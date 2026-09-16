@@ -37,7 +37,7 @@ class SessionDetailScreen extends ConsumerWidget {
                   Text(
                     session.dayName,
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 21,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

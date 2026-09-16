@@ -18,19 +18,6 @@ class ProgramRepository {
     );
     final bundledJson = jsonDecode(jsonString) as Map<String, dynamic>;
     final bundledProgram = ProgramModel.fromJson(bundledJson);
-    final existing = await (db.select(
-      db.programs,
-    )..where((p) => p.id.equals('ffts-4week'))).getSingleOrNull();
-    if (existing != null) {
-      final jsonMap = jsonDecode(existing.jsonData) as Map<String, dynamic>;
-      final existingProgram = ProgramModel.fromJson(jsonMap);
-      if (existingProgram.weeks.length >= bundledProgram.weeks.length) {
-        return existingProgram;
-      }
-      await saveProgram(bundledProgram, jsonString);
-      return bundledProgram;
-    }
-
     await saveProgram(bundledProgram, jsonString);
     return bundledProgram;
   }

@@ -103,8 +103,6 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.textMuted,
                     ),
                   ),
                 ),

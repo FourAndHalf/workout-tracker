@@ -45,7 +45,7 @@ class DayDetailScreen extends ConsumerWidget {
                             child: Text(
                               day.name,
                               style: const TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
                               ),
