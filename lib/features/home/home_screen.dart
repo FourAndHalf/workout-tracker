@@ -1,145 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/app_colors.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../../core/theme/app_colors.dart';
+import 'home_providers.dart';
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analytics = ref.watch(dashboardAnalyticsProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fitness Tracker'),
+        title: const Text('Dashboard'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
             onPressed: () => context.push('/settings'),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            // Welcome banner
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.surface, AppColors.card],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Fucked From The Start',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Week 1 &middot; Day 1: Arms',
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.background,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    icon: const Icon(Icons.play_arrow_rounded),
-                    label: const Text(
-                      'Start Workout',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () => context.push('/workout/w1-arms'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Quick Stats Grid
-            const Text(
-              'Quick Overview',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
+            const _SectionLabel('Quick actions'),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
-                  child: _StatCard(
-                    title: 'Workouts',
-                    value: '0',
-                    subtitle: 'This week',
-                    icon: Icons.fitness_center,
+                  child: _ActionTile(
+                    icon: Icons.play_arrow_rounded,
+                    label: 'Start',
                     color: AppColors.primary,
+                    onTap: () => context.push('/workout/w1-arms'),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: _StatCard(
-                    title: 'Nutrition',
-                    value: '0 kcal',
-                    subtitle: 'Logged today',
-                    icon: Icons.restaurant,
+                  child: _ActionTile(
+                    icon: Icons.list_alt_rounded,
+                    label: 'Plan',
                     color: AppColors.secondary,
+                    onTap: () => context.go('/programs'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _ActionTile(
+                    icon: Icons.camera_alt_outlined,
+                    label: 'Food',
+                    color: AppColors.warning,
+                    onTap: () => context.go('/nutrition'),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-
-            // Quick Action Buttons
-            const Text(
-              'Quick Actions',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            ListTile(
-              tileColor: AppColors.card,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: AppColors.border),
+            const _SectionLabel('This week'),
+            const SizedBox(height: 10),
+            analytics.when(
+              loading: () => const SizedBox(
+                height: 160,
+                child: Center(child: CircularProgressIndicator()),
               ),
-              leading: const CircleAvatar(
-                backgroundColor: AppColors.surface,
-                child: Icon(Icons.camera_alt, color: AppColors.primary),
+              error: (error, _) =>
+                  const _AnalyticsMessage('Analytics unavailable'),
+              data: (data) => Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _MetricTile(
+                          value: '${data.workoutsThisWeek}',
+                          label: 'Workouts',
+                          icon: Icons.fitness_center_rounded,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _MetricTile(
+                          value: '${data.setsThisWeek}',
+                          label: 'Sets',
+                          icon: Icons.check_circle_outline_rounded,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _MetricTile(
+                          value: '${data.currentStreak}',
+                          label: 'Day streak',
+                          icon: Icons.local_fire_department_outlined,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _VolumeTile(data: data),
+                  const SizedBox(height: 10),
+                  _LatestWorkoutTile(data: data),
+                ],
               ),
-              title: const Text('Log Food Photo'),
-              subtitle: const Text('Snap meal for daily calorie tracking'),
-              trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
-              onTap: () => context.go('/nutrition'),
-            ),
-            const SizedBox(height: 8),
-            ListTile(
-              tileColor: AppColors.card,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: AppColors.border),
-              ),
-              leading: const CircleAvatar(
-                backgroundColor: AppColors.surface,
-                child: Icon(Icons.list_alt, color: AppColors.secondary),
-              ),
-              title: const Text('Browse Workout Program'),
-              subtitle: const Text('View 4-Week Program days & exercises'),
-              trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
-              onTap: () => context.go('/programs'),
             ),
           ],
         ),
@@ -148,49 +113,187 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
+class _SectionLabel extends StatelessWidget {
+  final String text;
 
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.subtitle,
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+  );
+}
+
+class _ActionTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionTile({
     required this.icon,
+    required this.label,
     required this.color,
+    required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context) => InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(8),
+    child: Container(
+      height: 82,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.card,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-              Icon(icon, color: color, size: 20),
-            ],
-          ),
-          const SizedBox(height: 8),
+          Icon(icon, color: color, size: 25),
+          const SizedBox(height: 6),
           Text(
-            value,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 2),
-          Text(subtitle, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+class _MetricTile extends StatelessWidget {
+  final String value;
+  final String label;
+  final IconData icon;
+
+  const _MetricTile({
+    required this.value,
+    required this.label,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) => Container(
+    height: 92,
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Icon(icon, size: 18, color: AppColors.primary),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+        ),
+      ],
+    ),
+  );
+}
+
+class _VolumeTile extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _VolumeTile({required this.data});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Row(
+      children: [
+        const Icon(Icons.trending_up_rounded, color: AppColors.secondary),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Training volume',
+              style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            ),
+            Text(
+              '${data.volumeThisWeek.toStringAsFixed(0)} kg',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const Spacer(),
+        if (data.topExerciseName != null)
+          Text(
+            '${data.topExerciseName}\n${data.topExerciseWeight!.toStringAsFixed(1)} kg best',
+            textAlign: TextAlign.right,
+            style: const TextStyle(
+              fontSize: 11,
+              color: AppColors.textSecondary,
+            ),
+          ),
+      ],
+    ),
+  );
+}
+
+class _LatestWorkoutTile extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _LatestWorkoutTile({required this.data});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Row(
+      children: [
+        const Icon(Icons.history_rounded, color: AppColors.primary),
+        const SizedBox(width: 12),
+        Text(
+          data.latestWorkoutName == null
+              ? 'No completed workouts yet'
+              : 'Last workout\n${data.latestWorkoutName}',
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        ),
+      ],
+    ),
+  );
+}
+
+class _AnalyticsMessage extends StatelessWidget {
+  final String message;
+
+  const _AnalyticsMessage(this.message);
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Center(
+      child: Text(
+        message,
+        style: const TextStyle(color: AppColors.textSecondary),
+      ),
+    ),
+  );
 }
