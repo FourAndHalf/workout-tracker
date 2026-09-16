@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
 
@@ -7,7 +8,11 @@ void main() {
   group('ProgramModel Deserialization Tests', () {
     test('Parses program_week1.json correctly', () {
       final file = File('assets/programs/program_week1.json');
-      expect(file.existsSync(), isTrue, reason: 'assets/programs/program_week1.json must exist');
+      expect(
+        file.existsSync(),
+        isTrue,
+        reason: 'assets/programs/program_week1.json must exist',
+      );
 
       final jsonString = file.readAsStringSync();
       final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
@@ -57,7 +62,43 @@ void main() {
 
       final reParsedProgram = ProgramModel.fromJson(reserializedMap);
       expect(reParsedProgram.programId, equals(program.programId));
-      expect(reParsedProgram.weeks.first.days.length, equals(program.weeks.first.days.length));
+      expect(
+        reParsedProgram.weeks.first.days.length,
+        equals(program.weeks.first.days.length),
+      );
+    });
+
+    test('Uses a configured exercise video or a Shorts search fallback', () {
+      final configured = ExerciseModel(
+        id: 'configured',
+        order: 1,
+        name: 'Bench Press',
+        targetSets: 3,
+        logMode: 'weightReps',
+        videoUrl: 'https://youtube.com/shorts/example',
+      );
+      final fallback = ExerciseModel(
+        id: 'fallback',
+        order: 2,
+        name: 'Cable Row',
+        targetSets: 3,
+        logMode: 'weightReps',
+      );
+
+      expect(
+        configured.exerciseVideoUri.toString(),
+        'https://youtube.com/shorts/example',
+      );
+      expect(fallback.exerciseVideoUri.host, 'www.youtube.com');
+      expect(fallback.exerciseVideoUri.path, '/results');
+      expect(
+        fallback.exerciseVideoUri.queryParameters['search_query'],
+        contains('Cable Row'),
+      );
+      expect(
+        fallback.exerciseVideoUri.queryParameters['search_query'],
+        contains('shorts'),
+      );
     });
   });
 }
