@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+
 import '../database/app_database.dart';
 
 class WorkoutRepository {
@@ -13,7 +14,9 @@ class WorkoutRepository {
     required String dayId,
     required String dayName,
   }) async {
-    return await db.into(db.workoutSessions).insert(
+    return await db
+        .into(db.workoutSessions)
+        .insert(
           WorkoutSessionsCompanion.insert(
             programId: programId,
             weekId: weekId,
@@ -26,7 +29,9 @@ class WorkoutRepository {
 
   /// Finish an active workout session
   Future<void> finishSession(int sessionId, {String? notes}) async {
-    await (db.update(db.workoutSessions)..where((s) => s.id.equals(sessionId))).write(
+    await (db.update(
+      db.workoutSessions,
+    )..where((s) => s.id.equals(sessionId))).write(
       WorkoutSessionsCompanion(
         finishedAt: Value(DateTime.now()),
         notes: Value(notes),
@@ -59,7 +64,9 @@ class WorkoutRepository {
     int? durationSeconds,
     String? notes,
   }) async {
-    return await db.into(db.exerciseLogs).insert(
+    return await db
+        .into(db.exerciseLogs)
+        .insert(
           ExerciseLogsCompanion.insert(
             sessionId: sessionId,
             blockId: blockId,
@@ -95,8 +102,17 @@ class WorkoutRepository {
         .get();
   }
 
+  /// Get every persisted exercise log for dashboard analytics.
+  Future<List<ExerciseLog>> getAllExerciseLogs() async {
+    return (db.select(
+      db.exerciseLogs,
+    )..orderBy([(l) => OrderingTerm.desc(l.loggedAt)])).get();
+  }
+
   /// Get max weight history for a specific exercise over time
-  Future<List<ExerciseLog>> getMaxWeightLogsForExercise(String exerciseId) async {
+  Future<List<ExerciseLog>> getMaxWeightLogsForExercise(
+    String exerciseId,
+  ) async {
     return (db.select(db.exerciseLogs)
           ..where((l) => l.exerciseId.equals(exerciseId) & l.weight.isNotNull())
           ..orderBy([(l) => OrderingTerm.desc(l.weight)]))
