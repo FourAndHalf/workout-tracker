@@ -16,7 +16,13 @@ class ProgramListScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Workout Program')),
       body: programAsync.when(
         data: (program) {
-          final week = program.weeks.first;
+          final sessionsAsync = ref.watch(completedWorkoutSessionsProvider);
+          final sessions = sessionsAsync.valueOrNull ?? const [];
+          final week = program.weeks[activeWeekIndex(program, sessions)];
+          final completedDays = sessions
+              .where((session) => session.weekId == week.id)
+              .map((session) => session.dayId)
+              .toSet();
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -89,6 +95,7 @@ class ProgramListScreen extends ConsumerWidget {
                       (prev, block) => prev + block.exercises.length,
                     );
 
+                    final isCompleted = completedDays.contains(day.id);
                     return Card(
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -114,6 +121,14 @@ class ProgramListScreen extends ConsumerWidget {
                                 fontSize: 16,
                               ),
                             ),
+                            if (isCompleted) ...[
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.check_circle,
+                                color: AppColors.primary,
+                                size: 18,
+                              ),
+                            ],
                             if (day.needsReview == true) ...[
                               const SizedBox(width: 8),
                               Container(
@@ -150,10 +165,18 @@ class ProgramListScreen extends ConsumerWidget {
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        trailing: const Icon(
-                          Icons.chevron_right,
-                          color: AppColors.textMuted,
-                        ),
+                        trailing: isCompleted
+                            ? const Text(
+                                'Done',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.chevron_right,
+                                color: AppColors.textMuted,
+                              ),
                         onTap: () {
                           context.push(
                             '/programs/${program.programId}/${day.id}',

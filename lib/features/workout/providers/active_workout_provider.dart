@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../main.dart';
 import '../../../data/models/program_model.dart';
 import '../../../data/repositories/workout_repository.dart';
@@ -9,8 +10,10 @@ class ActiveWorkoutState {
   final DayModel? dayModel;
   final int currentBlockIndex;
   final int currentExerciseIndex;
-  final Map<String, List<Map<String, dynamic>>> loggedSets; // exerciseId -> list of logged set maps
-  final Map<String, List<int>> restPauseChunks; // exerciseId -> list of chunk reps
+  final Map<String, List<Map<String, dynamic>>>
+  loggedSets; // exerciseId -> list of logged set maps
+  final Map<String, List<int>>
+  restPauseChunks; // exerciseId -> list of chunk reps
   final bool isResting;
   final int restSeconds;
   final DateTime? startTime;
@@ -59,19 +62,16 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   final WorkoutRepository _workoutRepo;
 
   ActiveWorkoutNotifier(this._workoutRepo, String dayId)
-      : super(ActiveWorkoutState(dayId: dayId, startTime: DateTime.now()));
+    : super(ActiveWorkoutState(dayId: dayId, startTime: DateTime.now()));
 
-  void initDay(DayModel day) async {
+  void initDay(DayModel day, {String weekId = 'w1'}) async {
     final sessionId = await _workoutRepo.startSession(
       programId: 'ffts-4week',
-      weekId: 'w1',
+      weekId: weekId,
       dayId: day.id,
       dayName: day.name,
     );
-    state = state.copyWith(
-      sessionId: sessionId,
-      dayModel: day,
-    );
+    state = state.copyWith(sessionId: sessionId, dayModel: day);
   }
 
   /// Log a set for the current exercise
@@ -103,7 +103,9 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       durationSeconds: durationSeconds,
     );
 
-    final updatedSets = Map<String, List<Map<String, dynamic>>>.from(state.loggedSets);
+    final updatedSets = Map<String, List<Map<String, dynamic>>>.from(
+      state.loggedSets,
+    );
     final setList = List<Map<String, dynamic>>.from(currentSets);
     setList.add({
       'logId': logId,
@@ -119,7 +121,9 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     int nextExerciseIdx = state.currentExerciseIndex;
     int nextBlockIdx = state.currentBlockIndex;
 
-    if (block.type == 'superset' || block.type == 'triSet' || block.type == 'giantSet') {
+    if (block.type == 'superset' ||
+        block.type == 'triSet' ||
+        block.type == 'giantSet') {
       // Compound block: move to next exercise in the set sequence
       if (state.currentExerciseIndex < block.exercises.length - 1) {
         nextExerciseIdx = state.currentExerciseIndex + 1;
@@ -182,9 +186,12 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   }
 }
 
-final activeWorkoutProvider = StateNotifierProvider.family<ActiveWorkoutNotifier, ActiveWorkoutState, String>(
-  (ref, dayId) {
-    final repo = ref.watch(workoutRepositoryProvider);
-    return ActiveWorkoutNotifier(repo, dayId);
-  },
-);
+final activeWorkoutProvider =
+    StateNotifierProvider.family<
+      ActiveWorkoutNotifier,
+      ActiveWorkoutState,
+      String
+    >((ref, dayId) {
+      final repo = ref.watch(workoutRepositoryProvider);
+      return ActiveWorkoutNotifier(repo, dayId);
+    });

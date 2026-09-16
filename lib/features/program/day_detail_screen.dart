@@ -24,7 +24,11 @@ class DayDetailScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(dayId.toUpperCase())),
       body: programAsync.when(
         data: (program) {
-          final week = program.weeks.first;
+          final week = program.weeks.firstWhere(
+            (candidate) =>
+                candidate.days.any((candidateDay) => candidateDay.id == dayId),
+            orElse: () => program.weeks.first,
+          );
           final day = week.days.firstWhere(
             (d) => d.id == dayId,
             orElse: () => week.days.first,
