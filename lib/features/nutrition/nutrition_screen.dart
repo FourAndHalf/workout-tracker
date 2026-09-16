@@ -167,13 +167,29 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         ref.watch(shoppingListEnabledProvider).valueOrNull ?? true;
 
     return DefaultTabController(
-      length: shoppingListEnabled ? 3 : 2,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Nutrition'),
+          actions: [
+            if (shoppingListEnabled)
+              IconButton(
+                tooltip: 'Shopping list',
+                icon: const Icon(Icons.shopping_cart_outlined),
+                onPressed: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => const Dialog(
+                    child: SizedBox(
+                      width: 420,
+                      height: 620,
+                      child: _ShoppingListTab(),
+                    ),
+                  ),
+                ),
+              ),
+          ],
           bottom: TabBar(
             tabs: [
-              if (shoppingListEnabled) Tab(text: 'Shopping list'),
               Tab(text: 'Daily log'),
               Tab(text: 'Meal plan'),
             ],
@@ -181,7 +197,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         ),
         body: TabBarView(
           children: [
-            if (shoppingListEnabled) const _ShoppingListTab(),
             RefreshIndicator(
               onRefresh: () => ref.refresh(todayFoodPhotosProvider.future),
               child: ListView(
@@ -276,7 +291,9 @@ class _ShoppingListTab extends ConsumerStatefulWidget {
 
 class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
   static const _checkedKeyPrefix = 'weekly_shopping_list_checked_';
+  static const _itemsKeyPrefix = 'weekly_shopping_list_items_';
   Set<String> _checkedItems = <String>{};
+  List<String>? _customItems;
 
   String get _weekKey {
     final today = DateTime.now();
@@ -289,11 +306,13 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
   }
 
   String get _checkedKey => '$_checkedKeyPrefix$_weekKey';
+  String get _itemsKey => '$_itemsKeyPrefix$_weekKey';
 
   @override
   void initState() {
     super.initState();
     _loadCheckedItems();
+    _loadCustomItems();
   }
 
   Future<void> _loadCheckedItems() async {
@@ -302,6 +321,18 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
     setState(() {
       _checkedItems = preferences.getStringList(_checkedKey)?.toSet() ?? {};
     });
+  }
+
+  Future<void> _loadCustomItems() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    final saved = preferences.getStringList(_itemsKey);
+    if (saved != null) setState(() => _customItems = saved);
+  }
+
+  Future<void> _saveCustomItems(List<String> items) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setStringList(_itemsKey, items);
   }
 
   Future<void> _toggleItem(String item, bool checked) async {
@@ -324,6 +355,51 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
     }
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Unable to open Blinkit.')));
+  }
+
+  Future<void> _editItem(String current, {bool adding = false}) async {
+    final controller = TextEditingController(text: adding ? '' : current);
+    final value = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(adding ? 'Add shopping item' : 'Update shopping item'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(labelText: 'Ingredient'),
+          onSubmitted: (value) => Navigator.pop(context, value.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    if (value == null || value.isEmpty || !mounted) return;
+    final items = List<String>.from(_customItems ?? const [])
+      ..removeWhere((item) => item == current);
+    if (!items.contains(value)) items.add(value);
+    items.sort();
+    setState(() => _customItems = items);
+    await _saveCustomItems(items);
+  }
+
+  Future<void> _removeItem(String item) async {
+    final items = List<String>.from(_customItems ?? const [])
+      ..removeWhere((value) => value == item);
+    setState(() {
+      _customItems = items;
+      _checkedItems.remove(item);
+    });
+    await _saveCustomItems(items);
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setStringList(_checkedKey, _checkedItems.toList());
   }
 
   List<String> _shoppingItems(List<MealPlan> meals) {
@@ -411,7 +487,7 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
       error: (error, stack) =>
           Center(child: Text('Unable to load shopping list: $error')),
       data: (meals) {
-        final items = _shoppingItems(meals);
+        final items = _customItems ?? _shoppingItems(meals);
         final remaining = items
             .where((item) => !_checkedItems.contains(item))
             .length;
@@ -429,6 +505,14 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                 Text(
                   '$remaining left',
                   style: const TextStyle(color: AppColors.textSecondary),
+                ),
+                IconButton(
+                  tooltip: 'Add item',
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    _customItems ??= List<String>.from(items);
+                    _editItem('', adding: true);
+                  },
                 ),
               ],
             ),
@@ -459,7 +543,27 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                         ),
                       ),
                     ),
-                    secondary: const Icon(Icons.shopping_bag_outlined),
+                    secondary: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          tooltip: 'Edit item',
+                          icon: const Icon(Icons.edit_outlined),
+                          onPressed: () {
+                            _customItems ??= List<String>.from(items);
+                            _editItem(item);
+                          },
+                        ),
+                        IconButton(
+                          tooltip: 'Remove item',
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () {
+                            _customItems ??= List<String>.from(items);
+                            _removeItem(item);
+                          },
+                        ),
+                      ],
+                    ),
                     onChanged: (value) => _toggleItem(item, value ?? false),
                   );
                 }).toList(),
