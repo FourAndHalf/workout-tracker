@@ -78,7 +78,7 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
                     Text(
                       '$total',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isComplete
                             ? AppColors.primary

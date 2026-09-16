@@ -17,6 +17,19 @@ class AppTheme {
         onSecondary: AppColors.background,
         onSurface: AppColors.textPrimary,
       ),
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+        displayMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        headlineSmall: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        titleMedium: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        bodyLarge: TextStyle(fontSize: 14),
+        bodyMedium: TextStyle(fontSize: 13),
+        bodySmall: TextStyle(fontSize: 11),
+        labelLarge: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+        labelMedium: TextStyle(fontSize: 11),
+        labelSmall: TextStyle(fontSize: 10),
+      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surface,
         elevation: 0,
@@ -25,7 +38,7 @@ class AppTheme {
         iconTheme: IconThemeData(color: AppColors.textPrimary),
         titleTextStyle: TextStyle(
           color: AppColors.textPrimary,
-          fontSize: 18,
+          fontSize: 17,
           fontWeight: FontWeight.bold,
         ),
       ),

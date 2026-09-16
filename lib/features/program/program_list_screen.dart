@@ -36,7 +36,7 @@ class ProgramListScreen extends ConsumerWidget {
                       Text(
                         program.programName,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),

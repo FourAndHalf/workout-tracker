@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/program_model.dart';
 
 class ExerciseTile extends StatelessWidget {
   final ExerciseModel exercise;
 
-  const ExerciseTile({
-    super.key,
-    required this.exercise,
-  });
+  const ExerciseTile({super.key, required this.exercise});
 
   IconData _getLogModeIcon(String logMode) {
     switch (logMode) {
@@ -60,7 +58,7 @@ class ExerciseTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border.withValues(alpha:0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,29 +88,10 @@ class ExerciseTile extends StatelessWidget {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColors.textMuted,
                           ),
                         ),
                       ),
                     ),
-                    if (!exercise.prescriptionComplete)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppColors.warning.withValues(alpha:0.15),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: AppColors.warning, width: 0.5),
-                        ),
-                        child: const Text(
-                          'Incomplete',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.warning,
-                          ),
-                        ),
-                      ),
                   ],
                 ),
                 const SizedBox(height: 4),

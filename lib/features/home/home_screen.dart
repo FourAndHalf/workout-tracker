@@ -121,7 +121,7 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     text,
-    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
   );
 }
 
@@ -193,7 +193,7 @@ class _MetricTile extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
@@ -231,7 +231,7 @@ class _VolumeTile extends StatelessWidget {
             ),
             Text(
               '${data.volumeThisWeek.toStringAsFixed(0)} kg',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),

@@ -210,7 +210,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                 children: [
                   const Text(
                     'Today',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -507,7 +507,7 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                 const Expanded(
                   child: Text(
                     'Shopping list',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
@@ -682,7 +682,7 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                       Text(
                         'Weekly meals',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

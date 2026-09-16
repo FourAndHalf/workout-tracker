@@ -252,7 +252,7 @@ class _CalendarView extends StatelessWidget {
             ),
             Text(
               '${_monthName(month.month)} ${month.year}',
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             IconButton(
               onPressed: onNext,
