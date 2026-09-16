@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import 'home_providers.dart';
@@ -62,6 +63,20 @@ class HomeScreen extends ConsumerWidget {
                     label: 'Food',
                     color: AppColors.warning,
                     onTap: () => context.go('/nutrition'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _ActionTile(
+                    icon: Icons.music_note_rounded,
+                    label: 'Music',
+                    color: AppColors.secondary,
+                    onTap: () async {
+                      await launchUrl(
+                        Uri.parse('https://open.spotify.com/'),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
                   ),
                 ),
               ],
