@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/program_model.dart';
 
@@ -37,6 +38,20 @@ class ExerciseTile extends StatelessWidget {
     return '${exercise.targetSets} Sets';
   }
 
+  Future<void> _openExerciseVideo(BuildContext context) async {
+    if (await launchUrl(
+      exercise.exerciseVideoUri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      return;
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open YouTube Shorts.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,12 +82,17 @@ class ExerciseTile extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        exercise.name,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                      child: InkWell(
+                        onTap: () => _openExerciseVideo(context),
+                        child: Text(
+                          exercise.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppColors.textMuted,
+                          ),
                         ),
                       ),
                     ),

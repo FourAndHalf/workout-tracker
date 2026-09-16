@@ -179,11 +179,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                     'Today',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Capture meals as you go',
-                    style: TextStyle(color: AppColors.textSecondary),
-                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
@@ -351,11 +346,6 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Kerala meals for ${mealPlanDayNames[_selectedDay - 1]}',
-                        style: TextStyle(color: AppColors.textSecondary),
                       ),
                     ],
                   ),
