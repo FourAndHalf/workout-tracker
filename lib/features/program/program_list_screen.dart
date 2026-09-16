@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../core/theme/app_colors.dart';
 import 'program_providers.dart';
 
@@ -12,9 +13,7 @@ class ProgramListScreen extends ConsumerWidget {
     final programAsync = ref.watch(currentProgramProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout Program'),
-      ),
+      appBar: AppBar(title: const Text('Workout Program')),
       body: programAsync.when(
         data: (program) {
           final week = program.weeks.first;
@@ -23,7 +22,6 @@ class ProgramListScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Program Header
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
@@ -35,7 +33,6 @@ class ProgramListScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         program.programName,
                         style: const TextStyle(
@@ -79,12 +76,12 @@ class ProgramListScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
 
-                // Days List
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: week.days.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
                   itemBuilder: (context, index) {
                     final day = week.days[index];
                     final exerciseCount = day.blocks.fold<int>(
@@ -94,7 +91,10 @@ class ProgramListScreen extends ConsumerWidget {
 
                     return Card(
                       child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         leading: CircleAvatar(
                           backgroundColor: AppColors.surface,
                           child: Text(
@@ -117,11 +117,19 @@ class ProgramListScreen extends ConsumerWidget {
                             if (day.needsReview == true) ...[
                               const SizedBox(width: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.warning.withValues(alpha: 0.15),
+                                  color: AppColors.warning.withValues(
+                                    alpha: 0.15,
+                                  ),
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: AppColors.warning, width: 0.5),
+                                  border: Border.all(
+                                    color: AppColors.warning,
+                                    width: 0.5,
+                                  ),
                                 ),
                                 child: const Text(
                                   'Review',
@@ -137,11 +145,19 @@ class ProgramListScreen extends ConsumerWidget {
                         ),
                         subtitle: Text(
                           '${day.blocks.length} Blocks &middot; $exerciseCount Exercises',
-                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                        trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          color: AppColors.textMuted,
+                        ),
                         onTap: () {
-                          context.push('/programs/${program.programId}/${day.id}');
+                          context.push(
+                            '/programs/${program.programId}/${day.id}',
+                          );
                         },
                       ),
                     );
@@ -154,9 +170,8 @@ class ProgramListScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
-        error: (err, stack) => Center(
-          child: Text('Error loading program: $err'),
-        ),
+        error: (err, stack) =>
+            Center(child: Text('Error loading program: $err')),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../core/theme/app_colors.dart';
 import 'program_providers.dart';
 import 'widgets/block_card.dart';
@@ -20,9 +21,7 @@ class DayDetailScreen extends ConsumerWidget {
     final programAsync = ref.watch(currentProgramProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(dayId.toUpperCase()),
-      ),
+      appBar: AppBar(title: Text(dayId.toUpperCase())),
       body: programAsync.when(
         data: (program) {
           final week = program.weeks.first;
@@ -40,7 +39,6 @@ class DayDetailScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
-                      // Day Header
                       Row(
                         children: [
                           Expanded(
@@ -65,18 +63,24 @@ class DayDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 12),
 
-                      // Day Review Note Warning (if present)
                       if (day.reviewNote != null) ...[
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: AppColors.warning.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.warning, width: 0.5),
+                            border: Border.all(
+                              color: AppColors.warning,
+                              width: 0.5,
+                            ),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 18),
+                              const Icon(
+                                Icons.warning_amber_rounded,
+                                color: AppColors.warning,
+                                size: 18,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -93,7 +97,6 @@ class DayDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 16),
                       ],
 
-                      // Blocks List
                       ...day.blocks.asMap().entries.map((entry) {
                         return BlockCard(
                           block: entry.value,
@@ -105,7 +108,6 @@ class DayDetailScreen extends ConsumerWidget {
                 ),
               ),
 
-              // Bottom Start Workout Bar
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: const BoxDecoration(
@@ -127,7 +129,10 @@ class DayDetailScreen extends ConsumerWidget {
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: Text(
                         'Start ${day.name} Workout',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       onPressed: () {
                         context.push('/workout/${day.id}');
@@ -142,9 +147,8 @@ class DayDetailScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
-        error: (err, stack) => Center(
-          child: Text('Error loading day detail: $err'),
-        ),
+        error: (err, stack) =>
+            Center(child: Text('Error loading day detail: $err')),
       ),
     );
   }

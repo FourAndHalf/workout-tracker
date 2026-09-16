@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/program_model.dart';
 import 'exercise_tile.dart';
@@ -7,11 +8,7 @@ class BlockCard extends StatelessWidget {
   final BlockModel block;
   final int blockIndex;
 
-  const BlockCard({
-    super.key,
-    required this.block,
-    required this.blockIndex,
-  });
+  const BlockCard({super.key, required this.block, required this.blockIndex});
 
   Color _getBlockBadgeColor(String type) {
     switch (type) {
@@ -60,14 +57,15 @@ class BlockCard extends StatelessWidget {
         color: AppColors.card,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: block.type == 'straight' ? AppColors.border : badgeColor.withValues(alpha:0.5),
+          color: block.type == 'straight'
+              ? AppColors.border
+              : badgeColor.withValues(alpha: 0.5),
           width: block.type == 'straight' ? 1 : 1.5,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Block Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -77,15 +75,20 @@ class BlockCard extends StatelessWidget {
                 topRight: Radius.circular(11),
               ),
               border: Border(
-                bottom: BorderSide(color: AppColors.border.withValues(alpha:0.5)),
+                bottom: BorderSide(
+                  color: AppColors.border.withValues(alpha: 0.5),
+                ),
               ),
             ),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: badgeColor.withValues(alpha:0.15),
+                    color: badgeColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: badgeColor, width: 1),
                   ),
@@ -122,13 +125,16 @@ class BlockCard extends StatelessWidget {
             ),
           ),
 
-          // Block Instructions (if any)
           if (block.instructions != null && block.instructions!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.warning),
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    size: 14,
+                    color: AppColors.warning,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -144,11 +150,12 @@ class BlockCard extends StatelessWidget {
               ),
             ),
 
-          // Exercises List
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
-              children: block.exercises.map((e) => ExerciseTile(exercise: e)).toList(),
+              children: block.exercises
+                  .map((e) => ExerciseTile(exercise: e))
+                  .toList(),
             ),
           ),
         ],

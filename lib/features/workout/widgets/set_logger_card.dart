@@ -92,7 +92,6 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             children: [
               Expanded(
@@ -124,7 +123,6 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
           ),
           const SizedBox(height: 12),
 
-          // Previously logged sets list
           if (widget.loggedSets.isNotEmpty) ...[
             Column(
               children: widget.loggedSets.asMap().entries.map((entry) {
@@ -166,7 +164,6 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
             const SizedBox(height: 12),
           ],
 
-          // Active Input Row (if not all sets done)
           if (!isDone) ...[
             if (widget.exercise.logMode == 'weightReps' ||
                 widget.exercise.logMode == 'failure')
