@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 
 import '../database/app_database.dart';
@@ -6,6 +8,15 @@ class NutritionRepository {
   final AppDatabase db;
 
   NutritionRepository(this.db);
+
+  Future<void> clearUserData() async {
+    final photos = await db.select(db.foodPhotos).get();
+    for (final photo in photos) {
+      final file = File(photo.filePath);
+      if (await file.exists()) await file.delete();
+    }
+    await db.clearUserData();
+  }
 
   static String dateKey(DateTime date) =>
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';

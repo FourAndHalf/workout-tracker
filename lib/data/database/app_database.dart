@@ -41,6 +41,18 @@ class AppDatabase extends _$AppDatabase {
       if (from < 3) await m.createTable(mealPlans);
     },
   );
+
+  Future<void> clearUserData() async {
+    await transaction(() async {
+      await delete(dailyNutritionPhotos).go();
+      await delete(exerciseLogs).go();
+      await delete(workoutSessions).go();
+      await delete(foodPhotos).go();
+      await delete(dailyNutrition).go();
+      await delete(supplementIntakes).go();
+      await delete(mealPlans).go();
+    });
+  }
 }
 
 LazyDatabase _openConnection() {
