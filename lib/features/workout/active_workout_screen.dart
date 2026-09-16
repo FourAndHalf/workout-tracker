@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../program/program_providers.dart';
+import '../../main.dart';
 import 'providers/active_workout_provider.dart';
 import 'widgets/set_logger_card.dart';
 import 'widgets/cumulative_counter.dart';
@@ -25,6 +26,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   static const _targetSeconds = 45 * 60;
   Timer? _elapsedTimer;
   int _elapsedSeconds = 0;
+  bool _lockScreenTimerStarted = false;
 
   @override
   void initState() {
@@ -75,6 +77,19 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
             workoutNotifier.initDay(day);
           });
         }
+        if (workoutState.sessionId != null &&
+            workoutState.startTime != null &&
+            !_lockScreenTimerStarted) {
+          _lockScreenTimerStarted = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ref
+                .read(dailyWorkoutAlarmServiceProvider)
+                .startWorkoutTimer(
+                  workoutState.startTime!,
+                  workoutName: day.name,
+                );
+          });
+        }
 
         return Scaffold(
           appBar: AppBar(
@@ -97,7 +112,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                 ),
                 Text(
                   'Target: 45:00',
-                  style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.textMuted,
+                  ),
                 ),
               ],
             ),
@@ -115,6 +133,9 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                   ),
                 ),
                 onPressed: () async {
+                  await ref
+                      .read(dailyWorkoutAlarmServiceProvider)
+                      .stopWorkoutTimer();
                   await workoutNotifier.finishWorkout();
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(

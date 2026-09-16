@@ -178,10 +178,16 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                 icon: const Icon(Icons.shopping_cart_outlined),
                 onPressed: () => showDialog<void>(
                   context: context,
-                  builder: (_) => const Dialog(
-                    child: SizedBox(
-                      width: 420,
-                      height: 620,
+                  builder: (_) => Dialog(
+                    insetPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 24,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 460,
+                        maxHeight: 560,
+                      ),
                       child: _ShoppingListTab(),
                     ),
                   ),
@@ -492,14 +498,16 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
             .where((item) => !_checkedItems.contains(item))
             .length;
         return ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
           children: [
             Row(
               children: [
+                const Icon(Icons.shopping_cart_outlined, size: 22),
+                const SizedBox(width: 10),
                 const Expanded(
                   child: Text(
-                    'Weekly shopping list',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    'Shopping list',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
@@ -516,59 +524,69 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Tap an item name to search Blinkit.',
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              child: Column(
-                children: items.map((item) {
-                  final checked = _checkedItems.contains(item);
-                  return CheckboxListTile(
-                    value: checked,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: InkWell(
-                      onTap: () => _openBlinkit(item),
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                          decoration: checked
-                              ? TextDecoration.lineThrough
-                              : null,
-                          color: checked
-                              ? AppColors.textMuted
-                              : AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    secondary: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          tooltip: 'Edit item',
-                          icon: const Icon(Icons.edit_outlined),
-                          onPressed: () {
-                            _customItems ??= List<String>.from(items);
-                            _editItem(item);
-                          },
-                        ),
-                        IconButton(
-                          tooltip: 'Remove item',
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () {
-                            _customItems ??= List<String>.from(items);
-                            _removeItem(item);
-                          },
-                        ),
-                      ],
-                    ),
-                    onChanged: (value) => _toggleItem(item, value ?? false),
-                  );
-                }).toList(),
+            const SizedBox(height: 2),
+            const Padding(
+              padding: EdgeInsets.only(left: 32),
+              child: Text(
+                'This week’s ingredients',
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ),
+            const SizedBox(height: 12),
+            if (items.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: Center(child: Text('No ingredients this week')),
+              ),
+            ...items.map((item) {
+              final checked = _checkedItems.contains(item);
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Checkbox(
+                    value: checked,
+                    onChanged: (value) => _toggleItem(item, value ?? false),
+                  ),
+                  title: InkWell(
+                    onTap: () => _openBlinkit(item),
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        decoration: checked ? TextDecoration.lineThrough : null,
+                        color: checked
+                            ? AppColors.textMuted
+                            : AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit item',
+                        visualDensity: VisualDensity.compact,
+                        icon: const Icon(Icons.edit_outlined, size: 19),
+                        onPressed: () {
+                          _customItems ??= List<String>.from(items);
+                          _editItem(item);
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'Remove item',
+                        visualDensity: VisualDensity.compact,
+                        icon: const Icon(Icons.delete_outline, size: 19),
+                        onPressed: () {
+                          _customItems ??= List<String>.from(items);
+                          _removeItem(item);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ],
         );
       },

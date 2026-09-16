@@ -25,9 +25,9 @@ void main() {
     expect(find.text('Weekly shopping list'), findsOneWidget);
     await tester.tap(find.text('Delete saved data'));
     await tester.pumpAndSettle();
-    expect(find.text('How much data should be deleted?'), findsOneWidget);
-    expect(find.text('Last 1 hour'), findsOneWidget);
-    await tester.tap(find.text('Last 1 day'));
+    expect(find.text('Delete saved data'), findsNWidgets(2));
+    expect(find.byType(DropdownButtonFormField<Duration>), findsOneWidget);
+    await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
     expect(find.text('Confirm deletion'), findsOneWidget);
     expect(find.text('Delete data'), findsOneWidget);
