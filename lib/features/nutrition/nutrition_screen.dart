@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -157,12 +158,13 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
     final supplements = ref.watch(todaySupplementStatusProvider);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Nutrition'),
           bottom: const TabBar(
             tabs: [
+              Tab(text: 'Shopping list'),
               Tab(text: 'Daily log'),
               Tab(text: 'Meal plan'),
             ],
@@ -170,6 +172,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         ),
         body: TabBarView(
           children: [
+            const _ShoppingListTab(),
             RefreshIndicator(
               onRefresh: () => ref.refresh(todayFoodPhotosProvider.future),
               child: ListView(
@@ -251,6 +254,135 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ShoppingListTab extends ConsumerStatefulWidget {
+  const _ShoppingListTab();
+
+  @override
+  ConsumerState<_ShoppingListTab> createState() => _ShoppingListTabState();
+}
+
+class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
+  static const _checkedKeyPrefix = 'weekly_shopping_list_checked_';
+  Set<String> _checkedItems = <String>{};
+
+  String get _weekKey {
+    final today = DateTime.now();
+    final monday = DateTime(
+      today.year,
+      today.month,
+      today.day,
+    ).subtract(Duration(days: today.weekday - 1));
+    return '${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
+  }
+
+  String get _checkedKey => '$_checkedKeyPrefix$_weekKey';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCheckedItems();
+  }
+
+  Future<void> _loadCheckedItems() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      _checkedItems = preferences.getStringList(_checkedKey)?.toSet() ?? {};
+    });
+  }
+
+  Future<void> _toggleItem(String item, bool checked) async {
+    setState(() {
+      if (checked) {
+        _checkedItems.add(item);
+      } else {
+        _checkedItems.remove(item);
+      }
+    });
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setStringList(_checkedKey, _checkedItems.toList());
+  }
+
+  Future<void> _openBlinkit(String item) async {
+    final uri = Uri.https('blinkit.com', '/s/', {'q': item});
+    if (await launchUrl(uri, mode: LaunchMode.externalApplication) || !mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unable to open Blinkit.')),
+    );
+  }
+
+  List<String> _shoppingItems(List<MealPlan> meals) {
+    final items = <String>{};
+    for (final meal in meals) {
+      for (final ingredient in meal.ingredients.split(',')) {
+        final item = ingredient.trim();
+        if (item.isNotEmpty) items.add(item);
+      }
+    }
+    return items.toList()..sort();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final plans = ref.watch(mealPlansProvider);
+    return plans.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Unable to load shopping list: $error')),
+      data: (meals) {
+        final items = _shoppingItems(meals);
+        final remaining = items.where((item) => !_checkedItems.contains(item)).length;
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          children: [
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Weekly shopping list',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text('$remaining left', style: const TextStyle(color: AppColors.textSecondary)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Tap an item name to search Blinkit.',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Column(
+                children: items.map((item) {
+                  final checked = _checkedItems.contains(item);
+                  return CheckboxListTile(
+                    value: checked,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: InkWell(
+                      onTap: () => _openBlinkit(item),
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                          decoration: checked ? TextDecoration.lineThrough : null,
+                          color: checked ? AppColors.textMuted : AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    secondary: const Icon(Icons.shopping_bag_outlined),
+                    onChanged: (value) => _toggleItem(item, value ?? false),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
