@@ -82,7 +82,10 @@ void main() {
 
       expect(notifier.state.loggedSets[exercise.id], isNotNull);
       expect(notifier.state.loggedSets[exercise.id]!.length, equals(1));
-      expect(notifier.state.loggedSets[exercise.id]!.first['weight'], equals(35.0));
+      expect(
+        notifier.state.loggedSets[exercise.id]!.first['weight'],
+        equals(35.0),
+      );
       expect(notifier.state.isResting, isTrue);
 
       notifier.dismissRestTimer();
@@ -109,6 +112,52 @@ void main() {
 
       expect(notifier.state.restPauseChunks[exercise.id], equals([30, 25]));
     });
+
+    test(
+      'Lock-screen completion logs the current set and advances exercise',
+      () async {
+        final day = DayModel(
+          id: 'w1-sequence',
+          name: 'Sequence',
+          order: 1,
+          blocks: [
+            BlockModel(
+              id: 'sequence-block',
+              name: 'Sequence',
+              type: 'straight',
+              targetSets: 1,
+              exercises: [
+                ExerciseModel(
+                  id: 'first',
+                  order: 1,
+                  name: 'First exercise',
+                  targetSets: 1,
+                  repTarget: 10,
+                  logMode: 'repsOnly',
+                ),
+                ExerciseModel(
+                  id: 'second',
+                  order: 2,
+                  name: 'Second exercise',
+                  targetSets: 1,
+                  repTarget: 8,
+                  logMode: 'repsOnly',
+                ),
+              ],
+            ),
+          ],
+        );
+        final sequenceNotifier = ActiveWorkoutNotifier(workoutRepo, day.id);
+        addTearDown(sequenceNotifier.dispose);
+        sequenceNotifier.initDay(day);
+        await Future<void>.delayed(Duration.zero);
+
+        await sequenceNotifier.completeCurrentSetFromLockScreen();
+
+        expect(sequenceNotifier.state.currentExerciseIndex, 1);
+        expect(sequenceNotifier.state.loggedSets['first']!.single['reps'], 10);
+      },
+    );
 
     test('Finishes workout session in database', () async {
       await Future.delayed(Duration.zero);
