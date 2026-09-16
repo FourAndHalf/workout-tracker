@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -54,10 +56,14 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
 
     setState(() => _isSaving = true);
     try {
-      final savedPath = await _copyToAppStorage(picked);
+      final savedPhoto = await _copyToAppStorage(picked);
       await ref
           .read(nutritionRepositoryProvider)
-          .addFoodPhoto(filePath: savedPath, mealLabel: mealLabel);
+          .addFoodPhoto(
+            filePath: savedPhoto.filePath,
+            thumbnail: savedPhoto.thumbnail,
+            mealLabel: mealLabel,
+          );
       ref.invalidate(todayFoodPhotosProvider);
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -107,7 +113,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
     );
   }
 
-  Future<String> _copyToAppStorage(XFile picked) async {
+  Future<_SavedPhoto> _copyToAppStorage(XFile picked) async {
     final directory = await getApplicationDocumentsDirectory();
     final photosDirectory = Directory(path.join(directory.path, 'food_photos'));
     await photosDirectory.create(recursive: true);
@@ -117,8 +123,16 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         : path.extension(picked.path);
     final filename = 'meal_${DateTime.now().microsecondsSinceEpoch}$extension';
     final destination = File(path.join(photosDirectory.path, filename));
-    await File(picked.path).copy(destination.path);
-    return destination.path;
+    final bytes = await picked.readAsBytes();
+    await destination.writeAsBytes(bytes);
+
+    final decoded = img.decodeImage(bytes);
+    final thumbnail = decoded == null
+        ? null
+        : Uint8List.fromList(
+            img.encodeJpg(img.copyResize(decoded, width: 320), quality: 78),
+          );
+    return _SavedPhoto(filePath: destination.path, thumbnail: thumbnail);
   }
 
   @override
@@ -226,6 +240,13 @@ class _PhotoActionTile extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _SavedPhoto {
+  final String filePath;
+  final Uint8List? thumbnail;
+
+  const _SavedPhoto({required this.filePath, required this.thumbnail});
 }
 
 class _PhotoGrid extends StatelessWidget {
