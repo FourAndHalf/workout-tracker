@@ -80,6 +80,23 @@ void main() {
   });
 
   group('NutritionRepository Unit Tests', () {
+    test('Seeds a complete Kerala meal plan for all seven days', () async {
+      await nutritionRepo.ensureDefaultKeralaMealPlan();
+      final meals = await nutritionRepo.getMealPlans();
+
+      expect(meals.length, greaterThanOrEqualTo(35));
+      expect(
+        meals.map((meal) => meal.dayOfWeek).toSet(),
+        equals({1, 2, 3, 4, 5, 6, 7}),
+      );
+      expect(meals.any((meal) => meal.mealName.contains('Puttu')), isTrue);
+      expect(meals.any((meal) => meal.mealName.contains('Matta rice')), isTrue);
+      expect(
+        meals.where((meal) => meal.videoUrl != null).length,
+        greaterThan(0),
+      );
+    });
+
     test('Tracks daily supplement intake independently by date', () async {
       final today = DateTime(2026, 9, 16);
       await nutritionRepo.setSupplementTaken(

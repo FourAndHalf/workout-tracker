@@ -32,22 +32,8 @@ final mealPlansProvider = FutureProvider.autoDispose<List<MealPlan>>((
   ref,
 ) async {
   final repository = ref.watch(nutritionRepositoryProvider);
-  var plans = await repository.getMealPlans();
-  if (plans.isEmpty) {
-    await repository.addMealPlan(
-      dayOfWeek: 1,
-      mealName: 'Chicken quinoa bowl',
-      ingredients:
-          'Chicken breast, quinoa, spinach, tomato, avocado, olive oil',
-      calories: 620,
-      proteinG: 48,
-      carbsG: 55,
-      fatG: 22,
-      videoUrl: 'https://www.youtube.com/results?search_query=chicken+quinoa+bowl+recipe+shorts',
-    );
-    plans = await repository.getMealPlans();
-  }
-  return plans;
+  await repository.ensureDefaultKeralaMealPlan();
+  return repository.getMealPlans();
 });
 
 class NutritionScreen extends ConsumerStatefulWidget {
@@ -274,18 +260,31 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   }
 }
 
-class _MealPlanTab extends ConsumerWidget {
+const mealPlanDayNames = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+class _MealPlanTab extends ConsumerStatefulWidget {
   const _MealPlanTab();
 
-  static const dayNames = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
+  @override
+  ConsumerState<_MealPlanTab> createState() => _MealPlanTabState();
+}
+
+class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
+  late int _selectedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = DateTime.now().weekday;
+  }
 
   Future<void> _editMeal(
     BuildContext context,
@@ -327,59 +326,79 @@ class _MealPlanTab extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final plans = ref.watch(mealPlansProvider);
     return plans.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) =>
           Center(child: Text('Unable to load meal plan: $error')),
-      data: (meals) => ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-        children: [
-          Row(
-            children: [
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Weekly meals',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+      data: (meals) {
+        final dayMeals = meals
+            .where((meal) => meal.dayOfWeek == _selectedDay)
+            .toList();
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Weekly meals',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Plan ingredients and nutrition in advance',
-                      style: TextStyle(color: AppColors.textSecondary),
-                    ),
-                  ],
+                      SizedBox(height: 4),
+                      Text(
+                        'Kerala meals for ${mealPlanDayNames[_selectedDay - 1]}',
+                        style: TextStyle(color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton.filled(
+                  tooltip: 'Add meal',
+                  icon: const Icon(Icons.add),
+                  onPressed: () => _editMeal(context, ref),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<int>(
+              initialValue: _selectedDay,
+              decoration: const InputDecoration(labelText: 'Select day'),
+              items: List.generate(
+                7,
+                (index) => DropdownMenuItem(
+                  value: index + 1,
+                  child: Text(mealPlanDayNames[index]),
                 ),
               ),
-              IconButton.filled(
-                tooltip: 'Add meal',
-                icon: const Icon(Icons.add),
-                onPressed: () => _editMeal(context, ref),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ...meals.map(
-            (meal) => _MealPlanCard(
-              meal: meal,
-              dayName: dayNames[meal.dayOfWeek - 1],
-              onEdit: () => _editMeal(context, ref, meal: meal),
-              onDelete: () async {
-                await ref
-                    .read(nutritionRepositoryProvider)
-                    .deleteMealPlan(meal.id);
-                ref.invalidate(mealPlansProvider);
+              onChanged: (value) {
+                if (value != null) setState(() => _selectedDay = value);
               },
             ),
-          ),
-        ],
-      ),
+            const SizedBox(height: 16),
+            ...dayMeals.map(
+              (meal) => _MealPlanCard(
+                meal: meal,
+                dayName: mealPlanDayNames[meal.dayOfWeek - 1],
+                onEdit: () => _editMeal(context, ref, meal: meal),
+                onDelete: () async {
+                  await ref
+                      .read(nutritionRepositoryProvider)
+                      .deleteMealPlan(meal.id);
+                  ref.invalidate(mealPlansProvider);
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -598,7 +617,7 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
               7,
               (index) => DropdownMenuItem(
                 value: index + 1,
-                child: Text(_MealPlanTab.dayNames[index]),
+                child: Text(mealPlanDayNames[index]),
               ),
             ),
             onChanged: (value) => setState(() => _day = value ?? 1),

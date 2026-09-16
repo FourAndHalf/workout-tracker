@@ -29,7 +29,8 @@ void main() {
     await tester.tap(find.text('Meal plan'));
     await tester.pumpAndSettle();
     expect(find.text('Weekly meals'), findsOneWidget);
-    expect(find.text('Chicken quinoa bowl'), findsOneWidget);
+    expect(find.text('Select day'), findsOneWidget);
+    expect(find.byType(DropdownButtonFormField<int>), findsOneWidget);
     expect(find.text('Cooking video'), findsOneWidget);
   });
 }
