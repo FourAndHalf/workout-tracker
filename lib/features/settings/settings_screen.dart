@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -7,6 +11,7 @@ import '../../main.dart';
 import '../../services/daily_workout_alarm_service.dart';
 import '../home/home_providers.dart';
 import '../nutrition/nutrition_screen.dart';
+import '../../data/repositories/supplement_repository.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -20,6 +25,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _loadingAlarm = true;
   bool _shoppingListEnabled = true;
   bool _loadingNutritionSettings = true;
+  Future<List<SupplementItem>>? _supplements;
 
   @override
   void initState() {
@@ -64,10 +70,95 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _pickAlarmTime() async {
-    final time = await showTimePicker(context: context, initialTime: _alarm.time);
+    final time = await showTimePicker(
+      context: context,
+      initialTime: _alarm.time,
+    );
     if (time != null) {
       await _updateAlarm(_alarm.copyWith(time: time, enabled: true));
     }
+  }
+
+  Future<void> _addSupplement(SupplementRepository repository) async {
+    final nameController = TextEditingController();
+    XFile? photo;
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Add supplement'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                autofocus: true,
+                decoration: const InputDecoration(labelText: 'Supplement name'),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        final picked = await ImagePicker().pickImage(
+                          source: ImageSource.camera,
+                        );
+                        if (picked != null)
+                          setDialogState(() => photo = picked);
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      label: const Text('Camera'),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        final picked = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        if (picked != null)
+                          setDialogState(() => photo = picked);
+                      },
+                      icon: const Icon(Icons.photo_library_outlined),
+                      label: const Text('Gallery'),
+                    ),
+                  ),
+                ],
+              ),
+              if (photo != null)
+                Text(
+                  path.basename(photo!.path),
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () async {
+                if (nameController.text.trim().isEmpty) return;
+                await repository.saveSupplement(
+                  SupplementItem(
+                    id: DateTime.now().microsecondsSinceEpoch.toString(),
+                    name: nameController.text.trim(),
+                    photoPath: photo?.path,
+                  ),
+                );
+                if (dialogContext.mounted) Navigator.pop(dialogContext, true);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (saved == true && mounted)
+      setState(() => _supplements = repository.getSupplements());
   }
 
   Future<void> _confirmDelete(BuildContext context) async {
@@ -161,8 +252,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     _loadingAlarm
                         ? 'Loading alarm settings'
                         : _alarm.enabled
-                            ? 'Every day at ${_alarm.time.format(context)}'
-                            : 'Alarm is off',
+                        ? 'Every day at ${_alarm.time.format(context)}'
+                        : 'Alarm is off',
                   ),
                   value: _alarm.enabled,
                   onChanged: _loadingAlarm
@@ -192,11 +283,82 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               title: const Text('Weekly shopping list'),
               subtitle: const Text('Show the shopping list tab in Nutrition'),
               value: _shoppingListEnabled,
-              onChanged: _loadingNutritionSettings
-                  ? null
-                  : _toggleShoppingList,
+              onChanged: _loadingNutritionSettings ? null : _toggleShoppingList,
             ),
           ),
+          const SizedBox(height: 8),
+          ref
+              .watch(supplementRepositoryProvider)
+              .when(
+                loading: () => const Card(
+                  child: ListTile(title: Text('Loading supplements...')),
+                ),
+                error: (_, _) => const Card(
+                  child: ListTile(title: Text('Supplements unavailable')),
+                ),
+                data: (repository) {
+                  _supplements ??= repository.getSupplements();
+                  return FutureBuilder<List<SupplementItem>>(
+                    future: _supplements,
+                    builder: (context, snapshot) {
+                      final supplements =
+                          snapshot.data ?? const <SupplementItem>[];
+                      return Card(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.medication_outlined),
+                              title: const Text('Supplements'),
+                              subtitle: const Text(
+                                'Manage what you are taking',
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.add),
+                                tooltip: 'Add supplement',
+                                onPressed: () => _addSupplement(repository),
+                              ),
+                            ),
+                            if (supplements.isEmpty)
+                              const ListTile(
+                                title: Text('No supplements added yet'),
+                              ),
+                            ...supplements.map(
+                              (supplement) => ListTile(
+                                leading: supplement.photoPath == null
+                                    ? const Icon(Icons.medication_outlined)
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.file(
+                                          File(supplement.photoPath!),
+                                          width: 42,
+                                          height: 42,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                title: Text(supplement.name),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete_outline),
+                                  tooltip: 'Remove supplement',
+                                  onPressed: () async {
+                                    await repository.deleteSupplement(
+                                      supplement.id,
+                                    );
+                                    if (mounted)
+                                      setState(
+                                        () => _supplements = repository
+                                            .getSupplements(),
+                                      );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
           const SizedBox(height: 24),
           Card(
             child: ListTile(

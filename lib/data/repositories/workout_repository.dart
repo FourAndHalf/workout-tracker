@@ -118,4 +118,65 @@ class WorkoutRepository {
           ..orderBy([(l) => OrderingTerm.desc(l.weight)]))
         .get();
   }
+
+  Future<List<String>> getExerciseNames() async {
+    final logs = await (db.select(
+      db.exerciseLogs,
+    )..orderBy([(log) => OrderingTerm.asc(log.exerciseName)])).get();
+    return logs.map((log) => log.exerciseName).toSet().toList();
+  }
+
+  Future<List<ExerciseLog>> getExerciseHistory(String exerciseName) {
+    return (db.select(db.exerciseLogs)
+          ..where((log) => log.exerciseName.equals(exerciseName))
+          ..orderBy([(log) => OrderingTerm.asc(log.loggedAt)]))
+        .get();
+  }
+
+  Future<List<WeeklyVolume>> getWeeklyVolumes({int weeks = 8}) async {
+    final logs = await getAllExerciseLogs();
+    final today = DateTime.now();
+    final currentMonday = _startOfWeek(today);
+    final volumes = <WeeklyVolume>[];
+    for (var index = weeks - 1; index >= 0; index--) {
+      final start = currentMonday.subtract(Duration(days: index * 7));
+      final end = start.add(const Duration(days: 7));
+      final volume = logs
+          .where(
+            (log) =>
+                !log.loggedAt.isBefore(start) && log.loggedAt.isBefore(end),
+          )
+          .fold<double>(
+            0,
+            (total, log) => total + ((log.weight ?? 0) * (log.reps ?? 0)),
+          );
+      volumes.add(WeeklyVolume(start: start, volume: volume));
+    }
+    return volumes;
+  }
+
+  Future<Set<DateTime>> getWorkoutDates() async {
+    final sessions = await getCompletedSessions();
+    return sessions
+        .map(
+          (session) => DateTime(
+            session.startedAt.year,
+            session.startedAt.month,
+            session.startedAt.day,
+          ),
+        )
+        .toSet();
+  }
+
+  DateTime _startOfWeek(DateTime date) {
+    final day = DateTime(date.year, date.month, date.day);
+    return day.subtract(Duration(days: day.weekday - 1));
+  }
+}
+
+class WeeklyVolume {
+  final DateTime start;
+  final double volume;
+
+  const WeeklyVolume({required this.start, required this.volume});
 }
