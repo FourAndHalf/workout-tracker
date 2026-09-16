@@ -80,6 +80,37 @@ void main() {
   });
 
   group('NutritionRepository Unit Tests', () {
+    test('Clears saved user data while keeping the program table', () async {
+      await workoutRepo.startSession(
+        programId: 'program',
+        weekId: 'week',
+        dayId: 'day',
+        dayName: 'Arms',
+      );
+      await nutritionRepo.addFoodPhoto(filePath: '/missing/photo.jpg');
+      await nutritionRepo.setSupplementTaken(
+        date: DateTime.now(),
+        supplement: 'Protein powder',
+        taken: true,
+      );
+      await nutritionRepo.addMealPlan(
+        dayOfWeek: 1,
+        mealName: 'Test meal',
+        ingredients: 'Rice',
+        calories: 100,
+        proteinG: 5,
+        carbsG: 10,
+        fatG: 2,
+      );
+
+      await nutritionRepo.clearUserData();
+
+      expect(await workoutRepo.getCompletedSessions(), isEmpty);
+      expect(await nutritionRepo.getPhotosForDate(DateTime.now()), isEmpty);
+      expect(await nutritionRepo.getTakenSupplements(DateTime.now()), isEmpty);
+      expect(await nutritionRepo.getMealPlans(), isEmpty);
+    });
+
     test('Seeds a complete Kerala meal plan for all seven days', () async {
       await nutritionRepo.ensureDefaultKeralaMealPlan();
       final meals = await nutritionRepo.getMealPlans();
