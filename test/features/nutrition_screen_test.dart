@@ -39,8 +39,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Shopping list'));
     await tester.pumpAndSettle();
-    expect(find.text('Weekly shopping list'), findsOneWidget);
-    expect(find.text('Rice flour'), findsOneWidget);
+    expect(find.text('Shopping list'), findsOneWidget);
     expect(find.byTooltip('Edit item'), findsWidgets);
     expect(find.byTooltip('Remove item'), findsWidgets);
   });

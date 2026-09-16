@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../main.dart';
@@ -73,10 +74,65 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final time = await showTimePicker(
       context: context,
       initialTime: _alarm.time,
+      builder: (context, child) => Theme(
+        data: Theme.of(context).copyWith(
+          timePickerTheme: const TimePickerThemeData(
+            backgroundColor: AppColors.surface,
+            hourMinuteColor: AppColors.card,
+            hourMinuteTextColor: AppColors.textPrimary,
+            dialHandColor: AppColors.primary,
+            dialBackgroundColor: AppColors.card,
+            dayPeriodColor: AppColors.card,
+            dayPeriodTextColor: AppColors.textPrimary,
+          ),
+        ),
+        child: child!,
+      ),
     );
     if (time != null) {
       await _updateAlarm(_alarm.copyWith(time: time, enabled: true));
     }
+  }
+
+  Future<void> _pickAlarmTune() async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            const ListTile(
+              title: Text('Alarm tune'),
+              subtitle: Text('Choose a Spotify mix'),
+            ),
+            ...workoutAlarmTunes.map(
+              (tune) => RadioListTile<String>(
+                value: tune.id,
+                groupValue: _alarm.tuneId,
+                title: Text(tune.title),
+                subtitle: Text(tune.artist),
+                onChanged: (value) => Navigator.pop(context, value),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (selected != null) {
+      await _updateAlarm(_alarm.copyWith(tuneId: selected));
+    }
+  }
+
+  Future<void> _openAlarmTune() async {
+    final tune = workoutAlarmTunes.firstWhere(
+      (item) => item.id == _alarm.tuneId,
+      orElse: () => workoutAlarmTunes.first,
+    );
+    await launchUrl(
+      Uri.parse(tune.spotifyUrl),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   Future<void> _addSupplement(SupplementRepository repository) async {
@@ -164,28 +220,44 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _confirmDelete(BuildContext context) async {
     final period = await showDialog<Duration>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('How much data should be deleted?'),
-        content: const Text(
-          'Choose how far back to remove workout and nutrition history. Meal plans and your workout program stay available.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          for (final option in const <MapEntry<String, Duration>>[
-            MapEntry('Last 1 hour', Duration(hours: 1)),
-            MapEntry('Last 1 day', Duration(days: 1)),
-            MapEntry('Last 2 days', Duration(days: 2)),
-            MapEntry('Last 1 week', Duration(days: 7)),
-          ])
-            TextButton(
-              onPressed: () => Navigator.pop(context, option.value),
-              child: Text(option.key),
+      builder: (context) {
+        var selected = const Duration(days: 1);
+        const options = <MapEntry<String, Duration>>[
+          MapEntry('Last 1 hour', Duration(hours: 1)),
+          MapEntry('Last 1 day', Duration(days: 1)),
+          MapEntry('Last 2 days', Duration(days: 2)),
+          MapEntry('Last 1 week', Duration(days: 7)),
+        ];
+        return StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            title: const Text('Delete saved data'),
+            content: DropdownButtonFormField<Duration>(
+              initialValue: selected,
+              decoration: const InputDecoration(labelText: 'Time range'),
+              items: [
+                for (final option in options)
+                  DropdownMenuItem(
+                    value: option.value,
+                    child: Text(option.key),
+                  ),
+              ],
+              onChanged: (value) {
+                if (value != null) setDialogState(() => selected = value);
+              },
             ),
-        ],
-      ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, selected),
+                child: const Text('Continue'),
+              ),
+            ],
+          ),
+        );
+      },
     );
     if (period == null || !context.mounted) return;
 
@@ -268,6 +340,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: _loadingAlarm ? null : _pickAlarmTime,
                 ),
+                ListTile(
+                  leading: const Icon(Icons.music_note_outlined),
+                  title: const Text('Alarm tune'),
+                  subtitle: Text(
+                    workoutAlarmTunes
+                        .firstWhere(
+                          (tune) => tune.id == _alarm.tuneId,
+                          orElse: () => workoutAlarmTunes.first,
+                        )
+                        .title,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Open in Spotify',
+                        icon: const Icon(Icons.open_in_new, size: 18),
+                        onPressed: _loadingAlarm ? null : _openAlarmTune,
+                      ),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
+                  onTap: _loadingAlarm ? null : _pickAlarmTune,
+                ),
               ],
             ),
           ),
@@ -308,9 +404,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ListTile(
                               leading: const Icon(Icons.medication_outlined),
                               title: const Text('Supplements'),
-                              subtitle: const Text(
-                                'Manage what you are taking',
-                              ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.add),
                                 tooltip: 'Add supplement',
