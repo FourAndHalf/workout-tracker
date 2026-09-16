@@ -6,6 +6,7 @@ import 'data/database/app_database.dart';
 import 'data/repositories/program_repository.dart';
 import 'data/repositories/workout_repository.dart';
 import 'data/repositories/nutrition_repository.dart';
+import 'services/daily_workout_alarm_service.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();
@@ -28,8 +29,15 @@ final nutritionRepositoryProvider = Provider<NutritionRepository>((ref) {
   return NutritionRepository(db);
 });
 
+final dailyWorkoutAlarmServiceProvider = Provider<DailyWorkoutAlarmService>((
+  ref,
+) {
+  return DailyWorkoutAlarmService();
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DailyWorkoutAlarmService().initialize();
 
   runApp(const ProviderScope(child: FitnessTrackerApp()));
 }
