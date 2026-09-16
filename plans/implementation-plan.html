@@ -321,80 +321,80 @@
     </div>
     <ul class="task-list">
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Install Linux system dependencies <span class="tag tag-setup">setup</span></div>
           <div class="task-detail">curl, git, unzip, xz-utils, clang, cmake, ninja-build, pkg-config, libgtk-3-dev, liblzma-dev</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Install Flutter SDK (stable branch) <span class="tag tag-setup">setup</span></div>
           <div class="task-detail">Clone to ~/development/flutter, add to PATH in shell profile</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Install Android SDK &amp; accept licenses <span class="tag tag-setup">setup</span></div>
           <div class="task-detail">Android SDK, cmdline-tools, build-tools 34+, platform-tools. Run flutter doctor --android-licenses</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Configure USB debugging for physical device <span class="tag tag-setup">setup</span></div>
           <div class="task-detail">Enable Developer Options + USB Debugging on phone; install udev rules if needed</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Verify installation with <code>flutter doctor -v</code> <span class="tag tag-setup">setup</span></div>
           <div class="task-detail">All checks passing (Flutter, Android toolchain, connected device)</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create Flutter project <span class="tag tag-new">new</span></div>
           <div class="task-detail">flutter create --org com.fourandhalf --project-name fitness_tracker --platforms android .</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Configure pubspec.yaml with all dependencies <span class="tag tag-config">config</span></div>
           <div class="task-detail">drift, sqlite3_flutter_libs, flutter_riverpod, go_router, workmanager, image_picker, google_generative_ai, fl_chart, flutter_local_notifications, timezone, path_provider</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create full directory structure under lib/ <span class="tag tag-new">new</span></div>
           <div class="task-detail">core/, data/, features/, services/ with all sub-folders per the architecture</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Copy program JSON into assets/programs/ <span class="tag tag-config">config</span></div>
           <div class="task-detail">Move data/program_week1.json → assets/programs/, register in pubspec.yaml assets section</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Verify project compiles: <code>flutter analyze &amp;&amp; flutter build apk --debug</code> <span class="tag tag-test">verify</span></div>
           <div class="task-detail">Clean build with zero errors and zero warnings</div>
@@ -416,88 +416,88 @@
     </div>
     <ul class="task-list">
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create JSON model classes <span class="tag tag-new">new</span></div>
           <div class="task-detail">ProgramModel, WeekModel, DayModel, BlockModel, ExerciseModel — with fromJson/toJson in lib/data/models/</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Write unit tests for JSON deserialization <span class="tag tag-test">test</span></div>
           <div class="task-detail">Parse program_week1.json, verify all 5 days, all block types, all log modes, prescriptionComplete flags</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Define Drift tables: Programs <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/data/database/tables/programs.dart — id, name, source_note, json_data, created_at</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Define Drift tables: WorkoutSessions <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/data/database/tables/workout_sessions.dart — id, program_id, week_id, day_id, day_name, started_at, finished_at, notes</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Define Drift tables: ExerciseLogs <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/data/database/tables/exercise_logs.dart — id, session_id, block_id, exercise_id, exercise_name, block_type, log_mode, set_number, weight, reps, target_reps, hit_failure, duration_seconds, notes, logged_at</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Define Drift tables: FoodPhotos, DailyNutrition, DailyNutritionPhotos <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/data/database/tables/food_photos.dart &amp; daily_nutrition.dart — per ER diagram</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create AppDatabase class and run code generation <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/data/database/app_database.dart — dart run build_runner build --delete-conflicting-outputs</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Implement ProgramRepository <span class="tag tag-new">new</span></div>
           <div class="task-detail">Load JSON from assets, parse into models, store/retrieve programs from SQLite, support external JSON import</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Implement WorkoutRepository <span class="tag tag-new">new</span></div>
           <div class="task-detail">CRUD sessions + exercise logs, query by date/day type/exercise, aggregate queries (max weight, total volume)</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Implement NutritionRepository <span class="tag tag-new">new</span></div>
           <div class="task-detail">CRUD food photos + daily nutrition, query by date, store Gemini analysis results</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Write repository unit tests <span class="tag tag-test">test</span></div>
           <div class="task-detail">Test all CRUD operations, query filters, and edge cases with in-memory Drift database</div>
@@ -519,56 +519,56 @@
     </div>
     <ul class="task-list">
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create app color palette &amp; constants <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/core/theme/app_colors.dart — deep charcoal bg, neon green primary, electric blue accent, surface/card colors</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create Material 3 dark theme <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/core/theme/app_theme.dart — ThemeData with typography (Inter/Outfit via Google Fonts), card styles, glassmorphism, input decorations</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Configure GoRouter with all routes <span class="tag tag-new">new</span></div>
           <div class="task-detail">lib/router.dart — /, /programs, /programs/:id, /programs/:id/:dayId, /workout/:dayId, /history, /history/:id, /progress, /nutrition, /nutrition/:date, /settings</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create main.dart and app.dart entry points <span class="tag tag-new">new</span></div>
           <div class="task-detail">Initialize Drift DB, Riverpod ProviderScope, MaterialApp.router with theme and GoRouter</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build Home dashboard screen <span class="tag tag-new">new</span></div>
           <div class="task-detail">Today's workout card (quick-start), recent session summary, weekly streak indicator, food photo FAB</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build bottom navigation bar <span class="tag tag-new">new</span></div>
           <div class="task-detail">5 tabs: Home, Programs, History, Progress, Nutrition — with animated transitions</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Write widget tests for navigation and home screen <span class="tag tag-test">test</span></div>
           <div class="task-detail">Verify all tabs navigate correctly, dashboard cards render with mock data</div>
@@ -590,48 +590,48 @@
     </div>
     <ul class="task-list">
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build ProgramListScreen <span class="tag tag-new">new</span></div>
           <div class="task-detail">List all imported programs with week/day counts, expandable weeks → days, "Import Program" FAB</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build DayDetailScreen <span class="tag tag-new">new</span></div>
           <div class="task-detail">Scrollable list of blocks and exercises for a selected day, "Start Workout" FAB</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build BlockCard widget with block-type visual styling <span class="tag tag-new">new</span></div>
           <div class="task-detail">Distinct visuals per type: straight (standard), superset (linked + "SS" badge), triSet ("TRI"), giantSet ("GIANT"), dropSet ("DROP"), restPause ("RP" + progress ring)</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Build ExerciseTile widget <span class="tag tag-new">new</span></div>
           <div class="task-detail">Shows name, prescription text, target sets × reps, log mode icon, prescriptionComplete warning</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Create Riverpod providers for program state <span class="tag tag-new">new</span></div>
           <div class="task-detail">programsProvider, selectedProgramProvider, selectedDayProvider — wired to ProgramRepository</div>
         </div>
       </li>
 
-      <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Write widget tests for program viewer <span class="tag tag-test">test</span></div>
           <div class="task-detail">Verify all 5 days render, all block types display correct badges, exercises show correct data</div>

@@ -1,0 +1,36 @@
+import 'dart:io';
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+
+import 'tables/programs.dart';
+import 'tables/workout_sessions.dart';
+import 'tables/exercise_logs.dart';
+import 'tables/food_photos.dart';
+import 'tables/daily_nutrition.dart';
+
+part 'app_database.g.dart';
+
+@DriftDatabase(tables: [
+  Programs,
+  WorkoutSessions,
+  ExerciseLogs,
+  FoodPhotos,
+  DailyNutrition,
+  DailyNutritionPhotos,
+])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
+
+  @override
+  int get schemaVersion => 1;
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'fitness_tracker.sqlite'));
+    return NativeDatabase.createInBackground(file);
+  });
+}

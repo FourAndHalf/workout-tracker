@@ -11,17 +11,43 @@ All work on this project **must** follow the phased implementation plan defined 
    task. Work on tasks **in order** within each phase, and complete all tasks in a phase before
    moving to the next.
 
-2. **A task is considered complete** only when **both** conditions are met:
+2. **Before implementing a feature or task**, create and switch to a dedicated git feature branch
+   from `main`:
+   ```bash
+   git switch main
+   git switch -c feature/<short-task-name>
+   ```
+   Use a concise, kebab-case branch name that reflects the current plan task.
+
+3. **A task is considered complete** only when **all** conditions are met:
    - The functional code is implemented and works correctly.
    - Relevant tests are written and passing (unit, widget, or integration as appropriate).
+   - The task changes are committed to git history on the feature branch.
+   - The completed feature branch is merged back into `main`.
 
-3. **When a task is fully complete**, update `plans/implementation-plan.html`:
+4. **When a task is fully complete**, update `plans/implementation-plan.html`:
    - Check the corresponding checkbox.
    - The task text will automatically render with ~~strikethrough~~ styling via the HTML/CSS.
    - Do **not** delete tasks from the plan — they serve as a historical record.
 
-4. **Never skip a task** without explicit user approval. If a task is blocked, surface the blocker
+5. **Never skip a task** without explicit user approval. If a task is blocked, surface the blocker
    to the user rather than jumping ahead.
+
+## Git Workflow
+
+- Implement every feature/task on a dedicated `feature/<short-task-name>` branch created from
+  `main`.
+- Keep commits focused and descriptive. Prefer one task per commit when practical.
+- Do not commit unfinished or failing work unless the user explicitly requests a checkpoint commit.
+- After the task is implemented and relevant tests pass, commit the changes on the feature branch.
+- Merge the completed feature branch back into `main` after completion:
+  ```bash
+  git switch main
+  git merge --no-ff feature/<short-task-name>
+  ```
+- After merging, ensure `main` contains the completed task, the plan checkbox update, and the test
+  coverage for that task.
+- Do not delete feature branches unless the user explicitly requests cleanup.
 
 ## Testing Requirements
 
@@ -42,7 +68,6 @@ All work on this project **must** follow the phased implementation plan defined 
 - Use the project's established architecture (feature-based folders, Riverpod for state, Drift for
   DB, GoRouter for navigation).
 - Preserve all existing comments and docstrings unrelated to current changes.
-- Keep commits focused — one task per commit when practical.
 
 ## Plan Integrity
 
