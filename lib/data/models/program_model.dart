@@ -6,6 +6,8 @@ class ProgramModel {
   final Map<String, String>? logModes;
   final Map<String, String>? blockTypes;
   final List<WeekModel> weeks;
+  final BonusDayModel? bonusDay;
+  final List<String> openItems;
 
   ProgramModel({
     required this.schemaVersion,
@@ -15,6 +17,8 @@ class ProgramModel {
     this.logModes,
     this.blockTypes,
     required this.weeks,
+    this.bonusDay,
+    this.openItems = const [],
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +38,14 @@ class ProgramModel {
               ?.map((w) => WeekModel.fromJson(w as Map<String, dynamic>))
               .toList() ??
           [],
+      bonusDay: json['bonusDay'] == null
+          ? null
+          : BonusDayModel.fromJson(json['bonusDay'] as Map<String, dynamic>),
+      openItems:
+          (json['openItems'] as List<dynamic>?)
+              ?.map((item) => item.toString())
+              .toList() ??
+          [],
     );
   }
 
@@ -46,8 +58,36 @@ class ProgramModel {
       'logModes': logModes,
       'blockTypes': blockTypes,
       'weeks': weeks.map((w) => w.toJson()).toList(),
+      'bonusDay': bonusDay?.toJson(),
+      'openItems': openItems,
     };
   }
+}
+
+class BonusDayModel {
+  final String id;
+  final String title;
+  final DayModel day;
+
+  const BonusDayModel({
+    required this.id,
+    required this.title,
+    required this.day,
+  });
+
+  factory BonusDayModel.fromJson(Map<String, dynamic> json) {
+    return BonusDayModel(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      day: DayModel.fromJson(json['day'] as Map<String, dynamic>),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'day': day.toJson(),
+  };
 }
 
 class WeekModel {
@@ -193,11 +233,13 @@ class ExerciseModel {
   final String? prescription;
   final bool prescriptionComplete;
   final int targetSets;
-  final List<int>? repScheme;
+  final List<int?>? repScheme;
   final int? repTarget;
   final String? repUnit;
   final String logMode; // weightReps, repsOnly, time, cumulative, failure
   final String? videoUrl;
+  final bool? needsReview;
+  final String? reviewNote;
 
   ExerciseModel({
     required this.id,
@@ -211,6 +253,8 @@ class ExerciseModel {
     this.repUnit,
     required this.logMode,
     this.videoUrl,
+    this.needsReview,
+    this.reviewNote,
   });
 
   Uri get exerciseVideoUri {
@@ -233,13 +277,17 @@ class ExerciseModel {
       prescription: json['prescription'] as String?,
       prescriptionComplete: json['prescriptionComplete'] as bool? ?? true,
       targetSets: json['targetSets'] as int? ?? 1,
-      repScheme: (json['repScheme'] as List<dynamic>?)
-          ?.map((r) => r as int)
-          .toList(),
+      repScheme: json['repScheme'] is int
+          ? [json['repScheme'] as int]
+          : (json['repScheme'] as List<dynamic>?)
+                ?.map((r) => r as int?)
+                .toList(),
       repTarget: json['repTarget'] as int?,
       repUnit: json['repUnit'] as String?,
       logMode: json['logMode'] as String? ?? 'weightReps',
       videoUrl: json['videoUrl'] as String?,
+      needsReview: json['needsReview'] as bool?,
+      reviewNote: json['reviewNote'] as String?,
     );
   }
 
@@ -256,6 +304,8 @@ class ExerciseModel {
       'repUnit': repUnit,
       'logMode': logMode,
       'videoUrl': videoUrl,
+      'needsReview': needsReview,
+      'reviewNote': reviewNote,
     };
   }
 }

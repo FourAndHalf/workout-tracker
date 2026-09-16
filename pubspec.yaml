@@ -70,3 +70,4 @@ flutter:
 
   assets:
     - assets/programs/program_week1.json
+    - assets/programs/program_full.json

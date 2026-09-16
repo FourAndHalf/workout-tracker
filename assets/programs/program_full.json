@@ -1,0 +1,4050 @@
+{
+  "schemaVersion": 1,
+  "programId": "ffts-4week",
+  "programName": "4 Week Program",
+  "sourceNote": "Transcribed from Workout.pdf. Many exercise descriptions were truncated in the source (the underlying PDF text layer itself cuts off, not just the visual rendering -- confirmed via pdftotext). Lines with needsReview:true and a reviewNote were completed by Claude with a reasonable assumption and MUST be spot-checked against your own memory of the program before you trust them mid-workout. Lines with only prescriptionComplete:false and no reviewNote are still literally cut off with no safe assumption made (rep count unknown).",
+  "logModes": {
+    "weightReps": "Weight field + reps field.",
+    "repsOnly": "Reps field only (bodyweight movements).",
+    "time": "Duration in seconds.",
+    "cumulative": "Tap-add chunks of reps until repTarget is reached (rest-pause / century sets).",
+    "failure": "Reps field + 'hit failure' toggle."
+  },
+  "blockTypes": {
+    "straight": "Exercises performed and rested independently.",
+    "superset": "Two exercises back to back, no rest between.",
+    "triSet": "Three movements performed continuously as one set.",
+    "giantSet": "Four or more movements performed continuously as one set.",
+    "dropSet": "Weight reduced dropsPerSet times within a single set.",
+    "restPause": "Single set taken past failure with short pauses until repTarget. Also used for 'century sets' (push-to-100 single sets) -- see open item below."
+  },
+  "weeks": [
+    {
+      "number": 1,
+      "id": "w1",
+      "title": "Fucked From The Start",
+      "days": [
+        {
+          "id": "w1-arms",
+          "name": "Arms",
+          "order": 1,
+          "blocks": [
+            {
+              "id": "w1-arms-b1",
+              "name": "Triceps",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Rest pause to 100 reps.",
+              "exercises": [
+                {
+                  "id": "w1-arms-tri-01",
+                  "order": 1,
+                  "name": "Rope Extensions",
+                  "prescription": "2 Sets / Rest Pause to 100 reps (Pick a weight you can get around 30 reps before you hit failure)",
+                  "prescriptionComplete": false,
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...around 30 reps'. Closing clause assumed by analogy to the other rest-pause-to-100 lines on this page (e.g. Incline Curls' '...but you won't' pattern)."
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b2",
+              "name": "Incline Skull Crush W/ Seated French Press",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": "Partial at bottom.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-arms-tri-02",
+                  "order": 1,
+                  "name": "Incline Skull Crush",
+                  "prescription": "3 Sets / 20 Reps (Weight should let you hit 20 clean reps)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...20 Reps (Weight'. Assumed completion."
+                },
+                {
+                  "id": "w1-arms-tri-03",
+                  "order": 2,
+                  "name": "Seated French Press (partial at bottom)",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b3",
+              "name": "Cable French Press W/ Overhead Rope Extension",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": "Pronate wrists.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-arms-tri-04",
+                  "order": 1,
+                  "name": "Cable French Press",
+                  "prescription": "3 Sets / 20 Reps (Weight should let you hit 20 clean reps)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...20 Reps (Weight should'. Assumed completion."
+                },
+                {
+                  "id": "w1-arms-tri-05",
+                  "order": 2,
+                  "name": "Overhead Rope Extension (pronate wrists)",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b4",
+              "name": "Close Grip Bench",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "SLOW.",
+              "exercises": [
+                {
+                  "id": "w1-arms-tri-06",
+                  "order": 1,
+                  "name": "Close Grip Bench (SLOW)",
+                  "prescription": "3 Sets / FAILURE (Pick a Weight you can get 20 reps with but you won't)",
+                  "prescriptionComplete": true,
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b5",
+              "name": "Biceps",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Rest pause to 100 reps.",
+              "exercises": [
+                {
+                  "id": "w1-arms-bi-01",
+                  "order": 1,
+                  "name": "Straight Bar Cable Curls",
+                  "prescription": "2 Sets / Rest Pause to 100 reps (Pick a weight you can get around 30 reps before you hit failure)",
+                  "prescriptionComplete": false,
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...around'. Assumed completion, mirrors Rope Extensions above."
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b6",
+              "name": "Reverse Preacher Curl W/ Drag Curl",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-arms-bi-02",
+                  "order": 1,
+                  "name": "Reverse Preacher Curl (Close Grip)",
+                  "prescription": "3 Sets / 20 Reps (Weight should let you hit 20 clean reps)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...20 Reps (Weight'. Assumed completion."
+                },
+                {
+                  "id": "w1-arms-bi-03",
+                  "order": 2,
+                  "name": "Drag Curl (Wide Grip)",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b7",
+              "name": "Reverse EZ Bar Cable Curls W/ Regular EZ Bar Cable Curls",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-arms-bi-04",
+                  "order": 1,
+                  "name": "Reverse EZ Bar Cable Curls",
+                  "prescription": "3 Sets / 20 Reps (Weight should let you hit 20 clean reps)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...20 Reps (Weight should'. Assumed completion."
+                },
+                {
+                  "id": "w1-arms-bi-05",
+                  "order": 2,
+                  "name": "Regular EZ Bar Cable Curls",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-arms-b8",
+              "name": "Incline Curls",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "SLOW.",
+              "exercises": [
+                {
+                  "id": "w1-arms-bi-06",
+                  "order": 1,
+                  "name": "Incline Curls (SLOW)",
+                  "prescription": "3 Sets / FAILURE (Pick a Weight you can get 20 reps with but you won't)",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w1-shoulders",
+          "name": "Shoulders",
+          "order": 2,
+          "blocks": [
+            {
+              "id": "w1-sh-b1",
+              "name": "Bus Drivers",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Slightly below eye level.",
+              "exercises": [
+                {
+                  "id": "w1-sh-01",
+                  "order": 1,
+                  "name": "Bus Drivers",
+                  "prescription": "2 Sets / Rest Pause to 100 reps \"slightly below eye level\"",
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b2",
+              "name": "Machine Side Laterals",
+              "type": "triSet",
+              "targetSets": 2,
+              "instructions": "One set = 20 partials at the top, then 20 full reps, then 20 partials at the bottom.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-sh-02",
+                  "order": 1,
+                  "name": "Machine Side Lateral - Partials (TOP)",
+                  "prescription": "20 partials at the top",
+                  "targetSets": 2,
+                  "repScheme": [
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-03",
+                  "order": 2,
+                  "name": "Machine Side Lateral - Full ROM",
+                  "prescription": "20 full reps",
+                  "targetSets": 2,
+                  "repScheme": [
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-04",
+                  "order": 3,
+                  "name": "Machine Side Lateral - Partials (BOTTOM)",
+                  "prescription": "20 partials at the bottom",
+                  "targetSets": 2,
+                  "repScheme": [
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...Partials at the'. 'bottom' assumed to mirror the block's own instructions text, which does complete the sentence."
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b3",
+              "name": "Rear Delt Cable Flys - 3 angles",
+              "type": "straight",
+              "targetSets": 2,
+              "instructions": "2 sets at each angle.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-sh-05",
+                  "order": 1,
+                  "name": "Rear Delt Cable Fly - Shoulder Level",
+                  "prescription": "2 Sets",
+                  "targetSets": 2,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-06",
+                  "order": 2,
+                  "name": "Rear Delt Cable Fly - High \"McDonald's\"",
+                  "prescription": "2 Sets",
+                  "targetSets": 2,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-07",
+                  "order": 3,
+                  "name": "Rear Delt Cable Fly - High 45 Degree Angle",
+                  "prescription": "2 Sets (Each Set Each Angle, 2 Sets Each)",
+                  "targetSets": 2,
+                  "repScheme": null,
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source line reads '...High 45 Degree angle' with the closing parenthetical cut off ('2 Sets Each (Shoulder Level, High McDonald's, High 45 Degree angle'). Assumed to simply restate '2 sets each'."
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b4",
+              "name": "Smith Press",
+              "type": "restPause",
+              "targetSets": 3,
+              "instructions": "Shoot for 20 reps on your initial push for each set.",
+              "exercises": [
+                {
+                  "id": "w1-sh-08",
+                  "order": 1,
+                  "name": "Smith Press (Rest Pause)",
+                  "prescription": "3 Sets / Shoot For 20 Reps on your initial push for each set \"keep constant tension, no lockout\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "logMode": "cumulative",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...for each set \"keep'. Assumed completion in the spirit of similar Smith-machine cues elsewhere in the program (constant tension / no lockout)."
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b5",
+              "name": "Straight Bar Cable Front Raise",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "Each set you drop the weight 2x, so 3 total pushes is one set.",
+              "dropsPerSet": 2,
+              "exercises": [
+                {
+                  "id": "w1-sh-09",
+                  "order": 1,
+                  "name": "Straight Bar Cable Front Raise",
+                  "prescription": "3 Sets (Each Set you Drop The Weight 2x so 3 total pushes is one set)",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...3 total is one'. Assumed to read 'one set', consistent with the block name/instructions."
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b6",
+              "name": "Machine Rear Delt SS Seated Dumbbell Side Lateral",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": null,
+              "needsReview": true,
+              "reviewNote": "This block is listed twice consecutively in the source PDF. Confirm whether that is intentional (6 total sets) or a duplication error.",
+              "exercises": [
+                {
+                  "id": "w1-sh-10",
+                  "order": 1,
+                  "name": "Machine Rear Delt",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-11",
+                  "order": 2,
+                  "name": "Seated Dumbbell Side Lateral",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-sh-b7",
+              "name": "Machine Rear Delt SS Seated Dumbbell Side Lateral (2nd listing)",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": null,
+              "needsReview": true,
+              "reviewNote": "Duplicate of w1-sh-b6 in the source. Delete this block if the repetition was a typo.",
+              "exercises": [
+                {
+                  "id": "w1-sh-12",
+                  "order": 1,
+                  "name": "Machine Rear Delt",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-sh-13",
+                  "order": 2,
+                  "name": "Seated Dumbbell Side Lateral",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w1-back",
+          "name": "Back",
+          "order": 3,
+          "blocks": [
+            {
+              "id": "w1-bk-b1",
+              "name": "T-Bar Row",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Chest supported or regular. Rest pause.",
+              "exercises": [
+                {
+                  "id": "w1-bk-01",
+                  "order": 1,
+                  "name": "Chest Supported T-Bar Row (or Regular T-Bar Row)",
+                  "prescription": "2 Sets / 100 Reps \"Rest pause to 100\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '\"Rest pause -'. Assumed to simply describe the rest-pause-to-100 structure."
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b2",
+              "name": "V-Bar Pull Downs",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": "Lean forward during the negative.",
+              "exercises": [
+                {
+                  "id": "w1-bk-02",
+                  "order": 1,
+                  "name": "V-Bar Pull Downs",
+                  "prescription": "4 Sets / 15 Reps \"Lean forward during the negative (to enhance the stretch)\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 4,
+                  "repScheme": [
+                    15,
+                    15,
+                    15,
+                    15
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...to enhance the'. Assumed 'stretch' to close the cue, consistent with 'Dynamic Seated Cable Row' below."
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b3",
+              "name": "Double Handle Bent Over Seated Cable Rows",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Stay leaned forward.",
+              "exercises": [
+                {
+                  "id": "w1-bk-03",
+                  "order": 1,
+                  "name": "Double Handle Bent Over Seated Cable Rows",
+                  "prescription": "3 Sets / 20 Reps \"Stay leaned forward the whole set\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '\"Stay leaned forward -'. Assumed completion."
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b4",
+              "name": "Seated Cable Mid Trap Shrug",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Slow reps, slight hold at the top.",
+              "exercises": [
+                {
+                  "id": "w1-bk-04",
+                  "order": 1,
+                  "name": "Seated Cable Mid Trap Shrug",
+                  "prescription": "3 Sets / 15 Slow Reps \"Slight hold at the top\"",
+                  "targetSets": 3,
+                  "repScheme": [
+                    15,
+                    15,
+                    15
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b5",
+              "name": "Dynamic Seated Cable Row",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Keep low back tight and exaggerate the stretch.",
+              "exercises": [
+                {
+                  "id": "w1-bk-05",
+                  "order": 1,
+                  "name": "Dynamic Seated Cable Row",
+                  "prescription": "3 Sets / 20 Reps \"Keep low back tight and exaggerate the stretch\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...and exaggerate the'. Assumed 'stretch', matching the block's own instructions field which does complete the thought."
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b6",
+              "name": "Lying Dumbbell Row SS Seated Shrug",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": "Take whatever grip you prefer.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-bk-06",
+                  "order": 1,
+                  "name": "Lying Dumbbell Row",
+                  "prescription": "3 Sets / 20 Reps \"Take whatever grip you prefer\"",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...whatever grip you'. Assumed completion, matches the block's own instructions field."
+                },
+                {
+                  "id": "w1-bk-07",
+                  "order": 2,
+                  "name": "Seated Shrug",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-bk-b7",
+              "name": "Hyperextensions",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Exaggerate the range of motion.",
+              "exercises": [
+                {
+                  "id": "w1-bk-08",
+                  "order": 1,
+                  "name": "Hyperextensions",
+                  "prescription": "3 Sets / 20 Reps \"exaggeration\"",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w1-chest-abs",
+          "name": "Chest + Abs",
+          "order": 4,
+          "blocks": [
+            {
+              "id": "w1-ch-b1",
+              "name": "High Cable Fly",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": "Rest pause. Shoot for 30 on the first push.",
+              "exercises": [
+                {
+                  "id": "w1-ch-01",
+                  "order": 1,
+                  "name": "High Cable Fly",
+                  "prescription": "1 Set / 100 Reps (Rest Pause - Shoot for 30 on the first push)",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b2",
+              "name": "Low Cable Fly",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": "Rest pause. Shoot for 30 on the first push.",
+              "exercises": [
+                {
+                  "id": "w1-ch-02",
+                  "order": 1,
+                  "name": "Low Cable Fly",
+                  "prescription": "1 Set / 100 Reps (Rest Pause - Shoot for 30 on the first push)",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b3",
+              "name": "Smith Machine Slight Incline Press",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "4 count negative and explosive positive.",
+              "exercises": [
+                {
+                  "id": "w1-ch-03",
+                  "order": 1,
+                  "name": "Smith Machine Slight Incline Press",
+                  "prescription": "\"4 count negative & explosive positive, drop the weight if you need to hit reps\"",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '...drop the'. Assumed it refers to a weight drop to keep the set going, consistent with the day's overall drop/failure theme."
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b4",
+              "name": "Machine Chest Fly - Partials + Full ROM + Decline",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": "Partial rep at top, then full range of motion, then decline.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-ch-04",
+                  "order": 1,
+                  "name": "Machine Chest Fly - Partial at Top",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-ch-05",
+                  "order": 2,
+                  "name": "Machine Chest Fly - Full ROM",
+                  "prescription": "3 Sets / 20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-ch-06",
+                  "order": 3,
+                  "name": "Machine Chest Fly - Decline",
+                  "prescription": "3rd set to failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b5",
+              "name": "Decline Bench + Decline Fly Partials + Pushups",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": "Fly partials at the bottom. Final movement to failure.",
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w1-ch-07",
+                  "order": 1,
+                  "name": "Decline Bench",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-ch-08",
+                  "order": 2,
+                  "name": "Decline Fly - Partials at the Bottom",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-ch-09",
+                  "order": 3,
+                  "name": "Pushups",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b6",
+              "name": "Dumbbell Push-ups w/ Twist",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Arch your back to mimic decline.",
+              "exercises": [
+                {
+                  "id": "w1-ch-10",
+                  "order": 1,
+                  "name": "Dumbbell Push-ups w/ Twist",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w1-ch-b7",
+              "name": "Abs",
+              "type": "straight",
+              "targetSets": 2,
+              "instructions": "Try not to rest much.",
+              "exercises": [
+                {
+                  "id": "w1-ab-01",
+                  "order": 1,
+                  "name": "TRX (Rope Handle) Abs",
+                  "prescription": "2 Sets / 50 Reps \"Try not to rest much but good luck with that\"",
+                  "targetSets": 2,
+                  "repScheme": [
+                    50,
+                    50
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w1-legs",
+          "name": "Legs",
+          "order": 5,
+          "blocks": [
+            {
+              "id": "w1-lg-b1",
+              "name": "Leg Extensions",
+              "type": "straight",
+              "targetSets": 6,
+              "instructions": "Ascending rep ramp.",
+              "exercises": [
+                {
+                  "id": "w1-lg-01",
+                  "order": 1,
+                  "name": "Leg Extensions",
+                  "prescription": "6 Sets / (50, 60, 70, 80, 90, 100)",
+                  "targetSets": 6,
+                  "repScheme": [
+                    50,
+                    60,
+                    70,
+                    80,
+                    90,
+                    100
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b2",
+              "name": "Leg Press - 3 Second Pause at Bottom",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Heels in, toes out. Feet nice and low. Lift toes.",
+              "exercises": [
+                {
+                  "id": "w1-lg-02",
+                  "order": 1,
+                  "name": "Leg Press (3 second pause at bottom)",
+                  "prescription": "\"Heels in toes out - feet nice and low - lift toes\"",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b3",
+              "name": "Leg Press - Feet Wide",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Don't lock out.",
+              "exercises": [
+                {
+                  "id": "w1-lg-03",
+                  "order": 1,
+                  "name": "Leg Press (Feet Wide)",
+                  "prescription": "3 Sets / 20 Reps \"Don't lockout\"",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b4",
+              "name": "Sumo Deads",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w1-lg-04",
+                  "order": 1,
+                  "name": "Sumo Deadlifts",
+                  "prescription": "4 Sets / (10, 8, 20, 20)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    10,
+                    8,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b5",
+              "name": "Lying Leg Curl",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": "Toes pointed away, hips lifted off the pad.",
+              "exercises": [
+                {
+                  "id": "w1-lg-05",
+                  "order": 1,
+                  "name": "Lying Leg Curl",
+                  "prescription": "4 Sets / 20 Reps \"Toes pointed away + Lifted off pad\"",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b6",
+              "name": "Walking Lunges",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "Holding 1 dumbbell.",
+              "exercises": [
+                {
+                  "id": "w1-lg-06",
+                  "order": 1,
+                  "name": "Walking Lunges (1 Dumbbell)",
+                  "prescription": "3 Sets / 20 Steps Per Leg",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "repUnit": "steps per leg",
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b7",
+              "name": "3 Way Seated Calf",
+              "type": "triSet",
+              "targetSets": 4,
+              "instructions": "Toes straight, turned out, turned in. 20 reps each position.",
+              "exercises": [
+                {
+                  "id": "w1-lg-07",
+                  "order": 1,
+                  "name": "Seated Calf - Toes Straight",
+                  "prescription": "4 Sets / 20 Reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-lg-08",
+                  "order": 2,
+                  "name": "Seated Calf - Toes Turned Out",
+                  "prescription": "4 Sets / 20 Reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w1-lg-09",
+                  "order": 3,
+                  "name": "Seated Calf - Toes Turned In",
+                  "prescription": "4 Sets / 20 Reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w1-lg-b8",
+              "name": "Anterior Tib SS Plate Calf Raises",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": "Anterior tib on lying leg machine to failure, then 30 rep plate calf raises.",
+              "exercises": [
+                {
+                  "id": "w1-lg-10",
+                  "order": 1,
+                  "name": "Anterior Tib (on Lying Leg machine)",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                },
+                {
+                  "id": "w1-lg-11",
+                  "order": 2,
+                  "name": "Plate Calf Raises",
+                  "prescription": "30 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "w2",
+      "title": "BFGS",
+      "days": [
+        {
+          "id": "w2-arms",
+          "name": "Arms",
+          "order": 1,
+          "blocks": [
+            {
+              "id": "w2-arms-b1",
+              "name": "Giant Set 1 - Biceps",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-arms-01",
+                  "order": 1,
+                  "name": "Reverse Cable Curls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-02",
+                  "order": 2,
+                  "name": "Close Grip Cable Curls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-03",
+                  "order": 3,
+                  "name": "Wide Grip Cable Curls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-04",
+                  "order": 4,
+                  "name": "Wide Grip Drag Curls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-arms-b2",
+              "name": "Giant Set 2 - Triceps",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-arms-05",
+                  "order": 1,
+                  "name": "Partial Rope Extensions (Bottom)",
+                  "prescription": "30 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    30,
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-06",
+                  "order": 2,
+                  "name": "Partial Rope Extensions (Top)",
+                  "prescription": "30 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    30,
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-07",
+                  "order": 3,
+                  "name": "Full ROM Rope Extensions",
+                  "prescription": "30 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    30,
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-08",
+                  "order": 4,
+                  "name": "Close Grip Push-ups",
+                  "prescription": "30 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    30,
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            },
+            {
+              "id": "w2-arms-b3",
+              "name": "Giant Set 3 - Triceps",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-arms-09",
+                  "order": 1,
+                  "name": "EZ Bar Close Grip Curl",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-10",
+                  "order": 2,
+                  "name": "EZ Bar Drag Curl",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-11",
+                  "order": 3,
+                  "name": "Seated French Press",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-arms-12",
+                  "order": 4,
+                  "name": "45 Degree Skull Crushers",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2-shoulders",
+          "name": "Shoulders",
+          "order": 2,
+          "blocks": [
+            {
+              "id": "w2-sh-b1",
+              "name": "Giant Set 1",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-sh-01",
+                  "order": 1,
+                  "name": "Partial Machine Rear Delt - TOP",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-02",
+                  "order": 2,
+                  "name": "Machine Rear Delt Full ROM",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-03",
+                  "order": 3,
+                  "name": "Partial Machine Rear Delt - BOTTOM",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-04",
+                  "order": 4,
+                  "name": "Bent Over DB Rears",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-sh-b2",
+              "name": "Giant Set 2",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-sh-05",
+                  "order": 1,
+                  "name": "Face Pulls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-06",
+                  "order": 2,
+                  "name": "Front Y-Raise W/ Separation",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-07",
+                  "order": 3,
+                  "name": "Around The World - Anterior Head Focus",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-08",
+                  "order": 4,
+                  "name": "Around The World - Lateral Head Focus",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-sh-b3",
+              "name": "Giant Set 3",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-sh-09",
+                  "order": 1,
+                  "name": "Partial Side Laterals - TOP",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-10",
+                  "order": 2,
+                  "name": "Full ROM Side Lateral",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-11",
+                  "order": 3,
+                  "name": "Partial Side Laterals - BOTTOM",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-sh-12",
+                  "order": 4,
+                  "name": "Static Hold Parallel To Floor",
+                  "prescription": "60 secs",
+                  "targetSets": 3,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2-back",
+          "name": "Back",
+          "order": 3,
+          "blocks": [
+            {
+              "id": "w2-bk-b1",
+              "name": "Giant Set 1",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-bk-01",
+                  "order": 1,
+                  "name": "Reverse Grip Pulldowns - Elbows in Fixed Position",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-02",
+                  "order": 2,
+                  "name": "Pronated Medium Grip Pulldown - Elbows in Fixed Position",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-03",
+                  "order": 3,
+                  "name": "Wide Grip Pulldowns",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-04",
+                  "order": 4,
+                  "name": "Wide Grip Trap Pulls",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-bk-b2",
+              "name": "Giant Set 2",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-bk-05",
+                  "order": 1,
+                  "name": "Bent Over Lat Row",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-06",
+                  "order": 2,
+                  "name": "Bent Over Lat Row W/ Extension At Top",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-07",
+                  "order": 3,
+                  "name": "Strict Cable Row - Slight Lean",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-08",
+                  "order": 4,
+                  "name": "Trap Row",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-bk-b3",
+              "name": "Giant Set 3",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-bk-09",
+                  "order": 1,
+                  "name": "Barbell Shrugs",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-10",
+                  "order": 2,
+                  "name": "Deadlifts",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-bk-11",
+                  "order": 3,
+                  "name": "Pull-ups",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "repsOnly"
+                },
+                {
+                  "id": "w2-bk-12",
+                  "order": 4,
+                  "name": "Partial Pull-ups",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2-chest-abs",
+          "name": "Chest + Abs",
+          "order": 4,
+          "blocks": [
+            {
+              "id": "w2-ch-b1",
+              "name": "Giant Set 1",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-ch-01",
+                  "order": 1,
+                  "name": "Incline Bench Press",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-02",
+                  "order": 2,
+                  "name": "Coffin Press",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-03",
+                  "order": 3,
+                  "name": "Wide Grip Push-ups",
+                  "prescription": "Failure",
+                  "targetSets": 4,
+                  "repScheme": 20,
+                  "logMode": "failure"
+                },
+                {
+                  "id": "w2-ch-04",
+                  "order": 4,
+                  "name": "Standard Push-ups w/ Arch To Mimic Decline",
+                  "prescription": "Failure",
+                  "targetSets": 4,
+                  "repScheme": 20,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w2-ch-b2",
+              "name": "Giant Set 2",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-ch-05",
+                  "order": 1,
+                  "name": "45 Degree DB Press",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-06",
+                  "order": 2,
+                  "name": "Barrel Press",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-07",
+                  "order": 3,
+                  "name": "Partial Flys - Bottom",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-08",
+                  "order": 4,
+                  "name": "Flys Full ROM",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-ch-b3",
+              "name": "Giant Set 3",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-ch-09",
+                  "order": 1,
+                  "name": "High Cable Fly - Elbows High",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-10",
+                  "order": 2,
+                  "name": "Mid Cable Fly - Elbows High",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-11",
+                  "order": 3,
+                  "name": "Mid Cable Fly - Straight In Front",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-ch-12",
+                  "order": 4,
+                  "name": "Low Cable Fly",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2-legs",
+          "name": "Legs",
+          "order": 5,
+          "blocks": [
+            {
+              "id": "w2-lg-b1",
+              "name": "Giant Set 1",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-lg-01",
+                  "order": 1,
+                  "name": "Hack Squat Feet Together - Lift Heels",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-02",
+                  "order": 2,
+                  "name": "Hack Squat Heels Together Toes Out",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-03",
+                  "order": 3,
+                  "name": "Half Hack Squat - Feet Wide / Bottom Half",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-04",
+                  "order": 4,
+                  "name": "Hack Squat - Regular",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-lg-b2",
+              "name": "Giant Set 2",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-lg-05",
+                  "order": 1,
+                  "name": "Lying Leg Curl - Toes Away / Plantar-flexion",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-06",
+                  "order": 2,
+                  "name": "Lying Leg Curl - Toes To Shins / Dorsiflexion",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-07",
+                  "order": 3,
+                  "name": "DB Stiff Legs - Toes on Plate",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-08",
+                  "order": 4,
+                  "name": "Walking Lunges or Alt Reverse Lunges in Place",
+                  "prescription": "20 reps each leg",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "repUnit": "reps each leg",
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w2-lg-b3",
+              "name": "Giant Set 3",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "3 sets.",
+              "exercises": [
+                {
+                  "id": "w2-lg-09",
+                  "order": 1,
+                  "name": "Glute Hyperextensions",
+                  "prescription": "30 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            },
+            {
+              "id": "w2-lg-b4",
+              "name": "Giant Set 4",
+              "type": "giantSet",
+              "targetSets": 4,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w2-lg-10",
+                  "order": 1,
+                  "name": "Smith Calf - Regular",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-11",
+                  "order": 2,
+                  "name": "Smith Calf - Toes Out + Supinate Foot",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-12",
+                  "order": 3,
+                  "name": "Smith Calf - Toes In + Pronate Foot",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w2-lg-13",
+                  "order": 4,
+                  "name": "Smith Calf - Rock Back Anterior Tib & Calf Raise",
+                  "prescription": "20 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "w3",
+      "title": "Time of Death",
+      "days": [
+        {
+          "id": "w3-arms",
+          "name": "Arms",
+          "order": 1,
+          "blocks": [
+            {
+              "id": "w3-arms-b1",
+              "name": "Straight Bar Cable Curl SS Straight Bar Cable Extension",
+              "type": "superset",
+              "targetSets": 6,
+              "instructions": "1 Set of Biceps & 1 Set of Triceps = 1 Total Set.",
+              "exercises": [
+                {
+                  "id": "w3-arms-01",
+                  "order": 1,
+                  "name": "Straight Bar Cable Curl",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-arms-02",
+                  "order": 2,
+                  "name": "Straight Bar Cable Extension",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-arms-b2",
+              "name": "EZ Bar French Press SS Close Grip Bent Over Curls",
+              "type": "superset",
+              "targetSets": 6,
+              "instructions": "1 Set of Biceps & 1 Set of Triceps = 1 Total Set.",
+              "exercises": [
+                {
+                  "id": "w3-arms-03",
+                  "order": 1,
+                  "name": "EZ Bar French Press",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-arms-04",
+                  "order": 2,
+                  "name": "Close Grip Bent Over Curls",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-arms-b3",
+              "name": "Rope Curls SS Rope Extensions",
+              "type": "superset",
+              "targetSets": 6,
+              "instructions": "1 Set of Biceps & 1 Set of Triceps = 1 Total Set.",
+              "exercises": [
+                {
+                  "id": "w3-arms-05",
+                  "order": 1,
+                  "name": "Rope Curls",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-arms-06",
+                  "order": 2,
+                  "name": "Rope Extensions",
+                  "prescription": "20 reps each",
+                  "targetSets": 6,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w3-shoulders",
+          "name": "Shoulders",
+          "order": 2,
+          "blocks": [
+            {
+              "id": "w3-sh-b1",
+              "name": "Seated \"Steep Incline\" Side Lateral Drop Sets",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "4 count negative & positive. Each set has 2 drops in it - 15 reps, drop, 15 more reps, drop, 15 more reps.",
+              "dropsPerSet": 2,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "The shared header for this pair of drop-set rows reads '...15 reps > drop & 15 more reps >' and cuts off there. Assumed the pattern repeats a third time (15/drop/15/drop/15) given dropsPerSet=2 implies 3 rep segments; confirm the actual rep target for each segment.",
+              "exercises": [
+                {
+                  "id": "w3-sh-01",
+                  "order": 1,
+                  "name": "Seated \"Steep Incline\" Side Lateral",
+                  "prescription": "Drop set, 15 reps per segment (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [15, 15, 15],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-sh-b2",
+              "name": "Standing Side Laterals",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "4 count negative & explosive positive.",
+              "dropsPerSet": 2,
+              "exercises": [
+                {
+                  "id": "w3-sh-02",
+                  "order": 1,
+                  "name": "Standing Side Laterals",
+                  "prescription": "Drop set, 15 reps per segment (assumed, same structure as the block above)",
+                  "prescriptionComplete": true,
+                  "targetSets": 3,
+                  "repScheme": [15, 15, 15],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-sh-b3",
+              "name": "Rear Delt Flys \"High\" SS Bus Drivers",
+              "type": "superset",
+              "targetSets": 4,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w3-sh-03",
+                  "order": 1,
+                  "name": "Rear Delt Flys (High)",
+                  "prescription": "20 Reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-sh-04",
+                  "order": 2,
+                  "name": "Bus Drivers",
+                  "prescription": "To failure (assumed)",
+                  "targetSets": 4,
+                  "repScheme": null,
+                  "logMode": "failure",
+                  "needsReview": true,
+                  "reviewNote": "Source reads '20 Reps for Rear Delt Flys + Bus' and cuts off. Assumed Bus Drivers are taken to failure, matching the '-/x' failure-marker notation in the data columns."
+                }
+              ]
+            },
+            {
+              "id": "w3-sh-b4",
+              "name": "Bent Over Rear Delt Fly + Standing Side Lateral + Front Raise",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "exercises": [
+                {
+                  "id": "w3-sh-05",
+                  "order": 1,
+                  "name": "Bent Over Rear Delt Fly",
+                  "prescription": "20 reps each (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source reads '(20 reps' and cuts off before confirming 'each'. Assumed 20 reps per exercise, matching the rest of the program's default."
+                },
+                {
+                  "id": "w3-sh-06",
+                  "order": 2,
+                  "name": "Standing Side Lateral",
+                  "prescription": "20 reps each (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-sh-07",
+                  "order": 3,
+                  "name": "Front Raise",
+                  "prescription": "20 reps each (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w3-back",
+          "name": "Back",
+          "order": 3,
+          "blocks": [
+            {
+              "id": "w3-bk-b1",
+              "name": "Bent Over Barbell Rows Drop Set",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "10 reps, drop, 10 reps, drop, 20 reps = 1 set.",
+              "dropsPerSet": 2,
+              "exercises": [
+                {
+                  "id": "w3-bk-01",
+                  "order": 1,
+                  "name": "Bent Over Barbell Rows",
+                  "prescription": "10 reps/10 reps/20 reps = 1 set",
+                  "targetSets": 3,
+                  "repScheme": [10, 10, 20],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-bk-b2",
+              "name": "1 Arm Row",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-bk-02",
+                  "order": 1,
+                  "name": "1 Arm Row",
+                  "prescription": "4 sets of 15 reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    15,
+                    15,
+                    15,
+                    15
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-bk-b3",
+              "name": "1 Arm Row \"Elbow Out\"",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-bk-03",
+                  "order": 1,
+                  "name": "1 Arm Row \"Elbow Out\"",
+                  "prescription": "3 sets of 15 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    15,
+                    15,
+                    15
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-bk-b4",
+              "name": "Hyper Extension DB Rows",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-bk-04",
+                  "order": 1,
+                  "name": "Hyper Extension DB Rows",
+                  "prescription": "4 Sets / 20 Reps Each",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-bk-b5",
+              "name": "Lat Pulldown VBar Handle",
+              "type": "dropSet",
+              "targetSets": 4,
+              "instructions": "15 reps + 4 drops = 1 set.",
+              "dropsPerSet": 4,
+              "exercises": [
+                {
+                  "id": "w3-bk-05",
+                  "order": 1,
+                  "name": "Lat Pulldown VBar Handle",
+                  "prescription": "4 Total Sets / 15 Reps + 4 Drops = 1 Set",
+                  "targetSets": 4,
+                  "repScheme": [
+                    15,
+                    15,
+                    15,
+                    15
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w3-chest-abs",
+          "name": "Chest + Abs",
+          "order": 4,
+          "blocks": [
+            {
+              "id": "w3-ch-b1",
+              "name": "Machine Chest Fly \"SLOW\"",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-ch-01",
+                  "order": 1,
+                  "name": "Machine Chest Fly (SLOW)",
+                  "prescription": "3 Sets / 15-20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [15, 15, 15],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-ch-b2",
+              "name": "Decline DB Press",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": "Slow negative + 5 count hold at bottom.",
+              "exercises": [
+                {
+                  "id": "w3-ch-02",
+                  "order": 1,
+                  "name": "Decline DB Press",
+                  "prescription": "4 Sets / 12 Reps",
+                  "prescriptionComplete": true,
+                  "targetSets": 4,
+                  "repScheme": [
+                    12,
+                    12,
+                    12,
+                    12
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-ch-b3",
+              "name": "Dips + Negatives",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-ch-03",
+                  "order": 1,
+                  "name": "Dips + Negatives",
+                  "prescription": "4 Sets / Failure",
+                  "targetSets": 4,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w3-ch-b4",
+              "name": "Incline Coffin Press + Incline Partial Fly (Bottom) + DB Push-ups",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '(3 Total' and cuts off before the full set/rep detail.",
+              "exercises": [
+                {
+                  "id": "w3-ch-04",
+                  "order": 1,
+                  "name": "Incline Coffin Press",
+                  "prescription": "Reps not specified in source (assumed to failure/as prescribed)",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-ch-05",
+                  "order": 2,
+                  "name": "Incline Partial Fly (Bottom)",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w3-ch-06",
+                  "order": 3,
+                  "name": "DB Push-ups",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w3-ch-b7",
+              "name": "Cable Fly \"Mid Position\"",
+              "type": "straight",
+              "targetSets": 2,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-ch-07",
+                  "order": 1,
+                  "name": "Cable Fly (Mid Position)",
+                  "prescription": "2 Sets / 20 Reps",
+                  "targetSets": 2,
+                  "repScheme": [
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-ab-b1",
+              "name": "Abs",
+              "type": "straight",
+              "targetSets": 2,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-ab-01",
+                  "order": 1,
+                  "name": "Lat Bar V-Ups",
+                  "prescription": "2 Sets / 50 Reps",
+                  "targetSets": 2,
+                  "repScheme": [
+                    50,
+                    50
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w3-legs",
+          "name": "Legs",
+          "order": 5,
+          "blocks": [
+            {
+              "id": "w3-lg-b1",
+              "name": "Leg Extensions",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": "10 second positive + 10 second negative.",
+              "exercises": [
+                {
+                  "id": "w3-lg-01",
+                  "order": 1,
+                  "name": "Leg Extensions (10 Second Positive + 10 Second Negative)",
+                  "prescription": "4 Sets / 10 Reps",
+                  "prescriptionComplete": false,
+                  "targetSets": 4,
+                  "repScheme": [
+                    10,
+                    10,
+                    10,
+                    10
+                  ],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off right after '...4 Sets / 10'. Assumed 'Reps' to complete it (the digit itself is visible in the source, only the unit word is missing)."
+                }
+              ]
+            },
+            {
+              "id": "w3-lg-b2",
+              "name": "Leg Press",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": "Feet shoulder width - 5 count negative / hold / positive.",
+              "exercises": [
+                {
+                  "id": "w3-lg-02",
+                  "order": 1,
+                  "name": "Leg Press (Feet Shoulder Width)",
+                  "prescription": "4 Sets, rep count not given in source",
+                  "prescriptionComplete": false,
+                  "targetSets": 4,
+                  "repScheme": null,
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off after '(4' before the rep count is reached. No safe assumption for the number itself -- left as repScheme: null pending manual check against the original program."
+                }
+              ]
+            },
+            {
+              "id": "w3-lg-b3",
+              "name": "Squats \"High Bar\"",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-lg-03",
+                  "order": 1,
+                  "name": "Squats (High Bar)",
+                  "prescription": "3 sets / 20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-lg-b4",
+              "name": "Stiff Legs \"Slow\"",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-lg-04",
+                  "order": 1,
+                  "name": "Stiff Legs (Slow)",
+                  "prescription": "3 sets / 20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-lg-b5",
+              "name": "Barbell Walking Lunges",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w3-lg-05",
+                  "order": 1,
+                  "name": "Barbell Walking Lunges",
+                  "prescription": "3 Sets / 20 Steps Each Leg",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "repUnit": "steps per leg",
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w3-lg-b6",
+              "name": "Seated Calf Raise w/ 3 Drops",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "1 set = 50 reps on first push + 3 drops.",
+              "dropsPerSet": 3,
+              "exercises": [
+                {
+                  "id": "w3-lg-06",
+                  "order": 1,
+                  "name": "Seated Calf Raise",
+                  "prescription": "3 Sets / 1 set = 50 Reps on First Push + 3 Drops",
+                  "prescriptionComplete": false,
+                  "targetSets": 3,
+                  "repScheme": [50, 50, 50, 50],
+                  "logMode": "weightReps",
+                  "needsReview": true,
+                  "reviewNote": "Source cuts off right after '...+ 3'. Assumed 'Drops', matching the block name 'w/ 3 Drops'."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "w4",
+      "title": "The One Everyone Hated",
+      "days": [
+        {
+          "id": "w4-arms",
+          "name": "Arms",
+          "order": 1,
+          "blocks": [
+            {
+              "id": "w4-arms-b1",
+              "name": "Rope Extensions / Straight Bar Cable Curls (no rest, x2 through)",
+              "type": "superset",
+              "targetSets": 1,
+              "instructions": "Alternate Rope Extensions and Straight Bar Cable Curls twice through, no rest between any of the four sets.",
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Each of the first three lines cuts off after '...NO REST AFTER RIGHT INTO THE BICEPS' / '...INTO THE'. Assumed they describe going straight from one exercise into the next with zero rest, run through twice; the exact missing words are a guess.",
+              "exercises": [
+                {
+                  "id": "w4-arms-01",
+                  "order": 1,
+                  "name": "Rope Extensions",
+                  "prescription": "1 Set / 100 Reps (No rest, straight into the next exercise)",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                },
+                {
+                  "id": "w4-arms-02",
+                  "order": 2,
+                  "name": "Straight Bar Cable Curls",
+                  "prescription": "1 Set / 100 Reps (No rest, straight into the next exercise)",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                },
+                {
+                  "id": "w4-arms-03",
+                  "order": 3,
+                  "name": "Rope Extensions",
+                  "prescription": "1 Set / 100 Reps (No rest, straight into the next exercise)",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                },
+                {
+                  "id": "w4-arms-04",
+                  "order": 4,
+                  "name": "Straight Bar Cable Curls",
+                  "prescription": "1 Set / 100 Reps",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-arms-b2",
+              "name": "TRIFUCTA - EZ Bar Seated French Press / 45 Degree Skulls / Close Grip Press",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...45 Degree Skulls - Close Grip Press' and cuts off before the rep detail. Assumed 20 reps per exercise (the program default), 3rd set to failure based on the 'x' marker in the data column.",
+              "exercises": [
+                {
+                  "id": "w4-arms-05",
+                  "order": 1,
+                  "name": "EZ Bar Seated French Press",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-06",
+                  "order": 2,
+                  "name": "45 Degree Skulls",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-07",
+                  "order": 3,
+                  "name": "Close Grip Press",
+                  "prescription": "To failure (assumed, per 'x' marker in source)",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w4-arms-b3",
+              "name": "BIFUCTA - DB Seated Partials / Incline Curls / Standing Curls W/ Exaggerated Stretch",
+              "type": "triSet",
+              "targetSets": 4,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...Standing Curls W/ Exaggerated' and cuts off. Assumed 'Exaggerated Stretch', consistent with this program's habit of emphasizing exaggerated range of motion (see Hyperextensions, week 1).",
+              "exercises": [
+                {
+                  "id": "w4-arms-08",
+                  "order": 1,
+                  "name": "DB Seated Partials",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-09",
+                  "order": 2,
+                  "name": "Incline Curls",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-10",
+                  "order": 3,
+                  "name": "Standing Curls W/ Exaggerated Stretch",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-arms-b4",
+              "name": "Biceps Giant Set",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w4-arms-11",
+                  "order": 1,
+                  "name": "Reverse Grip Cable",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-12",
+                  "order": 2,
+                  "name": "Close Grip Cable",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-13",
+                  "order": 3,
+                  "name": "Wide Grip Cable",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-14",
+                  "order": 4,
+                  "name": "Wide Grip Cable Drags",
+                  "prescription": "20 reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-arms-b5",
+              "name": "Triceps Giant Set",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Unlike the Biceps Giant Set above, these four lines carry no '(20 reps)' suffix in the source at all. Assumed 20 reps each to match every other giant set in the program.",
+              "exercises": [
+                {
+                  "id": "w4-arms-15",
+                  "order": 1,
+                  "name": "Partial Rope Extensions (BOTTOM)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-16",
+                  "order": 2,
+                  "name": "Partial Rope Extensions (TOP)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-17",
+                  "order": 3,
+                  "name": "Full ROM Rope Extensions",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-arms-18",
+                  "order": 4,
+                  "name": "Close Grip Push-ups",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w4-shoulders",
+          "name": "Shoulders",
+          "order": 2,
+          "blocks": [
+            {
+              "id": "w4-sh-b1",
+              "name": "Buffet Side Laterals",
+              "type": "triSet",
+              "targetSets": 4,
+              "instructions": "Partials (BOTTOM) - Full ROM - Partials (TOP).",
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...(4 Sets / 20' and cuts off before confirming 'Reps Each'. Assumed 20 reps per position.",
+              "exercises": [
+                {
+                  "id": "w4-sh-01",
+                  "order": 1,
+                  "name": "Buffet Side Lateral - Partials (BOTTOM)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-02",
+                  "order": 2,
+                  "name": "Buffet Side Lateral - Full ROM",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-03",
+                  "order": 3,
+                  "name": "Buffet Side Lateral - Partials (TOP)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-sh-b2",
+              "name": "Around The World (Rear Delt Focused) SS Around The World (Front Delt Focused)",
+              "type": "superset",
+              "targetSets": 4,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...SS Around The World (Front Delt' and cuts off before the rep count. Assumed 20 reps each, matching the identical exercise pairing in week 2.",
+              "exercises": [
+                {
+                  "id": "w4-sh-04",
+                  "order": 1,
+                  "name": "Around The World (Rear Delt Focused)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-05",
+                  "order": 2,
+                  "name": "Around The World (Front Delt Focused)",
+                  "prescription": "20 reps (assumed)",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-sh-b3",
+              "name": "Fucked From The Middle Bus Drivers",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Turn left + turn right through the range (assumed).",
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '\"Turn Left + Turn' and cuts off. Assumed it describes sweeping the bus-driver motion both directions.",
+              "exercises": [
+                {
+                  "id": "w4-sh-06",
+                  "order": 1,
+                  "name": "Fucked From The Middle Bus Drivers",
+                  "prescription": "2 Sets / 100 Reps",
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-sh-b4",
+              "name": "Cable Giant Set",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 4 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w4-sh-07",
+                  "order": 1,
+                  "name": "Thumbs Up Side Lateral",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-08",
+                  "order": 2,
+                  "name": "Bent Over Rears",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-09",
+                  "order": 3,
+                  "name": "Rears Shoulder Level",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-sh-10",
+                  "order": 4,
+                  "name": "Rears Like You Worship McDonald's",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-sh-b5",
+              "name": "Reverse Grip Barbell Press",
+              "type": "straight",
+              "targetSets": 4,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-sh-11",
+                  "order": 1,
+                  "name": "Reverse Grip Barbell Press",
+                  "prescription": "4 Sets / 20 Reps",
+                  "targetSets": 4,
+                  "repScheme": [
+                    20,
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w4-back-traps",
+          "name": "Back + Traps",
+          "order": 3,
+          "blocks": [
+            {
+              "id": "w4-bk-b1",
+              "name": "1 Arm Row - 10 Sets of 10",
+              "type": "straight",
+              "targetSets": 10,
+              "instructions": "Left arm + right arm = 1 set / no resting.",
+              "exercises": [
+                {
+                  "id": "w4-bk-01",
+                  "order": 1,
+                  "name": "1 Arm Row",
+                  "prescription": "10 Sets of 10 reps",
+                  "targetSets": 10,
+                  "repScheme": [
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10,
+                    10
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-bk-b2",
+              "name": "T-Bar Row Century Sets",
+              "type": "restPause",
+              "targetSets": 2,
+              "instructions": "Century set: push to 100 reps per set.",
+              "needsReview": true,
+              "reviewNote": "'Century Set' isn't one of the six block types defined in the schema; mapped to restPause + logMode cumulative (repTarget 100) as the closest existing fit. Worth deciding whether to add a dedicated centurySet block type -- it appears several times in weeks 3 and 4.",
+              "exercises": [
+                {
+                  "id": "w4-bk-02",
+                  "order": 1,
+                  "name": "T-Bar Row",
+                  "prescription": "2 Sets / 100 Reps",
+                  "targetSets": 2,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-bk-b3",
+              "name": "Deadlifts",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-bk-03",
+                  "order": 1,
+                  "name": "Deadlifts",
+                  "prescription": "3 Sets / 30 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    30,
+                    30,
+                    30
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-bk-b4",
+              "name": "V Bar Pulldown Drop Sets",
+              "type": "dropSet",
+              "targetSets": 3,
+              "instructions": "Only drop 1 pin at a time (assumed).",
+              "dropsPerSet": 4,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '(\"Only drop 1 pin and' and cuts off. Assumed it's a cue to drop the pin stack gradually rather than in big jumps.",
+              "exercises": [
+                {
+                  "id": "w4-bk-04",
+                  "order": 1,
+                  "name": "V Bar Pulldown",
+                  "prescription": "3 Sets / 10 Reps + 4 Drops",
+                  "targetSets": 3,
+                  "repScheme": [
+                    10,
+                    10,
+                    10
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-bk-b5",
+              "name": "DB Shrug Century Set",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": "Century set: push to 100 reps.",
+              "needsReview": true,
+              "reviewNote": "Same 'Century Set' block-type gap as w4-bk-b2.",
+              "exercises": [
+                {
+                  "id": "w4-bk-05",
+                  "order": 1,
+                  "name": "DB Shrug",
+                  "prescription": "1 Set / 100 Reps",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w4-chest-abs",
+          "name": "Chest + Abs",
+          "order": 4,
+          "blocks": [
+            {
+              "id": "w4-ch-b1",
+              "name": "Machine Chest Fly - Partials Top + Full + Decline",
+              "type": "triSet",
+              "targetSets": 3,
+              "instructions": null,
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...3 Sets / 20 Reps - 20' and cuts off before the third rep value. Assumed 20/20 for the first two positions and failure for Decline, mirroring the near-identical week 1 version of this exact exercise (w1-ch-b4).",
+              "exercises": [
+                {
+                  "id": "w4-ch-01",
+                  "order": 1,
+                  "name": "Machine Chest Fly - Partial at Top",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-ch-02",
+                  "order": 2,
+                  "name": "Machine Chest Fly - Full ROM",
+                  "prescription": "20 Reps (assumed)",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-ch-03",
+                  "order": 3,
+                  "name": "Machine Chest Fly - Decline",
+                  "prescription": "To failure (assumed, per 'x' marker)",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w4-ch-b2",
+              "name": "Decline Barrel Press",
+              "type": "straight",
+              "targetSets": 3,
+              "instructions": "5 count hold at bottom.",
+              "exercises": [
+                {
+                  "id": "w4-ch-04",
+                  "order": 1,
+                  "name": "Decline Barrel Press",
+                  "prescription": "3 Sets / 12 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    12,
+                    12,
+                    12
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-ch-b3",
+              "name": "Giant Set - 6 exercises",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Do all 6 exercises in order below without stopping - that is 1 set.",
+              "exercises": [
+                {
+                  "id": "w4-ch-05",
+                  "order": 1,
+                  "name": "Incline DB Press",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-ch-06",
+                  "order": 2,
+                  "name": "Incline Coffin Press",
+                  "prescription": "20 Reps",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-ch-07",
+                  "order": 3,
+                  "name": "Flat Barrel Press",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                },
+                {
+                  "id": "w4-ch-08",
+                  "order": 4,
+                  "name": "Flat Partial \"bottom\" Flys",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                },
+                {
+                  "id": "w4-ch-09",
+                  "order": 5,
+                  "name": "Dips off the bench",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                },
+                {
+                  "id": "w4-ch-10",
+                  "order": 6,
+                  "name": "DB Pushups w/ Twist",
+                  "prescription": "Failure",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "failure"
+                }
+              ]
+            },
+            {
+              "id": "w4-ch-b4",
+              "name": "Cable Fly's \"high\"",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-ch-11",
+                  "order": 1,
+                  "name": "Cable Fly (High)",
+                  "prescription": "1 Set / 100 Reps",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-ch-b5",
+              "name": "Cable Fly's \"low\"",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-ch-12",
+                  "order": 1,
+                  "name": "Cable Fly (Low)",
+                  "prescription": "1 Set / 100 Reps",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-ab-b1",
+              "name": "Abs",
+              "type": "straight",
+              "targetSets": 2,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-ab-01",
+                  "order": 1,
+                  "name": "Hanging Knee Raises",
+                  "prescription": "2 Sets / 50 Reps",
+                  "targetSets": 2,
+                  "repScheme": [
+                    50,
+                    50
+                  ],
+                  "logMode": "repsOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w4-legs",
+          "name": "Legs",
+          "order": 5,
+          "blocks": [
+            {
+              "id": "w4-lg-b1",
+              "name": "180 Walking Lunges",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": null,
+              "needsReview": true,
+              "reviewNote": "No explicit set/rep breakdown given beyond the name itself; modeled as a single 180-rep cumulative target.",
+              "exercises": [
+                {
+                  "id": "w4-lg-01",
+                  "order": 1,
+                  "name": "180 Walking Lunges",
+                  "prescription": "1 Set / 180 Reps (assumed, from exercise name)",
+                  "targetSets": 1,
+                  "repTarget": 180,
+                  "logMode": "cumulative"
+                }
+              ]
+            },
+            {
+              "id": "w4-lg-b2",
+              "name": "Leg Extensions",
+              "type": "straight",
+              "targetSets": 6,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-lg-02",
+                  "order": 1,
+                  "name": "Leg Extensions",
+                  "prescription": "6 Sets / 50, 60, 70, 80, 90, 100 Reps",
+                  "prescriptionComplete": true,
+                  "targetSets": 6,
+                  "repScheme": [
+                    50,
+                    60,
+                    70,
+                    80,
+                    90,
+                    100
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-lg-b3",
+              "name": "4 Way Hack Squat",
+              "type": "giantSet",
+              "targetSets": 3,
+              "instructions": "Feet together, heels in toes out, feet wide halfway up, full ROM (assumed 4th position).",
+              "prescriptionComplete": false,
+              "needsReview": true,
+              "reviewNote": "Source reads '...Feet wide halfway up, Full' and cuts off before naming the 4th position. Assumed 'Full ROM' / regular squat as the natural 4th variation; rep counts aren't given in the source at all for this block.",
+              "exercises": [
+                {
+                  "id": "w4-lg-04",
+                  "order": 1,
+                  "name": "Hack Squat - Feet Together, Lift Heels",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-lg-05",
+                  "order": 2,
+                  "name": "Hack Squat - Heels In, Toes Out",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-lg-06",
+                  "order": 3,
+                  "name": "Hack Squat - Feet Wide, Halfway Up",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-lg-07",
+                  "order": 4,
+                  "name": "Hack Squat - Full ROM (assumed)",
+                  "prescription": "Reps not specified in source",
+                  "targetSets": 3,
+                  "repScheme": null,
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-lg-b4",
+              "name": "Stiff Leg SS Sumo Dead",
+              "type": "superset",
+              "targetSets": 3,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-lg-08",
+                  "order": 1,
+                  "name": "Stiff Leg Deadlift",
+                  "prescription": "20 Reps Each",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                },
+                {
+                  "id": "w4-lg-09",
+                  "order": 2,
+                  "name": "Sumo Deadlift",
+                  "prescription": "20 Reps Each",
+                  "targetSets": 3,
+                  "repScheme": [
+                    20,
+                    20,
+                    20
+                  ],
+                  "logMode": "weightReps"
+                }
+              ]
+            },
+            {
+              "id": "w4-lg-b5",
+              "name": "Squat",
+              "type": "restPause",
+              "targetSets": 1,
+              "instructions": null,
+              "exercises": [
+                {
+                  "id": "w4-lg-10",
+                  "order": 1,
+                  "name": "Squat",
+                  "prescription": "1 set / 100 reps",
+                  "targetSets": 1,
+                  "repTarget": 100,
+                  "logMode": "cumulative"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "bonusDay": {
+    "id": "bonus",
+    "title": "Say Uncle!",
+    "day": {
+      "id": "bonus-arms-calves",
+      "name": "Say Uncle! (Arms + Calves)",
+      "order": 1,
+      "blocks": [
+        {
+          "id": "bonus-bi-b1",
+          "name": "EZ Bar Close Grip Curls",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-bi-01",
+              "order": 1,
+              "name": "EZ Bar Close Grip Curls",
+              "prescription": "4 Sets / 30 Reps on the first, then Failure/Failure/Failure",
+              "targetSets": 4,
+              "repScheme": [
+                30,
+                null,
+                null,
+                null
+              ],
+              "logMode": "failure"
+            }
+          ]
+        },
+        {
+          "id": "bonus-bi-b2",
+          "name": "EZ Bar Wide Grip Curls + Drags",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-bi-02",
+              "order": 1,
+              "name": "EZ Bar Wide Grip Curls + Drags",
+              "prescription": "4 Sets / 20 Reps on the first, then Failure/Failure/Failure",
+              "targetSets": 4,
+              "repScheme": [
+                20,
+                null,
+                null,
+                null
+              ],
+              "logMode": "failure"
+            }
+          ]
+        },
+        {
+          "id": "bonus-bi-b3",
+          "name": "Seated Cable Curls",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-bi-03",
+              "order": 1,
+              "name": "Seated Cable Curls",
+              "prescription": "4 Sets / 20 Reps",
+              "targetSets": 4,
+              "repScheme": [
+                20,
+                20,
+                20,
+                20
+              ],
+              "logMode": "weightReps"
+            }
+          ]
+        },
+        {
+          "id": "bonus-bi-b4",
+          "name": "Cable \"Incline\" Curl SS Short Head Curl",
+          "type": "superset",
+          "targetSets": 4,
+          "instructions": null,
+          "prescriptionComplete": false,
+          "needsReview": true,
+          "reviewNote": "Source reads '...20 Reps on Incline Curl Then' and cuts off. Assumed it means straight into Short Head Curl taken to failure, matching the '-/x' failure-marker notation in the data columns.",
+          "exercises": [
+            {
+              "id": "bonus-bi-04",
+              "order": 1,
+              "name": "Cable Incline Curl",
+              "prescription": "20 Reps",
+              "targetSets": 4,
+              "repScheme": [
+                20,
+                20,
+                20,
+                20
+              ],
+              "logMode": "weightReps"
+            },
+            {
+              "id": "bonus-bi-05",
+              "order": 2,
+              "name": "Short Head Curl",
+              "prescription": "To failure (assumed)",
+              "targetSets": 4,
+              "repScheme": 20,
+              "logMode": "failure"
+            }
+          ]
+        },
+        {
+          "id": "bonus-tri-b1",
+          "name": "Slow 45 Degree Skulls",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-tri-01",
+              "order": 1,
+              "name": "Slow 45 Degree Skulls",
+              "prescription": "4 Sets / 30 Reps on the first set, then Failure/Failure/Failure",
+              "prescriptionComplete": false,
+              "targetSets": 4,
+              "repScheme": [
+                30,
+                null,
+                null,
+                null
+              ],
+              "logMode": "failure",
+              "needsReview": true,
+              "reviewNote": "Source cuts off after listing 'Failure' twice ('...Failure / Failure /'). Assumed the 4th set is also Failure, matching the identical pattern on EZ Bar Close Grip Curls above."
+            }
+          ]
+        },
+        {
+          "id": "bonus-tri-b2",
+          "name": "Incline Bench Cable Extension",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-tri-02",
+              "order": 1,
+              "name": "Incline Bench Cable Extension",
+              "prescription": "4 Sets / 20 Reps",
+              "targetSets": 4,
+              "repScheme": [
+                20,
+                20,
+                20,
+                20
+              ],
+              "logMode": "weightReps"
+            }
+          ]
+        },
+        {
+          "id": "bonus-tri-b3",
+          "name": "Every Possible Single Arm Cable Extension You Can Do",
+          "type": "straight",
+          "targetSets": 2,
+          "instructions": null,
+          "prescriptionComplete": false,
+          "needsReview": true,
+          "reviewNote": "Source reads '...You Can Do - 2 Sets / 20' and cuts off. Assumed '20 Reps'.",
+          "exercises": [
+            {
+              "id": "bonus-tri-03",
+              "order": 1,
+              "name": "Single Arm Cable Extension (every angle you can do)",
+              "prescription": "2 Sets / 20 Reps (assumed)",
+              "targetSets": 2,
+              "repScheme": [
+                20,
+                20
+              ],
+              "logMode": "weightReps"
+            }
+          ]
+        },
+        {
+          "id": "bonus-tri-b4",
+          "name": "Close Grip Smith",
+          "type": "straight",
+          "targetSets": 4,
+          "instructions": null,
+          "exercises": [
+            {
+              "id": "bonus-tri-04",
+              "order": 1,
+              "name": "Close Grip Smith",
+              "prescription": "4 Sets / 15 Reps",
+              "targetSets": 4,
+              "repScheme": [
+                15,
+                15,
+                15,
+                15
+              ],
+              "logMode": "weightReps"
+            }
+          ]
+        },
+        {
+          "id": "bonus-calf-b1",
+          "name": "Leg Press Calf Raise 3 Way",
+          "type": "triSet",
+          "targetSets": 4,
+          "instructions": "Toes out, straight, in.",
+          "exercises": [
+            {
+              "id": "bonus-calf-01",
+              "order": 1,
+              "name": "Leg Press Calf Raise - Toes Out",
+              "prescription": "30 Reps each",
+              "targetSets": 4,
+              "repScheme": [
+                30,
+                30,
+                30,
+                30
+              ],
+              "logMode": "weightReps"
+            },
+            {
+              "id": "bonus-calf-02",
+              "order": 2,
+              "name": "Leg Press Calf Raise - Toes Straight",
+              "prescription": "30 Reps each",
+              "targetSets": 4,
+              "repScheme": [
+                30,
+                30,
+                30,
+                30
+              ],
+              "logMode": "weightReps"
+            },
+            {
+              "id": "bonus-calf-03",
+              "order": 3,
+              "name": "Leg Press Calf Raise - Toes In",
+              "prescription": "30 Reps each",
+              "targetSets": 4,
+              "repScheme": [
+                30,
+                30,
+                30,
+                30
+              ],
+              "logMode": "weightReps"
+            }
+          ]
+        },
+        {
+          "id": "bonus-calf-b2",
+          "name": "DC Style Seated Calf",
+          "type": "straight",
+          "targetSets": 3,
+          "instructions": "10 count positive, 10 count negative, 10 count hold (position assumed).",
+          "prescriptionComplete": false,
+          "needsReview": true,
+          "reviewNote": "Source reads '...10 Count Hold at' and cuts off before naming where the hold happens. Assumed a stretched-position hold, standard for DC-style calf work, but unverified.",
+          "exercises": [
+            {
+              "id": "bonus-calf-04",
+              "order": 1,
+              "name": "DC Style Seated Calf",
+              "prescription": "10-10-10 tempo, reps not specified in source",
+              "targetSets": 3,
+              "repScheme": null,
+              "logMode": "weightReps"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "openItems": [
+    "Legs, week 1: day header says 'Giant Set #1 - Quads (3 Rounds/Sets)' but Leg Extensions underneath specifies 6 individual sets with a 50-100 rep ramp. Contradiction, not resolved -- flagged needsReview on w1-legs.",
+    "Shoulders, week 1: 'Machine Rear Delt SS Seated Dumbbell Side Lateral' block appears twice consecutively (w1-sh-b6, w1-sh-b7) -- confirm intentional double volume vs. copy-paste duplication in the source.",
+    "Chest+Abs, week 2: no Abs block present in the source for this day, unlike every other Chest+Abs day in the program -- confirm this is intentional.",
+    "'Century sets' (T-Bar Row, DB Shrug, week 4 Back+Traps) don't have a dedicated block type in the current 6-type enum -- mapped to restPause + logMode cumulative as the closest fit. Consider adding a 7th block type (e.g. centurySet) if you want it visually distinct in the UI.",
+    "A number of week 3/4/bonus lines have rep counts genuinely missing from the source (not just an assumed word, the number itself) -- these are left as repScheme: null / 'reps not specified in source' rather than guessed, since guessing a number felt too unreliable. Search for these in the reviewNotes."
+  ]
+}

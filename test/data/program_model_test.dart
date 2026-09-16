@@ -52,6 +52,25 @@ void main() {
       expect(rpBlock.exercises.first.prescriptionComplete, isFalse);
     });
 
+    test('Parses the complete four-week program and bonus day', () {
+      final file = File('assets/programs/program_full.json');
+      expect(file.existsSync(), isTrue);
+      final program = ProgramModel.fromJson(
+        jsonDecode(file.readAsStringSync()) as Map<String, dynamic>,
+      );
+
+      expect(program.weeks.length, equals(4));
+      expect(program.weeks.expand((week) => week.days).length, equals(20));
+      expect(program.bonusDay?.title, equals('Say Uncle!'));
+      expect(program.openItems, isNotEmpty);
+      final scalarScheme = program.weeks[1].days
+          .expand((day) => day.blocks)
+          .expand((block) => block.exercises)
+          .firstWhere((exercise) => exercise.id == 'w2-ch-03')
+          .repScheme;
+      expect(scalarScheme, equals([20]));
+    });
+
     test('Serializes to JSON and back cleanly', () {
       final file = File('assets/programs/program_week1.json');
       final jsonString = file.readAsStringSync();
