@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_card.dart';
 import '../../../data/models/program_model.dart';
 
 class SetLoggerCard extends StatefulWidget {
@@ -79,16 +80,10 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
   Widget build(BuildContext context) {
     final isDone = widget.currentSetNumber > widget.exercise.targetSets;
 
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDone ? AppColors.primary : AppColors.border,
-          width: isDone ? 1.5 : 1,
-        ),
-      ),
+      borderColor: isDone ? AppColors.primary : AppColors.border,
+      borderWidth: isDone ? 1.5 : 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -241,13 +236,6 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
               width: double.infinity,
               height: 44,
               child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
                 icon: const Icon(Icons.check_rounded),
                 label: Text(
                   'Log Set ${widget.currentSetNumber}',

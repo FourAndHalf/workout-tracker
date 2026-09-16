@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/empty_state.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/workout_repository.dart';
 import '../../data/repositories/progress_repository.dart';
@@ -38,8 +39,10 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
             return const Center(child: CircularProgressIndicator());
           final names = namesSnapshot.data!;
           if (names.isEmpty)
-            return const Center(
-              child: Text('Log a workout to see your progress.'),
+            return const EmptyState(
+              icon: Icons.show_chart_rounded,
+              message: 'Log a workout to see your progress',
+              subtitle: 'Your strength and volume trends will show up here.',
             );
           final selected = names.contains(_exercise) ? _exercise! : names.first;
           if (_exercise != selected)
@@ -350,7 +353,43 @@ class _StrengthCard extends StatelessWidget {
                   minY: 0,
                   gridData: const FlGridData(show: false),
                   borderData: FlBorderData(show: false),
-                  titlesData: const FlTitlesData(show: false),
+                  titlesData: FlTitlesData(
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 36,
+                        getTitlesWidget: (value, meta) => Text(
+                          value.toStringAsFixed(0),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 20,
+                        interval: (points.length / 4)
+                            .clamp(1, double.infinity)
+                            .floorToDouble(),
+                        getTitlesWidget: (value, meta) => Text(
+                          '${value.toInt() + 1}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   lineBarsData: [
                     LineChartBarData(
                       spots: points,
@@ -385,7 +424,47 @@ class _VolumeCard extends StatelessWidget {
           maxY: _maxVolume(volumes),
           gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
-          titlesData: const FlTitlesData(show: false),
+          titlesData: FlTitlesData(
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 36,
+                getTitlesWidget: (value, meta) => Text(
+                  value.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 24,
+                getTitlesWidget: (value, meta) {
+                  final index = value.toInt();
+                  if (index < 0 || index >= volumes.length) {
+                    return const SizedBox.shrink();
+                  }
+                  final date = volumes[index].start;
+                  return Text(
+                    '${date.day}/${date.month}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textMuted,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
           barGroups: [
             for (var i = 0; i < volumes.length; i++)
               BarChartGroupData(

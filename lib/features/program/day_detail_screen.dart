@@ -123,13 +123,6 @@ class DayDetailScreen extends ConsumerWidget {
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.background,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: Text(
                         'Start ${day.name} Workout',

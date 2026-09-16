@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_card.dart';
 import '../../../data/models/program_model.dart';
 import 'exercise_tile.dart';
 
@@ -51,19 +52,15 @@ class BlockCard extends StatelessWidget {
     final badgeColor = _getBlockBadgeColor(block.type);
     final badgeText = _getBlockBadgeText(block.type);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: block.type == 'straight'
-              ? AppColors.border
-              : badgeColor.withValues(alpha: 0.5),
-          width: block.type == 'straight' ? 1 : 1.5,
-        ),
-      ),
-      child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: AppCard(
+        padding: EdgeInsets.zero,
+        borderColor: block.type == 'straight'
+            ? AppColors.border
+            : badgeColor.withValues(alpha: 0.5),
+        borderWidth: block.type == 'straight' ? 1 : 1.5,
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -159,6 +156,7 @@ class BlockCard extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/empty_state.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
@@ -62,8 +63,13 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               onRefresh: () async => _refresh(),
               child: ListView(
                 children: const [
-                  SizedBox(height: 220),
-                  Center(child: Text('Complete a workout to see it here.')),
+                  SizedBox(height: 160),
+                  EmptyState(
+                    icon: Icons.event_available_outlined,
+                    message: 'Complete a workout to see it here',
+                    subtitle:
+                        'Your training history and calendar will fill in as you go.',
+                  ),
                 ],
               ),
             );

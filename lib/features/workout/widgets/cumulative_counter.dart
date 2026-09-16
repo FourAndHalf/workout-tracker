@@ -144,14 +144,9 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
                 const SizedBox(width: 12),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.background,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   icon: const Icon(Icons.add_rounded, size: 20),

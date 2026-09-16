@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/app_card.dart';
 import 'home_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -116,6 +117,7 @@ class HomeScreen extends ConsumerWidget {
                           value: '${data.currentStreak}',
                           label: 'Day streak',
                           icon: Icons.local_fire_department_outlined,
+                          highlight: true,
                         ),
                       ),
                     ],
@@ -210,47 +212,44 @@ class _QuoteCard extends StatelessWidget {
   const _QuoteCard({required this.quote});
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: double.infinity,
+  Widget build(BuildContext context) => AppCard(
     padding: const EdgeInsets.fromLTRB(16, 15, 16, 14),
-    decoration: BoxDecoration(
-      color: AppColors.card,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Icon(
-          Icons.format_quote_rounded,
-          color: AppColors.warning,
-          size: 23,
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                quote.quote,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.35,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                quote.source,
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: AppColors.textMuted,
-                ),
-              ),
-            ],
+    child: SizedBox(
+      width: double.infinity,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.format_quote_rounded,
+            color: AppColors.warning,
+            size: 23,
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  quote.quote,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.35,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  quote.source,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -269,17 +268,11 @@ class _ActionTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => InkWell(
+  Widget build(BuildContext context) => AppCard(
     onTap: onTap,
-    borderRadius: BorderRadius.circular(8),
-    child: Container(
-      height: 82,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
-      ),
+    padding: const EdgeInsets.all(10),
+    child: SizedBox(
+      height: 62,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -299,67 +292,76 @@ class _MetricTile extends StatelessWidget {
   final String value;
   final String label;
   final IconData icon;
+  final bool highlight;
 
   const _MetricTile({
     required this.value,
     required this.label,
     required this.icon,
+    this.highlight = false,
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(minHeight: 92),
+  Widget build(BuildContext context) => AppCard(
+    color: highlight
+        ? AppColors.primary.withValues(alpha: 0.10)
+        : AppColors.surface,
+    borderColor: highlight ? AppColors.primary.withValues(alpha: 0.4) : null,
     padding: const EdgeInsets.fromLTRB(12, 10, 12, 11),
-    decoration: BoxDecoration(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
-    ),
-    child: Stack(
-      children: [
-        Positioned(
-          left: -12,
-          top: 0,
-          bottom: 0,
-          child: Container(
-            width: 3,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.horizontal(right: Radius.circular(3)),
-            ),
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(icon, size: 18, color: AppColors.primary),
-                const Icon(
-                  Icons.arrow_outward_rounded,
-                  size: 14,
-                  color: AppColors.textMuted,
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 68),
+      child: Stack(
+        children: [
+          Positioned(
+            left: -12,
+            top: 0,
+            bottom: 0,
+            child: Container(
+              width: highlight ? 5 : 3,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: const BorderRadius.horizontal(
+                  right: Radius.circular(3),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(icon, size: 18, color: AppColors.primary),
+                  const Icon(
+                    Icons.arrow_outward_rounded,
+                    size: 14,
+                    color: AppColors.textMuted,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: highlight ? AppColors.primary : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -370,13 +372,8 @@ class _VolumeTile extends StatelessWidget {
   const _VolumeTile({required this.data});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppCard(
     padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      color: AppColors.card,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
-    ),
     child: Row(
       children: [
         const Icon(Icons.trending_up_rounded, color: AppColors.secondary),
@@ -415,13 +412,9 @@ class _LatestWorkoutTile extends StatelessWidget {
   const _LatestWorkoutTile({required this.data});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppCard(
+    color: AppColors.surface,
     padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
-    ),
     child: Row(
       children: [
         const Icon(Icons.history_rounded, color: AppColors.primary),
@@ -443,13 +436,9 @@ class _AnalyticsMessage extends StatelessWidget {
   const _AnalyticsMessage(this.message);
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppCard(
+    color: AppColors.surface,
     padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
-    ),
     child: Center(
       child: Text(
         message,
