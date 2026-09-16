@@ -281,7 +281,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: SwitchListTile.adaptive(
               secondary: const Icon(Icons.shopping_cart_outlined),
               title: const Text('Weekly shopping list'),
-              subtitle: const Text('Show the shopping list tab in Nutrition'),
               value: _shoppingListEnabled,
               onChanged: _loadingNutritionSettings ? null : _toggleShoppingList,
             ),
