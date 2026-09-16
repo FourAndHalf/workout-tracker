@@ -169,28 +169,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.border),
-                          ),
-                          child: Text(
-                            'Block ${blockIndex + 1}: ${block.name} (${block.type})',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.secondary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-
                         ...block.exercises.map((exercise) {
                           if (exercise.logMode == 'cumulative') {
                             final chunks =
