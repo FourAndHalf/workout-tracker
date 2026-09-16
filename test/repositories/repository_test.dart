@@ -80,6 +80,33 @@ void main() {
   });
 
   group('NutritionRepository Unit Tests', () {
+    test('Tracks daily supplement intake independently by date', () async {
+      final today = DateTime(2026, 9, 16);
+      await nutritionRepo.setSupplementTaken(
+        date: today,
+        supplement: 'Protein powder',
+        taken: true,
+      );
+
+      expect(
+        await nutritionRepo.getTakenSupplements(today),
+        contains('Protein powder'),
+      );
+      expect(
+        await nutritionRepo.getTakenSupplements(
+          today.add(const Duration(days: 1)),
+        ),
+        isEmpty,
+      );
+
+      await nutritionRepo.setSupplementTaken(
+        date: today,
+        supplement: 'Protein powder',
+        taken: false,
+      );
+      expect(await nutritionRepo.getTakenSupplements(today), isEmpty);
+    });
+
     test('Stores food photos and updates daily nutrition summary', () async {
       final photoId = await nutritionRepo.addFoodPhoto(
         filePath: '/storage/emulated/0/Pictures/meal1.jpg',
@@ -92,7 +119,8 @@ void main() {
       expect(photosToday.length, equals(1));
       expect(photosToday.first.mealLabel, equals('Lunch'));
 
-      final todayStr = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+      final todayStr =
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
       await nutritionRepo.saveDailyNutrition(
         dateStr: todayStr,
         totalCalories: 650.0,

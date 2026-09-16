@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,22 +10,37 @@ import 'tables/workout_sessions.dart';
 import 'tables/exercise_logs.dart';
 import 'tables/food_photos.dart';
 import 'tables/daily_nutrition.dart';
+import 'tables/supplement_intakes.dart';
+import 'tables/meal_plans.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [
-  Programs,
-  WorkoutSessions,
-  ExerciseLogs,
-  FoodPhotos,
-  DailyNutrition,
-  DailyNutritionPhotos,
-])
+@DriftDatabase(
+  tables: [
+    Programs,
+    WorkoutSessions,
+    ExerciseLogs,
+    FoodPhotos,
+    DailyNutrition,
+    DailyNutritionPhotos,
+    SupplementIntakes,
+    MealPlans,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(supplementIntakes);
+      if (from < 3) await m.createTable(mealPlans);
+    },
+  );
 }
 
 LazyDatabase _openConnection() {

@@ -25,5 +25,11 @@ void main() {
     expect(find.text('Take photo'), findsOneWidget);
     expect(find.text('Choose from gallery'), findsOneWidget);
     expect(find.text('No meals logged today'), findsOneWidget);
+
+    await tester.tap(find.text('Meal plan'));
+    await tester.pumpAndSettle();
+    expect(find.text('Weekly meals'), findsOneWidget);
+    expect(find.text('Chicken quinoa bowl'), findsOneWidget);
+    expect(find.text('Cooking video'), findsOneWidget);
   });
 }
