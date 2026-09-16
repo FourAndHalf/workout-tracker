@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/program_model.dart';
 
@@ -11,7 +12,8 @@ class SetLoggerCard extends StatefulWidget {
     int? reps,
     bool hitFailure,
     int? durationSeconds,
-  }) onLogSet;
+  })
+  onLogSet;
 
   const SetLoggerCard({
     super.key,
@@ -26,9 +28,15 @@ class SetLoggerCard extends StatefulWidget {
 }
 
 class _SetLoggerCardState extends State<SetLoggerCard> {
-  final TextEditingController _weightController = TextEditingController(text: '40');
-  final TextEditingController _repsController = TextEditingController(text: '20');
-  final TextEditingController _timeController = TextEditingController(text: '60');
+  final TextEditingController _weightController = TextEditingController(
+    text: '40',
+  );
+  final TextEditingController _repsController = TextEditingController(
+    text: '20',
+  );
+  final TextEditingController _timeController = TextEditingController(
+    text: '60',
+  );
   bool _hitFailure = false;
 
   @override
@@ -67,7 +75,7 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           Row(
@@ -100,15 +108,25 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
               children: widget.loggedSets.asMap().entries.map((entry) {
                 final idx = entry.key + 1;
                 final set = entry.value;
-                final weightStr = set['weight'] != null ? '${set['weight']} kg' : '';
-                final repsStr = set['reps'] != null ? '${set['reps']} reps' : '';
-                final failureStr = set['hitFailure'] == true ? ' 🔥 Failure' : '';
+                final weightStr = set['weight'] != null
+                    ? '${set['weight']} kg'
+                    : '';
+                final repsStr = set['reps'] != null
+                    ? '${set['reps']} reps'
+                    : '';
+                final failureStr = set['hitFailure'] == true
+                    ? ' 🔥 Failure'
+                    : '';
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
                     children: [
-                      const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 16),
+                      const Icon(
+                        Icons.check_circle_rounded,
+                        color: AppColors.primary,
+                        size: 16,
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         'Set $idx: $weightStr $repsStr$failureStr',
@@ -128,13 +146,16 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
 
           // Active Input Row (if not all sets done)
           if (!isDone) ...[
-            if (widget.exercise.logMode == 'weightReps' || widget.exercise.logMode == 'failure')
+            if (widget.exercise.logMode == 'weightReps' ||
+                widget.exercise.logMode == 'failure')
               Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: _weightController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Weight (kg)',
                         isDense: true,
@@ -182,7 +203,11 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
                 onChanged: (val) => setState(() => _hitFailure = val),
                 title: const Text(
                   'Hit Failure 🔥',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.error),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.error,
+                  ),
                 ),
                 contentPadding: EdgeInsets.zero,
                 dense: true,
