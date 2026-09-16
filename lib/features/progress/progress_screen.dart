@@ -240,32 +240,26 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          final photo = await _picker.pickImage(
-                            source: ImageSource.camera,
-                          );
-                          if (photo != null)
-                            setDialogState(() => _photo = photo);
-                        },
-                        icon: const Icon(Icons.camera_alt_outlined),
-                        label: const Text('Camera'),
-                      ),
+                    IconButton.outlined(
+                      tooltip: 'Take photo',
+                      onPressed: () async {
+                        final photo = await _picker.pickImage(
+                          source: ImageSource.camera,
+                        );
+                        if (photo != null) setDialogState(() => _photo = photo);
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined),
                     ),
                     const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          final photo = await _picker.pickImage(
-                            source: ImageSource.gallery,
-                          );
-                          if (photo != null)
-                            setDialogState(() => _photo = photo);
-                        },
-                        icon: const Icon(Icons.photo_library_outlined),
-                        label: const Text('Gallery'),
-                      ),
+                    IconButton.outlined(
+                      tooltip: 'Choose from gallery',
+                      onPressed: () async {
+                        final photo = await _picker.pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        if (photo != null) setDialogState(() => _photo = photo);
+                      },
+                      icon: const Icon(Icons.photo_library_outlined),
                     ),
                   ],
                 ),

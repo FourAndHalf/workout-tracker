@@ -66,7 +66,12 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
 
     return programAsync.when(
       data: (program) {
-        final week = program.weeks.first;
+        final week = program.weeks.firstWhere(
+          (candidate) => candidate.days.any(
+            (candidateDay) => candidateDay.id == widget.dayId,
+          ),
+          orElse: () => program.weeks.first,
+        );
         final day = week.days.firstWhere(
           (d) => d.id == widget.dayId,
           orElse: () => week.days.first,
@@ -74,7 +79,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
 
         if (workoutState.dayModel == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            workoutNotifier.initDay(day);
+            workoutNotifier.initDay(day, weekId: week.id);
           });
         }
         if (workoutState.sessionId != null &&
@@ -137,6 +142,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                       .read(dailyWorkoutAlarmServiceProvider)
                       .stopWorkoutTimer();
                   await workoutNotifier.finishWorkout();
+                  ref.invalidate(completedWorkoutSessionsProvider);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
