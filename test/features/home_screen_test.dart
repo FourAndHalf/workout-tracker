@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
@@ -7,6 +8,14 @@ import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/features/home/home_providers.dart';
 
 void main() {
+  test('daily motivation quote is stable for the same date', () {
+    final first = dailyMotivationQuote(DateTime(2026, 9, 16));
+    final second = dailyMotivationQuote(DateTime(2026, 9, 16, 23, 59));
+
+    expect(first.quote, second.quote);
+    expect(first.source, isNotEmpty);
+  });
+
   testWidgets('HomeScreen renders action tiles and analytics', (
     WidgetTester tester,
   ) async {
@@ -26,7 +35,8 @@ void main() {
     expect(find.text('Start'), findsOneWidget);
     expect(find.text('Plan'), findsOneWidget);
     expect(find.text('Food'), findsOneWidget);
-    expect(find.text('This week'), findsOneWidget);
+    expect(find.text('Your week at a glance'), findsOneWidget);
+    expect(find.byIcon(Icons.format_quote_rounded), findsOneWidget);
     expect(find.text('Training volume'), findsOneWidget);
   });
 

@@ -3,6 +3,53 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
+class MotivationQuote {
+  final String quote;
+  final String source;
+
+  const MotivationQuote({required this.quote, required this.source});
+}
+
+const _motivationQuotes = [
+  MotivationQuote(
+    quote: 'We are what we repeatedly do. Excellence is a habit.',
+    source: 'Aristotle',
+  ),
+  MotivationQuote(
+    quote: 'The secret of getting ahead is getting started.',
+    source: 'Mark Twain',
+  ),
+  MotivationQuote(
+    quote: 'It is never too late to be what you might have been.',
+    source: 'George Eliot',
+  ),
+  MotivationQuote(
+    quote: 'The body achieves what the mind believes.',
+    source: 'Napoleon Hill',
+  ),
+  MotivationQuote(
+    quote: 'Small disciplines repeated with consistency lead to great achievements.',
+    source: 'John C. Maxwell',
+  ),
+  MotivationQuote(
+    quote: 'Success is the sum of small efforts, repeated day in and day out.',
+    source: 'Robert Collier',
+  ),
+  MotivationQuote(
+    quote: 'The difference between try and triumph is just a little umph!',
+    source: 'Marvin Phillips',
+  ),
+];
+
+MotivationQuote dailyMotivationQuote(DateTime date) {
+  final dayNumber = DateTime(
+    date.year,
+    date.month,
+    date.day,
+  ).difference(DateTime(2024, 1, 1)).inDays;
+  return _motivationQuotes[dayNumber.abs() % _motivationQuotes.length];
+}
+
 class DashboardAnalytics {
   final int workoutsThisWeek;
   final int setsThisWeek;
