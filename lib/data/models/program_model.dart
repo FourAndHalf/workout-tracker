@@ -29,7 +29,8 @@ class ProgramModel {
       blockTypes: (json['blockTypes'] as Map<String, dynamic>?)?.map(
         (k, v) => MapEntry(k, v.toString()),
       ),
-      weeks: (json['weeks'] as List<dynamic>?)
+      weeks:
+          (json['weeks'] as List<dynamic>?)
               ?.map((w) => WeekModel.fromJson(w as Map<String, dynamic>))
               .toList() ??
           [],
@@ -67,7 +68,8 @@ class WeekModel {
       number: json['number'] as int,
       id: json['id'] as String,
       title: json['title'] as String,
-      days: (json['days'] as List<dynamic>?)
+      days:
+          (json['days'] as List<dynamic>?)
               ?.map((d) => DayModel.fromJson(d as Map<String, dynamic>))
               .toList() ??
           [],
@@ -108,7 +110,8 @@ class DayModel {
       order: json['order'] as int,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
-      blocks: (json['blocks'] as List<dynamic>?)
+      blocks:
+          (json['blocks'] as List<dynamic>?)
               ?.map((b) => BlockModel.fromJson(b as Map<String, dynamic>))
               .toList() ??
           [],
@@ -160,7 +163,8 @@ class BlockModel {
       dropsPerSet: json['dropsPerSet'] as int?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
-      exercises: (json['exercises'] as List<dynamic>?)
+      exercises:
+          (json['exercises'] as List<dynamic>?)
               ?.map((e) => ExerciseModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -193,6 +197,7 @@ class ExerciseModel {
   final int? repTarget;
   final String? repUnit;
   final String logMode; // weightReps, repsOnly, time, cumulative, failure
+  final String? videoUrl;
 
   ExerciseModel({
     required this.id,
@@ -205,7 +210,20 @@ class ExerciseModel {
     this.repTarget,
     this.repUnit,
     required this.logMode,
+    this.videoUrl,
   });
+
+  Uri get exerciseVideoUri {
+    final configuredUrl = videoUrl?.trim();
+    final parsedUrl = configuredUrl == null || configuredUrl.isEmpty
+        ? null
+        : Uri.tryParse(configuredUrl);
+
+    return parsedUrl ??
+        Uri.https('www.youtube.com', '/results', {
+          'search_query': '$name exercise tutorial shorts',
+        });
+  }
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
     return ExerciseModel(
@@ -215,10 +233,13 @@ class ExerciseModel {
       prescription: json['prescription'] as String?,
       prescriptionComplete: json['prescriptionComplete'] as bool? ?? true,
       targetSets: json['targetSets'] as int? ?? 1,
-      repScheme: (json['repScheme'] as List<dynamic>?)?.map((r) => r as int).toList(),
+      repScheme: (json['repScheme'] as List<dynamic>?)
+          ?.map((r) => r as int)
+          .toList(),
       repTarget: json['repTarget'] as int?,
       repUnit: json['repUnit'] as String?,
       logMode: json['logMode'] as String? ?? 'weightReps',
+      videoUrl: json['videoUrl'] as String?,
     );
   }
 
@@ -234,6 +255,7 @@ class ExerciseModel {
       'repTarget': repTarget,
       'repUnit': repUnit,
       'logMode': logMode,
+      'videoUrl': videoUrl,
     };
   }
 }

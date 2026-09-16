@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/program_model.dart';
@@ -60,6 +61,20 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
     );
   }
 
+  Future<void> _openExerciseVideo() async {
+    if (await launchUrl(
+          widget.exercise.exerciseVideoUri,
+          mode: LaunchMode.externalApplication,
+        ) ||
+        !mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unable to open YouTube Shorts.')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDone = widget.currentSetNumber > widget.exercise.targetSets;
@@ -89,6 +104,13 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
                     color: AppColors.textPrimary,
                   ),
                 ),
+              ),
+              IconButton(
+                tooltip: 'Watch ${widget.exercise.name} on YouTube Shorts',
+                icon: const Icon(Icons.open_in_new_rounded),
+                color: AppColors.primary,
+                onPressed: _openExerciseVideo,
+                visualDensity: VisualDensity.compact,
               ),
               Text(
                 'Set ${widget.currentSetNumber > widget.exercise.targetSets ? widget.exercise.targetSets : widget.currentSetNumber} / ${widget.exercise.targetSets}',

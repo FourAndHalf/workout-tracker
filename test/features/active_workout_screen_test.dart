@@ -62,42 +62,49 @@ void main() {
     ],
   );
 
-  testWidgets('ActiveWorkoutScreen renders elapsed timer, loggers, and FINISH button', (WidgetTester tester) async {
-    final db = AppDatabase(NativeDatabase.memory());
-    addTearDown(() => db.close());
+  testWidgets(
+    'ActiveWorkoutScreen renders elapsed timer, loggers, and FINISH button',
+    (WidgetTester tester) async {
+      final db = AppDatabase(NativeDatabase.memory());
+      addTearDown(() => db.close());
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          databaseProvider.overrideWithValue(db),
-          currentProgramProvider.overrideWith((ref) async => mockProgram),
-        ],
-        child: const FitnessTrackerApp(),
-      ),
-    );
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            databaseProvider.overrideWithValue(db),
+            currentProgramProvider.overrideWith((ref) async => mockProgram),
+          ],
+          child: const FitnessTrackerApp(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    // Tap Programs -> tap Arms -> tap Start Arms Workout
-    await tester.tap(find.text('Programs'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      // Tap Programs -> tap Arms -> tap Start Arms Workout
+      await tester.tap(find.text('Programs'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    final armsFinder = find.widgetWithText(ListTile, 'Arms');
-    await tester.tap(armsFinder);
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      final armsFinder = find.widgetWithText(ListTile, 'Arms');
+      await tester.tap(armsFinder);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.text('Start Arms Workout'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('Start Arms Workout'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    // Verify Active Workout Screen Header
-    expect(find.text('FINISH'), findsOneWidget);
-    expect(find.textContaining('Elapsed:'), findsOneWidget);
+      // Verify Active Workout Screen Header
+      expect(find.text('FINISH'), findsOneWidget);
+      expect(find.textContaining('Elapsed:'), findsOneWidget);
 
-    // Verify Set Loggers
-    expect(find.text('REST-PAUSE PROGRESS'), findsOneWidget);
-    expect(find.text('Log Set 1'), findsOneWidget);
-  });
+      // Verify Set Loggers
+      expect(find.text('REST-PAUSE PROGRESS'), findsOneWidget);
+      expect(find.text('Log Set 1'), findsOneWidget);
+      expect(
+        find.byTooltip('Watch Incline Skull Crush on YouTube Shorts'),
+        findsOneWidget,
+      );
+    },
+  );
 }
