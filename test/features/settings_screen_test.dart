@@ -22,6 +22,7 @@ void main() {
     );
 
     expect(find.text('Delete saved data'), findsOneWidget);
+    expect(find.text('Weekly shopping list'), findsOneWidget);
     await tester.tap(find.text('Delete saved data'));
     await tester.pumpAndSettle();
     expect(find.text('How much data should be deleted?'), findsOneWidget);

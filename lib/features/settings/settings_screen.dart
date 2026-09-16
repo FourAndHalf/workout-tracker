@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../main.dart';
@@ -17,11 +18,32 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   DailyWorkoutAlarmSettings _alarm = const DailyWorkoutAlarmSettings();
   bool _loadingAlarm = true;
+  bool _shoppingListEnabled = true;
+  bool _loadingNutritionSettings = true;
 
   @override
   void initState() {
     super.initState();
     _loadAlarm();
+    _loadNutritionSettings();
+  }
+
+  Future<void> _loadNutritionSettings() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _shoppingListEnabled =
+            preferences.getBool(shoppingListEnabledKey) ?? true;
+        _loadingNutritionSettings = false;
+      });
+    }
+  }
+
+  Future<void> _toggleShoppingList(bool enabled) async {
+    setState(() => _shoppingListEnabled = enabled);
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setBool(shoppingListEnabledKey, enabled);
+    ref.invalidate(shoppingListEnabledProvider);
   }
 
   Future<void> _loadAlarm() async {
@@ -156,6 +178,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: _loadingAlarm ? null : _pickAlarmTime,
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Nutrition',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: SwitchListTile.adaptive(
+              secondary: const Icon(Icons.shopping_cart_outlined),
+              title: const Text('Weekly shopping list'),
+              subtitle: const Text('Show the shopping list tab in Nutrition'),
+              value: _shoppingListEnabled,
+              onChanged: _loadingNutritionSettings
+                  ? null
+                  : _toggleShoppingList,
             ),
           ),
           const SizedBox(height: 24),
