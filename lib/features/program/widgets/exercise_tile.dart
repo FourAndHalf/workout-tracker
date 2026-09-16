@@ -28,11 +28,11 @@ class ExerciseTile extends StatelessWidget {
 
   String _formatSetsReps() {
     if (exercise.repTarget != null) {
-      return '${exercise.targetSets} Sets &middot; Target: ${exercise.repTarget} reps';
+      return '${exercise.targetSets} Sets \u00B7 Target: ${exercise.repTarget} reps';
     }
     if (exercise.repScheme != null && exercise.repScheme!.isNotEmpty) {
       final unit = exercise.repUnit != null ? ' ${exercise.repUnit}' : '';
-      return '${exercise.targetSets} Sets &middot; (${exercise.repScheme!.join(", ")})$unit';
+      return '${exercise.targetSets} Sets \u00B7 (${exercise.repScheme!.join(", ")})$unit';
     }
     return '${exercise.targetSets} Sets';
   }
