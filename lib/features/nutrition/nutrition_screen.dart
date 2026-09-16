@@ -37,6 +37,13 @@ final mealPlansProvider = FutureProvider.autoDispose<List<MealPlan>>((
   return repository.getMealPlans();
 });
 
+const shoppingListEnabledKey = 'nutrition_shopping_list_enabled';
+
+final shoppingListEnabledProvider = FutureProvider<bool>((ref) async {
+  final preferences = await SharedPreferences.getInstance();
+  return preferences.getBool(shoppingListEnabledKey) ?? true;
+});
+
 class NutritionScreen extends ConsumerStatefulWidget {
   const NutritionScreen({super.key});
 
@@ -156,15 +163,17 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   Widget build(BuildContext context) {
     final photos = ref.watch(todayFoodPhotosProvider);
     final supplements = ref.watch(todaySupplementStatusProvider);
+    final shoppingListEnabled =
+        ref.watch(shoppingListEnabledProvider).valueOrNull ?? true;
 
     return DefaultTabController(
-      length: 3,
+      length: shoppingListEnabled ? 3 : 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Nutrition'),
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
-              Tab(text: 'Shopping list'),
+              if (shoppingListEnabled) Tab(text: 'Shopping list'),
               Tab(text: 'Daily log'),
               Tab(text: 'Meal plan'),
             ],
@@ -172,7 +181,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         ),
         body: TabBarView(
           children: [
-            const _ShoppingListTab(),
+            if (shoppingListEnabled) const _ShoppingListTab(),
             RefreshIndicator(
               onRefresh: () => ref.refresh(todayFoodPhotosProvider.future),
               child: ListView(
