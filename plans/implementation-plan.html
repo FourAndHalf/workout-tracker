@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Tracker — Implementation Plan</title>
+  <style>
+    :root {
+      --bg-primary: #0d0f12;
+      --bg-card: #161a21;
+      --bg-card-hover: #1c2129;
+      --border: #2a2f3a;
+      --text-primary: #e8eaed;
+      --text-secondary: #9aa0a6;
+      --text-muted: #5f6368;
+      --accent-green: #34d399;
+      --accent-blue: #60a5fa;
+      --accent-orange: #fbbf24;
+      --accent-red: #f87171;
+      --accent-purple: #a78bfa;
+      --done-text: #5f6368;
+      --done-bg: #0d0f12;
+      --phase-1: #34d399;
+      --phase-2: #60a5fa;
+      --phase-3: #a78bfa;
+      --phase-4: #f472b6;
+      --phase-5: #fbbf24;
+      --phase-6: #fb923c;
+      --phase-7: #f87171;
+      --phase-8: #38bdf8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+
+    header h1 span { color: var(--accent-green); }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .progress-bar-container {
+      margin: 1.5rem 0 0.5rem;
+      background: var(--bg-card);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+      border-radius: 999px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .phase {
+      margin-bottom: 2rem;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .phase-header:hover .phase-title { opacity: 0.85; }
+
+    .phase-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--bg-primary);
+      flex-shrink: 0;
+    }
+
+    .phase-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .phase-counter {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .phase-toggle {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+
+    .phase.collapsed .phase-toggle { transform: rotate(-90deg); }
+    .phase.collapsed .task-list { display: none; }
+
+    .task-list { list-style: none; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      margin-bottom: 2px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .task-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border);
+    }
+
+    .task-item.done {
+      background: var(--done-bg);
+      border-color: transparent;
+    }
+
+    .task-item.done .task-text {
+      text-decoration: line-through;
+      color: var(--done-text);
+    }
+
+    .task-item.done .task-detail {
+      text-decoration: line-through;
+      color: var(--done-text);
+      opacity: 0.6;
+    }
+
+    .task-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      margin-top: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .task-checkbox:hover { border-color: var(--accent-green); }
+
+    .task-checkbox:checked {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    .task-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -1px;
+      left: 2px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--bg-primary);
+    }
+
+    .task-content { flex: 1; }
+
+    .task-text {
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s, text-decoration 0.2s;
+    }
+
+    .task-detail {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      transition: color 0.2s, text-decoration 0.2s;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      vertical-align: middle;
+      margin-left: 0.375rem;
+    }
+
+    .tag-new { background: rgba(52, 211, 153, 0.15); color: var(--accent-green); }
+    .tag-modify { background: rgba(96, 165, 250, 0.15); color: var(--accent-blue); }
+    .tag-config { background: rgba(251, 191, 36, 0.15); color: var(--accent-orange); }
+    .tag-test { background: rgba(167, 139, 250, 0.15); color: var(--accent-purple); }
+    .tag-setup { background: rgba(248, 113, 113, 0.15); color: var(--accent-red); }
+
+    .subtask-list {
+      list-style: none;
+      margin-top: 0.375rem;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .subtask-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.25rem 0;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .subtask-item.done .subtask-text {
+      text-decoration: line-through;
+      color: var(--done-text);
+    }
+
+    .subtask-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      min-width: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 3px;
+      margin-top: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .subtask-checkbox:checked {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    .subtask-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -2px;
+      left: 1px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--bg-primary);
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏋️ Fitness Tracker — <span>Implementation Plan</span></h1>
+  <p>Flutter Android App &middot; SQLite (Drift) &middot; Gemini AI Nutrition Analysis</p>
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 0 tasks completed</div>
+</header>
+
+<main id="planContainer">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 1 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="1">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-1);">1</span>
+      <span class="phase-title">Environment Setup &amp; Project Scaffolding</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Install Linux system dependencies <span class="tag tag-setup">setup</span></div>
+          <div class="task-detail">curl, git, unzip, xz-utils, clang, cmake, ninja-build, pkg-config, libgtk-3-dev, liblzma-dev</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Install Flutter SDK (stable branch) <span class="tag tag-setup">setup</span></div>
+          <div class="task-detail">Clone to ~/development/flutter, add to PATH in shell profile</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Install Android SDK &amp; accept licenses <span class="tag tag-setup">setup</span></div>
+          <div class="task-detail">Android SDK, cmdline-tools, build-tools 34+, platform-tools. Run flutter doctor --android-licenses</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Configure USB debugging for physical device <span class="tag tag-setup">setup</span></div>
+          <div class="task-detail">Enable Developer Options + USB Debugging on phone; install udev rules if needed</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Verify installation with <code>flutter doctor -v</code> <span class="tag tag-setup">setup</span></div>
+          <div class="task-detail">All checks passing (Flutter, Android toolchain, connected device)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create Flutter project <span class="tag tag-new">new</span></div>
+          <div class="task-detail">flutter create --org com.fourandhalf --project-name fitness_tracker --platforms android .</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Configure pubspec.yaml with all dependencies <span class="tag tag-config">config</span></div>
+          <div class="task-detail">drift, sqlite3_flutter_libs, flutter_riverpod, go_router, workmanager, image_picker, google_generative_ai, fl_chart, flutter_local_notifications, timezone, path_provider</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create full directory structure under lib/ <span class="tag tag-new">new</span></div>
+          <div class="task-detail">core/, data/, features/, services/ with all sub-folders per the architecture</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Copy program JSON into assets/programs/ <span class="tag tag-config">config</span></div>
+          <div class="task-detail">Move data/program_week1.json → assets/programs/, register in pubspec.yaml assets section</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Verify project compiles: <code>flutter analyze &amp;&amp; flutter build apk --debug</code> <span class="tag tag-test">verify</span></div>
+          <div class="task-detail">Clean build with zero errors and zero warnings</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 2 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="2">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-2);">2</span>
+      <span class="phase-title">Data Layer — Database &amp; JSON Models</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create JSON model classes <span class="tag tag-new">new</span></div>
+          <div class="task-detail">ProgramModel, WeekModel, DayModel, BlockModel, ExerciseModel — with fromJson/toJson in lib/data/models/</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write unit tests for JSON deserialization <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Parse program_week1.json, verify all 5 days, all block types, all log modes, prescriptionComplete flags</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Define Drift tables: Programs <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/data/database/tables/programs.dart — id, name, source_note, json_data, created_at</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Define Drift tables: WorkoutSessions <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/data/database/tables/workout_sessions.dart — id, program_id, week_id, day_id, day_name, started_at, finished_at, notes</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Define Drift tables: ExerciseLogs <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/data/database/tables/exercise_logs.dart — id, session_id, block_id, exercise_id, exercise_name, block_type, log_mode, set_number, weight, reps, target_reps, hit_failure, duration_seconds, notes, logged_at</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Define Drift tables: FoodPhotos, DailyNutrition, DailyNutritionPhotos <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/data/database/tables/food_photos.dart &amp; daily_nutrition.dart — per ER diagram</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create AppDatabase class and run code generation <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/data/database/app_database.dart — dart run build_runner build --delete-conflicting-outputs</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement ProgramRepository <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Load JSON from assets, parse into models, store/retrieve programs from SQLite, support external JSON import</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement WorkoutRepository <span class="tag tag-new">new</span></div>
+          <div class="task-detail">CRUD sessions + exercise logs, query by date/day type/exercise, aggregate queries (max weight, total volume)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement NutritionRepository <span class="tag tag-new">new</span></div>
+          <div class="task-detail">CRUD food photos + daily nutrition, query by date, store Gemini analysis results</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write repository unit tests <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Test all CRUD operations, query filters, and edge cases with in-memory Drift database</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 3 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="3">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-3);">3</span>
+      <span class="phase-title">Core UI — Theme, Navigation &amp; Home Screen</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create app color palette &amp; constants <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/core/theme/app_colors.dart — deep charcoal bg, neon green primary, electric blue accent, surface/card colors</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create Material 3 dark theme <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/core/theme/app_theme.dart — ThemeData with typography (Inter/Outfit via Google Fonts), card styles, glassmorphism, input decorations</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Configure GoRouter with all routes <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/router.dart — /, /programs, /programs/:id, /programs/:id/:dayId, /workout/:dayId, /history, /history/:id, /progress, /nutrition, /nutrition/:date, /settings</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create main.dart and app.dart entry points <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Initialize Drift DB, Riverpod ProviderScope, MaterialApp.router with theme and GoRouter</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build Home dashboard screen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Today's workout card (quick-start), recent session summary, weekly streak indicator, food photo FAB</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build bottom navigation bar <span class="tag tag-new">new</span></div>
+          <div class="task-detail">5 tabs: Home, Programs, History, Progress, Nutrition — with animated transitions</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write widget tests for navigation and home screen <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Verify all tabs navigate correctly, dashboard cards render with mock data</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 4 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="4">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-4);">4</span>
+      <span class="phase-title">Workout Program Viewer</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build ProgramListScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">List all imported programs with week/day counts, expandable weeks → days, "Import Program" FAB</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build DayDetailScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Scrollable list of blocks and exercises for a selected day, "Start Workout" FAB</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build BlockCard widget with block-type visual styling <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Distinct visuals per type: straight (standard), superset (linked + "SS" badge), triSet ("TRI"), giantSet ("GIANT"), dropSet ("DROP"), restPause ("RP" + progress ring)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build ExerciseTile widget <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Shows name, prescription text, target sets × reps, log mode icon, prescriptionComplete warning</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create Riverpod providers for program state <span class="tag tag-new">new</span></div>
+          <div class="task-detail">programsProvider, selectedProgramProvider, selectedDayProvider — wired to ProgramRepository</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write widget tests for program viewer <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Verify all 5 days render, all block types display correct badges, exercises show correct data</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 5 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="5">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-5);">5</span>
+      <span class="phase-title">Live Workout Logging</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build ActiveWorkoutScreen scaffold <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Header (day name, elapsed timer, progress bar), scrollable block list, footer (rest timer, finish button)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SetLoggerCard — weightReps mode <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Weight input (kg) + reps input + "Log Set" button, previous sets displayed below with check marks</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SetLoggerCard — repsOnly mode <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Reps input only (bodyweight movements) + "Log Set" button</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SetLoggerCard — failure mode <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Weight input + reps input + "Hit Failure" toggle switch</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build CumulativeCounter — cumulative (rest-pause) mode <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Animated circular progress ring (current/target), reps input + "+ Add Chunk" button, chunk history display (30 → 18 → 12 → …)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SetLoggerCard — time mode <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Duration input (seconds) or start/stop timer</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement superset/tri-set/giant-set flow logic <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Log Exercise A → auto-show Exercise B (no rest), after final exercise in group → start rest timer, repeat for targetSets</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement drop-set logging flow <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Single set = N weight drops (weight + reps per drop), dropsPerSet from block config</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build RestTimerWidget <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Configurable duration, circular countdown animation, vibration + sound on complete, auto-start after set, persistent bottom banner</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Create ActiveWorkoutProvider (Riverpod) <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Manages session state, current block/exercise position, set completion, elapsed time, auto-advance logic</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Persist exercise logs to SQLite on each set <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Insert ExerciseLog row on every "Log Set" tap, create WorkoutSession on start, update finished_at on finish</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write unit tests for workout logging logic <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Test all 5 log modes, superset flow sequencing, cumulative counter arithmetic, drop-set multi-weight logging</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write widget tests for workout logging UI <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Verify correct input widgets render per logMode, set completion updates UI, timer starts/stops correctly</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 6 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="6">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-6);">6</span>
+      <span class="phase-title">Workout History &amp; Progress Charts</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build HistoryScreen with calendar view <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Scrollable month grid with dots on workout days, plus chronological list view toggle</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SessionDetailScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Full session replay — all logged sets with weights, reps, failure indicators, session notes, duration</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Add session-to-session comparison <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Compare current session vs previous session of the same day type (weight deltas, rep changes)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build ProgressScreen with exercise selector <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Dropdown to filter by exercise, date range picker</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build StrengthChart (fl_chart line chart) <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Max weight per exercise over time, smooth bezier curves, gradient fill</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build VolumeChart (fl_chart bar chart) <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Total weekly volume (sets × reps × weight), grouped bars by week</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build FrequencyChart (calendar heatmap) <span class="tag tag-new">new</span></div>
+          <div class="task-detail">GitHub-style contribution heatmap showing workout consistency</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write tests for history and progress features <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Test aggregate queries return correct data, charts render with mock datasets, calendar marks correct dates</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 7 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="7">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-7);">7</span>
+      <span class="phase-title">Nutrition Tracking — Food Photos &amp; AI Analysis</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build NutritionScreen with daily photo timeline <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Grid of today's food photos, timestamp display, meal label badges (Breakfast/Lunch/Dinner/Snack), daily summary card at top</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement food photo capture flow <span class="tag tag-new">new</span></div>
+          <div class="task-detail">ImagePicker camera integration, save to app directory, generate thumbnail, insert into food_photos table, prompt for meal label</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement GeminiService for food photo analysis <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/services/gemini_service.dart — multimodal prompt with all day's photos, structured JSON response (food_items, calories, macros)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Set up WorkManager for midnight background analysis <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/services/background_service.dart — registerPeriodicTask, 24h frequency, initialDelay to midnight, network + battery constraints</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement background task callback <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Fetch today's photos from DB, send to GeminiService, store results in daily_nutrition table, post local notification with results summary</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build DailySummaryScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Macro breakdown donut chart (protein/carbs/fat via fl_chart), per-item calorie table, photo gallery, manual override for totals</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Add manual "Analyze Now" trigger <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Button on NutritionScreen to trigger analysis on-demand (not just midnight)</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Configure Android manifest permissions <span class="tag tag-config">config</span></div>
+          <div class="task-detail">CAMERA, READ/WRITE_EXTERNAL_STORAGE, INTERNET, POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM, RECEIVE_BOOT_COMPLETED</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write tests for nutrition features <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Test GeminiService response parsing, background task callback logic, photo storage CRUD, NutritionRepository queries</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 8 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="8">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-8);">8</span>
+      <span class="phase-title">Custom Program Import &amp; Settings</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build ImportProgramScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">File picker to select JSON from device, validate against schema, preview structure before importing, store in programs table</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement JSON schema validation <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Validate imported JSON has required fields (programId, weeks, days, blocks, exercises), report clear errors for malformed files</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build SettingsScreen <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Gemini API key input (secure storage), default rest timer duration, weight unit (kg/lbs), notification preferences, export/backup data, app info</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Implement data export/backup <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Export workout history as JSON/CSV, share via Android share intent</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Final polish — micro-animations, transitions, edge cases <span class="tag tag-modify">polish</span></div>
+          <div class="task-detail">Page transitions, loading states, empty states, error handling, haptic feedback, smooth scroll behavior</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Write integration tests for full workout flow <span class="tag tag-test">test</span></div>
+          <div class="task-detail">End-to-end: launch → select program → start workout → log sets across all modes → finish → verify in history</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Run <code>flutter analyze</code> with zero issues <span class="tag tag-test">verify</span></div>
+          <div class="task-detail">Clean static analysis pass, no warnings or info-level issues</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Build release APK and install on device <span class="tag tag-test">verify</span></div>
+          <div class="task-detail">flutter build apk --release, install via USB, verify all features on physical hardware</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>Fitness Tracker Implementation Plan &middot; Generated 2026-09-16 &middot; Flutter + Drift + Gemini AI</p>
+</footer>
+
+<script>
+  function onCheck(checkbox) {
+    const item = checkbox.closest('.task-item') || checkbox.closest('.subtask-item');
+    if (checkbox.checked) {
+      item.classList.add('done');
+    } else {
+      item.classList.remove('done');
+    }
+    updateProgress();
+    saveState();
+  }
+
+  function togglePhase(header) {
+    const phase = header.closest('.phase');
+    phase.classList.toggle('collapsed');
+    saveState();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.task-checkbox');
+    const checked = document.querySelectorAll('.task-checkbox:checked');
+    const total = all.length;
+    const done = checked.length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total + ' tasks completed (' + pct + '%)';
+
+    // Update per-phase counters
+    document.querySelectorAll('.phase').forEach(phase => {
+      const phaseAll = phase.querySelectorAll('.task-checkbox');
+      const phaseChecked = phase.querySelectorAll('.task-checkbox:checked');
+      const counter = phase.querySelector('[data-counter]');
+      if (counter) {
+        counter.textContent = phaseChecked.length + '/' + phaseAll.length;
+      }
+    });
+  }
+
+  function saveState() {
+    const state = {
+      checks: [],
+      collapsed: []
+    };
+    document.querySelectorAll('.task-checkbox').forEach((cb, i) => {
+      if (cb.checked) state.checks.push(i);
+    });
+    document.querySelectorAll('.phase.collapsed').forEach(p => {
+      state.collapsed.push(p.dataset.phase);
+    });
+    try {
+      localStorage.setItem('fitness-tracker-plan', JSON.stringify(state));
+    } catch (e) { /* ignore */ }
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('fitness-tracker-plan');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      const checkboxes = document.querySelectorAll('.task-checkbox');
+      (state.checks || []).forEach(i => {
+        if (checkboxes[i]) {
+          checkboxes[i].checked = true;
+          const item = checkboxes[i].closest('.task-item');
+          if (item) item.classList.add('done');
+        }
+      });
+      (state.collapsed || []).forEach(phaseNum => {
+        const phase = document.querySelector('.phase[data-phase="' + phaseNum + '"]');
+        if (phase) phase.classList.add('collapsed');
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  // Initialize
+  loadState();
+  updateProgress();
+</script>
+
+</body>
+</html>
