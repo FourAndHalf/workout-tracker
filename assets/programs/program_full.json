@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "programId": "ffts-4week",
   "programName": "4 Week Program",
-  "sourceNote": "Transcribed from Workout.pdf. Many exercise descriptions were truncated in the source (the underlying PDF text layer itself cuts off, not just the visual rendering -- confirmed via pdftotext). Lines with needsReview:true and a reviewNote were completed by Claude with a reasonable assumption and MUST be spot-checked against your own memory of the program before you trust them mid-workout. Lines with only prescriptionComplete:false and no reviewNote are still literally cut off with no safe assumption made (rep count unknown).",
   "logModes": {
     "weightReps": "Weight field + reps field.",
     "repsOnly": "Reps field only (bodyweight movements).",
