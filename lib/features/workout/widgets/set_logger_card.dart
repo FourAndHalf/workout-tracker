@@ -95,12 +95,17 @@ class _SetLoggerCardState extends State<SetLoggerCard> {
           Row(
             children: [
               Expanded(
-                child: Text(
-                  widget.exercise.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                child: InkWell(
+                  onTap: _openExerciseVideo,
+                  child: Text(
+                    widget.exercise.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.textMuted,
+                    ),
                   ),
                 ),
               ),
