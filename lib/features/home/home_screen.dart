@@ -178,7 +178,7 @@ class _MetricTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 92,
+    constraints: const BoxConstraints(minHeight: 92),
     padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
       color: AppColors.surface,
@@ -187,13 +187,15 @@ class _MetricTile extends StatelessWidget {
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 18, color: AppColors.primary),
+        const SizedBox(height: 8),
         Text(
           value,
           style: const TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
         ),
+        const SizedBox(height: 4),
         Text(
           label,
           style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),

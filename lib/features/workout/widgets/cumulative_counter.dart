@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 class CumulativeCounter extends StatefulWidget {
@@ -18,7 +19,9 @@ class CumulativeCounter extends StatefulWidget {
 }
 
 class _CumulativeCounterState extends State<CumulativeCounter> {
-  final TextEditingController _chunkController = TextEditingController(text: '20');
+  final TextEditingController _chunkController = TextEditingController(
+    text: '20',
+  );
 
   int get totalLogged => widget.loggedChunks.fold(0, (sum, val) => sum + val);
 
@@ -39,7 +42,9 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
   @override
   Widget build(BuildContext context) {
     final total = totalLogged;
-    final progress = widget.targetReps > 0 ? (total / widget.targetReps).clamp(0.0, 1.0) : 0.0;
+    final progress = widget.targetReps > 0
+        ? (total / widget.targetReps).clamp(0.0, 1.0)
+        : 0.0;
     final isComplete = total >= widget.targetReps;
 
     return Container(
@@ -56,7 +61,6 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
         children: [
           Row(
             children: [
-              // Circular progress ring
               SizedBox(
                 width: 64,
                 height: 64,
@@ -76,7 +80,9 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: isComplete ? AppColors.primary : AppColors.textPrimary,
+                        color: isComplete
+                            ? AppColors.primary
+                            : AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -92,19 +98,27 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: isComplete ? AppColors.primary : AppColors.textSecondary,
+                        color: isComplete
+                            ? AppColors.primary
+                            : AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       '$total / ${widget.targetReps} Reps Completed',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     if (widget.loggedChunks.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
                         'Chunks: ${widget.loggedChunks.join(" → ")}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ],
                   ],
@@ -114,7 +128,6 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
           ),
           const SizedBox(height: 16),
 
-          // Chunk Input Controls
           if (!isComplete)
             Row(
               children: [
@@ -133,13 +146,19 @@ class _CumulativeCounterState extends State<CumulativeCounter> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   icon: const Icon(Icons.add_rounded, size: 20),
-                  label: const Text('Add Chunk', style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: const Text(
+                    'Add Chunk',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   onPressed: _submitChunk,
                 ),
               ],
