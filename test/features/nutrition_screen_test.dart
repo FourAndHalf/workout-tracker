@@ -22,6 +22,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Shopping list'), findsOneWidget);
+
+    await tester.tap(find.text('Daily log'));
+    await tester.pumpAndSettle();
     expect(find.text('Take photo'), findsOneWidget);
     expect(find.text('Choose from gallery'), findsOneWidget);
     expect(find.text('No meals logged today'), findsOneWidget);
@@ -32,5 +36,10 @@ void main() {
     expect(find.text('Select day'), findsOneWidget);
     expect(find.byType(DropdownButtonFormField<int>), findsOneWidget);
     expect(find.text('Cooking video'), findsOneWidget);
+
+    await tester.tap(find.text('Shopping list'));
+    await tester.pumpAndSettle();
+    expect(find.text('Weekly shopping list'), findsOneWidget);
+    expect(find.text('Rice puttu'), findsOneWidget);
   });
 }
