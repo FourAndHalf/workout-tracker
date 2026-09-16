@@ -11,6 +11,8 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analytics = ref.watch(dashboardAnalyticsProvider);
+    final now = DateTime.now();
+    final quote = dailyMotivationQuote(now);
 
     return Scaffold(
       appBar: AppBar(
@@ -28,6 +30,10 @@ class HomeScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            _TodayHeader(date: now),
+            const SizedBox(height: 14),
+            _QuoteCard(quote: quote),
+            const SizedBox(height: 24),
             const _SectionLabel('Quick actions'),
             const SizedBox(height: 10),
             Row(
@@ -61,7 +67,7 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 24),
-            const _SectionLabel('This week'),
+            const _SectionLabel('Your week at a glance'),
             const SizedBox(height: 10),
             analytics.when(
               loading: () => const SizedBox(
@@ -125,6 +131,115 @@ class _SectionLabel extends StatelessWidget {
   );
 }
 
+class _TodayHeader extends StatelessWidget {
+  final DateTime date;
+
+  const _TodayHeader({required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    final hour = date.hour;
+    final greeting = hour < 12
+        ? 'Good morning'
+        : hour < 17
+        ? 'Good afternoon'
+        : 'Good evening';
+    final weekday = const [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ][date.weekday - 1];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          greeting,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          '$weekday, ${date.day} ${months[date.month - 1]}',
+          style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuoteCard extends StatelessWidget {
+  final MotivationQuote quote;
+
+  const _QuoteCard({required this.quote});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.fromLTRB(16, 15, 16, 14),
+    decoration: BoxDecoration(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: AppColors.border),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(
+          Icons.format_quote_rounded,
+          color: AppColors.warning,
+          size: 23,
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                quote.quote,
+                style: const TextStyle(
+                  fontSize: 13,
+                  height: 1.35,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                quote.source,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class _ActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -179,26 +294,55 @@ class _MetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     constraints: const BoxConstraints(minHeight: 92),
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.fromLTRB(12, 10, 12, 11),
     decoration: BoxDecoration(
       color: AppColors.surface,
       borderRadius: BorderRadius.circular(8),
       border: Border.all(color: AppColors.border),
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+    child: Stack(
       children: [
-        Icon(icon, size: 18, color: AppColors.primary),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+        Positioned(
+          left: -12,
+          top: 0,
+          bottom: 0,
+          child: Container(
+            width: 3,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.horizontal(right: Radius.circular(3)),
+            ),
+          ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(icon, size: 18, color: AppColors.primary),
+                const Icon(
+                  Icons.arrow_outward_rounded,
+                  size: 14,
+                  color: AppColors.textMuted,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
         ),
       ],
     ),
