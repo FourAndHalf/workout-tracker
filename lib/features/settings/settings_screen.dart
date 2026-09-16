@@ -5,11 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../main.dart';
-import '../../services/daily_workout_alarm_service.dart';
 import '../home/home_providers.dart';
 import '../nutrition/nutrition_screen.dart';
 import '../../data/repositories/supplement_repository.dart';
@@ -22,8 +20,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  DailyWorkoutAlarmSettings _alarm = const DailyWorkoutAlarmSettings();
-  bool _loadingAlarm = true;
   bool _shoppingListEnabled = true;
   bool _loadingNutritionSettings = true;
   Future<List<SupplementItem>>? _supplements;
@@ -31,7 +27,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadAlarm();
     _loadNutritionSettings();
   }
 
@@ -51,88 +46,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool(shoppingListEnabledKey, enabled);
     ref.invalidate(shoppingListEnabledProvider);
-  }
-
-  Future<void> _loadAlarm() async {
-    final alarm = await ref
-        .read(dailyWorkoutAlarmServiceProvider)
-        .loadSettings();
-    if (mounted) {
-      setState(() {
-        _alarm = alarm;
-        _loadingAlarm = false;
-      });
-    }
-  }
-
-  Future<void> _updateAlarm(DailyWorkoutAlarmSettings next) async {
-    setState(() => _alarm = next);
-    await ref.read(dailyWorkoutAlarmServiceProvider).update(next);
-  }
-
-  Future<void> _pickAlarmTime() async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: _alarm.time,
-      builder: (context, child) => Theme(
-        data: Theme.of(context).copyWith(
-          timePickerTheme: const TimePickerThemeData(
-            backgroundColor: AppColors.surface,
-            hourMinuteColor: AppColors.card,
-            hourMinuteTextColor: AppColors.textPrimary,
-            dialHandColor: AppColors.primary,
-            dialBackgroundColor: AppColors.card,
-            dayPeriodColor: AppColors.card,
-            dayPeriodTextColor: AppColors.textPrimary,
-          ),
-        ),
-        child: child!,
-      ),
-    );
-    if (time != null) {
-      await _updateAlarm(_alarm.copyWith(time: time, enabled: true));
-    }
-  }
-
-  Future<void> _pickAlarmTune() async {
-    final selected = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            const ListTile(
-              title: Text('Alarm tune'),
-              subtitle: Text('Choose a Spotify mix'),
-            ),
-            ...workoutAlarmTunes.map(
-              (tune) => RadioListTile<String>(
-                value: tune.id,
-                groupValue: _alarm.tuneId,
-                title: Text(tune.title),
-                subtitle: Text(tune.artist),
-                onChanged: (value) => Navigator.pop(context, value),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (selected != null) {
-      await _updateAlarm(_alarm.copyWith(tuneId: selected));
-    }
-  }
-
-  Future<void> _openAlarmTune() async {
-    final tune = workoutAlarmTunes.firstWhere(
-      (item) => item.id == _alarm.tuneId,
-      orElse: () => workoutAlarmTunes.first,
-    );
-    await launchUrl(
-      Uri.parse(tune.spotifyUrl),
-      mode: LaunchMode.externalApplication,
-    );
   }
 
   Future<void> _addSupplement(SupplementRepository repository) async {
@@ -308,60 +221,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Card(
-            child: Column(
-              children: [
-                SwitchListTile.adaptive(
-                  secondary: const Icon(Icons.alarm_outlined),
-                  title: const Text('Daily workout alarm'),
-                  subtitle: Text(
-                    _loadingAlarm
-                        ? 'Loading alarm settings'
-                        : _alarm.enabled
-                        ? 'Every day at ${_alarm.time.format(context)}'
-                        : 'Alarm is off',
-                  ),
-                  value: _alarm.enabled,
-                  onChanged: _loadingAlarm
-                      ? null
-                      : (enabled) =>
-                            _updateAlarm(_alarm.copyWith(enabled: enabled)),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.schedule_outlined),
-                  title: const Text('Workout time'),
-                  subtitle: Text(_alarm.time.format(context)),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: _loadingAlarm ? null : _pickAlarmTime,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.music_note_outlined),
-                  title: const Text('Alarm tune'),
-                  subtitle: Text(
-                    workoutAlarmTunes
-                        .firstWhere(
-                          (tune) => tune.id == _alarm.tuneId,
-                          orElse: () => workoutAlarmTunes.first,
-                        )
-                        .title,
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: 'Open in Spotify',
-                        icon: const Icon(Icons.open_in_new, size: 18),
-                        onPressed: _loadingAlarm ? null : _openAlarmTune,
-                      ),
-                      const Icon(Icons.chevron_right),
-                    ],
-                  ),
-                  onTap: _loadingAlarm ? null : _pickAlarmTune,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
           const Text(
             'Nutrition',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
