@@ -5,6 +5,7 @@ import 'app.dart';
 import 'data/database/app_database.dart';
 import 'data/repositories/program_repository.dart';
 import 'data/repositories/workout_repository.dart';
+import 'data/repositories/nutrition_repository.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();
@@ -20,6 +21,11 @@ final programRepositoryProvider = Provider<ProgramRepository>((ref) {
 final workoutRepositoryProvider = Provider<WorkoutRepository>((ref) {
   final db = ref.watch(databaseProvider);
   return WorkoutRepository(db);
+});
+
+final nutritionRepositoryProvider = Provider<NutritionRepository>((ref) {
+  final db = ref.watch(databaseProvider);
+  return NutritionRepository(db);
 });
 
 void main() async {
