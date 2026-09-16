@@ -53,6 +53,64 @@ class AppDatabase extends _$AppDatabase {
       await delete(mealPlans).go();
     });
   }
+
+  Future<void> clearUserDataSince(DateTime since) async {
+    await transaction(() async {
+      final photos = await (select(foodPhotos)
+            ..where((photo) => photo.capturedAt.isBiggerOrEqualValue(since)))
+          .get();
+      final nutrition = await select(dailyNutrition).get();
+      final nutritionIds = nutrition
+          .where((row) {
+            final analyzedAt = row.analyzedAt;
+            if (analyzedAt != null) return !analyzedAt.isBefore(since);
+            final date = DateTime.tryParse(row.date);
+            return date != null && !date.isBefore(since);
+          })
+          .map((row) => row.id)
+          .toList();
+      final sessions = await (select(workoutSessions)
+            ..where((session) => session.startedAt.isBiggerOrEqualValue(since)))
+          .get();
+      final sessionIds = sessions.map((session) => session.id).toList();
+
+      if (nutritionIds.isNotEmpty) {
+        await (delete(dailyNutritionPhotos)
+              ..where((row) => row.dailyNutritionId.isIn(nutritionIds)))
+            .go();
+        await (delete(dailyNutrition)
+              ..where((row) => row.id.isIn(nutritionIds)))
+            .go();
+      }
+      if (sessionIds.isNotEmpty) {
+        await (delete(exerciseLogs)
+              ..where((row) => row.sessionId.isIn(sessionIds)))
+            .go();
+        await (delete(workoutSessions)
+              ..where((row) => row.id.isIn(sessionIds)))
+            .go();
+      }
+      await (delete(exerciseLogs)
+            ..where((row) => row.loggedAt.isBiggerOrEqualValue(since)))
+          .go();
+      await (delete(foodPhotos)
+            ..where((row) => row.id.isIn(photos.map((photo) => photo.id))))
+          .go();
+      final supplements = await select(supplementIntakes).get();
+      final supplementIds = supplements
+          .where((row) {
+            final date = DateTime.tryParse(row.date);
+            return date != null && !date.isBefore(since);
+          })
+          .map((row) => row.id)
+          .toList();
+      if (supplementIds.isNotEmpty) {
+        await (delete(supplementIntakes)
+              ..where((row) => row.id.isIn(supplementIds)))
+            .go();
+      }
+    });
+  }
 }
 
 LazyDatabase _openConnection() {

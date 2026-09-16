@@ -18,6 +18,17 @@ class NutritionRepository {
     await db.clearUserData();
   }
 
+  Future<void> clearUserDataSince(DateTime since) async {
+    final photos = await (db.select(db.foodPhotos)
+          ..where((photo) => photo.capturedAt.isBiggerOrEqualValue(since)))
+        .get();
+    for (final photo in photos) {
+      final file = File(photo.filePath);
+      if (await file.exists()) await file.delete();
+    }
+    await db.clearUserDataSince(since);
+  }
+
   static String dateKey(DateTime date) =>
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 

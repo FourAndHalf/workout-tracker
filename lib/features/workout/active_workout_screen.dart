@@ -22,6 +22,7 @@ class ActiveWorkoutScreen extends ConsumerStatefulWidget {
 }
 
 class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
+  static const _targetSeconds = 45 * 60;
   Timer? _elapsedTimer;
   int _elapsedSeconds = 0;
 
@@ -94,6 +95,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                     color: AppColors.primary,
                   ),
                 ),
+                Text(
+                  'Target: 45:00',
+                  style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                ),
               ],
             ),
             actions: [
@@ -125,6 +130,12 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
           ),
           body: Column(
             children: [
+              LinearProgressIndicator(
+                value: (_elapsedSeconds / _targetSeconds).clamp(0.0, 1.0),
+                minHeight: 3,
+                backgroundColor: AppColors.border,
+                color: AppColors.primary,
+              ),
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
