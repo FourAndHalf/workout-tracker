@@ -144,7 +144,7 @@ class ProgramListScreen extends ConsumerWidget {
                           ],
                         ),
                         subtitle: Text(
-                          '${day.blocks.length} Blocks &middot; $exerciseCount Exercises',
+                          '${day.blocks.length} Blocks \u00B7 $exerciseCount Exercises',
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppColors.textSecondary,
