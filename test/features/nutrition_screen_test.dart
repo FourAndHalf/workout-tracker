@@ -40,6 +40,6 @@ void main() {
     await tester.tap(find.text('Shopping list'));
     await tester.pumpAndSettle();
     expect(find.text('Weekly shopping list'), findsOneWidget);
-    expect(find.text('Rice puttu'), findsOneWidget);
+    expect(find.text('Rice flour'), findsOneWidget);
   });
 }

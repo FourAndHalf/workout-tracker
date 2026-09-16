@@ -318,23 +318,89 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
 
   Future<void> _openBlinkit(String item) async {
     final uri = Uri.https('blinkit.com', '/s/', {'q': item});
-    if (await launchUrl(uri, mode: LaunchMode.externalApplication) || !mounted) {
+    if (await launchUrl(uri, mode: LaunchMode.externalApplication) ||
+        !mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Unable to open Blinkit.')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Unable to open Blinkit.')));
   }
 
   List<String> _shoppingItems(List<MealPlan> meals) {
     final items = <String>{};
     for (final meal in meals) {
       for (final ingredient in meal.ingredients.split(',')) {
-        final item = ingredient.trim();
-        if (item.isNotEmpty) items.add(item);
+        items.addAll(_shoppingIngredientsFor(ingredient));
       }
     }
     return items.toList()..sort();
+  }
+
+  List<String> _shoppingIngredientsFor(String value) {
+    final item = value.trim().toLowerCase();
+    if (item.isEmpty) return const [];
+    if (item.contains('puttu') ||
+        item.contains('appam') ||
+        item.contains('idiyappam') ||
+        item.contains('dosa')) {
+      return const ['Rice flour'];
+    }
+    if (item.contains('chapati')) return const ['Wheat flour'];
+    if (item.contains('matta rice') || item.contains('rice kanji'))
+      return const ['Matta rice'];
+    if (item == 'rice') return const ['Rice'];
+    if (item.contains('rava') || item.contains('upma'))
+      return const ['Semolina'];
+    if (item.contains('chickpea')) return const ['Chickpeas'];
+    if (item.contains('cherupayar') || item.contains('green gram'))
+      return const ['Green gram'];
+    if (item.contains('parippu') || item.contains('sambar'))
+      return const ['Toor dal'];
+    if (item.contains('chicken')) return const ['Chicken'];
+    if (item.contains('karimeen') ||
+        item.contains('meen') ||
+        item.contains('fish') ||
+        item.contains('sardine'))
+      return const ['Fish'];
+    if (item.contains('prawn')) return const ['Prawns'];
+    if (item.contains('beef')) return const ['Beef'];
+    if (item.contains('egg')) return const ['Eggs'];
+    if (item.contains('coconut')) return const ['Coconut'];
+    if (item.contains('cabbage')) return const ['Cabbage'];
+    if (item.contains('carrot')) return const ['Carrots'];
+    if (item.contains('beetroot')) return const ['Beetroot'];
+    if (item.contains('cucumber')) return const ['Cucumber'];
+    if (item.contains('banana')) return const ['Bananas'];
+    if (item.contains('papaya')) return const ['Papaya'];
+    if (item.contains('pineapple')) return const ['Pineapple'];
+    if (item.contains('watermelon')) return const ['Watermelon'];
+    if (item.contains('orange')) return const ['Oranges'];
+    if (item.contains('guava')) return const ['Guava'];
+    if (item.contains('apple')) return const ['Apples'];
+    if (item.contains('peanuts')) return const ['Peanuts'];
+    if (item.contains('cashew')) return const ['Cashews'];
+    if (item.contains('almond')) return const ['Almonds'];
+    if (item.contains('walnut')) return const ['Walnuts'];
+    if (item.contains('pumpkin seed')) return const ['Pumpkin seeds'];
+    if (item.contains('protein powder')) return const ['Protein powder'];
+    if (item.contains('curd') || item.contains('buttermilk'))
+      return const ['Curd'];
+    if (item.contains('milk')) return const ['Milk'];
+    if (item.contains('tea')) return const ['Tea'];
+    if (item.contains('tapioca') || item == 'kappa') return const ['Tapioca'];
+    if (item.contains('corn')) return const ['Corn'];
+    if (item.contains('roasted gram')) return const ['Roasted gram'];
+    if (item.contains('curry leaves')) return const ['Curry leaves'];
+    if (item.contains('pickle')) return const ['Pickle'];
+    if (item.contains('avial') ||
+        item.contains('thoran') ||
+        item.contains('olan') ||
+        item.contains('kurma') ||
+        item.contains('salad'))
+      return const ['Mixed vegetables'];
+    if (item.contains('moru')) return const ['Curd'];
+    if (item.contains('cinnamon')) return const ['Cinnamon'];
+    return [value.trim()];
   }
 
   @override
@@ -342,10 +408,13 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
     final plans = ref.watch(mealPlansProvider);
     return plans.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text('Unable to load shopping list: $error')),
+      error: (error, stack) =>
+          Center(child: Text('Unable to load shopping list: $error')),
       data: (meals) {
         final items = _shoppingItems(meals);
-        final remaining = items.where((item) => !_checkedItems.contains(item)).length;
+        final remaining = items
+            .where((item) => !_checkedItems.contains(item))
+            .length;
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           children: [
@@ -357,7 +426,10 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text('$remaining left', style: const TextStyle(color: AppColors.textSecondary)),
+                Text(
+                  '$remaining left',
+                  style: const TextStyle(color: AppColors.textSecondary),
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -378,8 +450,12 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                       child: Text(
                         item,
                         style: TextStyle(
-                          decoration: checked ? TextDecoration.lineThrough : null,
-                          color: checked ? AppColors.textMuted : AppColors.textPrimary,
+                          decoration: checked
+                              ? TextDecoration.lineThrough
+                              : null,
+                          color: checked
+                              ? AppColors.textMuted
+                              : AppColors.textPrimary,
                         ),
                       ),
                     ),
