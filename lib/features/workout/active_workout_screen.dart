@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../data/models/program_model.dart';
+import '../../services/daily_workout_alarm_service.dart';
 import '../program/program_providers.dart';
 import '../../main.dart';
 import 'providers/active_workout_provider.dart';
@@ -27,10 +31,18 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   Timer? _elapsedTimer;
   int _elapsedSeconds = 0;
   bool _lockScreenTimerStarted = false;
+  String? _lastLockScreenState;
+  late final DailyWorkoutAlarmService _alarmService;
 
   @override
   void initState() {
     super.initState();
+    _alarmService = ref.read(dailyWorkoutAlarmServiceProvider);
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      WakelockPlus.enable();
+    }
     _startElapsedTimer();
   }
 
@@ -47,6 +59,12 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   @override
   void dispose() {
     _elapsedTimer?.cancel();
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)) {
+      WakelockPlus.disable();
+    }
+    _alarmService.setActiveWorkoutActionHandler(null);
     super.dispose();
   }
 
@@ -54,6 +72,60 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
     final mins = (seconds ~/ 60).toString().padLeft(2, '0');
     final secs = (seconds % 60).toString().padLeft(2, '0');
     return '$mins:$secs';
+  }
+
+  String _lockScreenSetLabel(ActiveWorkoutState state, DayModel day) {
+    if (day.blocks.isEmpty) return 'Workout complete';
+    final block =
+        day.blocks[state.currentBlockIndex.clamp(0, day.blocks.length - 1)];
+    if (block.exercises.isEmpty) return 'Workout complete';
+    final exercise =
+        block.exercises[state.currentExerciseIndex.clamp(
+          0,
+          block.exercises.length - 1,
+        )];
+    final logged = state.loggedSets[exercise.id]?.length ?? 0;
+    final set = (logged + 1).clamp(1, exercise.targetSets);
+    return '${exercise.name}  •  Set $set/${exercise.targetSets}';
+  }
+
+  String _nextExerciseName(ActiveWorkoutState state, DayModel day) {
+    for (
+      var blockIndex = state.currentBlockIndex;
+      blockIndex < day.blocks.length;
+      blockIndex++
+    ) {
+      final block = day.blocks[blockIndex];
+      final start = blockIndex == state.currentBlockIndex
+          ? state.currentExerciseIndex + 1
+          : 0;
+      if (start < block.exercises.length) return block.exercises[start].name;
+    }
+    return 'Workout complete';
+  }
+
+  void _syncLockScreenNotification(ActiveWorkoutState state, DayModel day) {
+    if (state.sessionId == null || state.startTime == null) return;
+    final currentSet = _lockScreenSetLabel(state, day);
+    final nextExercise = _nextExerciseName(state, day);
+    final key =
+        '${state.currentBlockIndex}:${state.currentExerciseIndex}:$currentSet:$nextExercise';
+    if (_lastLockScreenState == key) return;
+    _lastLockScreenState = key;
+    _alarmService.setActiveWorkoutActionHandler(() async {
+      await ref
+          .read(activeWorkoutProvider(widget.dayId).notifier)
+          .completeCurrentSetFromLockScreen();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _alarmService.updateWorkoutTimer(
+        state.startTime!,
+        workoutName: day.name,
+        targetEndAt: state.startTime!.add(const Duration(minutes: 45)),
+        currentSet: currentSet,
+        nextExercise: nextExercise,
+      );
+    });
   }
 
   @override
@@ -87,14 +159,18 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
             !_lockScreenTimerStarted) {
           _lockScreenTimerStarted = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref
-                .read(dailyWorkoutAlarmServiceProvider)
-                .startWorkoutTimer(
-                  workoutState.startTime!,
-                  workoutName: day.name,
-                );
+            _alarmService.startWorkoutTimer(
+              workoutState.startTime!,
+              workoutName: day.name,
+              targetEndAt: workoutState.startTime!.add(
+                const Duration(minutes: 45),
+              ),
+              currentSet: _lockScreenSetLabel(workoutState, day),
+              nextExercise: _nextExerciseName(workoutState, day),
+            );
           });
         }
+        _syncLockScreenNotification(workoutState, day);
 
         return Scaffold(
           appBar: AppBar(

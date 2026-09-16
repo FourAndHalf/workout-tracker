@@ -135,6 +135,15 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     } else {
       // Straight set: trigger rest after each set
       shouldTriggerRest = true;
+      if (setList.length >= exercise.targetSets) {
+        if (state.currentExerciseIndex < block.exercises.length - 1) {
+          nextExerciseIdx = state.currentExerciseIndex + 1;
+        } else if (state.currentBlockIndex <
+            state.dayModel!.blocks.length - 1) {
+          nextBlockIdx = state.currentBlockIndex + 1;
+          nextExerciseIdx = 0;
+        }
+      }
     }
 
     state = state.copyWith(
@@ -143,6 +152,30 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       currentBlockIndex: nextBlockIdx,
       isResting: shouldTriggerRest,
       restSeconds: 60,
+    );
+  }
+
+  Future<void> completeCurrentSetFromLockScreen() async {
+    final day = state.dayModel;
+    if (day == null || state.sessionId == null || day.blocks.isEmpty) return;
+
+    final block = day.blocks[state.currentBlockIndex];
+    if (block.exercises.isEmpty) return;
+    final exercise = block.exercises[state.currentExerciseIndex];
+
+    if (exercise.logMode == 'cumulative') {
+      await addRestPauseChunk(
+        exercise: exercise,
+        block: block,
+        chunkReps: exercise.repTarget ?? 1,
+      );
+      return;
+    }
+
+    await logSet(
+      exercise: exercise,
+      block: block,
+      reps: exercise.repTarget ?? 1,
     );
   }
 
