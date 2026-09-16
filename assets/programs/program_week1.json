@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "programId": "ffts-4week",
   "programName": "4 Week Program",
-  "sourceNote": "Transcribed from Workout.pdf. Lines flagged prescriptionComplete:false were truncated in the source text and must be completed from the original PDF before release.",
   "logModes": {
     "weightReps": "Weight field + reps field.",
     "repsOnly": "Reps field only (bodyweight movements).",
