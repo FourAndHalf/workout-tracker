@@ -26,7 +26,7 @@ class BackupInfo {
 /// app backups. Restoring is a full overwrite: local data and photos are
 /// replaced with what's in the selected backup.
 class BackupRepository {
-  static const String _firstLaunchRestoreCheckKey =
+  static const String firstLaunchRestoreCheckKey =
       'backup_first_launch_restore_check_done';
 
   final AppDatabase database;
@@ -54,10 +54,10 @@ class BackupRepository {
   Future<void> signOut() => driveService.signOut();
 
   bool get hasCompletedFirstLaunchRestoreCheck =>
-      preferences.getBool(_firstLaunchRestoreCheckKey) ?? false;
+      preferences.getBool(firstLaunchRestoreCheckKey) ?? false;
 
   Future<void> markFirstLaunchRestoreCheckComplete() =>
-      preferences.setBool(_firstLaunchRestoreCheckKey, true);
+      preferences.setBool(firstLaunchRestoreCheckKey, true);
 
   Future<void> createBackup() async {
     final photoPaths = await _collectPhotoPaths();

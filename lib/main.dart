@@ -80,5 +80,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DailyWorkoutAlarmService().initialize();
 
-  runApp(const ProviderScope(child: FitnessTrackerApp()));
+  final preferences = await SharedPreferences.getInstance();
+  final needsRestoreCheck =
+      !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ?? false);
+
+  runApp(
+    ProviderScope(
+      child: FitnessTrackerApp(needsRestoreCheck: needsRestoreCheck),
+    ),
+  );
 }
