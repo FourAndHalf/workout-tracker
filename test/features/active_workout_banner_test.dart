@@ -8,8 +8,16 @@ import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
 import 'package:fitness_tracker/features/program/program_providers.dart';
 import 'package:fitness_tracker/features/workout/widgets/active_workout_banner.dart';
+import 'package:fitness_tracker/router.dart';
 
 void main() {
+  // `appRouter` is a module-level singleton reused across every test in
+  // this file (each pumpWidget creates a new widget tree, but not a new
+  // router), so leftover navigation state from a previous test would
+  // otherwise leak in. Reset it to a known location before each test.
+  setUp(() => appRouter.go('/'));
+
+
   final mockProgram = ProgramModel(
     schemaVersion: 1,
     programId: 'ffts-4week',
@@ -83,8 +91,37 @@ void main() {
     expect(find.textContaining('in progress'), findsNothing);
   });
 
+  testWidgets('banner is suppressed while already on the active day\'s page', (
+    WidgetTester tester,
+  ) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(() => db.close());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          currentProgramProvider.overrideWith((ref) async => mockProgram),
+        ],
+        child: const FitnessTrackerApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await startArmsWorkout(tester);
+    expect(find.textContaining('Elapsed:'), findsOneWidget);
+
+    // Still on the Arms day-detail page: the banner would be redundant here.
+    expect(find.textContaining('in progress'), findsNothing);
+
+    await tester.tap(find.text('FINISH'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+  });
+
   testWidgets(
-    'banner appears after leaving an active workout and returns to it on tap',
+    'banner appears after navigating away and returns to the workout on tap',
     (WidgetTester tester) async {
       final db = AppDatabase(NativeDatabase.memory());
       addTearDown(() => db.close());
@@ -104,18 +141,16 @@ void main() {
       await startArmsWorkout(tester);
       expect(find.textContaining('Elapsed:'), findsOneWidget);
 
-      // Back out to Home without finishing the workout. Two "Back" buttons
-      // are mounted (the day detail screen underneath, and the workout
-      // screen on top), so target the topmost one explicitly.
-      await tester.tap(find.byTooltip('Back').last);
+      // Leave the day-detail page without finishing the workout.
+      await tester.tap(find.text('Home'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.textContaining('Arms in progress'), findsOneWidget);
 
       await tester.tap(find.byType(ActiveWorkoutBanner));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.textContaining('Elapsed:'), findsOneWidget);
 
@@ -147,7 +182,21 @@ void main() {
 
     await startArmsWorkout(tester);
 
+    await tester.tap(find.text('Home'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('in progress'), findsOneWidget);
+
+    await tester.tap(find.byType(ActiveWorkoutBanner));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
     await tester.tap(find.text('FINISH'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(find.text('Home'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
