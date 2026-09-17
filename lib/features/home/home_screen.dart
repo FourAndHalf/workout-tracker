@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
+import '../program/program_providers.dart';
 import 'home_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -13,6 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analytics = ref.watch(dashboardAnalyticsProvider);
+    final nextWorkout = ref.watch(nextWorkoutDayProvider).valueOrNull;
     final now = DateTime.now();
     final quote = dailyMotivationQuote(now);
 
@@ -45,7 +47,11 @@ class HomeScreen extends ConsumerWidget {
                     icon: Icons.play_arrow_rounded,
                     label: 'Start',
                     color: AppColors.primary,
-                    onTap: () => context.push('/programs/ffts-4week/w1-arms'),
+                    onTap: nextWorkout == null
+                        ? null
+                        : () => context.push(
+                            '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
+                          ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -258,7 +264,7 @@ class _ActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _ActionTile({
     required this.icon,

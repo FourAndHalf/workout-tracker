@@ -17,6 +17,54 @@ final completedWorkoutSessionsProvider = FutureProvider<List<WorkoutSession>>((
   return ref.watch(workoutRepositoryProvider).getCompletedSessions();
 });
 
+class NextWorkoutInfo {
+  final String programId;
+  final String dayId;
+  final String dayName;
+
+  const NextWorkoutInfo({
+    required this.programId,
+    required this.dayId,
+    required this.dayName,
+  });
+}
+
+/// The next workout day the user hasn't completed yet, so the Home
+/// screen's "Start" shortcut always advances instead of always starting
+/// week 1 day 1.
+final nextWorkoutDayProvider = FutureProvider<NextWorkoutInfo?>((ref) async {
+  final program = await ref.watch(currentProgramProvider.future);
+  final sessions = await ref.watch(completedWorkoutSessionsProvider.future);
+  return nextWorkoutFor(program, sessions);
+});
+
+NextWorkoutInfo? nextWorkoutFor(
+  ProgramModel program,
+  List<WorkoutSession> sessions,
+) {
+  if (program.weeks.isEmpty) return null;
+
+  final weekIndex = activeWeekIndex(program, sessions);
+  final week = program.weeks[weekIndex];
+  if (week.days.isEmpty) return null;
+
+  final completedDayIds = sessions
+      .where((session) => session.weekId == week.id)
+      .map((session) => session.dayId)
+      .toSet();
+
+  final nextDay = week.days.firstWhere(
+    (day) => !completedDayIds.contains(day.id),
+    orElse: () => week.days.first,
+  );
+
+  return NextWorkoutInfo(
+    programId: program.programId,
+    dayId: nextDay.id,
+    dayName: nextDay.name,
+  );
+}
+
 int activeWeekIndex(ProgramModel program, List<WorkoutSession> sessions) {
   for (var weekIndex = 0; weekIndex < program.weeks.length - 1; weekIndex++) {
     final week = program.weeks[weekIndex];

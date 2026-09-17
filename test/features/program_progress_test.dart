@@ -47,4 +47,66 @@ void main() {
       1,
     );
   });
+
+  group('nextWorkoutFor', () {
+    final program = ProgramModel(
+      schemaVersion: 1,
+      programId: 'program',
+      programName: 'Program',
+      weeks: [
+        WeekModel(
+          number: 1,
+          id: 'w1',
+          title: 'Week 1',
+          days: [
+            DayModel(id: 'w1-arms', name: 'Arms', order: 1, blocks: []),
+            DayModel(id: 'w1-legs', name: 'Legs', order: 2, blocks: []),
+          ],
+        ),
+        WeekModel(
+          number: 2,
+          id: 'w2',
+          title: 'Week 2',
+          days: [DayModel(id: 'w2-arms', name: 'Arms', order: 1, blocks: [])],
+        ),
+      ],
+    );
+
+    WorkoutSession session(String weekId, String dayId) => WorkoutSession(
+      id: dayId.hashCode,
+      programId: 'program',
+      weekId: weekId,
+      dayId: dayId,
+      dayName: dayId,
+      startedAt: DateTime(2026),
+      finishedAt: DateTime(2026),
+    );
+
+    test('suggests the first day when nothing is completed', () {
+      final next = nextWorkoutFor(program, []);
+      expect(next?.dayId, 'w1-arms');
+    });
+
+    test('advances to the next day once the first is completed', () {
+      final next = nextWorkoutFor(program, [session('w1', 'w1-arms')]);
+      expect(next?.dayId, 'w1-legs');
+    });
+
+    test('advances into the next week once the current week is done', () {
+      final next = nextWorkoutFor(program, [
+        session('w1', 'w1-arms'),
+        session('w1', 'w1-legs'),
+      ]);
+      expect(next?.dayId, 'w2-arms');
+    });
+
+    test('re-suggests the last week\'s day once the whole program is done', () {
+      final next = nextWorkoutFor(program, [
+        session('w1', 'w1-arms'),
+        session('w1', 'w1-legs'),
+        session('w2', 'w2-arms'),
+      ]);
+      expect(next?.dayId, 'w2-arms');
+    });
+  });
 }
