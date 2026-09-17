@@ -11,6 +11,7 @@ import '../../main.dart';
 import '../home/home_providers.dart';
 import '../nutrition/nutrition_screen.dart';
 import '../../data/repositories/supplement_repository.dart';
+import 'providers/backup_state.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -202,6 +203,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
+  String _backupStatusLabel(BackupOperationState state) {
+    switch (state.status) {
+      case BackupOperationStatus.signingIn:
+        return 'Signing in to Google...';
+      case BackupOperationStatus.backingUp:
+        return 'Backing up...';
+      case BackupOperationStatus.success:
+        return 'Backup complete';
+      case BackupOperationStatus.error:
+        return 'Backup failed — tap to retry';
+      case BackupOperationStatus.idle:
+        return 'Save all your data to Google Drive';
+    }
+  }
+
   String _periodLabel(Duration duration) {
     if (duration.inHours == 1) return '1 hour';
     if (duration.inDays == 1) return '1 day';
@@ -211,6 +227,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(backupOperationProvider, (previous, next) {
+      if (next.status == BackupOperationStatus.success &&
+          previous?.status != BackupOperationStatus.success) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Backup uploaded to Google Drive')));
+      } else if (next.status == BackupOperationStatus.error &&
+          previous?.status != BackupOperationStatus.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Backup failed: ${next.errorMessage}')),
+        );
+      }
+    });
+    final backupState = ref.watch(backupOperationProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
@@ -221,6 +252,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
+          Card(
+            child: ListTile(
+              leading: backupState.isInProgress
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.cloud_upload_outlined),
+              title: const Text('Back up to Google Drive'),
+              subtitle: Text(_backupStatusLabel(backupState)),
+              onTap: backupState.isInProgress
+                  ? null
+                  : () => ref.read(backupOperationProvider.notifier).backupNow(),
+            ),
+          ),
+          const SizedBox(height: 24),
           const Text(
             'Nutrition',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

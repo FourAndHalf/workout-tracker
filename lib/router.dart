@@ -4,7 +4,6 @@ import 'features/home/home_screen.dart';
 import 'features/home/main_navigation_scaffold.dart';
 import 'features/program/program_list_screen.dart';
 import 'features/program/day_detail_screen.dart';
-import 'features/workout/active_workout_screen.dart';
 import 'features/history/history_screen.dart';
 import 'features/history/session_detail_screen.dart';
 import 'features/progress/progress_screen.dart';
@@ -19,7 +18,10 @@ final appRouter = GoRouter(
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return MainNavigationScaffold(navigationShell: navigationShell);
+        return MainNavigationScaffold(
+          navigationShell: navigationShell,
+          currentLocation: state.uri.toString(),
+        );
       },
       branches: [
         StatefulShellBranch(
@@ -82,14 +84,6 @@ final appRouter = GoRouter(
           ],
         ),
       ],
-    ),
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/workout/:dayId',
-      builder: (context, state) {
-        final dayId = state.pathParameters['dayId']!;
-        return ActiveWorkoutScreen(dayId: dayId);
-      },
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,

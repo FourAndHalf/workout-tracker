@@ -8,8 +8,14 @@ import 'exercise_tile.dart';
 class BlockCard extends StatelessWidget {
   final BlockModel block;
   final int blockIndex;
+  final Map<String, ActiveExerciseLogState>? activeExerciseStates;
 
-  const BlockCard({super.key, required this.block, required this.blockIndex});
+  const BlockCard({
+    super.key,
+    required this.block,
+    required this.blockIndex,
+    this.activeExerciseStates,
+  });
 
   Color _getBlockBadgeColor(String type) {
     switch (type) {
@@ -151,7 +157,12 @@ class BlockCard extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: block.exercises
-                  .map((e) => ExerciseTile(exercise: e))
+                  .map(
+                    (e) => ExerciseTile(
+                      exercise: e,
+                      activeState: activeExerciseStates?[e.id],
+                    ),
+                  )
                   .toList(),
             ),
           ),
