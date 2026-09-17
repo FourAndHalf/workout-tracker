@@ -64,6 +64,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Log a workout to see your progress.'), findsOneWidget);
+    expect(find.text('Log a workout to see your progress'), findsOneWidget);
   });
 }

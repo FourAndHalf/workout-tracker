@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/utils/elapsed_time.dart';
 import '../../data/models/program_model.dart';
 import '../../services/daily_workout_alarm_service.dart';
 import '../program/program_providers.dart';
@@ -26,10 +27,10 @@ class ActiveWorkoutScreen extends ConsumerStatefulWidget {
       _ActiveWorkoutScreenState();
 }
 
-class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
+class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen>
+    with WidgetsBindingObserver {
   static const _targetSeconds = 45 * 60;
   Timer? _elapsedTimer;
-  int _elapsedSeconds = 0;
   bool _lockScreenTimerStarted = false;
   String? _lastLockScreenState;
   late final DailyWorkoutAlarmService _alarmService;
@@ -37,6 +38,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _alarmService = ref.read(dailyWorkoutAlarmServiceProvider);
     if (!kIsWeb &&
         (defaultTargetPlatform == TargetPlatform.android ||
@@ -47,17 +49,24 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
   }
 
   void _startElapsedTimer() {
+    // Ticks only trigger a rebuild — the displayed value is always
+    // recomputed from wall-clock time in build(), so missed/delayed ticks
+    // while the screen is off don't cause the timer to fall behind.
     _elapsedTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (mounted) {
-        setState(() {
-          _elapsedSeconds++;
-        });
-      }
+      if (mounted) setState(() {});
     });
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _elapsedTimer?.cancel();
     if (!kIsWeb &&
         (defaultTargetPlatform == TargetPlatform.android ||
@@ -172,6 +181,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
         }
         _syncLockScreenNotification(workoutState, day);
 
+        final elapsedSeconds = workoutState.startTime == null
+            ? 0
+            : elapsedSecondsSince(workoutState.startTime!);
+
         return Scaffold(
           appBar: AppBar(
             title: Column(
@@ -185,7 +198,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                   ),
                 ),
                 Text(
-                  'Elapsed: ${_formatElapsed(_elapsedSeconds)}',
+                  'Elapsed: ${_formatElapsed(elapsedSeconds)}',
                   style: const TextStyle(
                     fontSize: 11,
                     color: AppColors.primary,
@@ -234,7 +247,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
           body: Column(
             children: [
               LinearProgressIndicator(
-                value: (_elapsedSeconds / _targetSeconds).clamp(0.0, 1.0),
+                value: (elapsedSeconds / _targetSeconds).clamp(0.0, 1.0),
                 minHeight: 3,
                 backgroundColor: AppColors.border,
                 color: AppColors.primary,
