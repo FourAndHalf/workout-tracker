@@ -966,7 +966,7 @@
         <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Implement data export/backup <span class="tag tag-new">new</span></div>
-          <div class="task-detail">Export workout history as JSON/CSV, share via Android share intent</div>
+          <div class="task-detail">Google Drive backup/restore: back up the sqlite DB, SharedPreferences data, and photo files to Drive's hidden appDataFolder; restore (full overwrite) from a picked backup. Prerequisite (manual, one-time, not automatable): in Google Cloud Console, enable the Drive API, configure the OAuth consent screen (Testing mode, add the user's Google account as a test user), and create an OAuth 2.0 Android client for package com.fourandhalf.fitness_tracker with the debug (and later release) keystore SHA-1 fingerprint registered.</div>
         </div>
       </li>
 
