@@ -1,13 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/data/repositories/workout_repository.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
 import 'package:fitness_tracker/features/workout/providers/active_workout_provider.dart';
+import 'package:fitness_tracker/main.dart';
 
 void main() {
   late AppDatabase db;
   late WorkoutRepository workoutRepo;
+  late ProviderContainer container;
   late ActiveWorkoutNotifier notifier;
 
   final mockDay = DayModel(
@@ -52,11 +55,15 @@ void main() {
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     workoutRepo = WorkoutRepository(db);
-    notifier = ActiveWorkoutNotifier(workoutRepo, 'w1-arms');
+    container = ProviderContainer(
+      overrides: [workoutRepositoryProvider.overrideWithValue(workoutRepo)],
+    );
+    notifier = container.read(activeWorkoutProvider('w1-arms').notifier);
     notifier.initDay(mockDay);
   });
 
   tearDown(() async {
+    container.dispose();
     await db.close();
   });
 
@@ -147,8 +154,9 @@ void main() {
             ),
           ],
         );
-        final sequenceNotifier = ActiveWorkoutNotifier(workoutRepo, day.id);
-        addTearDown(sequenceNotifier.dispose);
+        final sequenceNotifier = container.read(
+          activeWorkoutProvider(day.id).notifier,
+        );
         sequenceNotifier.initDay(day);
         await Future<void>.delayed(Duration.zero);
 

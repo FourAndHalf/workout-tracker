@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../main.dart';
 import '../../../data/models/program_model.dart';
 import '../../../data/repositories/workout_repository.dart';
+import 'active_workout_session_notifier.dart';
 
 class ActiveWorkoutState {
   final int? sessionId;
@@ -60,8 +61,9 @@ class ActiveWorkoutState {
 
 class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   final WorkoutRepository _workoutRepo;
+  final Ref _ref;
 
-  ActiveWorkoutNotifier(this._workoutRepo, String dayId)
+  ActiveWorkoutNotifier(this._workoutRepo, this._ref, String dayId)
     : super(ActiveWorkoutState(dayId: dayId, startTime: DateTime.now()));
 
   void initDay(DayModel day, {String weekId = 'w1'}) async {
@@ -72,6 +74,11 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       dayName: day.name,
     );
     state = state.copyWith(sessionId: sessionId, dayModel: day);
+    _ref.read(activeWorkoutSessionProvider.notifier).start(
+      dayId: state.dayId,
+      dayName: day.name,
+      startTime: state.startTime!,
+    );
   }
 
   /// Log a set for the current exercise
@@ -216,6 +223,9 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     if (state.sessionId != null) {
       await _workoutRepo.finishSession(state.sessionId!, notes: notes);
     }
+    if (_ref.read(activeWorkoutSessionProvider)?.dayId == state.dayId) {
+      _ref.read(activeWorkoutSessionProvider.notifier).clear();
+    }
   }
 }
 
@@ -226,5 +236,5 @@ final activeWorkoutProvider =
       String
     >((ref, dayId) {
       final repo = ref.watch(workoutRepositoryProvider);
-      return ActiveWorkoutNotifier(repo, dayId);
+      return ActiveWorkoutNotifier(repo, ref, dayId);
     });
