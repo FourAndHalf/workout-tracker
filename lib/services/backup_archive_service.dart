@@ -3,35 +3,48 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
-import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/database/app_database.dart';
-
-/// A photo file to embed in a backup archive, grouped by category so it can
-/// be restored into the right on-disk location later.
-class BackupPhotoFile {
-  final String category;
-  final String absolutePath;
-
-  const BackupPhotoFile({required this.category, required this.absolutePath});
-}
 
 class BackupManifest {
   final int schemaVersion;
   final DateTime createdAt;
 
-  const BackupManifest({required this.schemaVersion, required this.createdAt});
+  /// Maps each photo's zip entry name to the absolute on-disk path it was
+  /// read from, so a restore can write it back to that exact same path
+  /// (app-private storage paths are stable for a given package on Android).
+  final Map<String, String> photoPaths;
+
+  const BackupManifest({
+    required this.schemaVersion,
+    required this.createdAt,
+    required this.photoPaths,
+  });
 
   Map<String, dynamic> toJson() => {
     'schemaVersion': schemaVersion,
     'createdAt': createdAt.toIso8601String(),
+    'photoPaths': photoPaths,
   };
 
   factory BackupManifest.fromJson(Map<String, dynamic> json) => BackupManifest(
     schemaVersion: json['schemaVersion'] as int,
     createdAt: DateTime.parse(json['createdAt'] as String),
+    photoPaths: (json['photoPaths'] as Map<String, dynamic>?)?.map(
+          (key, value) => MapEntry(key, value as String),
+        ) ??
+        const {},
   );
+}
+
+/// A photo file, extracted into the staging directory, paired with the
+/// absolute path it should be restored to.
+class PhotoRestoreEntry {
+  final String originalPath;
+  final File stagedFile;
+
+  const PhotoRestoreEntry({required this.originalPath, required this.stagedFile});
 }
 
 /// The result of extracting a backup archive into a staging directory.
@@ -39,13 +52,13 @@ class ExtractedBackup {
   final BackupManifest manifest;
   final File databaseFile;
   final Map<String, Object?> preferences;
-  final Map<String, List<File>> photosByCategory;
+  final List<PhotoRestoreEntry> photos;
 
   const ExtractedBackup({
     required this.manifest,
     required this.databaseFile,
     required this.preferences,
-    required this.photosByCategory,
+    required this.photos,
   });
 }
 
@@ -72,15 +85,27 @@ class BackupArchiveService {
     required AppDatabase database,
     required File databaseFile,
     required SharedPreferences preferences,
-    required List<BackupPhotoFile> photoFiles,
+    required List<String> photoPaths,
   }) async {
     await database.customStatement('PRAGMA wal_checkpoint(TRUNCATE);');
 
     final archive = Archive();
+    final manifestPhotoPaths = <String, String>{};
+
+    var index = 0;
+    for (final path in photoPaths) {
+      final file = File(path);
+      if (!await file.exists()) continue;
+      final entryName = '$photosDir/$index';
+      _addBytes(archive, entryName, await file.readAsBytes());
+      manifestPhotoPaths[entryName] = path;
+      index++;
+    }
 
     final manifest = BackupManifest(
       schemaVersion: database.schemaVersion,
       createdAt: DateTime.now().toUtc(),
+      photoPaths: manifestPhotoPaths,
     );
     _addBytes(archive, manifestEntry, utf8.encode(jsonEncode(manifest.toJson())));
 
@@ -91,14 +116,6 @@ class BackupArchiveService {
       for (final key in preferences.getKeys()) key: preferences.get(key),
     };
     _addBytes(archive, preferencesEntry, utf8.encode(jsonEncode(prefsMap)));
-
-    for (final photo in photoFiles) {
-      final file = File(photo.absolutePath);
-      if (!await file.exists()) continue;
-      final bytes = await file.readAsBytes();
-      final entryName = '$photosDir/${photo.category}/${p.basename(photo.absolutePath)}';
-      _addBytes(archive, entryName, bytes);
-    }
 
     final zipBytes = ZipEncoder().encodeBytes(archive);
     return Uint8List.fromList(zipBytes);
@@ -122,7 +139,7 @@ class BackupArchiveService {
     if (dbArchiveFile == null) {
       throw BackupArchiveException('Backup archive is missing $databaseEntry');
     }
-    final databaseFile = File(p.join(stagingDir.path, databaseEntry));
+    final databaseFile = File('${stagingDir.path}/$databaseEntry');
     await databaseFile.parent.create(recursive: true);
     await databaseFile.writeAsBytes(dbArchiveFile.content);
 
@@ -134,23 +151,21 @@ class BackupArchiveService {
       );
     }
 
-    final photosByCategory = <String, List<File>>{};
-    for (final entry in archive.files) {
-      if (!entry.name.startsWith('$photosDir/')) continue;
-      final segments = entry.name.split('/');
-      if (segments.length < 3) continue;
-      final category = segments[1];
-      final outFile = File(p.join(stagingDir.path, entry.name));
-      await outFile.parent.create(recursive: true);
-      await outFile.writeAsBytes(entry.content);
-      photosByCategory.putIfAbsent(category, () => []).add(outFile);
+    final photos = <PhotoRestoreEntry>[];
+    for (final entry in manifest.photoPaths.entries) {
+      final archiveFile = archive.findFile(entry.key);
+      if (archiveFile == null) continue;
+      final stagedFile = File('${stagingDir.path}/${entry.key}');
+      await stagedFile.parent.create(recursive: true);
+      await stagedFile.writeAsBytes(archiveFile.content);
+      photos.add(PhotoRestoreEntry(originalPath: entry.value, stagedFile: stagedFile));
     }
 
     return ExtractedBackup(
       manifest: manifest,
       databaseFile: databaseFile,
       preferences: preferences,
-      photosByCategory: photosByCategory,
+      photos: photos,
     );
   }
 

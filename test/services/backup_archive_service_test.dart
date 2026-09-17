@@ -54,10 +54,7 @@ void main() {
       database: db,
       databaseFile: dbFile,
       preferences: preferences,
-      photoFiles: [
-        BackupPhotoFile(category: 'food', absolutePath: foodPhoto.path),
-        BackupPhotoFile(category: 'progress', absolutePath: progressPhoto.path),
-      ],
+      photoPaths: [foodPhoto.path, progressPhoto.path],
     );
 
     final stagingDir = await Directory.systemTemp.createTemp('backup_extract_test_');
@@ -78,16 +75,10 @@ void main() {
       ['{"date":"2026-01-01T00:00:00.000"}'],
     );
 
-    expect(extracted.photosByCategory['food'], hasLength(1));
-    expect(
-      await extracted.photosByCategory['food']!.single.readAsBytes(),
-      [1, 2, 3, 4],
-    );
-    expect(extracted.photosByCategory['progress'], hasLength(1));
-    expect(
-      await extracted.photosByCategory['progress']!.single.readAsBytes(),
-      [5, 6, 7],
-    );
+    expect(extracted.photos, hasLength(2));
+    final byOriginalPath = {for (final p in extracted.photos) p.originalPath: p};
+    expect(await byOriginalPath[foodPhoto.path]!.stagedFile.readAsBytes(), [1, 2, 3, 4]);
+    expect(await byOriginalPath[progressPhoto.path]!.stagedFile.readAsBytes(), [5, 6, 7]);
   });
 
   test('skips photo files that no longer exist on disk', () async {
@@ -97,19 +88,14 @@ void main() {
       database: db,
       databaseFile: dbFile,
       preferences: preferences,
-      photoFiles: [
-        BackupPhotoFile(
-          category: 'food',
-          absolutePath: '${tempDir.path}/does_not_exist.jpg',
-        ),
-      ],
+      photoPaths: ['${tempDir.path}/does_not_exist.jpg'],
     );
 
     final stagingDir = await Directory.systemTemp.createTemp('backup_extract_test_');
     addTearDown(() => stagingDir.delete(recursive: true));
 
     final extracted = await service.extractArchive(zipBytes, stagingDir: stagingDir);
-    expect(extracted.photosByCategory['food'], isNull);
+    expect(extracted.photos, isEmpty);
   });
 
   test('throws when the archive is missing a manifest', () async {
