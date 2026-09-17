@@ -9,7 +9,9 @@ import '../../../core/utils/elapsed_time.dart';
 import '../providers/active_workout_session_notifier.dart';
 
 class ActiveWorkoutBanner extends ConsumerStatefulWidget {
-  const ActiveWorkoutBanner({super.key});
+  final String? visibleDayId;
+
+  const ActiveWorkoutBanner({super.key, this.visibleDayId});
 
   @override
   ConsumerState<ActiveWorkoutBanner> createState() => _ActiveWorkoutBannerState();
@@ -55,8 +57,11 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
   @override
   Widget build(BuildContext context) {
     final info = ref.watch(activeWorkoutSessionProvider);
-    _syncTicker(info != null);
-    if (info == null) return const SizedBox.shrink();
+    final isActive = info != null;
+    _syncTicker(isActive);
+    if (info == null || info.dayId == widget.visibleDayId) {
+      return const SizedBox.shrink();
+    }
 
     final elapsed = elapsedSecondsSince(info.startTime);
     final mm = (elapsed ~/ 60).toString().padLeft(2, '0');
@@ -65,7 +70,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
     return Material(
       color: AppColors.primary,
       child: InkWell(
-        onTap: () => context.push('/workout/${info.dayId}'),
+        onTap: () => context.push('/programs/ffts-4week/${info.dayId}'),
         child: SafeArea(
           bottom: false,
           child: Padding(

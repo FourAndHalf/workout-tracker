@@ -226,6 +226,9 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     if (_ref.read(activeWorkoutSessionProvider)?.dayId == state.dayId) {
       _ref.read(activeWorkoutSessionProvider.notifier).clear();
     }
+    // Reset to a fresh, inactive state so the day-detail page reverts to
+    // its plain preview mode instead of staying "active" forever.
+    state = ActiveWorkoutState(dayId: state.dayId, startTime: DateTime.now());
   }
 }
 

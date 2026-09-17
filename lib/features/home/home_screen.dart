@@ -45,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
                     icon: Icons.play_arrow_rounded,
                     label: 'Start',
                     color: AppColors.primary,
-                    onTap: () => context.push('/workout/w1-arms'),
+                    onTap: () => context.push('/programs/ffts-4week/w1-arms'),
                   ),
                 ),
                 const SizedBox(width: 10),
