@@ -12,6 +12,7 @@ import '../../data/database/app_database.dart';
 import '../../data/repositories/workout_repository.dart';
 import '../../data/repositories/progress_repository.dart';
 import '../../main.dart';
+import '../home/home_providers.dart';
 
 class ProgressScreen extends ConsumerStatefulWidget {
   const ProgressScreen({super.key});
@@ -98,6 +99,32 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 future: repository.getWeeklyVolumes(),
                 builder: (context, snapshot) =>
                     _VolumeCard(volumes: snapshot.data ?? const []),
+              ),
+              const SizedBox(height: 12),
+              Consumer(
+                builder: (context, ref, _) {
+                  final streak = ref
+                      .watch(dashboardAnalyticsProvider)
+                      .valueOrNull
+                      ?.currentStreak;
+                  return _StreakCard(streak: streak ?? 0);
+                },
+              ),
+              const SizedBox(height: 12),
+              FutureBuilder<List<WorkoutSession>>(
+                future: repository.getCompletedSessions(),
+                builder: (context, snapshot) {
+                  final sessions = snapshot.data ?? const <WorkoutSession>[];
+                  return Column(
+                    children: [
+                      _WorkoutTypeDonutCard(sessions: sessions),
+                      const SizedBox(height: 12),
+                      _AverageDurationCard(sessions: sessions),
+                      const SizedBox(height: 12),
+                      _CaloriesCard(sessions: sessions),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 12),
               FutureBuilder<Set<DateTime>>(
@@ -556,6 +583,319 @@ class _ChartCard extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _StreakCard extends StatelessWidget {
+  final int streak;
+  const _StreakCard({required this.streak});
+  @override
+  Widget build(BuildContext context) => Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.local_fire_department_rounded,
+            color: AppColors.warning,
+            size: 36,
+          ),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$streak',
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                'Day streak',
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Approximate calories for a completed session, from its duration alone.
+/// This is a rough motivational estimate (moderate resistance training,
+/// ~7 kcal/min), not a medically precise calculation.
+int _estimatedCalories(WorkoutSession session) {
+  final finishedAt = session.finishedAt;
+  if (finishedAt == null) return 0;
+  final minutes = finishedAt.difference(session.startedAt).inMinutes;
+  if (minutes <= 0) return 0;
+  return (minutes * 7).round();
+}
+
+class _WorkoutTypeDonutCard extends StatelessWidget {
+  final List<WorkoutSession> sessions;
+  const _WorkoutTypeDonutCard({required this.sessions});
+  @override
+  Widget build(BuildContext context) {
+    final counts = <String, int>{};
+    for (final session in sessions) {
+      counts[session.dayName] = (counts[session.dayName] ?? 0) + 1;
+    }
+    final entries = counts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    const palette = [
+      AppColors.primary,
+      AppColors.supersetBlock,
+      AppColors.triSetBlock,
+      AppColors.giantSetBlock,
+      AppColors.dropSetBlock,
+      AppColors.secondary,
+    ];
+
+    return _ChartCard(
+      title: 'Workout type breakdown',
+      subtitle: '${sessions.length} sessions logged',
+      child: entries.isEmpty
+          ? const Center(child: Text('No completed workouts yet'))
+          : SizedBox(
+              height: 190,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PieChart(
+                      PieChartData(
+                        centerSpaceRadius: 40,
+                        sectionsSpace: 2,
+                        sections: [
+                          for (var i = 0; i < entries.length; i++)
+                            PieChartSectionData(
+                              value: entries[i].value.toDouble(),
+                              color: palette[i % palette.length],
+                              radius: 40,
+                              showTitle: false,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var i = 0; i < entries.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: palette[i % palette.length],
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '${entries[i].key} (${entries[i].value})',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+class _AverageDurationCard extends StatelessWidget {
+  final List<WorkoutSession> sessions;
+  const _AverageDurationCard({required this.sessions});
+  @override
+  Widget build(BuildContext context) {
+    final durations = sessions
+        .where((s) => s.finishedAt != null)
+        .map((s) => s.finishedAt!.difference(s.startedAt).inMinutes)
+        .where((minutes) => minutes > 0)
+        .toList();
+    final average = durations.isEmpty
+        ? 0
+        : (durations.reduce((a, b) => a + b) / durations.length).round();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.timer_outlined,
+              color: AppColors.secondary,
+              size: 32,
+            ),
+            const SizedBox(width: 14),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  durations.isEmpty ? '--' : '$average min',
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Text(
+                  'Average workout time',
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _WeeklyCalories {
+  final DateTime start;
+  final double calories;
+  const _WeeklyCalories({required this.start, required this.calories});
+}
+
+List<_WeeklyCalories> _bucketCaloriesByWeek(
+  List<WorkoutSession> sessions, {
+  int weeks = 8,
+}) {
+  final today = DateTime.now();
+  final currentWeekStart = DateTime(
+    today.year,
+    today.month,
+    today.day,
+  ).subtract(Duration(days: today.weekday - 1));
+
+  final buckets = <DateTime, double>{
+    for (var i = weeks - 1; i >= 0; i--)
+      currentWeekStart.subtract(Duration(days: i * 7)): 0,
+  };
+
+  for (final session in sessions) {
+    final sessionDay = DateTime(
+      session.startedAt.year,
+      session.startedAt.month,
+      session.startedAt.day,
+    );
+    final weekStart = sessionDay.subtract(
+      Duration(days: sessionDay.weekday - 1),
+    );
+    if (buckets.containsKey(weekStart)) {
+      buckets[weekStart] = buckets[weekStart]! + _estimatedCalories(session);
+    }
+  }
+
+  return buckets.entries
+      .map((entry) => _WeeklyCalories(start: entry.key, calories: entry.value))
+      .toList()
+    ..sort((a, b) => a.start.compareTo(b.start));
+}
+
+class _CaloriesCard extends StatelessWidget {
+  final List<WorkoutSession> sessions;
+  const _CaloriesCard({required this.sessions});
+  @override
+  Widget build(BuildContext context) {
+    final weekly = _bucketCaloriesByWeek(sessions);
+    final maxCalories = weekly.fold<double>(
+      0,
+      (value, item) => item.calories > value ? item.calories : value,
+    );
+
+    return _ChartCard(
+      title: 'Estimated calories burned',
+      subtitle: 'Rough estimate from workout duration',
+      child: SizedBox(
+        height: 190,
+        child: BarChart(
+          BarChartData(
+            maxY: maxCalories == 0 ? 100 : maxCalories * 1.2,
+            gridData: const FlGridData(show: false),
+            borderData: FlBorderData(show: false),
+            titlesData: FlTitlesData(
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 36,
+                  getTitlesWidget: (value, meta) => Text(
+                    value.toStringAsFixed(0),
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 24,
+                  getTitlesWidget: (value, meta) {
+                    final index = value.toInt();
+                    if (index < 0 || index >= weekly.length) {
+                      return const SizedBox.shrink();
+                    }
+                    final date = weekly[index].start;
+                    return Text(
+                      '${date.day}/${date.month}',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textMuted,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            barGroups: [
+              for (var i = 0; i < weekly.length; i++)
+                BarChartGroupData(
+                  x: i,
+                  barRods: [
+                    BarChartRodData(
+                      toY: weekly[i].calories,
+                      color: AppColors.warning,
+                      width: 12,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 double _maxVolume(List<WeeklyVolume> volumes) {
