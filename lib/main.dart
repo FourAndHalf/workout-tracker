@@ -1,15 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
 import 'data/database/app_database.dart';
+import 'data/repositories/backup_repository.dart';
 import 'data/repositories/program_repository.dart';
 import 'data/repositories/workout_repository.dart';
 import 'data/repositories/nutrition_repository.dart';
 import 'data/repositories/progress_repository.dart';
 import 'data/repositories/supplement_repository.dart';
+import 'services/backup_archive_service.dart';
 import 'services/daily_workout_alarm_service.dart';
+import 'services/google_drive_backup_service.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();
@@ -50,9 +57,36 @@ final dailyWorkoutAlarmServiceProvider = Provider<DailyWorkoutAlarmService>((
   return DailyWorkoutAlarmService();
 });
 
+final backupRepositoryProvider = FutureProvider<BackupRepository>((ref) async {
+  final db = ref.watch(databaseProvider);
+  final preferences = await SharedPreferences.getInstance();
+  final progressRepository = await ref.watch(progressRepositoryProvider.future);
+  final supplementRepository = await ref.watch(supplementRepositoryProvider.future);
+  final docsDir = await getApplicationDocumentsDirectory();
+  final databaseFile = File(p.join(docsDir.path, 'fitness_tracker.sqlite'));
+
+  return BackupRepository(
+    database: db,
+    databaseFile: databaseFile,
+    preferences: preferences,
+    progressRepository: progressRepository,
+    supplementRepository: supplementRepository,
+    archiveService: BackupArchiveService(),
+    driveService: GoogleDriveBackupService(),
+  );
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DailyWorkoutAlarmService().initialize();
 
-  runApp(const ProviderScope(child: FitnessTrackerApp()));
+  final preferences = await SharedPreferences.getInstance();
+  final needsRestoreCheck =
+      !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ?? false);
+
+  runApp(
+    ProviderScope(
+      child: FitnessTrackerApp(needsRestoreCheck: needsRestoreCheck),
+    ),
+  );
 }
