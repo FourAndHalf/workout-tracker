@@ -61,6 +61,7 @@ dependencies:
   googleapis: ^13.2.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
   archive: ^4.3.0
+  _discoveryapis_commons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ dev_dependencies:
 
   # Testing
   mocktail: ^1.0.4
+  http: ^1.2.0
 
 flutter:
   uses-material-design: true
