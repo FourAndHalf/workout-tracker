@@ -963,10 +963,10 @@
       </li>
 
       <li class="task-item">
-        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
         <div class="task-content">
           <div class="task-text">Implement data export/backup <span class="tag tag-new">new</span></div>
-          <div class="task-detail">Google Drive backup/restore: back up the sqlite DB, SharedPreferences data, and photo files to Drive's hidden appDataFolder; restore (full overwrite) from a picked backup. Prerequisite (manual, one-time, not automatable): in Google Cloud Console, enable the Drive API, configure the OAuth consent screen (Testing mode, add the user's Google account as a test user), and create an OAuth 2.0 Android client for package com.fourandhalf.fitness_tracker with the debug (and later release) keystore SHA-1 fingerprint registered.</div>
+          <div class="task-detail">Google Drive backup/restore: a "Back up to Google Drive" action in Settings > Data uploads the sqlite DB, SharedPreferences data, and photo files as a single archive to Drive's hidden appDataFolder. On a fresh install, a one-time restore gate offers to sign in, find the most recent backup, and restore it (full overwrite) before the app opens; skipping starts fresh. Prerequisite (manual, one-time, not automatable): in Google Cloud Console, enable the Drive API, configure the OAuth consent screen (Testing mode, add the user's Google account as a test user), and create an OAuth 2.0 Android client for package com.fourandhalf.fitness_tracker with the debug (and later release) keystore SHA-1 fingerprint registered.</div>
         </div>
       </li>
 
