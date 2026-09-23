@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/theme_mode_provider.dart';
 import '../../main.dart';
 import '../home/home_providers.dart';
 import '../nutrition/nutrition_screen.dart';
@@ -247,6 +248,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const Text(
+            'Appearance',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          SegmentedButton<ThemeMode>(
+            segments: const [
+              ButtonSegment(value: ThemeMode.system, label: Text('System')),
+              ButtonSegment(value: ThemeMode.light, label: Text('Light')),
+              ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
+            ],
+            selected: {ref.watch(themeModeProvider)},
+            onSelectionChanged: (selection) => ref
+                .read(themeModeProvider.notifier)
+                .setMode(selection.first),
+          ),
+          const SizedBox(height: 24),
           const Text(
             'Data',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
