@@ -29,6 +29,7 @@
       --phase-7: #f87171;
       --phase-8: #38bdf8;
       --phase-9: #2f81f7;
+      --phase-10: #a371f7;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1063,6 +1064,74 @@
         <div class="task-content">
           <div class="task-text">Density polish for exercise tiles &amp; block cards <span class="tag tag-modify">modify</span></div>
           <div class="task-detail">exercise_tile.dart / block_card.dart spacing and control density; spacing scale</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section class="phase" data-phase="10">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-10);">10</span>
+      <span class="phase-title">Home Screen Widget &amp; App Icons</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">App launcher icon &amp; adaptive icon <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Vector adaptive icon (dumbbell + flame motif, Primer palette) as foreground/background layers plus monochrome layer for Android 13 themed icons; wire via flutter_launcher_icons or res/mipmap-anydpi-v26; replace default ic_launcher</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Widget &amp; notification icons <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Monochrome vector drawables (camera, flame/streak) under android/app/src/main/res/drawable; reuse the same motif as the app icon; verify against light/dark launcher backgrounds</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Streak data bridge for widget <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Add home_widget dependency; service that writes current streak (from dashboardAnalyticsProvider) to widget shared storage and triggers widget update after workout completion and on app start; unit test the service</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Android launcher widget layout &amp; provider <span class="tag tag-new">new</span></div>
+          <div class="task-detail">AppWidgetProvider + res/layout + res/xml/appwidget_info.xml: flame icon with streak count and a camera button; supports light/dark; registered in AndroidManifest.xml; resizable min 2x1</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Camera deep link from widget <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Widget camera button launches app via URI (e.g. fitnesstracker://food/capture); GoRouter route opens the Nutrition food capture screen directly with the camera; handles cold start and app already running</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Photo label step in food capture <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">After the photo is taken, prompt for a text label and save photo + label with the food entry (reuse existing Nutrition storage; no AI analysis required); widget test for the label prompt</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Widget end-to-end verification <span class="tag tag-test">test</span></div>
+          <div class="task-detail">Run flutter analyze + flutter test; manually confirm widget shows streak, updates after a workout, camera button opens capture, label saves, and icons render on launcher and widget picker</div>
         </div>
       </li>
 
