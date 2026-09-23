@@ -77,24 +77,45 @@ class GoogleDriveFilesApi implements DriveBackupFilesApi {
 class GoogleDriveBackupService {
   final GoogleSignIn _googleSignIn;
   final DriveBackupFilesApi? _filesApiOverride;
+  Future<void>? _initialization;
+  GoogleSignInAccount? _account;
 
   GoogleDriveBackupService({
     GoogleSignIn? googleSignIn,
     DriveBackupFilesApi? filesApiForTesting,
-  }) : _googleSignIn = googleSignIn ?? GoogleSignIn(scopes: const [driveAppDataScope]),
+  }) : _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
        _filesApiOverride = filesApiForTesting;
 
-  Future<bool> isSignedIn() async {
-    if (_googleSignIn.currentUser != null) return true;
-    return await _googleSignIn.signInSilently() != null;
+  Future<void> _ensureInitialized() =>
+      _initialization ??= _googleSignIn.initialize();
+
+  Future<GoogleSignInAccount?> _restoreAccount() async {
+    if (_account != null) return _account;
+    await _ensureInitialized();
+    return _account = await _googleSignIn.attemptLightweightAuthentication();
   }
+
+  Future<bool> isSignedIn() async => await _restoreAccount() != null;
 
   Future<void> signIn() async {
-    final account = await _googleSignIn.signIn();
-    if (account == null) throw GoogleDriveSignInCancelledException();
+    await _ensureInitialized();
+    try {
+      _account = await _googleSignIn.authenticate(
+        scopeHint: const [driveAppDataScope],
+      );
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        throw GoogleDriveSignInCancelledException();
+      }
+      rethrow;
+    }
   }
 
-  Future<void> signOut() => _googleSignIn.signOut();
+  Future<void> signOut() async {
+    await _ensureInitialized();
+    _account = null;
+    await _googleSignIn.signOut();
+  }
 
   Future<drive.File> uploadBackup(String fileName, Uint8List bytes) async {
     final api = await _filesApi();
@@ -118,8 +139,12 @@ class GoogleDriveBackupService {
 
   Future<DriveBackupFilesApi> _filesApi() async {
     if (_filesApiOverride != null) return _filesApiOverride;
-    final client = await _googleSignIn.authenticatedClient();
-    if (client == null) throw GoogleDriveNotSignedInException();
-    return GoogleDriveFilesApi(drive.DriveApi(client));
+    final account = await _restoreAccount();
+    if (account == null) throw GoogleDriveNotSignedInException();
+    const scopes = [driveAppDataScope];
+    final authorization =
+        await account.authorizationClient.authorizationForScopes(scopes) ??
+        await account.authorizationClient.authorizeScopes(scopes);
+    return GoogleDriveFilesApi(drive.DriveApi(authorization.authClient(scopes: scopes)));
   }
 }

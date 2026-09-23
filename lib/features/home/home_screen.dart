@@ -18,12 +18,12 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analytics = ref.watch(dashboardAnalyticsProvider);
     ref.listen(dashboardAnalyticsProvider, (_, next) {
-      final data = next.valueOrNull;
+      final data = next.value;
       if (data != null) {
         StreakWidgetService().updateStreak(data.currentStreak).ignore();
       }
     });
-    final nextWorkout = ref.watch(nextWorkoutDayProvider).valueOrNull;
+    final nextWorkout = ref.watch(nextWorkoutDayProvider).value;
     final now = DateTime.now();
     final quote = dailyMotivationQuote(now);
 

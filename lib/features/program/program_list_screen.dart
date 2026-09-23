@@ -18,7 +18,7 @@ class ProgramListScreen extends ConsumerWidget {
       body: programAsync.when(
         data: (program) {
           final sessionsAsync = ref.watch(completedWorkoutSessionsProvider);
-          final sessions = sessionsAsync.valueOrNull ?? const [];
+          final sessions = sessionsAsync.value ?? const [];
           final week = program.weeks[activeWeekIndex(program, sessions)];
           final completedDays = sessions
               .where((session) => session.weekId == week.id)
