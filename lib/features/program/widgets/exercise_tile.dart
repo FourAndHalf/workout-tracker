@@ -151,7 +151,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
     final isDone = active.currentSetNumber > exercise.targetSets;
     return _buildTile(
       context,
-      borderColor: isDone ? AppColors.primary : null,
+      borderColor: isDone ? context.colors.primary : null,
       borderWidth: isDone ? 1.5 : 1,
       child: _buildSetLoggerBody(active, isDone),
     );
@@ -168,8 +168,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
       padding: const EdgeInsets.only(bottom: 8),
       child: AppCard(
         padding: const EdgeInsets.all(12),
-        color: AppColors.surface,
-        borderColor: borderColor ?? AppColors.border.withValues(alpha: 0.5),
+        color: context.colors.surface,
+        borderColor: borderColor ?? context.colors.border.withValues(alpha: 0.5),
         borderWidth: borderWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,11 +179,11 @@ class _ExerciseTileState extends State<ExerciseTile> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: AppColors.card,
+                  backgroundColor: context.colors.card,
                   child: Icon(
                     _getLogModeIcon(exercise.logMode),
                     size: 16,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -198,10 +198,10 @@ class _ExerciseTileState extends State<ExerciseTile> {
                               onTap: () => _openExerciseVideo(context),
                               child: Text(
                                 exercise.name,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
+                                  color: context.colors.textPrimary,
                                 ),
                               ),
                             ),
@@ -210,7 +210,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                             IconButton(
                               tooltip: 'Watch ${exercise.name} on YouTube Shorts',
                               icon: const Icon(Icons.open_in_new_rounded),
-                              color: AppColors.primary,
+                              color: context.colors.primary,
                               onPressed: () => _openExerciseVideo(context),
                               visualDensity: VisualDensity.compact,
                             ),
@@ -219,19 +219,19 @@ class _ExerciseTileState extends State<ExerciseTile> {
                       const SizedBox(height: 4),
                       Text(
                         _formatSetsReps(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.secondary,
+                          color: context.colors.secondary,
                         ),
                       ),
                       if (exercise.prescription != null) ...[
                         const SizedBox(height: 2),
                         Text(
                           exercise.prescription!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.textSecondary,
+                            color: context.colors.textSecondary,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -260,7 +260,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: isDone ? AppColors.primary : AppColors.secondary,
+              color: isDone ? context.colors.primary : context.colors.secondary,
             ),
           ),
         ),
@@ -283,17 +283,17 @@ class _ExerciseTileState extends State<ExerciseTile> {
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.check_circle_rounded,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       size: 16,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       'Set $idx: $weightStr $repsStr$failureStr',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: context.colors.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -360,12 +360,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
             SwitchListTile(
               value: _hitFailure,
               onChanged: (val) => setState(() => _hitFailure = val),
-              title: const Text(
+              title: Text(
                 'Hit Failure \u{1F525}',
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.error,
+                  color: context.colors.error,
                 ),
               ),
               contentPadding: EdgeInsets.zero,
@@ -411,9 +411,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   CircularProgressIndicator(
                     value: progress,
                     strokeWidth: 5,
-                    backgroundColor: AppColors.border,
+                    backgroundColor: context.colors.border,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      isComplete ? AppColors.primary : AppColors.secondary,
+                      isComplete ? context.colors.primary : context.colors.secondary,
                     ),
                   ),
                   Text(
@@ -422,8 +422,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: isComplete
-                          ? AppColors.primary
-                          : AppColors.textPrimary,
+                          ? context.colors.primary
+                          : context.colors.textPrimary,
                     ),
                   ),
                 ],
@@ -442,8 +442,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
                       color: isComplete
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
+                          ? context.colors.primary
+                          : context.colors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -458,9 +458,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
                     const SizedBox(height: 4),
                     Text(
                       'Chunks: ${active.restPauseChunks.join(" → ")}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.textMuted,
+                        color: context.colors.textMuted,
                       ),
                     ),
                   ],

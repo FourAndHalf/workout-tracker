@@ -180,10 +180,10 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                const Text(
+                Text(
                   'Track your body changes once a week.',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: context.colors.textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -206,9 +206,9 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                     ],
                   )
                 else
-                  const Text(
+                  Text(
                     'No weekly check-ins yet.',
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: context.colors.textSecondary),
                   ),
                 if (latest?.photoPath != null)
                   Padding(
@@ -347,7 +347,7 @@ class _CheckInValue extends StatelessWidget {
         Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         Text(
           label,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+          style: TextStyle(color: context.colors.textSecondary, fontSize: 11),
         ),
       ],
     ),
@@ -393,9 +393,9 @@ class _StrengthCard extends StatelessWidget {
                         reservedSize: 36,
                         getTitlesWidget: (value, meta) => Text(
                           value.toStringAsFixed(0),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
-                            color: AppColors.textMuted,
+                            color: context.colors.textMuted,
                           ),
                         ),
                       ),
@@ -409,9 +409,9 @@ class _StrengthCard extends StatelessWidget {
                             .floorToDouble(),
                         getTitlesWidget: (value, meta) => Text(
                           '${value.toInt() + 1}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
-                            color: AppColors.textMuted,
+                            color: context.colors.textMuted,
                           ),
                         ),
                       ),
@@ -421,12 +421,12 @@ class _StrengthCard extends StatelessWidget {
                     LineChartBarData(
                       spots: points,
                       isCurved: true,
-                      color: AppColors.primary,
+                      color: context.colors.primary,
                       barWidth: 3,
                       dotData: const FlDotData(show: true),
                       belowBarData: BarAreaData(
                         show: true,
-                        color: AppColors.primary.withValues(alpha: 0.12),
+                        color: context.colors.primary.withValues(alpha: 0.12),
                       ),
                     ),
                   ],
@@ -464,9 +464,9 @@ class _VolumeCard extends StatelessWidget {
                 reservedSize: 36,
                 getTitlesWidget: (value, meta) => Text(
                   value.toStringAsFixed(0),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
-                    color: AppColors.textMuted,
+                    color: context.colors.textMuted,
                   ),
                 ),
               ),
@@ -483,9 +483,9 @@ class _VolumeCard extends StatelessWidget {
                   final date = volumes[index].start;
                   return Text(
                     '${date.day}/${date.month}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
-                      color: AppColors.textMuted,
+                      color: context.colors.textMuted,
                     ),
                   );
                 },
@@ -499,7 +499,7 @@ class _VolumeCard extends StatelessWidget {
                 barRods: [
                   BarChartRodData(
                     toY: volumes[i].volume,
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     width: 12,
                     borderRadius: BorderRadius.circular(3),
                   ),
@@ -540,7 +540,7 @@ class _FrequencyCard extends StatelessWidget {
                 final active = dates.contains(date);
                 return Container(
                   decoration: BoxDecoration(
-                    color: active ? AppColors.primary : AppColors.border,
+                    color: active ? context.colors.primary : context.colors.border,
                     borderRadius: BorderRadius.circular(3),
                   ),
                 );
@@ -572,8 +572,8 @@ class _ChartCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             subtitle,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: context.colors.textSecondary,
               fontSize: 12,
             ),
           ),
@@ -594,9 +594,9 @@ class _StreakCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.local_fire_department_rounded,
-            color: AppColors.warning,
+            color: context.colors.warning,
             size: 36,
           ),
           const SizedBox(width: 14),
@@ -610,9 +610,9 @@ class _StreakCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
+              Text(
                 'Day streak',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
               ),
             ],
           ),
@@ -644,13 +644,13 @@ class _WorkoutTypeDonutCard extends StatelessWidget {
     }
     final entries = counts.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    const palette = [
-      AppColors.primary,
-      AppColors.supersetBlock,
-      AppColors.triSetBlock,
-      AppColors.giantSetBlock,
-      AppColors.dropSetBlock,
-      AppColors.secondary,
+    final palette = [
+      context.colors.primary,
+      context.colors.supersetBlock,
+      context.colors.triSetBlock,
+      context.colors.giantSetBlock,
+      context.colors.dropSetBlock,
+      context.colors.secondary,
     ];
 
     return _ChartCard(
@@ -702,9 +702,9 @@ class _WorkoutTypeDonutCard extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     '${entries[i].key} (${entries[i].value})',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
-                                      color: AppColors.textSecondary,
+                                      color: context.colors.textSecondary,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -741,9 +741,9 @@ class _AverageDurationCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.timer_outlined,
-              color: AppColors.secondary,
+              color: context.colors.secondary,
               size: 32,
             ),
             const SizedBox(width: 14),
@@ -757,10 +757,10 @@ class _AverageDurationCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
+                Text(
                   'Average workout time',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: context.colors.textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -849,9 +849,9 @@ class _CaloriesCard extends StatelessWidget {
                   reservedSize: 36,
                   getTitlesWidget: (value, meta) => Text(
                     value.toStringAsFixed(0),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
-                      color: AppColors.textMuted,
+                      color: context.colors.textMuted,
                     ),
                   ),
                 ),
@@ -868,9 +868,9 @@ class _CaloriesCard extends StatelessWidget {
                     final date = weekly[index].start;
                     return Text(
                       '${date.day}/${date.month}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
-                        color: AppColors.textMuted,
+                        color: context.colors.textMuted,
                       ),
                     );
                   },
@@ -884,7 +884,7 @@ class _CaloriesCard extends StatelessWidget {
                   barRods: [
                     BarChartRodData(
                       toY: weekly[i].calories,
-                      color: AppColors.warning,
+                      color: context.colors.warning,
                       width: 12,
                       borderRadius: BorderRadius.circular(3),
                     ),

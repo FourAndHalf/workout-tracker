@@ -64,16 +64,9 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.2),
-            blurRadius: 10,
-            spreadRadius: 1,
-          ),
-        ],
+        border: Border.all(color: context.colors.primary, width: 1.5),
       ),
       child: Row(
         children: [
@@ -86,15 +79,15 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
                 CircularProgressIndicator(
                   value: progress,
                   strokeWidth: 3.5,
-                  backgroundColor: AppColors.border,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  backgroundColor: context.colors.border,
+                  valueColor: AlwaysStoppedAnimation<Color>(context.colors.primary),
                 ),
                 Text(
                   '$_secondsRemaining',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                   ),
                 ),
               ],
@@ -106,21 +99,21 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'REST TIMER',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     letterSpacing: 0.5,
                   ),
                 ),
                 Text(
                   _secondsRemaining > 0 ? 'Resting... $_secondsRemaining s' : 'Rest Complete! Ready for next set.',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
               ],
@@ -128,10 +121,10 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
           ),
           TextButton(
             onPressed: () => _addSeconds(30),
-            child: const Text('+30s', style: TextStyle(color: AppColors.secondary, fontSize: 12)),
+            child: Text('+30s', style: TextStyle(color: context.colors.secondary, fontSize: 12)),
           ),
           IconButton(
-            icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.textMuted),
+            icon: Icon(Icons.close_rounded, size: 20, color: context.colors.textMuted),
             onPressed: widget.onDismiss,
           ),
         ],

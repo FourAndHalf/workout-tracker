@@ -43,7 +43,7 @@ class SessionDetailScreen extends ConsumerWidget {
                   ),
                   Text(
                     '${_dateLabel(session.startedAt)}  •  ${_duration(session)}',
-                    style: const TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(color: context.colors.textSecondary),
                   ),
                   if (session.notes?.isNotEmpty == true)
                     Padding(
@@ -65,7 +65,7 @@ class SessionDetailScreen extends ConsumerWidget {
                         title: Text(log.exerciseName),
                         subtitle: Text(_logSummary(log)),
                         trailing: log.hitFailure
-                            ? const Icon(Icons.flag, color: AppColors.warning)
+                            ? Icon(Icons.flag, color: context.colors.warning)
                             : null,
                       ),
                     ),

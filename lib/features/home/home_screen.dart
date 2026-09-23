@@ -46,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
                   child: _ActionTile(
                     icon: Icons.play_arrow_rounded,
                     label: 'Start',
-                    color: AppColors.primary,
+                    color: context.colors.primary,
                     onTap: nextWorkout == null
                         ? null
                         : () => context.push(
@@ -59,7 +59,7 @@ class HomeScreen extends ConsumerWidget {
                   child: _ActionTile(
                     icon: Icons.list_alt_rounded,
                     label: 'Plan',
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     onTap: () => context.go('/programs'),
                   ),
                 ),
@@ -68,7 +68,7 @@ class HomeScreen extends ConsumerWidget {
                   child: _ActionTile(
                     icon: Icons.camera_alt_outlined,
                     label: 'Food',
-                    color: AppColors.warning,
+                    color: context.colors.warning,
                     onTap: () => context.go('/nutrition'),
                   ),
                 ),
@@ -77,7 +77,7 @@ class HomeScreen extends ConsumerWidget {
                   child: _ActionTile(
                     icon: Icons.music_note_rounded,
                     label: 'Music',
-                    color: AppColors.secondary,
+                    color: context.colors.secondary,
                     onTap: () async {
                       await launchUrl(
                         Uri.parse('https://open.spotify.com/'),
@@ -205,7 +205,7 @@ class _TodayHeader extends StatelessWidget {
         const SizedBox(height: 3),
         Text(
           '$weekday, ${date.day} ${months[date.month - 1]}',
-          style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 13, color: context.colors.textSecondary),
         ),
       ],
     );
@@ -225,9 +225,9 @@ class _QuoteCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             Icons.format_quote_rounded,
-            color: AppColors.warning,
+            color: context.colors.warning,
             size: 23,
           ),
           const SizedBox(width: 10),
@@ -246,9 +246,9 @@ class _QuoteCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   quote.source,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
-                    color: AppColors.textMuted,
+                    color: context.colors.textMuted,
                   ),
                 ),
               ],
@@ -310,9 +310,9 @@ class _MetricTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppCard(
     color: highlight
-        ? AppColors.primary.withValues(alpha: 0.10)
-        : AppColors.surface,
-    borderColor: highlight ? AppColors.primary.withValues(alpha: 0.4) : null,
+        ? context.colors.primary.withValues(alpha: 0.10)
+        : context.colors.surface,
+    borderColor: highlight ? context.colors.primary.withValues(alpha: 0.4) : null,
     padding: const EdgeInsets.fromLTRB(12, 10, 12, 11),
     child: ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 68),
@@ -325,7 +325,7 @@ class _MetricTile extends StatelessWidget {
             child: Container(
               width: highlight ? 5 : 3,
               decoration: BoxDecoration(
-                color: AppColors.primary,
+                color: context.colors.primary,
                 borderRadius: const BorderRadius.horizontal(
                   right: Radius.circular(3),
                 ),
@@ -339,11 +339,11 @@ class _MetricTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(icon, size: 18, color: AppColors.primary),
-                  const Icon(
+                  Icon(icon, size: 18, color: context.colors.primary),
+                  Icon(
                     Icons.arrow_outward_rounded,
                     size: 14,
-                    color: AppColors.textMuted,
+                    color: context.colors.textMuted,
                   ),
                 ],
               ),
@@ -353,15 +353,15 @@ class _MetricTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: highlight ? AppColors.primary : AppColors.textPrimary,
+                  color: highlight ? context.colors.primary : context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
-                  color: AppColors.textSecondary,
+                  color: context.colors.textSecondary,
                 ),
               ),
             ],
@@ -382,14 +382,14 @@ class _VolumeTile extends StatelessWidget {
     padding: const EdgeInsets.all(14),
     child: Row(
       children: [
-        const Icon(Icons.trending_up_rounded, color: AppColors.secondary),
+        Icon(Icons.trending_up_rounded, color: context.colors.secondary),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Training volume',
-              style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
             ),
             Text(
               '${data.volumeThisWeek.toStringAsFixed(0)} kg',
@@ -402,9 +402,9 @@ class _VolumeTile extends StatelessWidget {
           Text(
             '${data.topExerciseName}\n${data.topExerciseWeight!.toStringAsFixed(1)} kg best',
             textAlign: TextAlign.right,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
-              color: AppColors.textSecondary,
+              color: context.colors.textSecondary,
             ),
           ),
       ],
@@ -419,11 +419,11 @@ class _LatestWorkoutTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppCard(
-    color: AppColors.surface,
+    color: context.colors.surface,
     padding: const EdgeInsets.all(14),
     child: Row(
       children: [
-        const Icon(Icons.history_rounded, color: AppColors.primary),
+        Icon(Icons.history_rounded, color: context.colors.primary),
         const SizedBox(width: 12),
         Text(
           data.latestWorkoutName == null
@@ -443,12 +443,12 @@ class _AnalyticsMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppCard(
-    color: AppColors.surface,
+    color: context.colors.surface,
     padding: const EdgeInsets.all(20),
     child: Center(
       child: Text(
         message,
-        style: const TextStyle(color: AppColors.textSecondary),
+        style: TextStyle(color: context.colors.textSecondary),
       ),
     ),
   );

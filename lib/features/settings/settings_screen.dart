@@ -182,7 +182,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
+            style: FilledButton.styleFrom(backgroundColor: context.colors.error),
             onPressed: () => Navigator.pop(context, true),
             child: const Text('Delete data'),
           ),
@@ -355,7 +355,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 24),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.delete_outline, color: AppColors.error),
+              leading: Icon(Icons.delete_outline, color: context.colors.error),
               title: const Text('Delete saved data'),
               subtitle: const Text('Clear workout and nutrition history'),
               onTap: () => _confirmDelete(context),
