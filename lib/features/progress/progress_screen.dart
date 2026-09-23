@@ -15,7 +15,10 @@ import '../../main.dart';
 import '../home/home_providers.dart';
 
 class ProgressScreen extends ConsumerStatefulWidget {
-  const ProgressScreen({super.key});
+  /// When true, renders without its own app bar (hosted by [ProgressHubScreen]).
+  final bool embedded;
+
+  const ProgressScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<ProgressScreen> createState() => _ProgressScreenState();
@@ -32,7 +35,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
   Widget build(BuildContext context) {
     final repository = ref.watch(workoutRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Progress')),
+      appBar: widget.embedded ? null : AppBar(title: const Text('Progress')),
       body: FutureBuilder<List<String>>(
         future: repository.getExerciseNames(),
         builder: (context, namesSnapshot) {

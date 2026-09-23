@@ -8,7 +8,10 @@ import '../../data/database/app_database.dart';
 import '../../main.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
-  const HistoryScreen({super.key});
+  /// When true, renders without its own app bar (hosted by [ProgressHubScreen]).
+  final bool embedded;
+
+  const HistoryScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
@@ -31,24 +34,37 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
+  Widget _viewToggleButton() {
+    return IconButton(
+      tooltip: _calendar ? 'Show list' : 'Show calendar',
+      icon: Icon(
+        _calendar ? Icons.view_list_outlined : Icons.calendar_month_outlined,
+      ),
+      onPressed: () => setState(() => _calendar = !_calendar),
+    );
+  }
+
+  /// The app bar action has no home when embedded, so it sits above the body.
+  Widget _withEmbeddedToggle(Widget body) {
+    if (!widget.embedded) return body;
+    return Column(
+      children: [
+        Align(alignment: Alignment.centerRight, child: _viewToggleButton()),
+        Expanded(child: body),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout History'),
-        actions: [
-          IconButton(
-            tooltip: _calendar ? 'Show list' : 'Show calendar',
-            icon: Icon(
-              _calendar
-                  ? Icons.view_list_outlined
-                  : Icons.calendar_month_outlined,
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              title: const Text('Workout History'),
+              actions: [_viewToggleButton()],
             ),
-            onPressed: () => setState(() => _calendar = !_calendar),
-          ),
-        ],
-      ),
-      body: FutureBuilder<List<WorkoutSession>>(
+      body: _withEmbeddedToggle(FutureBuilder<List<WorkoutSession>>(
         future: _sessions,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -98,7 +114,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                   ),
           );
         },
-      ),
+      )),
     );
   }
 

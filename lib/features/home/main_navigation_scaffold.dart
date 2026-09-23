@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/theme/app_colors.dart';
 import '../workout/widgets/active_workout_banner.dart';
 
 class MainNavigationScaffold extends StatelessWidget {
@@ -35,38 +34,33 @@ class MainNavigationScaffold extends StatelessWidget {
           Expanded(child: navigationShell),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (index) {
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: (index) {
           navigationShell.goBranch(
             index,
             initialLocation: index == navigationShell.currentIndex,
           );
         },
-        items: [
-          BottomNavigationBarItem(
+        destinations: const [
+          NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home, color: context.colors.primary),
+            selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.fitness_center_outlined),
-            activeIcon: Icon(Icons.fitness_center, color: context.colors.primary),
+            selectedIcon: Icon(Icons.fitness_center),
             label: 'Programs',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history_outlined),
-            activeIcon: Icon(Icons.history, color: context.colors.primary),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.show_chart_outlined),
-            activeIcon: Icon(Icons.show_chart, color: context.colors.primary),
+            selectedIcon: Icon(Icons.show_chart),
             label: 'Progress',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.restaurant_outlined),
-            activeIcon: Icon(Icons.restaurant, color: context.colors.primary),
+            selectedIcon: Icon(Icons.restaurant),
             label: 'Nutrition',
           ),
         ],
