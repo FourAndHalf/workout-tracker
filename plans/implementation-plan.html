@@ -28,6 +28,7 @@
       --phase-6: #fb923c;
       --phase-7: #f87171;
       --phase-8: #38bdf8;
+      --phase-9: #2f81f7;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -999,6 +1000,69 @@
         <div class="task-content">
           <div class="task-text">Build release APK and install on device <span class="tag tag-test">verify</span></div>
           <div class="task-detail">flutter build apk --release, install via USB, verify all features on physical hardware</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PHASE 9 -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="phase" data-phase="9">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-9);">9</span>
+      <span class="phase-title">UI Redesign — GitHub Primer Aesthetic</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Primer tokens &amp; dual light/dark theme <span class="tag tag-new">new</span></div>
+          <div class="task-detail">lib/core/theme/app_colors.dart + app_theme.dart — GitHub Primer light/dark tokens via ThemeExtension, Inter via google_fonts, flat 6px-radius/1px-border components, missing component themes, solid fills instead of alpha tints, Primer-style block pills</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Theme mode toggle in Settings <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">themeModeProvider (System/Light/Dark) persisted, wired in lib/app.dart, selector in Settings</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Reduce bottom nav to 4 tabs <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">Material 3 NavigationBar; fold History into Progress as a segmented control; keep /history/:sessionId route</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Simplify Home &amp; Progress screens <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">Fewer stacked cards, primary stats first, secondary stats behind expandable sections</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Split Nutrition &amp; Settings screens <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">Extract Nutrition dialogs/sections into widgets/; group Settings into titled sections; behavior unchanged</div>
+        </div>
+      </li>
+
+      <li class="task-item">
+        <input type="checkbox" class="task-checkbox" onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Density polish for exercise tiles &amp; block cards <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">exercise_tile.dart / block_card.dart spacing and control density; spacing scale</div>
         </div>
       </li>
 
