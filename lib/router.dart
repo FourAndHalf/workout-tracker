@@ -69,7 +69,9 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/nutrition',
-              builder: (context, state) => const NutritionScreen(),
+              builder: (context, state) => NutritionScreen(
+                autoCapture: state.uri.queryParameters['capture'] == 'camera',
+              ),
             ),
           ],
         ),

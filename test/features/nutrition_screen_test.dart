@@ -1,5 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -42,5 +44,53 @@ void main() {
     expect(find.text('Shopping list'), findsOneWidget);
     expect(find.byTooltip('Edit item'), findsWidgets);
     expect(find.byTooltip('Remove item'), findsWidgets);
+  });
+
+  testWidgets('autoCapture opens the camera picker on arrival', (tester) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    final pickerCalls = <MethodCall>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/image_picker'),
+          (call) async {
+            pickerCalls.add(call);
+            return null;
+          },
+        );
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('plugins.flutter.io/image_picker'),
+            null,
+          ),
+    );
+
+    final router = GoRouter(
+      initialLocation: '/nutrition?capture=camera',
+      routes: [
+        GoRoute(
+          path: '/nutrition',
+          builder: (context, state) => NutritionScreen(
+            autoCapture: state.uri.queryParameters['capture'] == 'camera',
+          ),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: MaterialApp.router(routerConfig: router),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(pickerCalls.where((c) => c.method == 'pickImage'), hasLength(1));
+    expect(
+      router.routeInformationProvider.value.uri.toString(),
+      '/nutrition',
+    );
   });
 }

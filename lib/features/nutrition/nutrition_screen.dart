@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -46,7 +47,10 @@ final shoppingListEnabledProvider = FutureProvider<bool>((ref) async {
 });
 
 class NutritionScreen extends ConsumerStatefulWidget {
-  const NutritionScreen({super.key});
+  /// Opens the camera on arrival (used by the launcher widget deep link).
+  final bool autoCapture;
+
+  const NutritionScreen({super.key, this.autoCapture = false});
 
   @override
   ConsumerState<NutritionScreen> createState() => _NutritionScreenState();
@@ -55,6 +59,27 @@ class NutritionScreen extends ConsumerStatefulWidget {
 class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   final ImagePicker _picker = ImagePicker();
   bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autoCapture) _scheduleAutoCapture();
+  }
+
+  @override
+  void didUpdateWidget(NutritionScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.autoCapture && !oldWidget.autoCapture) _scheduleAutoCapture();
+  }
+
+  void _scheduleAutoCapture() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      // Clear the query so tapping the widget again re-triggers the capture.
+      GoRouter.of(context).go('/nutrition');
+      _choosePhoto(ImageSource.camera);
+    });
+  }
 
   Future<void> _choosePhoto(ImageSource source) async {
     if (_isSaving) return;
