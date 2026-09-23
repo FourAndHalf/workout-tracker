@@ -134,33 +134,76 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
     return showModalBottomSheet<String?>(
       context: context,
       backgroundColor: context.colors.surface,
+      isScrollControlled: true,
       builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const ListTile(
-              title: Text(
-                'Meal',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ListTile(
+                title: Text(
+                  'Meal',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text('Add a label to find this photo later'),
               ),
-              subtitle: Text('Add a label to find this photo later'),
-            ),
-            ...['Breakfast', 'Lunch', 'Dinner', 'Snack'].map(
-              (label) => ListTile(
-                leading: const Icon(Icons.restaurant_outlined),
-                title: Text(label),
-                onTap: () => Navigator.pop(context, label),
+              ...['Breakfast', 'Lunch', 'Dinner', 'Snack'].map(
+                (label) => ListTile(
+                  leading: const Icon(Icons.restaurant_outlined),
+                  title: Text(label),
+                  onTap: () => Navigator.pop(context, label),
+                ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.remove_circle_outline),
-              title: const Text('Skip label'),
-              onTap: () => Navigator.pop(context),
-            ),
-          ],
+              ListTile(
+                leading: const Icon(Icons.edit_outlined),
+                title: const Text('Custom label'),
+                onTap: () async {
+                  final custom = await _askCustomLabel(context);
+                  if (context.mounted && custom != null) {
+                    Navigator.pop(context, custom);
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.remove_circle_outline),
+                title: const Text('Skip label'),
+                onTap: () => Navigator.pop(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<String?> _askCustomLabel(BuildContext context) {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Custom label'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textCapitalization: TextCapitalization.sentences,
+          decoration: const InputDecoration(
+            hintText: 'e.g. Post-workout shake',
+          ),
+          onSubmitted: (value) => Navigator.pop(dialogContext, value.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(dialogContext, controller.text.trim()),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    ).then((value) => (value == null || value.isEmpty) ? null : value);
   }
 
   Future<_SavedPhoto> _copyToAppStorage(XFile picked) async {
@@ -899,11 +942,13 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
   late final TextEditingController _fat;
   late final TextEditingController _video;
   late int _day;
+  late bool _showVideo;
 
   @override
   void initState() {
     super.initState();
     final meal = widget.meal;
+    _showVideo = meal?.videoUrl?.isNotEmpty ?? false;
     _day = meal?.dayOfWeek ?? 1;
     _name = TextEditingController(text: meal?.mealName ?? '');
     _ingredients = TextEditingController(text: meal?.ingredients ?? '');
@@ -960,13 +1005,35 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
     );
   }
 
+  Widget _macroField(TextEditingController controller, String label) =>
+      Expanded(
+        child: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: label,
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 12,
+            ),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) => AlertDialog(
     title: Text(widget.meal == null ? 'Add meal' : 'Edit meal'),
     content: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          TextField(
+            controller: _name,
+            decoration: const InputDecoration(labelText: 'Meal name'),
+          ),
+          const SizedBox(height: 14),
           DropdownButtonFormField<int>(
             initialValue: _day,
             decoration: const InputDecoration(labelText: 'Day'),
@@ -979,61 +1046,48 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
             ),
             onChanged: (value) => setState(() => _day = value ?? 1),
           ),
-          TextField(
-            controller: _name,
-            decoration: const InputDecoration(labelText: 'Meal name'),
-          ),
+          const SizedBox(height: 14),
           TextField(
             controller: _ingredients,
             decoration: const InputDecoration(
-              labelText: 'Ingredients (comma separated)',
+              labelText: 'Ingredients',
+              hintText: 'Comma separated',
             ),
             maxLines: 2,
           ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _calories,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'kcal'),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  controller: _protein,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Protein g'),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _carbs,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Carbs g'),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  controller: _fat,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Fat g'),
-                ),
-              ),
-            ],
-          ),
-          TextField(
-            controller: _video,
-            decoration: const InputDecoration(
-              labelText: 'Cooking video URL (optional)',
+          const SizedBox(height: 18),
+          Text(
+            'Nutrition',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: context.colors.textSecondary,
             ),
           ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _macroField(_calories, 'kcal'),
+              const SizedBox(width: 6),
+              _macroField(_protein, 'Protein'),
+              const SizedBox(width: 6),
+              _macroField(_carbs, 'Carbs'),
+              const SizedBox(width: 6),
+              _macroField(_fat, 'Fat'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (_showVideo)
+            TextField(
+              controller: _video,
+              decoration: const InputDecoration(labelText: 'Cooking video URL'),
+            )
+          else
+            TextButton.icon(
+              onPressed: () => setState(() => _showVideo = true),
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text('Add cooking video'),
+            ),
         ],
       ),
     ),

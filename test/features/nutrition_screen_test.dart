@@ -93,4 +93,35 @@ void main() {
       '/nutrition',
     );
   });
+
+  testWidgets('taking a photo prompts for a meal label', (tester) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    const channel = MethodChannel('plugins.flutter.io/image_picker');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async => '/tmp/none.jpg');
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null),
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: const MaterialApp(home: NutritionScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Take photo'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Breakfast'), findsOneWidget);
+    expect(find.text('Custom label'), findsOneWidget);
+
+    await tester.tap(find.text('Custom label'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
+  });
 }
