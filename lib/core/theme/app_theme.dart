@@ -85,12 +85,26 @@ class AppTheme {
           side: BorderSide(color: c.border),
         ),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      navigationBarTheme: NavigationBarThemeData(
         backgroundColor: c.surface,
-        selectedItemColor: c.primary,
-        unselectedItemColor: c.textMuted,
-        type: BottomNavigationBarType.fixed,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        height: 64,
+        indicatorColor: c.primary.withValues(alpha: 0.15),
+        iconTheme: WidgetStateProperty.resolveWith(
+          (s) => IconThemeData(
+            color: s.contains(WidgetState.selected)
+                ? c.primary
+                : c.textMuted,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (s) => textTheme.labelMedium?.copyWith(
+            color: s.contains(WidgetState.selected)
+                ? c.primary
+                : c.textMuted,
+          ),
+        ),
       ),
       dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
       chipTheme: ChipThemeData(

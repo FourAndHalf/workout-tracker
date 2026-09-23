@@ -4,9 +4,8 @@ import 'features/home/home_screen.dart';
 import 'features/home/main_navigation_scaffold.dart';
 import 'features/program/program_list_screen.dart';
 import 'features/program/day_detail_screen.dart';
-import 'features/history/history_screen.dart';
 import 'features/history/session_detail_screen.dart';
-import 'features/progress/progress_screen.dart';
+import 'features/progress/progress_hub_screen.dart';
 import 'features/nutrition/nutrition_screen.dart';
 import 'features/settings/settings_screen.dart';
 
@@ -53,25 +52,16 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/history',
-              builder: (context, state) => const HistoryScreen(),
-              routes: [
-                GoRoute(
-                  path: ':sessionId',
-                  builder: (context, state) {
-                    final sessionId = int.parse(state.pathParameters['sessionId']!);
-                    return SessionDetailScreen(sessionId: sessionId);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
               path: '/progress',
-              builder: (context, state) => const ProgressScreen(),
+              builder: (context, state) => const ProgressHubScreen(),
+            ),
+            // History lives under the Progress tab; the URL is unchanged.
+            GoRoute(
+              path: '/history/:sessionId',
+              builder: (context, state) {
+                final sessionId = int.parse(state.pathParameters['sessionId']!);
+                return SessionDetailScreen(sessionId: sessionId);
+              },
             ),
           ],
         ),
