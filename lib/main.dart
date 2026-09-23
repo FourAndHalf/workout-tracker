@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/theme/theme_mode_provider.dart';
 import 'data/database/app_database.dart';
 import 'data/repositories/backup_repository.dart';
 import 'data/repositories/program_repository.dart';
@@ -84,8 +85,13 @@ void main() async {
   final needsRestoreCheck =
       !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ?? false);
 
+  final themeMode = parseThemeMode(
+    preferences.getString(themeModePreferenceKey),
+  );
+
   runApp(
     ProviderScope(
+      overrides: [initialThemeModeProvider.overrideWithValue(themeMode)],
       child: FitnessTrackerApp(needsRestoreCheck: needsRestoreCheck),
     ),
   );
