@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
+import 'package:fitness_tracker/core/widgets/day_app_bar.dart';
 import 'package:fitness_tracker/main.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/features/home/home_providers.dart';
-import 'package:fitness_tracker/features/home/home_screen.dart';
 
 void main() {
   test('daily motivation quote is stable for the same date', () {
@@ -32,7 +32,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text(dailyGreeting(DateTime.now())), findsOneWidget);
+    expect(find.text(weekdayLabel(DateTime.now())), findsOneWidget);
     expect(find.byIcon(Icons.music_note_rounded), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
     expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);

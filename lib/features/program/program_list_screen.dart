@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/day_app_bar.dart';
 import 'program_providers.dart';
 
 class ProgramListScreen extends ConsumerWidget {
@@ -13,6 +14,7 @@ class ProgramListScreen extends ConsumerWidget {
     final programAsync = ref.watch(currentProgramProvider);
 
     return Scaffold(
+      appBar: const DayAppBar(),
       body: programAsync.when(
         data: (program) {
           final sessionsAsync = ref.watch(completedWorkoutSessionsProvider);

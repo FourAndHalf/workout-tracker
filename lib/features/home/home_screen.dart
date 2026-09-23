@@ -5,26 +5,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/day_app_bar.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
-
-const _greetings = [
-  "Let's get after it",
-  'Ready to train?',
-  'Make today count',
-  'Time to move',
-  'Stay consistent',
-  'Show up. Lift. Repeat.',
-  'Strong start today',
-];
-
-/// A short greeting that changes once per day.
-String dailyGreeting(DateTime date) {
-  final dayOfYear = date.difference(DateTime(date.year)).inDays;
-  return _greetings[dayOfYear % _greetings.length];
-}
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -43,8 +28,7 @@ class HomeScreen extends ConsumerWidget {
     final quote = dailyMotivationQuote(now);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(dailyGreeting(now)),
+      appBar: DayAppBar(
         actions: [
           IconButton(
             tooltip: 'Open Spotify',
