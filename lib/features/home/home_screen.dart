@@ -8,6 +8,22 @@ import '../../core/widgets/app_card.dart';
 import '../program/program_providers.dart';
 import 'home_providers.dart';
 
+const _greetings = [
+  "Let's get after it",
+  'Ready to train?',
+  'Make today count',
+  'Time to move',
+  'Stay consistent',
+  'Show up. Lift. Repeat.',
+  'Strong start today',
+];
+
+/// A short greeting that changes once per day.
+String dailyGreeting(DateTime date) {
+  final dayOfYear = date.difference(DateTime(date.year)).inDays;
+  return _greetings[dayOfYear % _greetings.length];
+}
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -20,8 +36,16 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: Text(dailyGreeting(now)),
         actions: [
+          IconButton(
+            tooltip: 'Open Spotify',
+            icon: const Icon(Icons.music_note_rounded),
+            onPressed: () => launchUrl(
+              Uri.parse('https://open.spotify.com/'),
+              mode: LaunchMode.externalApplication,
+            ),
+          ),
           IconButton(
             tooltip: 'Settings',
             icon: const Icon(Icons.settings_outlined),
@@ -34,59 +58,27 @@ class HomeScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            _TodayHeader(date: now),
-            const SizedBox(height: 14),
             _QuoteCard(quote: quote),
             const SizedBox(height: 24),
-            const _SectionLabel('Quick actions'),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: _ActionTile(
-                    icon: Icons.play_arrow_rounded,
-                    label: 'Start',
-                    color: context.colors.primary,
-                    onTap: nextWorkout == null
-                        ? null
-                        : () => context.push(
-                            '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
-                          ),
+            SizedBox(
+              height: 52,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: Text(
+                  nextWorkout == null
+                      ? 'No workout due'
+                      : 'Start ${nextWorkout.dayName} Workout',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _ActionTile(
-                    icon: Icons.list_alt_rounded,
-                    label: 'Plan',
-                    color: context.colors.secondary,
-                    onTap: () => context.go('/programs'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _ActionTile(
-                    icon: Icons.camera_alt_outlined,
-                    label: 'Food',
-                    color: context.colors.warning,
-                    onTap: () => context.go('/nutrition'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _ActionTile(
-                    icon: Icons.music_note_rounded,
-                    label: 'Music',
-                    color: context.colors.secondary,
-                    onTap: () async {
-                      await launchUrl(
-                        Uri.parse('https://open.spotify.com/'),
-                        mode: LaunchMode.externalApplication,
-                      );
-                    },
-                  ),
-                ),
-              ],
+                onPressed: nextWorkout == null
+                    ? null
+                    : () => context.push(
+                        '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
+                      ),
+              ),
             ),
             const SizedBox(height: 24),
             const _SectionLabel('Your week at a glance'),
@@ -154,64 +146,6 @@ class _SectionLabel extends StatelessWidget {
   );
 }
 
-class _TodayHeader extends StatelessWidget {
-  final DateTime date;
-
-  const _TodayHeader({required this.date});
-
-  @override
-  Widget build(BuildContext context) {
-    final hour = date.hour;
-    final greeting = hour < 12
-        ? 'Good morning'
-        : hour < 17
-        ? 'Good afternoon'
-        : 'Good evening';
-    final weekday = const [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ][date.weekday - 1];
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          greeting,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          '$weekday, ${date.day} ${months[date.month - 1]}',
-          style: TextStyle(fontSize: 13, color: context.colors.textSecondary),
-        ),
-      ],
-    );
-  }
-}
-
 class _QuoteCard extends StatelessWidget {
   final MotivationQuote quote;
 
@@ -260,40 +194,6 @@ class _QuoteCard extends StatelessWidget {
   );
 }
 
-class _ActionTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback? onTap;
-
-  const _ActionTile({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) => AppCard(
-    onTap: onTap,
-    padding: const EdgeInsets.all(10),
-    child: SizedBox(
-      height: 62,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 25),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class _MetricTile extends StatelessWidget {
   final String value;
   final String label;
@@ -312,7 +212,9 @@ class _MetricTile extends StatelessWidget {
     color: highlight
         ? context.colors.primary.withValues(alpha: 0.10)
         : context.colors.surface,
-    borderColor: highlight ? context.colors.primary.withValues(alpha: 0.4) : null,
+    borderColor: highlight
+        ? context.colors.primary.withValues(alpha: 0.4)
+        : null,
     padding: const EdgeInsets.fromLTRB(12, 10, 12, 11),
     child: ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 68),
@@ -353,7 +255,9 @@ class _MetricTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: highlight ? context.colors.primary : context.colors.textPrimary,
+                  color: highlight
+                      ? context.colors.primary
+                      : context.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 4),
@@ -389,7 +293,10 @@ class _VolumeTile extends StatelessWidget {
           children: [
             Text(
               'Training volume',
-              style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
+              style: TextStyle(
+                fontSize: 12,
+                color: context.colors.textSecondary,
+              ),
             ),
             Text(
               '${data.volumeThisWeek.toStringAsFixed(0)} kg',
@@ -402,10 +309,7 @@ class _VolumeTile extends StatelessWidget {
           Text(
             '${data.topExerciseName}\n${data.topExerciseWeight!.toStringAsFixed(1)} kg best',
             textAlign: TextAlign.right,
-            style: TextStyle(
-              fontSize: 11,
-              color: context.colors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 11, color: context.colors.textSecondary),
           ),
       ],
     ),
