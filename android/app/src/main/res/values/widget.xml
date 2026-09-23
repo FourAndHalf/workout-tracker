@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_streak_label">Day streak</string>
+    <string name="widget_camera_label">Log a meal photo</string>
+    <color name="widget_text">#1F2328</color>
+    <color name="widget_text_secondary">#656D76</color>
+</resources>
