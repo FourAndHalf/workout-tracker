@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/sliding_segmented_control.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
@@ -237,7 +238,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: DayAppBar(
           actions: [
             if (shoppingListEnabled)
               IconButton(

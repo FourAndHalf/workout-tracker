@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/widgets/sliding_segmented_control.dart';
+import '../../core/widgets/day_app_bar.dart';
 import '../history/history_screen.dart';
 import 'progress_screen.dart';
 
@@ -20,21 +21,19 @@ class _ProgressHubScreenState extends State<ProgressHubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const DayAppBar(),
       body: Column(
         children: [
-          SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(end: _tab.index.toDouble()),
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                builder: (context, position, _) => SlidingSegmentedControl(
-                  labels: const ['Stats', 'History'],
-                  position: position,
-                  onSelected: (i) => setState(() => _tab = _HubTab.values[i]),
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: _tab.index.toDouble()),
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              builder: (context, position, _) => SlidingSegmentedControl(
+                labels: const ['Stats', 'History'],
+                position: position,
+                onSelected: (i) => setState(() => _tab = _HubTab.values[i]),
               ),
             ),
           ),

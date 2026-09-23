@@ -1,5 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
+import 'package:fitness_tracker/core/widgets/day_app_bar.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/main.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,13 @@ void main() {
       find.descendant(of: bar, matching: find.text('History')),
       findsNothing,
     );
+
+    // Every tab shares the same day header.
+    for (final tab in ['Programs', 'Progress', 'Nutrition', 'Home']) {
+      await tester.tap(find.descendant(of: bar, matching: find.text(tab)));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byType(DayAppBar), findsOneWidget, reason: tab);
+    }
 
     await tester.tap(find.descendant(of: bar, matching: find.text('Progress')));
     await tester.pumpAndSettle();
