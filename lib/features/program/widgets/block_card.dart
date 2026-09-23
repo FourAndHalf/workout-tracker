@@ -17,21 +17,21 @@ class BlockCard extends StatelessWidget {
     this.activeExerciseStates,
   });
 
-  Color _getBlockBadgeColor(String type) {
+  Color _getBlockBadgeColor(BuildContext context, String type) {
     switch (type) {
       case 'superset':
-        return AppColors.supersetBlock;
+        return context.colors.supersetBlock;
       case 'triSet':
-        return AppColors.triSetBlock;
+        return context.colors.triSetBlock;
       case 'giantSet':
-        return AppColors.giantSetBlock;
+        return context.colors.giantSetBlock;
       case 'dropSet':
-        return AppColors.dropSetBlock;
+        return context.colors.dropSetBlock;
       case 'restPause':
-        return AppColors.restPauseBlock;
+        return context.colors.restPauseBlock;
       case 'straight':
       default:
-        return AppColors.straightBlock;
+        return context.colors.straightBlock;
     }
   }
 
@@ -55,7 +55,7 @@ class BlockCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badgeColor = _getBlockBadgeColor(block.type);
+    final badgeColor = _getBlockBadgeColor(context, block.type);
     final badgeText = _getBlockBadgeText(block.type);
 
     return Padding(
@@ -63,7 +63,7 @@ class BlockCard extends StatelessWidget {
       child: AppCard(
         padding: EdgeInsets.zero,
         borderColor: block.type == 'straight'
-            ? AppColors.border
+            ? context.colors.border
             : badgeColor.withValues(alpha: 0.5),
         borderWidth: block.type == 'straight' ? 1 : 1.5,
         child: Column(
@@ -72,14 +72,14 @@ class BlockCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: context.colors.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(11),
                 topRight: Radius.circular(11),
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.border.withValues(alpha: 0.5),
+                  color: context.colors.border.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -109,19 +109,19 @@ class BlockCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     block.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: context.colors.textPrimary,
                     ),
                   ),
                 ),
                 Text(
                   '${block.targetSets} Sets',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
+                    color: context.colors.textSecondary,
                   ),
                 ),
               ],
@@ -133,18 +133,18 @@ class BlockCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.info_outline_rounded,
                     size: 14,
-                    color: AppColors.warning,
+                    color: context.colors.warning,
                   ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       block.instructions!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.warning,
+                        color: context.colors.warning,
                         fontStyle: FontStyle.italic,
                       ),
                     ),

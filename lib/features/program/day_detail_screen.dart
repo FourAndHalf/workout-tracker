@@ -240,10 +240,10 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                           Expanded(
                             child: Text(
                               day.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                               ),
                             ),
                           ),
@@ -253,27 +253,27 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                                   children: [
                                     Text(
                                       'Elapsed: ${_formatElapsed(elapsedSeconds)}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
-                                        color: AppColors.primary,
+                                        color: context.colors.primary,
                                       ),
                                     ),
-                                    const Text(
+                                    Text(
                                       'Target: 45:00',
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: AppColors.textMuted,
+                                        color: context.colors.textMuted,
                                       ),
                                     ),
                                   ],
                                 )
                               : Text(
                                   '${day.blocks.length} Blocks',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.textSecondary,
+                                    color: context.colors.textSecondary,
                                   ),
                                 ),
                         ],
@@ -289,8 +289,8 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                               1.0,
                             ),
                             minHeight: 3,
-                            backgroundColor: AppColors.border,
-                            color: AppColors.primary,
+                            backgroundColor: context.colors.border,
+                            color: context.colors.primary,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -300,27 +300,27 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.warning.withValues(alpha: 0.1),
+                            color: context.colors.warning.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.warning,
+                              color: context.colors.warning,
                               width: 0.5,
                             ),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.warning_amber_rounded,
-                                color: AppColors.warning,
+                                color: context.colors.warning,
                                 size: 18,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   day.reviewNote!,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 12,
-                                    color: AppColors.warning,
+                                    color: context.colors.warning,
                                   ),
                                 ),
                               ),
@@ -354,9 +354,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
 
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border(top: BorderSide(color: AppColors.border)),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  border: Border(top: BorderSide(color: context.colors.border)),
                 ),
                 child: SafeArea(
                   child: SizedBox(
@@ -406,8 +406,8 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
             ],
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
+        loading: () => Center(
+          child: CircularProgressIndicator(color: context.colors.primary),
         ),
         error: (err, stack) =>
             Center(child: Text('Error loading day detail: $err')),

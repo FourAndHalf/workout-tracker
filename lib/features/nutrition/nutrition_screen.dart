@@ -107,7 +107,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   Future<String?> _pickMealLabel() {
     return showModalBottomSheet<String?>(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: context.colors.surface,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -512,7 +512,7 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                 ),
                 Text(
                   '$remaining left',
-                  style: const TextStyle(color: AppColors.textSecondary),
+                  style: TextStyle(color: context.colors.textSecondary),
                 ),
                 IconButton(
                   tooltip: 'Add item',
@@ -525,11 +525,11 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
               ],
             ),
             const SizedBox(height: 2),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 32),
               child: Text(
                 'This week’s ingredients',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
               ),
             ),
             const SizedBox(height: 12),
@@ -556,8 +556,8 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
                       style: TextStyle(
                         decoration: checked ? TextDecoration.lineThrough : null,
                         color: checked
-                            ? AppColors.textMuted
-                            : AppColors.textPrimary,
+                            ? context.colors.textMuted
+                            : context.colors.textPrimary,
                       ),
                     ),
                   ),
@@ -788,8 +788,8 @@ class _MealPlanCard extends StatelessWidget {
             ),
             Text(
               dayName,
-              style: const TextStyle(
-                color: AppColors.primary,
+              style: TextStyle(
+                color: context.colors.primary,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -797,8 +797,8 @@ class _MealPlanCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               ingredients.join('  •  '),
-              style: const TextStyle(
-                color: AppColors.textSecondary,
+              style: TextStyle(
+                color: context.colors.textSecondary,
                 fontSize: 12,
               ),
             ),
@@ -1038,14 +1038,14 @@ class _PhotoActionTile extends StatelessWidget {
       height: 92,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: context.colors.card,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.colors.border),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: AppColors.primary, size: 24),
+          Icon(icon, color: context.colors.primary, size: 24),
           const SizedBox(height: 8),
           Text(
             label,
@@ -1091,8 +1091,8 @@ class _PhotoGrid extends StatelessWidget {
             Image.file(
               File(photo.filePath),
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => const ColoredBox(
-                color: AppColors.card,
+              errorBuilder: (context, error, stackTrace) => ColoredBox(
+                color: context.colors.card,
                 child: Icon(Icons.broken_image_outlined),
               ),
             ),
@@ -1138,9 +1138,9 @@ class _SupplementChecklist extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.colors.surface,
       borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
+      border: Border.all(color: context.colors.border),
     ),
     child: Column(
       children: supplements
@@ -1160,7 +1160,7 @@ class _SupplementChecklist extends StatelessWidget {
                   supplement == 'Protein powder'
                       ? Icons.local_drink_outlined
                       : Icons.medication_outlined,
-                  color: AppColors.primary,
+                  color: context.colors.primary,
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
               ),
@@ -1181,13 +1181,13 @@ class _EmptyPhotos extends StatelessWidget {
     height: 150,
     alignment: Alignment.center,
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.colors.surface,
       borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: AppColors.border),
+      border: Border.all(color: context.colors.border),
     ),
     child: Text(
       message,
-      style: const TextStyle(color: AppColors.textSecondary),
+      style: TextStyle(color: context.colors.textSecondary),
     ),
   );
 }

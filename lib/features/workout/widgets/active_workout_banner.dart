@@ -68,7 +68,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
     final ss = (elapsed % 60).toString().padLeft(2, '0');
 
     return Material(
-      color: AppColors.primary,
+      color: context.colors.primary,
       child: InkWell(
         onTap: () => context.push('/programs/ffts-4week/${info.dayId}'),
         child: SafeArea(
@@ -77,37 +77,37 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.fitness_center_rounded,
                   size: 18,
-                  color: AppColors.background,
+                  color: Colors.white,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     '${info.dayName} in progress · $mm:$ss',
-                    style: const TextStyle(
-                      color: AppColors.background,
+                    style: TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Text(
+                Text(
                   'TAP TO RETURN',
                   style: TextStyle(
-                    color: AppColors.background,
+                    color: Colors.white,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
                   ),
                 ),
                 const SizedBox(width: 2),
-                const Icon(
+                Icon(
                   Icons.chevron_right_rounded,
                   size: 18,
-                  color: AppColors.background,
+                  color: Colors.white,
                 ),
               ],
             ),

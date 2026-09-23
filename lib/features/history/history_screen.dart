@@ -164,9 +164,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         title: Text(log.exerciseName),
                         subtitle: Text(_logSummary(log)),
                         trailing: log.hitFailure
-                            ? const Icon(
+                            ? Icon(
                                 Icons.flag,
-                                color: AppColors.warning,
+                                color: context.colors.warning,
                                 size: 18,
                               )
                             : null,
@@ -229,8 +229,8 @@ class _CalendarView extends StatelessWidget {
         Center(
           child: Text(
             label,
-            style: const TextStyle(
-              color: AppColors.textMuted,
+            style: TextStyle(
+              color: context.colors.textMuted,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -278,7 +278,7 @@ class _CalendarView extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           '${sessions.length} completed session${sessions.length == 1 ? '' : 's'}',
-          style: const TextStyle(color: AppColors.textSecondary),
+          style: TextStyle(color: context.colors.textSecondary),
         ),
         const SizedBox(height: 8),
         ...sessions
@@ -311,11 +311,11 @@ class _DayCell extends StatelessWidget {
     child: Container(
       decoration: BoxDecoration(
         color: sessions.isEmpty
-            ? AppColors.card
-            : AppColors.primary.withValues(alpha: 0.18),
+            ? context.colors.card
+            : context.colors.primary.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: sessions.isEmpty ? AppColors.border : AppColors.primary,
+          color: sessions.isEmpty ? context.colors.border : context.colors.primary,
         ),
       ),
       child: Column(
@@ -323,7 +323,7 @@ class _DayCell extends StatelessWidget {
         children: [
           Text('$day'),
           if (sessions.isNotEmpty)
-            const Icon(Icons.check_circle, size: 13, color: AppColors.primary),
+            Icon(Icons.check_circle, size: 13, color: context.colors.primary),
         ],
       ),
     ),

@@ -32,27 +32,27 @@ class ProgramListScreen extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: context.colors.surface,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.colors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         program.programName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: context.colors.primary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Week ${week.number}: "${week.title}"',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: context.colors.textSecondary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -60,9 +60,9 @@ class ProgramListScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           program.sourceNote!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: AppColors.textMuted,
+                            color: context.colors.textMuted,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -72,12 +72,12 @@ class ProgramListScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
 
-                const Text(
+                Text(
                   'Training Days',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: context.colors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -103,11 +103,11 @@ class ProgramListScreen extends ConsumerWidget {
                           vertical: 8,
                         ),
                         leading: CircleAvatar(
-                          backgroundColor: AppColors.surface,
+                          backgroundColor: context.colors.surface,
                           child: Text(
                             '${day.order}',
-                            style: const TextStyle(
-                              color: AppColors.primary,
+                            style: TextStyle(
+                              color: context.colors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -123,9 +123,9 @@ class ProgramListScreen extends ConsumerWidget {
                             ),
                             if (isCompleted) ...[
                               const SizedBox(width: 8),
-                              const Icon(
+                              Icon(
                                 Icons.check_circle,
-                                color: AppColors.primary,
+                                color: context.colors.primary,
                                 size: 18,
                               ),
                             ],
@@ -137,20 +137,20 @@ class ProgramListScreen extends ConsumerWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.warning.withValues(
+                                  color: context.colors.warning.withValues(
                                     alpha: 0.15,
                                   ),
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
-                                    color: AppColors.warning,
+                                    color: context.colors.warning,
                                     width: 0.5,
                                   ),
                                 ),
-                                child: const Text(
+                                child: Text(
                                   'Review',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: AppColors.warning,
+                                    color: context.colors.warning,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -160,22 +160,22 @@ class ProgramListScreen extends ConsumerWidget {
                         ),
                         subtitle: Text(
                           '${day.blocks.length} Blocks \u00B7 $exerciseCount Exercises',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textSecondary,
+                            color: context.colors.textSecondary,
                           ),
                         ),
                         trailing: isCompleted
-                            ? const Text(
+                            ? Text(
                                 'Done',
                                 style: TextStyle(
-                                  color: AppColors.primary,
+                                  color: context.colors.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
-                            : const Icon(
+                            : Icon(
                                 Icons.chevron_right,
-                                color: AppColors.textMuted,
+                                color: context.colors.textMuted,
                               ),
                         onTap: () {
                           context.push(
@@ -190,8 +190,8 @@ class ProgramListScreen extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
+        loading: () => Center(
+          child: CircularProgressIndicator(color: context.colors.primary),
         ),
         error: (err, stack) =>
             Center(child: Text('Error loading program: $err')),

@@ -43,30 +43,30 @@ class MainNavigationScaffold extends StatelessWidget {
             initialLocation: index == navigationShell.currentIndex,
           );
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home, color: AppColors.primary),
+            activeIcon: Icon(Icons.home, color: context.colors.primary),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center_outlined),
-            activeIcon: Icon(Icons.fitness_center, color: AppColors.primary),
+            activeIcon: Icon(Icons.fitness_center, color: context.colors.primary),
             label: 'Programs',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history_outlined),
-            activeIcon: Icon(Icons.history, color: AppColors.primary),
+            activeIcon: Icon(Icons.history, color: context.colors.primary),
             label: 'History',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.show_chart_outlined),
-            activeIcon: Icon(Icons.show_chart, color: AppColors.primary),
+            activeIcon: Icon(Icons.show_chart, color: context.colors.primary),
             label: 'Progress',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant_outlined),
-            activeIcon: Icon(Icons.restaurant, color: AppColors.primary),
+            activeIcon: Icon(Icons.restaurant, color: context.colors.primary),
             label: 'Nutrition',
           ),
         ],
