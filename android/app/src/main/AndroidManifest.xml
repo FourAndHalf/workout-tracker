@@ -3,8 +3,7 @@
     <application
         android:label="Fitness Tracker"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round">
+        android:icon="@drawable/ic_launcher_brand">
         <activity
             android:name=".MainActivity"
             android:exported="true"
