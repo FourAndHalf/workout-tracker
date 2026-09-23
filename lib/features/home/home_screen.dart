@@ -45,14 +45,35 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          children: [
-            _QuoteCard(quote: quote),
-            const SizedBox(height: 24),
-            SizedBox(
+      body: Column(
+        children: [
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                children: [
+                  _QuoteCard(quote: quote),
+                  const SizedBox(height: 24),
+                  const _SectionLabel('Your week at a glance'),
+                  const SizedBox(height: 10),
+                  analytics.when(
+                    loading: () => const SizedBox(
+                      height: 160,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (error, _) =>
+                        const _AnalyticsMessage('Analytics unavailable'),
+                    data: (data) => DashboardStats(data: data, now: now),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+            child: SizedBox(
+              width: double.infinity,
               height: 52,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.play_arrow_rounded),
@@ -72,20 +93,8 @@ class HomeScreen extends ConsumerWidget {
                       ),
               ),
             ),
-            const SizedBox(height: 24),
-            const _SectionLabel('Your week at a glance'),
-            const SizedBox(height: 10),
-            analytics.when(
-              loading: () => const SizedBox(
-                height: 160,
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              error: (error, _) =>
-                  const _AnalyticsMessage('Analytics unavailable'),
-              data: (data) => DashboardStats(data: data, now: now),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
