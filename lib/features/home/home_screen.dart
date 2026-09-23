@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
+import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
 import 'home_providers.dart';
 
@@ -30,6 +31,12 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analytics = ref.watch(dashboardAnalyticsProvider);
+    ref.listen(dashboardAnalyticsProvider, (_, next) {
+      final data = next.valueOrNull;
+      if (data != null) {
+        StreakWidgetService().updateStreak(data.currentStreak).ignore();
+      }
+    });
     final nextWorkout = ref.watch(nextWorkoutDayProvider).valueOrNull;
     final now = DateTime.now();
     final quote = dailyMotivationQuote(now);
