@@ -8,6 +8,7 @@ import '../../core/widgets/app_card.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
 import 'home_providers.dart';
+import 'widgets/dashboard_stats.dart';
 
 const _greetings = [
   "Let's get after it",
@@ -97,42 +98,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               error: (error, _) =>
                   const _AnalyticsMessage('Analytics unavailable'),
-              data: (data) => Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _MetricTile(
-                          value: '${data.workoutsThisWeek}',
-                          label: 'Workouts',
-                          icon: Icons.fitness_center_rounded,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _MetricTile(
-                          value: '${data.setsThisWeek}',
-                          label: 'Sets',
-                          icon: Icons.check_circle_outline_rounded,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _MetricTile(
-                          value: '${data.currentStreak}',
-                          label: 'Day streak',
-                          icon: Icons.local_fire_department_outlined,
-                          highlight: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  _VolumeTile(data: data),
-                  const SizedBox(height: 10),
-                  _LatestWorkoutTile(data: data),
-                ],
-              ),
+              data: (data) => DashboardStats(data: data, now: now),
             ),
           ],
         ),
@@ -197,152 +163,6 @@ class _QuoteCard extends StatelessWidget {
           ),
         ],
       ),
-    ),
-  );
-}
-
-class _MetricTile extends StatelessWidget {
-  final String value;
-  final String label;
-  final IconData icon;
-  final bool highlight;
-
-  const _MetricTile({
-    required this.value,
-    required this.label,
-    required this.icon,
-    this.highlight = false,
-  });
-
-  @override
-  Widget build(BuildContext context) => AppCard(
-    color: highlight
-        ? context.colors.primary.withValues(alpha: 0.10)
-        : context.colors.surface,
-    borderColor: highlight
-        ? context.colors.primary.withValues(alpha: 0.4)
-        : null,
-    padding: const EdgeInsets.fromLTRB(12, 10, 12, 11),
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 68),
-      child: Stack(
-        children: [
-          Positioned(
-            left: -12,
-            top: 0,
-            bottom: 0,
-            child: Container(
-              width: highlight ? 5 : 3,
-              decoration: BoxDecoration(
-                color: context.colors.primary,
-                borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(3),
-                ),
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(icon, size: 18, color: context.colors.primary),
-                  Icon(
-                    Icons.arrow_outward_rounded,
-                    size: 14,
-                    color: context.colors.textMuted,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                  color: highlight
-                      ? context.colors.primary
-                      : context.colors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: context.colors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-class _VolumeTile extends StatelessWidget {
-  final DashboardAnalytics data;
-
-  const _VolumeTile({required this.data});
-
-  @override
-  Widget build(BuildContext context) => AppCard(
-    padding: const EdgeInsets.all(14),
-    child: Row(
-      children: [
-        Icon(Icons.trending_up_rounded, color: context.colors.secondary),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Training volume',
-              style: TextStyle(
-                fontSize: 12,
-                color: context.colors.textSecondary,
-              ),
-            ),
-            Text(
-              '${data.volumeThisWeek.toStringAsFixed(0)} kg',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        const Spacer(),
-        if (data.topExerciseName != null)
-          Text(
-            '${data.topExerciseName}\n${data.topExerciseWeight!.toStringAsFixed(1)} kg best',
-            textAlign: TextAlign.right,
-            style: TextStyle(fontSize: 11, color: context.colors.textSecondary),
-          ),
-      ],
-    ),
-  );
-}
-
-class _LatestWorkoutTile extends StatelessWidget {
-  final DashboardAnalytics data;
-
-  const _LatestWorkoutTile({required this.data});
-
-  @override
-  Widget build(BuildContext context) => AppCard(
-    color: context.colors.surface,
-    padding: const EdgeInsets.all(14),
-    child: Row(
-      children: [
-        Icon(Icons.history_rounded, color: context.colors.primary),
-        const SizedBox(width: 12),
-        Text(
-          data.latestWorkoutName == null
-              ? 'No completed workouts yet'
-              : 'Last workout\n${data.latestWorkoutName}',
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        ),
-      ],
     ),
   );
 }

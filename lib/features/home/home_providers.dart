@@ -59,6 +59,16 @@ class DashboardAnalytics {
   final String? topExerciseName;
   final double? topExerciseWeight;
 
+  /// Sessions per week the dashboard treats as "on track".
+  static const weeklyGoal = 4;
+
+  /// Weekdays (1 = Monday ... 7 = Sunday) trained in the current week.
+  final Set<int> trainedWeekdays;
+  final bool trainedToday;
+  final double volumeLastWeek;
+  final int bestStreak;
+  final int? daysSinceLastWorkout;
+
   const DashboardAnalytics({
     required this.workoutsThisWeek,
     required this.setsThisWeek,
@@ -67,6 +77,11 @@ class DashboardAnalytics {
     this.latestWorkoutName,
     this.topExerciseName,
     this.topExerciseWeight,
+    this.trainedWeekdays = const {},
+    this.trainedToday = false,
+    this.volumeLastWeek = 0,
+    this.bestStreak = 0,
+    this.daysSinceLastWorkout,
   });
 
   factory DashboardAnalytics.fromData({
@@ -110,12 +125,44 @@ class DashboardAnalytics {
           ),
         )
         .toSet();
+    // A streak stays alive until a full day passes without training, so if
+    // today is still empty we count back from yesterday.
     var streak = 0;
-    var streakDay = today;
+    var streakDay = workoutDates.contains(today)
+        ? today
+        : today.subtract(const Duration(days: 1));
     while (workoutDates.contains(streakDay)) {
       streak++;
       streakDay = streakDay.subtract(const Duration(days: 1));
     }
+
+    final sortedDates = workoutDates.toList()..sort();
+    var bestStreak = 0;
+    var run = 0;
+    DateTime? previous;
+    for (final date in sortedDates) {
+      run = previous != null && date.difference(previous).inDays == 1
+          ? run + 1
+          : 1;
+      if (run > bestStreak) bestStreak = run;
+      previous = date;
+    }
+
+    final lastWeekStart = weekStart.subtract(const Duration(days: 7));
+    final volumeLastWeek = logs
+        .where(
+          (log) =>
+              !log.loggedAt.isBefore(lastWeekStart) &&
+              log.loggedAt.isBefore(weekStart),
+        )
+        .fold<double>(
+          0,
+          (total, log) => total + ((log.weight ?? 0) * (log.reps ?? 0)),
+        );
+    final trainedWeekdays = {
+      for (final session in sessionsThisWeek) session.startedAt.weekday,
+    };
+    final lastDate = sortedDates.isEmpty ? null : sortedDates.last;
 
     return DashboardAnalytics(
       workoutsThisWeek: sessionsThisWeek.length,
@@ -128,6 +175,13 @@ class DashboardAnalytics {
       latestWorkoutName: sessions.isEmpty ? null : sessions.first.dayName,
       topExerciseName: topExerciseName,
       topExerciseWeight: topExerciseWeight,
+      trainedWeekdays: trainedWeekdays,
+      trainedToday: workoutDates.contains(today),
+      volumeLastWeek: volumeLastWeek,
+      bestStreak: bestStreak,
+      daysSinceLastWorkout: lastDate == null
+          ? null
+          : today.difference(lastDate).inDays,
     );
   }
 }
