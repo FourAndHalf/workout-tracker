@@ -6,6 +6,7 @@ import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/main.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/features/home/home_providers.dart';
+import 'package:fitness_tracker/features/home/home_screen.dart';
 
 void main() {
   test('daily motivation quote is stable for the same date', () {
@@ -31,10 +32,10 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('Dashboard'), findsOneWidget);
-    expect(find.text('Start'), findsOneWidget);
-    expect(find.text('Plan'), findsOneWidget);
-    expect(find.text('Food'), findsOneWidget);
+    expect(find.text(dailyGreeting(DateTime.now())), findsOneWidget);
+    expect(find.byIcon(Icons.music_note_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
     expect(find.text('Your week at a glance'), findsOneWidget);
     expect(find.byIcon(Icons.format_quote_rounded), findsOneWidget);
     expect(find.text('Training volume'), findsOneWidget);
