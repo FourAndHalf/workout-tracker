@@ -108,7 +108,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 builder: (context, ref, _) {
                   final streak = ref
                       .watch(dashboardAnalyticsProvider)
-                      .valueOrNull
+                      .value
                       ?.currentStreak;
                   return _StreakCard(streak: streak ?? 0);
                 },
@@ -158,7 +158,7 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = ref.watch(progressRepositoryProvider).valueOrNull;
+    final repository = ref.watch(progressRepositoryProvider).value;
     if (repository == null)
       return const Card(
         child: Padding(

@@ -12,7 +12,7 @@ class DailyWorkoutAlarmService {
 
   Future<void> initialize() async {
     await _notifications.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: AndroidInitializationSettings('@drawable/ic_launcher_brand'),
       ),
       onDidReceiveNotificationResponse: (response) async {
@@ -49,10 +49,11 @@ class DailyWorkoutAlarmService {
     try {
       await initialize();
       await _notifications.show(
-        _activeWorkoutNotificationId,
-        workoutName,
-        'Target ${_formatClock(targetEndAt)}  •  $currentSet  •  Next: $nextExercise',
-        const NotificationDetails(
+        id: _activeWorkoutNotificationId,
+        title: workoutName,
+        body:
+            'Target ${_formatClock(targetEndAt)}  •  $currentSet  •  Next: $nextExercise',
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             'active_workout',
             'Active workout',
@@ -90,7 +91,7 @@ class DailyWorkoutAlarmService {
   Future<void> stopWorkoutTimer() async {
     try {
       await initialize();
-      await _notifications.cancel(_activeWorkoutNotificationId);
+      await _notifications.cancel(id: _activeWorkoutNotificationId);
     } catch (_) {
       // There is nothing to cancel when notification support is unavailable.
     }

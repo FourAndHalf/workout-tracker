@@ -22,25 +22,30 @@ void main() {
   });
 
   group('sign-in state', () {
-    test('isSignedIn is true when a current user already exists', () async {
-      when(() => googleSignIn.currentUser).thenReturn(MockGoogleSignInAccount());
+    setUp(() {
+      when(() => googleSignIn.initialize()).thenAnswer((_) async {});
+    });
+
+    test('isSignedIn is true when lightweight authentication returns an account', () async {
+      when(() => googleSignIn.attemptLightweightAuthentication())
+          .thenAnswer((_) async => MockGoogleSignInAccount());
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       expect(await service.isSignedIn(), isTrue);
-      verifyNever(() => googleSignIn.signInSilently());
     });
 
-    test('isSignedIn falls back to signInSilently when no current user', () async {
-      when(() => googleSignIn.currentUser).thenReturn(null);
-      when(() => googleSignIn.signInSilently()).thenAnswer((_) async => null);
+    test('isSignedIn is false when no account can be restored', () async {
+      when(() => googleSignIn.attemptLightweightAuthentication())
+          .thenAnswer((_) async => null);
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       expect(await service.isSignedIn(), isFalse);
-      verify(() => googleSignIn.signInSilently()).called(1);
+      verify(() => googleSignIn.attemptLightweightAuthentication()).called(1);
     });
 
     test('signIn throws when the user cancels the picker', () async {
-      when(() => googleSignIn.signIn()).thenAnswer((_) async => null);
+      when(() => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')))
+          .thenThrow(const GoogleSignInException(code: GoogleSignInExceptionCode.canceled));
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       expect(
@@ -49,16 +54,18 @@ void main() {
       );
     });
 
-    test('signIn completes when a user is returned', () async {
-      when(() => googleSignIn.signIn()).thenAnswer((_) async => MockGoogleSignInAccount());
+    test('signIn completes when an account is returned', () async {
+      when(() => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')))
+          .thenAnswer((_) async => MockGoogleSignInAccount());
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       await service.signIn();
-      verify(() => googleSignIn.signIn()).called(1);
+      verify(() => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')))
+          .called(1);
     });
 
     test('signOut delegates to GoogleSignIn', () async {
-      when(() => googleSignIn.signOut()).thenAnswer((_) async => null);
+      when(() => googleSignIn.signOut()).thenAnswer((_) async {});
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       await service.signOut();
@@ -66,7 +73,8 @@ void main() {
     });
 
     test('throws GoogleDriveNotSignedInException when no account is available', () async {
-      when(() => googleSignIn.currentUser).thenReturn(null);
+      when(() => googleSignIn.attemptLightweightAuthentication())
+          .thenAnswer((_) async => null);
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       expect(

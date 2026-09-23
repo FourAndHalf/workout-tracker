@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../main.dart';
+import '../../home/home_providers.dart';
+import '../../program/program_providers.dart';
 import '../../../data/models/program_model.dart';
 import '../../../data/repositories/workout_repository.dart';
 import 'active_workout_session_notifier.dart';
@@ -109,6 +112,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       hitFailure: hitFailure,
       durationSeconds: durationSeconds,
     );
+    _ref.invalidate(dashboardAnalyticsProvider);
 
     final updatedSets = Map<String, List<Map<String, dynamic>>>.from(
       state.loggedSets,
@@ -222,6 +226,8 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   Future<void> finishWorkout({String? notes}) async {
     if (state.sessionId != null) {
       await _workoutRepo.finishSession(state.sessionId!, notes: notes);
+      _ref.invalidate(dashboardAnalyticsProvider);
+      _ref.invalidate(nextWorkoutDayProvider);
     }
     if (_ref.read(activeWorkoutSessionProvider)?.dayId == state.dayId) {
       _ref.read(activeWorkoutSessionProvider.notifier).clear();

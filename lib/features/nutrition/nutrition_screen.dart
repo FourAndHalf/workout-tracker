@@ -233,7 +233,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   Widget build(BuildContext context) {
     final photos = ref.watch(todayFoodPhotosProvider);
     final shoppingListEnabled =
-        ref.watch(shoppingListEnabledProvider).valueOrNull ?? true;
+        ref.watch(shoppingListEnabledProvider).value ?? true;
 
     return DefaultTabController(
       length: 2,
