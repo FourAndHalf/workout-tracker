@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/widgets/sliding_segmented_control.dart';
 import '../history/history_screen.dart';
 import 'progress_screen.dart';
 
@@ -19,31 +20,34 @@ class _ProgressHubScreenState extends State<ProgressHubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Progress'),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: SegmentedButton<_HubTab>(
-              showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: _HubTab.stats, label: Text('Stats')),
-                ButtonSegment(value: _HubTab.history, label: Text('History')),
-              ],
-              selected: {_tab},
-              onSelectionChanged: (selection) =>
-                  setState(() => _tab = selection.first),
+      body: Column(
+        children: [
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(end: _tab.index.toDouble()),
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                builder: (context, position, _) => SlidingSegmentedControl(
+                  labels: const ['Stats', 'History'],
+                  position: position,
+                  onSelected: (i) => setState(() => _tab = _HubTab.values[i]),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      // IndexedStack keeps each tab's scroll position and loaded data.
-      body: IndexedStack(
-        index: _tab.index,
-        children: const [
-          ProgressScreen(embedded: true),
-          HistoryScreen(embedded: true),
+          Expanded(
+            // IndexedStack keeps each tab's scroll position and loaded data.
+            child: IndexedStack(
+              index: _tab.index,
+              children: const [
+                ProgressScreen(embedded: true),
+                HistoryScreen(embedded: true),
+              ],
+            ),
+          ),
         ],
       ),
     );
