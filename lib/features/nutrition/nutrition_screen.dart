@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/sliding_segmented_control.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
@@ -162,7 +163,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   @override
   Widget build(BuildContext context) {
     final photos = ref.watch(todayFoodPhotosProvider);
-    final supplements = ref.watch(todaySupplementStatusProvider);
     final shoppingListEnabled =
         ref.watch(shoppingListEnabledProvider).valueOrNull ?? true;
 
@@ -170,7 +170,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Nutrition'),
           actions: [
             if (shoppingListEnabled)
               IconButton(
@@ -194,93 +193,94 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                 ),
               ),
           ],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'Daily log'),
-              Tab(text: 'Meal plan'),
-            ],
-          ),
         ),
-        body: TabBarView(
+        body: Column(
           children: [
-            RefreshIndicator(
-              onRefresh: () => ref.refresh(todayFoodPhotosProvider.future),
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Builder(
+                builder: (context) {
+                  final controller = DefaultTabController.of(context);
+                  return AnimatedBuilder(
+                    animation: controller.animation!,
+                    builder: (context, _) => SlidingSegmentedControl(
+                      labels: const ['Daily log', 'Meal plan'],
+                      position: controller.animation!.value,
+                      onSelected: controller.animateTo,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
                 children: [
-                  const Text(
-                    'Today',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _PhotoActionTile(
-                          icon: Icons.camera_alt_outlined,
-                          label: 'Take photo',
-                          onTap: () => _choosePhoto(ImageSource.camera),
+                  RefreshIndicator(
+                    onRefresh: () =>
+                        ref.refresh(todayFoodPhotosProvider.future),
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                      children: [
+                        const Text(
+                          'Today',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _PhotoActionTile(
-                          icon: Icons.photo_library_outlined,
-                          label: 'Choose from gallery',
-                          onTap: () => _choosePhoto(ImageSource.gallery),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _PhotoActionTile(
+                                icon: Icons.camera_alt_outlined,
+                                label: 'Take photo',
+                                onTap: () => _choosePhoto(ImageSource.camera),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _PhotoActionTile(
+                                icon: Icons.photo_library_outlined,
+                                label: 'Choose from gallery',
+                                onTap: () => _choosePhoto(ImageSource.gallery),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  if (_isSaving) ...[
-                    const SizedBox(height: 16),
-                    const LinearProgressIndicator(),
-                  ],
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Daily reminders',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  supplements.when(
-                    loading: () => const LinearProgressIndicator(),
-                    error: (error, stack) =>
-                        const Text('Unable to load reminders'),
-                    data: (taken) => _SupplementChecklist(
-                      taken: taken,
-                      onChanged: (supplement, value) async {
-                        await ref
-                            .read(nutritionRepositoryProvider)
-                            .setSupplementTaken(
-                              date: DateTime.now(),
-                              supplement: supplement,
-                              taken: value,
-                            );
-                        ref.invalidate(todaySupplementStatusProvider);
-                      },
+                        if (_isSaving) ...[
+                          const SizedBox(height: 16),
+                          const LinearProgressIndicator(),
+                        ],
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Meal photos',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        photos.when(
+                          loading: () => const SizedBox(
+                            height: 180,
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          error: (error, _) =>
+                              _EmptyPhotos(message: 'Unable to load photos'),
+                          data: (items) => items.isEmpty
+                              ? const _EmptyPhotos(
+                                  message: 'No meals logged today',
+                                )
+                              : _PhotoGrid(photos: items),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 28),
-                  const Text(
-                    'Meal photos',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  photos.when(
-                    loading: () => const SizedBox(
-                      height: 180,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                    error: (error, _) =>
-                        _EmptyPhotos(message: 'Unable to load photos'),
-                    data: (items) => items.isEmpty
-                        ? const _EmptyPhotos(message: 'No meals logged today')
-                        : _PhotoGrid(photos: items),
-                  ),
+                  const _MealPlanTab(),
                 ],
               ),
             ),
-            const _MealPlanTab(),
           ],
         ),
       ),
@@ -529,7 +529,10 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
               padding: EdgeInsets.only(left: 32),
               child: Text(
                 'This week’s ingredients',
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                style: TextStyle(
+                  color: context.colors.textSecondary,
+                  fontSize: 12,
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -1127,50 +1130,6 @@ class _PhotoGrid extends StatelessWidget {
   );
 }
 
-class _SupplementChecklist extends StatelessWidget {
-  static const supplements = ['Protein powder', 'Cod liver oil capsule'];
-
-  final Set<String> taken;
-  final Future<void> Function(String supplement, bool value) onChanged;
-
-  const _SupplementChecklist({required this.taken, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(
-      color: context.colors.surface,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: context.colors.border),
-    ),
-    child: Column(
-      children: supplements
-          .map(
-            (supplement) => Material(
-              color: Colors.transparent,
-              child: CheckboxListTile(
-                value: taken.contains(supplement),
-                onChanged: (value) {
-                  if (value != null) onChanged(supplement, value);
-                },
-                title: Text(supplement),
-                subtitle: Text(
-                  taken.contains(supplement) ? 'Taken today' : 'Not logged yet',
-                ),
-                secondary: Icon(
-                  supplement == 'Protein powder'
-                      ? Icons.local_drink_outlined
-                      : Icons.medication_outlined,
-                  color: context.colors.primary,
-                ),
-                controlAffinity: ListTileControlAffinity.trailing,
-              ),
-            ),
-          )
-          .toList(),
-    ),
-  );
-}
-
 class _EmptyPhotos extends StatelessWidget {
   final String message;
 
@@ -1185,9 +1144,6 @@ class _EmptyPhotos extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       border: Border.all(color: context.colors.border),
     ),
-    child: Text(
-      message,
-      style: TextStyle(color: context.colors.textSecondary),
-    ),
+    child: Text(message, style: TextStyle(color: context.colors.textSecondary)),
   );
 }

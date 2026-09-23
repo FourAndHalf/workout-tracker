@@ -13,7 +13,6 @@ class ProgramListScreen extends ConsumerWidget {
     final programAsync = ref.watch(currentProgramProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Workout Program')),
       body: programAsync.when(
         data: (program) {
           final sessionsAsync = ref.watch(completedWorkoutSessionsProvider);

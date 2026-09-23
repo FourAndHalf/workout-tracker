@@ -88,7 +88,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     // Verify Program Screen Header
-    expect(find.text('Workout Program'), findsOneWidget);
     expect(find.text('4 Week Program'), findsOneWidget);
     expect(find.text('Training Days'), findsOneWidget);
 
