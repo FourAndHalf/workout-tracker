@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode_provider.dart';
+import 'core/widgets/splash_reveal.dart';
 import 'features/onboarding/restore_gate_screen.dart';
 import 'router.dart';
 
@@ -40,6 +42,7 @@ class _FitnessTrackerAppState extends ConsumerState<FitnessTrackerApp> {
       themeMode: themeMode,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => SplashReveal(child: child!),
     );
   }
 }

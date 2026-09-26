@@ -25,12 +25,16 @@ void main() {
   group('themeModeProvider', () {
     test('starts from the initial value and persists changes', () async {
       final container = ProviderContainer(
-        overrides: [initialThemeModeProvider.overrideWithValue(ThemeMode.light)],
+        overrides: [
+          initialThemeModeProvider.overrideWithValue(ThemeMode.light),
+        ],
       );
       addTearDown(container.dispose);
 
       expect(container.read(themeModeProvider), ThemeMode.light);
-      await container.read(themeModeProvider.notifier).setMode(ThemeMode.system);
+      await container
+          .read(themeModeProvider.notifier)
+          .setMode(ThemeMode.system);
 
       expect(container.read(themeModeProvider), ThemeMode.system);
       final preferences = await SharedPreferences.getInstance();

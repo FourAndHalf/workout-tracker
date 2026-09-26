@@ -67,106 +67,106 @@ class BlockCard extends StatelessWidget {
             : badgeColor.withValues(alpha: 0.5),
         borderWidth: block.type == 'straight' ? 1 : 1.5,
         child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: context.colors.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(11),
-                topRight: Radius.circular(11),
-              ),
-              border: Border(
-                bottom: BorderSide(
-                  color: context.colors.border.withValues(alpha: 0.5),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: context.colors.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: context.colors.border.withValues(alpha: 0.5),
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: badgeColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: badgeColor, width: 1),
-                  ),
-                  child: Text(
-                    badgeText,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: badgeColor,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    block.name,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: context.colors.textPrimary,
-                    ),
-                  ),
-                ),
-                Text(
-                  '${block.targetSets} Sets',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: context.colors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          if (block.instructions != null && block.instructions!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.info_outline_rounded,
-                    size: 14,
-                    color: context.colors.warning,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: badgeColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: badgeColor, width: 1),
+                    ),
+                    child: Text(
+                      badgeText,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: badgeColor,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      block.instructions!,
+                      block.name,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: context.colors.warning,
-                        fontStyle: FontStyle.italic,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: context.colors.textPrimary,
                       ),
+                    ),
+                  ),
+                  Text(
+                    '${block.targetSets} Sets',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: context.colors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
 
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: block.exercises
-                  .map(
-                    (e) => ExerciseTile(
-                      exercise: e,
-                      activeState: activeExerciseStates?[e.id],
+            if (block.instructions != null && block.instructions!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline_rounded,
+                      size: 14,
+                      color: context.colors.warning,
                     ),
-                  )
-                  .toList(),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        block.instructions!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: context.colors.warning,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                children: block.exercises
+                    .map(
+                      (e) => ExerciseTile(
+                        exercise: e,
+                        activeState: activeExerciseStates?[e.id],
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
-        ],
+          ],
         ),
       ),
     );

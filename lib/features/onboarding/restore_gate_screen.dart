@@ -71,10 +71,7 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: _content(),
-          ),
+          child: Padding(padding: const EdgeInsets.all(24), child: _content()),
         ),
       ),
     );
@@ -104,7 +101,10 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
               onPressed: _checkForBackup,
               child: const Text('Sign in & Check for Backup'),
             ),
-            TextButton(onPressed: _finish, child: const Text('Skip — Start Fresh')),
+            TextButton(
+              onPressed: _finish,
+              child: const Text('Skip — Start Fresh'),
+            ),
           ],
         );
       case _RestoreGateStep.checking:
@@ -134,7 +134,10 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
               onPressed: _restore,
               child: const Text('Restore this backup'),
             ),
-            TextButton(onPressed: _finish, child: const Text('Skip — Start Fresh')),
+            TextButton(
+              onPressed: _finish,
+              child: const Text('Skip — Start Fresh'),
+            ),
           ],
         );
       case _RestoreGateStep.restoring:
@@ -152,10 +155,19 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
           children: [
             const Icon(Icons.error_outline, size: 48),
             const SizedBox(height: 16),
-            Text('Something went wrong: $_errorMessage', textAlign: TextAlign.center),
+            Text(
+              'Something went wrong: $_errorMessage',
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 24),
-            FilledButton(onPressed: _checkForBackup, child: const Text('Retry')),
-            TextButton(onPressed: _finish, child: const Text('Skip — Start Fresh')),
+            FilledButton(
+              onPressed: _checkForBackup,
+              child: const Text('Retry'),
+            ),
+            TextButton(
+              onPressed: _finish,
+              child: const Text('Skip — Start Fresh'),
+            ),
           ],
         );
     }

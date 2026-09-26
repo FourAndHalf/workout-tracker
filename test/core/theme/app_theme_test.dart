@@ -12,14 +12,14 @@ void main() {
       expect(AppTheme.lightTheme.extension<AppColors>(), AppColors.light);
     });
 
-    test('uses Primer canvas colors for the scaffold', () {
+    test('uses Kinetic Obsidian canvas colors for the scaffold', () {
       expect(
         AppTheme.darkTheme.scaffoldBackgroundColor,
-        const Color(0xFF0D1117),
+        const Color(0xFF0F1218),
       );
       expect(
         AppTheme.lightTheme.scaffoldBackgroundColor,
-        const Color(0xFFFFFFFF),
+        const Color(0xFFF3F5F8),
       );
     });
   });

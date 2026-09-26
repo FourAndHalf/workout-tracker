@@ -15,12 +15,15 @@ void main() {
   setUp(() {
     repository = MockBackupRepository();
     doneCalled = false;
-    when(() => repository.markFirstLaunchRestoreCheckComplete()).thenAnswer((_) async {});
+    when(() => repository.markFirstLaunchRestoreCheckComplete())
+        .thenAnswer((_) async {});
   });
 
   Widget buildScreen() {
     return ProviderScope(
-      overrides: [backupRepositoryProvider.overrideWith((ref) async => repository)],
+      overrides: [
+        backupRepositoryProvider.overrideWith((ref) async => repository),
+      ],
       child: MaterialApp(
         home: RestoreGateScreen(onDone: () => doneCalled = true),
       ),
@@ -41,7 +44,9 @@ void main() {
   testWidgets('finds a backup and restores it on confirmation', (tester) async {
     when(() => repository.isSignedIn()).thenAnswer((_) async => true);
     when(() => repository.listBackups()).thenAnswer(
-      (_) async => [BackupInfo(id: 'b1', name: 'backup_1', createdAt: DateTime(2026, 1, 1))],
+      (_) async => [
+        BackupInfo(id: 'b1', name: 'backup_1', createdAt: DateTime(2026, 1, 1)),
+      ],
     );
     when(() => repository.restoreBackup('b1')).thenAnswer((_) async {});
 
@@ -62,7 +67,8 @@ void main() {
 
   testWidgets('proceeds automatically when no backup exists', (tester) async {
     when(() => repository.isSignedIn()).thenAnswer((_) async => true);
-    when(() => repository.listBackups()).thenAnswer((_) async => <BackupInfo>[]);
+    when(() => repository.listBackups())
+        .thenAnswer((_) async => <BackupInfo>[]);
 
     await tester.pumpWidget(buildScreen());
 
@@ -74,7 +80,9 @@ void main() {
     verifyNever(() => repository.restoreBackup(any()));
   });
 
-  testWidgets('shows an error with a retry option when sign-in fails', (tester) async {
+  testWidgets('shows an error with a retry option when sign-in fails', (
+    tester,
+  ) async {
     when(() => repository.isSignedIn()).thenAnswer((_) async => false);
     when(() => repository.signIn()).thenThrow(Exception('cancelled'));
 

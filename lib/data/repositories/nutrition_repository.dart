@@ -19,9 +19,9 @@ class NutritionRepository {
   }
 
   Future<void> clearUserDataSince(DateTime since) async {
-    final photos = await (db.select(db.foodPhotos)
-          ..where((photo) => photo.capturedAt.isBiggerOrEqualValue(since)))
-        .get();
+    final photos = await (db.select(
+      db.foodPhotos,
+    )..where((photo) => photo.capturedAt.isBiggerOrEqualValue(since))).get();
     for (final photo in photos) {
       final file = File(photo.filePath);
       if (await file.exists()) await file.delete();

@@ -3,7 +3,6 @@ import 'package:fitness_tracker/core/widgets/sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
   testWidgets('renders labels and reports taps', (tester) async {
     int? selected;

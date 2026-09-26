@@ -11,7 +11,7 @@ void main() {
     expect(weekdayLabel(DateTime(2026, 9, 27)), 'Sunday');
   });
 
-  testWidgets('DayAppBar shows the day, the date and its actions', (
+  testWidgets('DayAppBar shows the day, the app name and its actions', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -26,7 +26,7 @@ void main() {
     );
 
     expect(find.text('Thursday'), findsOneWidget);
-    expect(find.text('24 Sep'), findsOneWidget);
+    expect(find.text('Fitness Tracker'), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
   });
 }

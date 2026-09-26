@@ -22,11 +22,15 @@ class NextWorkoutInfo {
   final String programId;
   final String dayId;
   final String dayName;
+  final int weekNumber;
+  final int exerciseCount;
 
   const NextWorkoutInfo({
     required this.programId,
     required this.dayId,
     required this.dayName,
+    this.weekNumber = 1,
+    this.exerciseCount = 0,
   });
 }
 
@@ -63,6 +67,11 @@ NextWorkoutInfo? nextWorkoutFor(
     programId: program.programId,
     dayId: nextDay.id,
     dayName: nextDay.name,
+    weekNumber: week.number,
+    exerciseCount: nextDay.blocks.fold<int>(
+      0,
+      (total, block) => total + block.exercises.length,
+    ),
   );
 }
 

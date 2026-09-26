@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'app_logo.dart';
 
 const _weekdays = [
   'Monday',
@@ -31,9 +32,11 @@ const _months = [
 String weekdayLabel(DateTime date) => _weekdays[date.weekday - 1];
 
 /// e.g. "24 Sep".
-String shortDateLabel(DateTime date) => '${date.day} ${_months[date.month - 1]}';
+String shortDateLabel(DateTime date) =>
+    '${date.day} ${_months[date.month - 1]}';
 
-/// The shared top bar of every main tab: today's weekday over today's date.
+/// The shared top bar of every main tab: today's weekday over the app logo
+/// and name.
 class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
 
@@ -56,11 +59,18 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(weekdayLabel(date), style: textTheme.titleLarge),
-          Text(
-            shortDateLabel(date),
-            style: textTheme.bodySmall?.copyWith(
-              color: context.colors.textMuted,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const AppLogo(size: 16),
+              const SizedBox(width: 6),
+              Text(
+                'Fitness Tracker',
+                style: textTheme.bodySmall?.copyWith(
+                  color: context.colors.textMuted,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 class RestTimerWidget extends StatefulWidget {
@@ -59,7 +61,9 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final progress = widget.initialSeconds > 0 ? _secondsRemaining / widget.initialSeconds : 0.0;
+    final progress = widget.initialSeconds > 0
+        ? _secondsRemaining / widget.initialSeconds
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -80,7 +84,9 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
                   value: progress,
                   strokeWidth: 3.5,
                   backgroundColor: context.colors.border,
-                  valueColor: AlwaysStoppedAnimation<Color>(context.colors.primary),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    context.colors.primary,
+                  ),
                 ),
                 Text(
                   '$_secondsRemaining',
@@ -109,7 +115,9 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
                   ),
                 ),
                 Text(
-                  _secondsRemaining > 0 ? 'Resting... $_secondsRemaining s' : 'Rest Complete! Ready for next set.',
+                  _secondsRemaining > 0
+                      ? 'Resting... $_secondsRemaining s'
+                      : 'Rest Complete! Ready for next set.',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -121,10 +129,17 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
           ),
           TextButton(
             onPressed: () => _addSeconds(30),
-            child: Text('+30s', style: TextStyle(color: context.colors.secondary, fontSize: 12)),
+            child: Text(
+              '+30s',
+              style: TextStyle(color: context.colors.secondary, fontSize: 12),
+            ),
           ),
           IconButton(
-            icon: Icon(Icons.close_rounded, size: 20, color: context.colors.textMuted),
+            icon: Icon(
+              Icons.close_rounded,
+              size: 20,
+              color: context.colors.textMuted,
+            ),
             onPressed: widget.onDismiss,
           ),
         ],

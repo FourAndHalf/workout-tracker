@@ -14,7 +14,8 @@ class ActiveWorkoutBanner extends ConsumerStatefulWidget {
   const ActiveWorkoutBanner({super.key, this.visibleDayId});
 
   @override
-  ConsumerState<ActiveWorkoutBanner> createState() => _ActiveWorkoutBannerState();
+  ConsumerState<ActiveWorkoutBanner> createState() =>
+      _ActiveWorkoutBannerState();
 }
 
 class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>

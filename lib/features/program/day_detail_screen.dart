@@ -165,17 +165,16 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
           currentSetNumber: loggedSets.length + 1,
           loggedSets: loggedSets,
           restPauseChunks: chunks,
-          onLogSet:
-              ({weight, reps, hitFailure = false, durationSeconds}) {
-                notifier.logSet(
-                  exercise: exercise,
-                  block: block,
-                  weight: weight,
-                  reps: reps,
-                  hitFailure: hitFailure,
-                  durationSeconds: durationSeconds,
-                );
-              },
+          onLogSet: ({weight, reps, hitFailure = false, durationSeconds}) {
+            notifier.logSet(
+              exercise: exercise,
+              block: block,
+              weight: weight,
+              reps: reps,
+              hitFailure: hitFailure,
+              durationSeconds: durationSeconds,
+            );
+          },
           onAddChunk: (chunkReps) {
             notifier.addRestPauseChunk(
               exercise: exercise,
@@ -300,7 +299,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: context.colors.warning.withValues(alpha: 0.1),
+                            color: context.colors.warning.withValues(
+                              alpha: 0.1,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: context.colors.warning,
