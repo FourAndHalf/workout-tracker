@@ -36,8 +36,11 @@ void main() {
     expect(find.byIcon(Icons.music_note_rounded), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
     expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
-    expect(find.text('Your week at a glance'), findsOneWidget);
-    expect(find.byIcon(Icons.format_quote_rounded), findsOneWidget);
+    expect(find.text('Training cycle & volume'), findsOneWidget);
+    expect(
+      find.byIcon(Icons.format_quote_rounded, skipOffstage: false),
+      findsOneWidget,
+    );
     expect(find.text('Training volume'), findsOneWidget);
   });
 

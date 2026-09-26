@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:fitness_tracker/core/widgets/app_card.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
@@ -68,7 +68,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.widgetWithText(ListTile, 'Arms'));
+    await tester.tap(find.widgetWithText(AppCard, 'Arms'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
   }

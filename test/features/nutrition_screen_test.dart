@@ -28,16 +28,16 @@ void main() {
 
     await tester.tap(find.text('Daily log'));
     await tester.pumpAndSettle();
-    expect(find.text('Take photo'), findsOneWidget);
-    expect(find.text('Choose from gallery'), findsOneWidget);
+    expect(find.text('Snap Meal'), findsOneWidget);
+    expect(find.text('Upload Photo'), findsOneWidget);
     expect(find.text('No meals logged today'), findsOneWidget);
 
     await tester.tap(find.text('Meal plan'));
     await tester.pumpAndSettle();
-    expect(find.text('Weekly meals'), findsOneWidget);
-    expect(find.text('Select day'), findsOneWidget);
-    expect(find.byType(DropdownButtonFormField<int>), findsOneWidget);
-    expect(find.text('Cooking video'), findsOneWidget);
+    expect(find.textContaining('Planned Meals'), findsOneWidget);
+    expect(find.text('Add Meal'), findsOneWidget);
+    expect(find.text('DAILY PLANNED TARGET'), findsOneWidget);
+    expect(find.text('Video'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Shopping list'));
     await tester.pumpAndSettle();
@@ -111,7 +111,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Take photo'));
+    await tester.tap(find.text('Snap Meal'));
     await tester.pumpAndSettle();
 
     expect(find.text('Breakfast'), findsOneWidget);

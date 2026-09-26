@@ -13,7 +13,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/day_app_bar.dart';
+import '../../core/widgets/app_card.dart';
 import '../../core/widgets/sliding_segmented_control.dart';
+import '../../core/widgets/tag_pill.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
@@ -290,20 +292,24 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       children: [
-                        const Text(
-                          'Today',
+                        Text(
+                          'Log a meal',
                           style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.2,
+                            color: context.colors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
                               child: _PhotoActionTile(
                                 icon: Icons.camera_alt_outlined,
-                                label: 'Take photo',
+                                label: 'Snap Meal',
+                                caption: 'Use the camera',
+                                color: context.colors.success,
                                 onTap: () => _choosePhoto(ImageSource.camera),
                               ),
                             ),
@@ -311,7 +317,9 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                             Expanded(
                               child: _PhotoActionTile(
                                 icon: Icons.photo_library_outlined,
-                                label: 'Choose from gallery',
+                                label: 'Upload Photo',
+                                caption: 'Pick from gallery',
+                                color: context.colors.primary,
                                 onTap: () => _choosePhoto(ImageSource.gallery),
                               ),
                             ),
@@ -322,14 +330,24 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                           const LinearProgressIndicator(),
                         ],
                         const SizedBox(height: 24),
-                        const Text(
-                          'Meal photos',
+                        Text(
+                          "Today's meals",
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.2,
+                            color: context.colors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${photos.value?.length ?? 0} meals logged',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: context.colors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                         photos.when(
                           loading: () => const SizedBox(
                             height: 180,
@@ -742,9 +760,101 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
         final dayMeals = meals
             .where((meal) => meal.dayOfWeek == _selectedDay)
             .toList();
+        final colors = context.colors;
+        double sum(double Function(MealPlan) f) =>
+            dayMeals.fold(0, (total, meal) => total + f(meal));
+        final protein = sum((m) => m.proteinG);
+        final carbs = sum((m) => m.carbsG);
+        final fat = sum((m) => m.fatG);
+        final macroTotal = protein + carbs + fat;
         return ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            _WeekDayStrip(
+              selected: _selectedDay,
+              today: DateTime.now().weekday,
+              onSelected: (day) => setState(() => _selectedDay = day),
+            ),
+            const SizedBox(height: 12),
+            AppCard(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'DAILY PLANNED TARGET',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.55,
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                      const Spacer(),
+                      TagPill(
+                        '${dayMeals.length} ${dayMeals.length == 1 ? 'meal' : 'meals'}',
+                        color: colors.primary,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      text: sum((m) => m.calories).toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.7,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' kcal',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0,
+                            color: colors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (macroTotal > 0)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(999),
+                      child: SizedBox(
+                        height: 8,
+                        child: Row(
+                          children: [
+                            _MacroSegment(protein, colors.success),
+                            _MacroSegment(carbs, colors.primary),
+                            _MacroSegment(fat, colors.warning),
+                          ],
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _MacroStat('Protein', protein, colors.success),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _MacroStat('Carbs', carbs, colors.primary),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(child: _MacroStat('Fat', fat, colors.warning)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
@@ -752,47 +862,34 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Weekly meals',
-                        style: TextStyle(
+                        'Planned Meals (${mealPlanDayNames[_selectedDay - 1]})',
+                        style: const TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.2,
                         ),
                       ),
                     ],
                   ),
                 ),
-                IconButton.filled(
-                  tooltip: 'Add meal',
+                FilledButton.icon(
                   icon: const Icon(Icons.add),
+                  label: const Text('Add Meal'),
                   onPressed: () => _editMeal(context, ref),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<int>(
-              initialValue: _selectedDay,
-              decoration: const InputDecoration(labelText: 'Select day'),
-              items: List.generate(
-                7,
-                (index) => DropdownMenuItem(
-                  value: index + 1,
-                  child: Text(mealPlanDayNames[index]),
-                ),
-              ),
-              onChanged: (value) {
-                if (value != null) setState(() => _selectedDay = value);
-              },
-            ),
-            const SizedBox(height: 16),
-            ...dayMeals.map(
-              (meal) => _MealPlanCard(
-                meal: meal,
-                dayName: mealPlanDayNames[meal.dayOfWeek - 1],
-                onEdit: () => _editMeal(context, ref, meal: meal),
+            const SizedBox(height: 12),
+            ...dayMeals.indexed.map(
+              (entry) => _MealPlanCard(
+                meal: entry.$2,
+                index: entry.$1 + 1,
+                dayName: mealPlanDayNames[entry.$2.dayOfWeek - 1],
+                onEdit: () => _editMeal(context, ref, meal: entry.$2),
                 onDelete: () async {
                   await ref
                       .read(nutritionRepositoryProvider)
-                      .deleteMealPlan(meal.id);
+                      .deleteMealPlan(entry.$2.id);
                   ref.invalidate(mealPlansProvider);
                 },
               ),
@@ -804,14 +901,169 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
   }
 }
 
+class _WeekDayStrip extends StatelessWidget {
+  static const _letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  final int selected;
+  final int today;
+  final ValueChanged<int> onSelected;
+
+  const _WeekDayStrip({
+    required this.selected,
+    required this.today,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return AppCard(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      child: Row(
+        children: [
+          for (var day = 1; day <= 7; day++)
+            Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () => onSelected(day),
+                child: Container(
+                  height: 48,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: day == selected
+                        ? colors.success.withValues(alpha: 0.15)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: day == selected
+                          ? colors.success
+                          : Colors.transparent,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _letters[day - 1],
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: day == selected
+                              ? colors.success
+                              : colors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: day == today
+                              ? colors.primary
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MacroSegment extends StatelessWidget {
+  final double grams;
+  final Color color;
+
+  const _MacroSegment(this.grams, this.color);
+
+  @override
+  Widget build(BuildContext context) => Expanded(
+    flex: (grams * 10).round().clamp(1, 1 << 30),
+    child: ColoredBox(color: color),
+  );
+}
+
+class _MacroStat extends StatelessWidget {
+  final String label;
+  final double grams;
+  final Color color;
+
+  const _MacroStat(this.label, this.grams, this.color);
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    decoration: BoxDecoration(
+      color: context.colors.surface,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.8,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${grams.toStringAsFixed(0)}g',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontFeatures: [FontFeature.tabularFigures()],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _MacroPill extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _MacroPill(this.label, this.color);
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: 0.12),
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Text(
+      label,
+      style: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        color: color,
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
+    ),
+  );
+}
+
 class _MealPlanCard extends StatelessWidget {
   final MealPlan meal;
+  final int index;
   final String dayName;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const _MealPlanCard({
     required this.meal,
+    required this.index,
     required this.dayName,
     required this.onEdit,
     required this.onDelete,
@@ -819,15 +1071,15 @@ class _MealPlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     final ingredients = meal.ingredients
         .split(',')
         .map((item) => item.trim())
         .where((item) => item.isNotEmpty)
         .toList();
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AppCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -835,67 +1087,113 @@ class _MealPlanCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    meal.mealName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    'MEAL $index \u00B7 ${dayName.toUpperCase()}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.55,
+                      color: colors.warning,
                     ),
                   ),
                 ),
-                PopupMenuButton<String>(
-                  onSelected: (action) {
-                    if (action == 'edit') {
-                      onEdit();
-                    }
-                    if (action == 'delete') {
-                      onDelete();
-                    }
-                  },
-                  itemBuilder: (_) => const [
-                    PopupMenuItem(value: 'edit', child: Text('Edit')),
-                    PopupMenuItem(value: 'delete', child: Text('Delete')),
-                  ],
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: PopupMenuButton<String>(
+                    padding: EdgeInsets.zero,
+                    iconSize: 20,
+                    onSelected: (action) {
+                      if (action == 'edit') {
+                        onEdit();
+                      }
+                      if (action == 'delete') {
+                        onDelete();
+                      }
+                    },
+                    itemBuilder: (_) => const [
+                      PopupMenuItem(value: 'edit', child: Text('Edit')),
+                      PopupMenuItem(value: 'delete', child: Text('Delete')),
+                    ],
+                  ),
                 ),
               ],
             ),
+            const SizedBox(height: 6),
             Text(
-              dayName,
-              style: TextStyle(
-                color: context.colors.primary,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+              meal.mealName,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.2,
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              ingredients.join('  •  '),
-              style: TextStyle(
-                color: context.colors.textSecondary,
-                fontSize: 12,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 6,
-              children: [
-                Text('${meal.calories.toStringAsFixed(0)} kcal'),
-                Text('P ${meal.proteinG.toStringAsFixed(0)}g'),
-                Text('C ${meal.carbsG.toStringAsFixed(0)}g'),
-                Text('F ${meal.fatG.toStringAsFixed(0)}g'),
-              ],
-            ),
-            if (meal.videoUrl != null && meal.videoUrl!.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              TextButton.icon(
-                icon: const Icon(Icons.play_circle_outline, size: 18),
-                label: const Text('Cooking video'),
-                onPressed: () => launchUrl(
-                  Uri.parse(meal.videoUrl!),
-                  mode: LaunchMode.externalApplication,
-                ),
+            if (ingredients.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final item in ingredients)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colors.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: colors.border),
+                      ),
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ],
+            const SizedBox(height: 12),
+            Divider(color: colors.border, height: 1),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(
+                  '${meal.calories.toStringAsFixed(0)} kcal',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+                _MacroPill(
+                  'P ${meal.proteinG.toStringAsFixed(0)}g',
+                  colors.success,
+                ),
+                _MacroPill(
+                  'C ${meal.carbsG.toStringAsFixed(0)}g',
+                  colors.primary,
+                ),
+                _MacroPill(
+                  'F ${meal.fatG.toStringAsFixed(0)}g',
+                  colors.warning,
+                ),
+                if (meal.videoUrl != null && meal.videoUrl!.isNotEmpty)
+                  ActionChip(
+                    avatar: const Icon(Icons.play_arrow_rounded, size: 18),
+                    label: const Text('Video'),
+                    onPressed: () => launchUrl(
+                      Uri.parse(meal.videoUrl!),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),
@@ -1105,38 +1403,46 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
 class _PhotoActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
+  final String caption;
+  final Color color;
   final VoidCallback onTap;
 
   const _PhotoActionTile({
     required this.icon,
     required this.label,
+    required this.caption,
+    required this.color,
     required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) => InkWell(
+  Widget build(BuildContext context) => AppCard(
     onTap: onTap,
-    borderRadius: BorderRadius.circular(8),
-    child: Container(
-      height: 92,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: context.colors.card,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: context.colors.border),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: context.colors.primary, size: 24),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+    color: color.withValues(alpha: 0.08),
+    borderColor: color.withValues(alpha: 0.3),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
           ),
-        ],
-      ),
+          child: Icon(icon, color: color, size: 24),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          caption,
+          style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
+        ),
+      ],
     ),
   );
 }

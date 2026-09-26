@@ -17,6 +17,8 @@ class DashboardStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
+      _CycleHeader(data: data),
+      const SizedBox(height: 12),
       _StreakCard(data: data),
       const SizedBox(height: 10),
       _WeekStrip(data: data, today: now.weekday),
@@ -89,6 +91,58 @@ String dashboardNudge(DashboardAnalytics data) {
   }
   final left = goal - data.workoutsThisWeek;
   return '$left more ${left == 1 ? 'workout' : 'workouts'} to hit your weekly goal.';
+}
+
+class _CycleHeader extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _CycleHeader({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    const goal = DashboardAnalytics.weeklyGoal;
+    final done = data.workoutsThisWeek.clamp(0, goal);
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Training cycle & volume',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              Text(
+                'This week vs last week',
+                style: TextStyle(fontSize: 12, color: colors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: colors.primary.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: colors.primary.withValues(alpha: 0.3)),
+          ),
+          child: Text(
+            '$done of $goal done (${(done * 100 / goal).round()}%)',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: colors.primary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _StreakCard extends StatelessWidget {

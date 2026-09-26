@@ -1,3 +1,4 @@
+import 'package:fitness_tracker/core/widgets/app_logo.dart';
 import 'package:fitness_tracker/core/theme/app_theme.dart';
 import 'package:fitness_tracker/core/widgets/splash_reveal.dart';
 import 'package:flutter/material.dart';
