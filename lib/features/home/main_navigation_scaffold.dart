@@ -31,7 +31,9 @@ class MainNavigationScaffold extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          ActiveWorkoutBanner(visibleDayId: _visibleDayId),
+          // Home shows its own "Go back to workout" card instead.
+          if (navigationShell.currentIndex != 0)
+            ActiveWorkoutBanner(visibleDayId: _visibleDayId),
           Expanded(child: navigationShell),
         ],
       ),

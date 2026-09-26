@@ -8,6 +8,7 @@ import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
+import '../workout/providers/active_workout_session_notifier.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
 
@@ -53,6 +54,8 @@ class HomeScreen extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                 children: [
+                  _QuoteCard(quote: quote),
+                  const SizedBox(height: 12),
                   _StartWorkoutCard(next: nextWorkout),
                   const SizedBox(height: 24),
                   analytics.when(
@@ -64,8 +67,6 @@ class HomeScreen extends ConsumerWidget {
                         const _AnalyticsMessage('Analytics unavailable'),
                     data: (data) => DashboardStats(data: data, now: now),
                   ),
-                  const SizedBox(height: 10),
-                  _QuoteCard(quote: quote),
                 ],
               ),
             ),
@@ -76,24 +77,27 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _StartWorkoutCard extends StatelessWidget {
+class _StartWorkoutCard extends ConsumerWidget {
   final NextWorkoutInfo? next;
 
   const _StartWorkoutCard({required this.next});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final next = this.next;
-    final enabled = next != null;
-    final fill = enabled ? colors.success : colors.surface;
+    final active = ref.watch(activeWorkoutSessionProvider);
+    final resuming = active != null;
+    final enabled = resuming || next != null;
+    final accent = resuming ? colors.primary : colors.success;
+    final fill = enabled ? accent : colors.surface;
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: enabled
             ? [
                 BoxShadow(
-                  color: colors.success.withValues(alpha: 0.25),
+                  color: accent.withValues(alpha: 0.25),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -105,7 +109,9 @@ class _StartWorkoutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: next == null
+          onTap: resuming
+              ? () => context.push('/programs/ffts-4week/${active.dayId}')
+              : next == null
               ? null
               : () => context.push('/programs/${next.programId}/${next.dayId}'),
           child: Padding(
@@ -131,7 +137,9 @@ class _StartWorkoutCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        next == null
+                        resuming
+                            ? 'Go back to ${active.dayName} Workout'
+                            : next == null
                             ? 'No workout due'
                             : 'Start ${next.dayName} Workout',
                         style: TextStyle(
@@ -141,7 +149,13 @@ class _StartWorkoutCard extends StatelessWidget {
                           color: enabled ? Colors.white : colors.textMuted,
                         ),
                       ),
-                      if (next != null) ...[
+                      if (resuming) ...[
+                        const SizedBox(height: 4),
+                        const Text(
+                          'Tap to return',
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
+                        ),
+                      ] else if (next != null) ...[
                         const SizedBox(height: 4),
                         Text(
                           'Week ${next.weekNumber} \u00B7 ${next.exerciseCount} Exercises',
