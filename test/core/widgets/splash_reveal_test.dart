@@ -11,11 +11,11 @@ void main() {
         home: const SplashReveal(child: Text('home')),
       ),
     );
-    expect(find.byType(Image), findsOneWidget);
+    expect(find.byType(AppLogo), findsOneWidget);
     expect(find.text('home'), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 1200));
-    expect(find.byType(Image), findsNothing);
+    expect(find.byType(AppLogo), findsNothing);
     expect(find.text('home'), findsOneWidget);
   });
 }
