@@ -75,22 +75,38 @@ class HomeScreen extends ConsumerWidget {
             child: SizedBox(
               width: double.infinity,
               height: 52,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.play_arrow_rounded),
-                label: Text(
-                  nextWorkout == null
-                      ? 'No workout due'
-                      : 'Start ${nextWorkout.dayName} Workout',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: nextWorkout == null
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: context.colors.success.withValues(
+                              alpha: 0.25,
+                            ),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
                 ),
-                onPressed: nextWorkout == null
-                    ? null
-                    : () => context.push(
-                        '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
-                      ),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.play_arrow_rounded),
+                  label: Text(
+                    nextWorkout == null
+                        ? 'No workout due'
+                        : 'Start ${nextWorkout.dayName} Workout',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: nextWorkout == null
+                      ? null
+                      : () => context.push(
+                          '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
+                        ),
+                ),
               ),
             ),
           ),
@@ -108,7 +124,7 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     text,
-    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
   );
 }
 

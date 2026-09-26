@@ -83,5 +83,6 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icon/app_icon.png
     - assets/programs/program_week1.json
     - assets/programs/program_full.json

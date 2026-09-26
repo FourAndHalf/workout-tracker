@@ -26,13 +26,16 @@ void main() {
       when(() => googleSignIn.initialize()).thenAnswer((_) async {});
     });
 
-    test('isSignedIn is true when lightweight authentication returns an account', () async {
-      when(() => googleSignIn.attemptLightweightAuthentication())
-          .thenAnswer((_) async => MockGoogleSignInAccount());
-      final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
+    test(
+      'isSignedIn is true when lightweight authentication returns an account',
+      () async {
+        when(() => googleSignIn.attemptLightweightAuthentication())
+            .thenAnswer((_) async => MockGoogleSignInAccount());
+        final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
-      expect(await service.isSignedIn(), isTrue);
-    });
+        expect(await service.isSignedIn(), isTrue);
+      },
+    );
 
     test('isSignedIn is false when no account can be restored', () async {
       when(() => googleSignIn.attemptLightweightAuthentication())
@@ -44,8 +47,11 @@ void main() {
     });
 
     test('signIn throws when the user cancels the picker', () async {
-      when(() => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')))
-          .thenThrow(const GoogleSignInException(code: GoogleSignInExceptionCode.canceled));
+      when(
+        () => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')),
+      ).thenThrow(
+        const GoogleSignInException(code: GoogleSignInExceptionCode.canceled),
+      );
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       expect(
@@ -60,8 +66,9 @@ void main() {
       final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
       await service.signIn();
-      verify(() => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')))
-          .called(1);
+      verify(
+        () => googleSignIn.authenticate(scopeHint: any(named: 'scopeHint')),
+      ).called(1);
     });
 
     test('signOut delegates to GoogleSignIn', () async {
@@ -72,16 +79,19 @@ void main() {
       verify(() => googleSignIn.signOut()).called(1);
     });
 
-    test('throws GoogleDriveNotSignedInException when no account is available', () async {
-      when(() => googleSignIn.attemptLightweightAuthentication())
-          .thenAnswer((_) async => null);
-      final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
+    test(
+      'throws GoogleDriveNotSignedInException when no account is available',
+      () async {
+        when(() => googleSignIn.attemptLightweightAuthentication())
+            .thenAnswer((_) async => null);
+        final service = GoogleDriveBackupService(googleSignIn: googleSignIn);
 
-      expect(
-        () => service.uploadBackup('backup.ftbackup', Uint8List(0)),
-        throwsA(isA<GoogleDriveNotSignedInException>()),
-      );
-    });
+        expect(
+          () => service.uploadBackup('backup.ftbackup', Uint8List(0)),
+          throwsA(isA<GoogleDriveNotSignedInException>()),
+        );
+      },
+    );
   });
 
   group('backup operations delegate to the files API', () {
@@ -97,7 +107,8 @@ void main() {
     test('uploadBackup passes the file name and bytes through', () async {
       final bytes = Uint8List.fromList([1, 2, 3]);
       final created = drive.File()..id = 'file-1';
-      when(() => filesApi.upload('backup.ftbackup', bytes)).thenAnswer((_) async => created);
+      when(() => filesApi.upload('backup.ftbackup', bytes))
+          .thenAnswer((_) async => created);
 
       final result = await service.uploadBackup('backup.ftbackup', bytes);
 

@@ -64,57 +64,60 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               title: const Text('Workout History'),
               actions: [_viewToggleButton()],
             ),
-      body: _withEmbeddedToggle(FutureBuilder<List<WorkoutSession>>(
-        future: _sessions,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return const Center(child: Text('Unable to load workout history'));
-          }
-          final sessions = snapshot.data ?? const <WorkoutSession>[];
-          if (sessions.isEmpty) {
+      body: _withEmbeddedToggle(
+        FutureBuilder<List<WorkoutSession>>(
+          future: _sessions,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Unable to load workout history'),
+              );
+            }
+            final sessions = snapshot.data ?? const <WorkoutSession>[];
+            if (sessions.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async => _refresh(),
+                child: ListView(
+                  children: const [
+                    SizedBox(height: 160),
+                    EmptyState(
+                      icon: Icons.event_available_outlined,
+                      message: 'Complete a workout to see it here',
+                      subtitle: 'Your training history and calendar will fill in as you go.',
+                    ),
+                  ],
+                ),
+              );
+            }
             return RefreshIndicator(
               onRefresh: () async => _refresh(),
-              child: ListView(
-                children: const [
-                  SizedBox(height: 160),
-                  EmptyState(
-                    icon: Icons.event_available_outlined,
-                    message: 'Complete a workout to see it here',
-                    subtitle:
-                        'Your training history and calendar will fill in as you go.',
-                  ),
-                ],
-              ),
+              child: _calendar
+                  ? _CalendarView(
+                      month: _month,
+                      sessions: sessions,
+                      onPrevious: () => setState(
+                        () => _month = DateTime(_month.year, _month.month - 1),
+                      ),
+                      onNext: () => setState(
+                        () => _month = DateTime(_month.year, _month.month + 1),
+                      ),
+                      onDayTap: (date, daySessions) =>
+                          _showDayDetails(context, date, daySessions),
+                      onSessionTap: (session) =>
+                          context.push('/history/${session.id}'),
+                    )
+                  : _SessionList(
+                      sessions: sessions,
+                      onSessionTap: (session) =>
+                          context.push('/history/${session.id}'),
+                    ),
             );
-          }
-          return RefreshIndicator(
-            onRefresh: () async => _refresh(),
-            child: _calendar
-                ? _CalendarView(
-                    month: _month,
-                    sessions: sessions,
-                    onPrevious: () => setState(
-                      () => _month = DateTime(_month.year, _month.month - 1),
-                    ),
-                    onNext: () => setState(
-                      () => _month = DateTime(_month.year, _month.month + 1),
-                    ),
-                    onDayTap: (date, daySessions) =>
-                        _showDayDetails(context, date, daySessions),
-                    onSessionTap: (session) =>
-                        context.push('/history/${session.id}'),
-                  )
-                : _SessionList(
-                    sessions: sessions,
-                    onSessionTap: (session) =>
-                        context.push('/history/${session.id}'),
-                  ),
-          );
-        },
-      )),
+          },
+        ),
+      ),
     );
   }
 
@@ -331,7 +334,9 @@ class _DayCell extends StatelessWidget {
             : context.colors.primary.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: sessions.isEmpty ? context.colors.border : context.colors.primary,
+          color: sessions.isEmpty
+              ? context.colors.border
+              : context.colors.primary,
         ),
       ),
       child: Column(

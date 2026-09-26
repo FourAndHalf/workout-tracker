@@ -30,9 +30,9 @@ class SlidingSegmentedControl extends StatelessWidget {
           height: 44,
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
-            color: colors.surface,
+            color: colors.card,
             border: Border.all(color: colors.border),
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Stack(
             children: [
@@ -47,7 +47,7 @@ class SlidingSegmentedControl extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: colors.primary,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(9),
                     ),
                   ),
                 ),
@@ -57,7 +57,7 @@ class SlidingSegmentedControl extends StatelessWidget {
                   for (var i = 0; i < count; i++)
                     Expanded(
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(9),
                         onTap: () => onSelected(i),
                         child: Center(
                           child: Text(

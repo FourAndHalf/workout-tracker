@@ -53,14 +53,18 @@ void main() {
     );
   });
 
-  test('backupNow surfaces an error state when the repository throws', () async {
-    when(() => repository.isSignedIn()).thenAnswer((_) async => true);
-    when(() => repository.createBackup()).thenThrow(Exception('upload failed'));
+  test(
+    'backupNow surfaces an error state when the repository throws',
+    () async {
+      when(() => repository.isSignedIn()).thenAnswer((_) async => true);
+      when(() => repository.createBackup())
+          .thenThrow(Exception('upload failed'));
 
-    await container.read(backupOperationProvider.notifier).backupNow();
+      await container.read(backupOperationProvider.notifier).backupNow();
 
-    final state = container.read(backupOperationProvider);
-    expect(state.status, BackupOperationStatus.error);
-    expect(state.errorMessage, contains('upload failed'));
-  });
+      final state = container.read(backupOperationProvider);
+      expect(state.status, BackupOperationStatus.error);
+      expect(state.errorMessage, contains('upload failed'));
+    },
+  );
 }

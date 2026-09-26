@@ -12,7 +12,8 @@ class ActiveWorkoutBannerInfo {
   });
 }
 
-class ActiveWorkoutSessionNotifier extends StateNotifier<ActiveWorkoutBannerInfo?> {
+class ActiveWorkoutSessionNotifier
+    extends StateNotifier<ActiveWorkoutBannerInfo?> {
   ActiveWorkoutSessionNotifier() : super(null);
 
   void start({
@@ -33,6 +34,7 @@ class ActiveWorkoutSessionNotifier extends StateNotifier<ActiveWorkoutBannerInfo
 }
 
 final activeWorkoutSessionProvider =
-    StateNotifierProvider<ActiveWorkoutSessionNotifier, ActiveWorkoutBannerInfo?>(
-      (ref) => ActiveWorkoutSessionNotifier(),
-    );
+    StateNotifierProvider<
+      ActiveWorkoutSessionNotifier,
+      ActiveWorkoutBannerInfo?
+    >((ref) => ActiveWorkoutSessionNotifier());

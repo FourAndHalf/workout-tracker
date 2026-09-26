@@ -88,10 +88,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(pickerCalls.where((c) => c.method == 'pickImage'), hasLength(1));
-    expect(
-      router.routeInformationProvider.value.uri.toString(),
-      '/nutrition',
-    );
+    expect(router.routeInformationProvider.value.uri.toString(), '/nutrition');
   });
 
   testWidgets('taking a photo prompts for a meal label', (tester) async {

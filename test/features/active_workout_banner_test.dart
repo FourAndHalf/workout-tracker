@@ -17,7 +17,6 @@ void main() {
   // otherwise leak in. Reset it to a known location before each test.
   setUp(() => appRouter.go('/'));
 
-
   final mockProgram = ProgramModel(
     schemaVersion: 1,
     programId: 'ffts-4week',

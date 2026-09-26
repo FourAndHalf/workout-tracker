@@ -15,7 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MockBackupArchiveService extends Mock implements BackupArchiveService {}
 
-class MockGoogleDriveBackupService extends Mock implements GoogleDriveBackupService {}
+class MockGoogleDriveBackupService extends Mock
+    implements GoogleDriveBackupService {}
 
 void main() {
   setUpAll(() async {
@@ -69,9 +70,9 @@ void main() {
 
   group('createBackup', () {
     test('collects photo paths and uploads the built archive', () async {
-      await db.into(db.foodPhotos).insert(
-        FoodPhotosCompanion.insert(filePath: 'food1.jpg'),
-      );
+      await db
+          .into(db.foodPhotos)
+          .insert(FoodPhotosCompanion.insert(filePath: 'food1.jpg'));
       await progressRepository.saveCheckIn(
         ProgressCheckIn(
           date: DateTime(2026, 1, 1),
@@ -81,7 +82,11 @@ void main() {
         ),
       );
       await supplementRepository.saveSupplement(
-        const SupplementItem(id: 's1', name: 'Creatine', photoPath: 'supp1.jpg'),
+        const SupplementItem(
+          id: 's1',
+          name: 'Creatine',
+          photoPath: 'supp1.jpg',
+        ),
       );
 
       final builtBytes = Uint8List.fromList([1, 2, 3]);
@@ -93,9 +98,8 @@ void main() {
           photoPaths: any(named: 'photoPaths'),
         ),
       ).thenAnswer((_) async => builtBytes);
-      when(
-        () => driveService.uploadBackup(any(), any()),
-      ).thenAnswer((_) async => drive.File()..id = 'uploaded');
+      when(() => driveService.uploadBackup(any(), any()))
+          .thenAnswer((_) async => drive.File()..id = 'uploaded');
 
       await repository.createBackup();
 
@@ -123,9 +127,8 @@ void main() {
       required String photoOriginalPath,
       required String photoContent,
     }) async {
-      final sourceDir = await Directory(
-        '${tempDir.path}/staged_source',
-      ).create(recursive: true);
+      final sourceDir = await Directory('${tempDir.path}/staged_source')
+          .create(recursive: true);
       final stagedDb = File('${sourceDir.path}/db.sqlite');
       await stagedDb.writeAsString(newDbContent);
       final stagedPhoto = File('${sourceDir.path}/photo.jpg');
@@ -140,7 +143,10 @@ void main() {
         databaseFile: stagedDb,
         preferences: const {'foo': 'bar', 'count': 5},
         photos: [
-          PhotoRestoreEntry(originalPath: photoOriginalPath, stagedFile: stagedPhoto),
+          PhotoRestoreEntry(
+            originalPath: photoOriginalPath,
+            stagedFile: stagedPhoto,
+          ),
         ],
       );
     }
@@ -150,9 +156,13 @@ void main() {
       await preferences.setString('old', 'value');
       final photoPath = '${tempDir.path}/photos/pic1.jpg';
 
-      when(() => driveService.downloadBackup(any())).thenAnswer((_) async => Uint8List(0));
+      when(() => driveService.downloadBackup(any()))
+          .thenAnswer((_) async => Uint8List(0));
       when(
-        () => archiveService.extractArchive(any(), stagingDir: any(named: 'stagingDir')),
+        () => archiveService.extractArchive(
+          any(),
+          stagingDir: any(named: 'stagingDir'),
+        ),
       ).thenAnswer(
         (_) => stubExtractedBackup(
           newDbContent: 'NEW DB CONTENT',
@@ -169,50 +179,62 @@ void main() {
       expect(preferences.containsKey('old'), isFalse);
       expect(await File(photoPath).readAsString(), 'photo-bytes');
       expect(await File('${dbFile.path}.bak').exists(), isFalse);
-      expect(await Directory('${tempDir.path}/.restore_staging').exists(), isFalse);
-    });
-
-    test('rolls back the database file if a later restore step fails', () async {
-      await dbFile.writeAsString('ORIGINAL DB CONTENT');
-      // A photo whose staged file doesn't exist forces the photo-copy step
-      // to throw after the database has already been swapped.
-      final missingStagedPhoto = File('${tempDir.path}/does_not_exist.jpg');
-
-      when(() => driveService.downloadBackup(any())).thenAnswer((_) async => Uint8List(0));
-      when(
-        () => archiveService.extractArchive(any(), stagingDir: any(named: 'stagingDir')),
-      ).thenAnswer((_) async {
-        final sourceDir = await Directory(
-          '${tempDir.path}/staged_source',
-        ).create(recursive: true);
-        final stagedDb = File('${sourceDir.path}/db.sqlite');
-        await stagedDb.writeAsString('NEW DB CONTENT');
-        return ExtractedBackup(
-          manifest: BackupManifest(
-            schemaVersion: db.schemaVersion,
-            createdAt: DateTime.now(),
-            photoPaths: const {},
-          ),
-          databaseFile: stagedDb,
-          preferences: const {},
-          photos: [
-            PhotoRestoreEntry(
-              originalPath: '${tempDir.path}/pic.jpg',
-              stagedFile: missingStagedPhoto,
-            ),
-          ],
-        );
-      });
-
-      await expectLater(
-        () => repository.restoreBackup('backup-1'),
-        throwsA(anything),
+      expect(
+        await Directory('${tempDir.path}/.restore_staging').exists(),
+        isFalse,
       );
-
-      expect(await dbFile.readAsString(), 'ORIGINAL DB CONTENT');
-      expect(await File('${dbFile.path}.bak').exists(), isFalse);
-      expect(await Directory('${tempDir.path}/.restore_staging').exists(), isFalse);
     });
+
+    test(
+      'rolls back the database file if a later restore step fails',
+      () async {
+        await dbFile.writeAsString('ORIGINAL DB CONTENT');
+        // A photo whose staged file doesn't exist forces the photo-copy step
+        // to throw after the database has already been swapped.
+        final missingStagedPhoto = File('${tempDir.path}/does_not_exist.jpg');
+
+        when(() => driveService.downloadBackup(any()))
+            .thenAnswer((_) async => Uint8List(0));
+        when(
+          () => archiveService.extractArchive(
+            any(),
+            stagingDir: any(named: 'stagingDir'),
+          ),
+        ).thenAnswer((_) async {
+          final sourceDir = await Directory('${tempDir.path}/staged_source')
+              .create(recursive: true);
+          final stagedDb = File('${sourceDir.path}/db.sqlite');
+          await stagedDb.writeAsString('NEW DB CONTENT');
+          return ExtractedBackup(
+            manifest: BackupManifest(
+              schemaVersion: db.schemaVersion,
+              createdAt: DateTime.now(),
+              photoPaths: const {},
+            ),
+            databaseFile: stagedDb,
+            preferences: const {},
+            photos: [
+              PhotoRestoreEntry(
+                originalPath: '${tempDir.path}/pic.jpg',
+                stagedFile: missingStagedPhoto,
+              ),
+            ],
+          );
+        });
+
+        await expectLater(
+          () => repository.restoreBackup('backup-1'),
+          throwsA(anything),
+        );
+
+        expect(await dbFile.readAsString(), 'ORIGINAL DB CONTENT');
+        expect(await File('${dbFile.path}.bak').exists(), isFalse);
+        expect(
+          await Directory('${tempDir.path}/.restore_staging').exists(),
+          isFalse,
+        );
+      },
+    );
   });
 
   group('first-launch restore check flag', () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'features/home/home_screen.dart';
 import 'features/home/main_navigation_scaffold.dart';
 import 'features/program/program_list_screen.dart';
@@ -9,7 +10,9 @@ import 'features/progress/progress_hub_screen.dart';
 import 'features/nutrition/nutrition_screen.dart';
 import 'features/settings/settings_screen.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
@@ -25,10 +28,7 @@ final appRouter = GoRouter(
       branches: [
         StatefulShellBranch(
           routes: [
-            GoRoute(
-              path: '/',
-              builder: (context, state) => const HomeScreen(),
-            ),
+            GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
           ],
         ),
         StatefulShellBranch(

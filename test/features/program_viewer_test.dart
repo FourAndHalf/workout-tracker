@@ -59,14 +59,21 @@ void main() {
           ),
           DayModel(id: 'w1-shoulders', name: 'Shoulders', order: 2, blocks: []),
           DayModel(id: 'w1-back', name: 'Back', order: 3, blocks: []),
-          DayModel(id: 'w1-chest-abs', name: 'Chest + Abs', order: 4, blocks: []),
+          DayModel(
+            id: 'w1-chest-abs',
+            name: 'Chest + Abs',
+            order: 4,
+            blocks: [],
+          ),
           DayModel(id: 'w1-legs', name: 'Legs', order: 5, blocks: []),
         ],
       ),
     ],
   );
 
-  testWidgets('ProgramListScreen renders program details and training days', (WidgetTester tester) async {
+  testWidgets('ProgramListScreen renders program details and training days', (
+    WidgetTester tester,
+  ) async {
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(() => db.close());
 
@@ -99,7 +106,9 @@ void main() {
     expect(find.text('Legs'), findsOneWidget);
   });
 
-  testWidgets('Tapping Arms opens DayDetailScreen with blocks and exercises', (WidgetTester tester) async {
+  testWidgets('Tapping Arms opens DayDetailScreen with blocks and exercises', (
+    WidgetTester tester,
+  ) async {
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(() => db.close());
 
@@ -131,6 +140,5 @@ void main() {
     expect(find.text('Start Arms Workout'), findsOneWidget);
     expect(find.text('Rope Extensions'), findsOneWidget);
     expect(find.text('Incline Skull Crush'), findsAtLeast(1));
-
   });
 }

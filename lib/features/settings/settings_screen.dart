@@ -183,7 +183,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: context.colors.error),
+            style: FilledButton.styleFrom(
+              backgroundColor: context.colors.error,
+            ),
             onPressed: () => Navigator.pop(context, true),
             child: const Text('Delete data'),
           ),
@@ -231,9 +233,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     ref.listen(backupOperationProvider, (previous, next) {
       if (next.status == BackupOperationStatus.success &&
           previous?.status != BackupOperationStatus.success) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Backup uploaded to Google Drive')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Backup uploaded to Google Drive')),
+        );
       } else if (next.status == BackupOperationStatus.error &&
           previous?.status != BackupOperationStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -260,9 +262,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
             ],
             selected: {ref.watch(themeModeProvider)},
-            onSelectionChanged: (selection) => ref
-                .read(themeModeProvider.notifier)
-                .setMode(selection.first),
+            onSelectionChanged: (selection) =>
+                ref.read(themeModeProvider.notifier).setMode(selection.first),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -283,7 +284,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               subtitle: Text(_backupStatusLabel(backupState)),
               onTap: backupState.isInProgress
                   ? null
-                  : () => ref.read(backupOperationProvider.notifier).backupNow(),
+                  : () =>
+                        ref.read(backupOperationProvider.notifier).backupNow(),
             ),
           ),
           const SizedBox(height: 24),

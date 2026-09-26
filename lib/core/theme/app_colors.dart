@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// GitHub Primer-inspired color tokens, resolved by brightness through
+/// "Kinetic Obsidian" color tokens (see design/DESIGN.md), resolved by brightness through
 /// [ThemeExtension]. Read them with `context.colors`.
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
@@ -27,7 +27,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.restPauseBlock,
   });
 
-  // Backgrounds
+  // Backgrounds: canvas, inset (level 2), card (level 1), hairline border
   final Color background;
   final Color surface;
   final Color card;
@@ -56,49 +56,49 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color restPauseBlock;
 
   static const dark = AppColors(
-    background: Color(0xFF0D1117),
-    surface: Color(0xFF161B22),
-    card: Color(0xFF161B22),
-    border: Color(0xFF30363D),
-    primary: Color(0xFF2F81F7),
-    secondary: Color(0xFF7D8590),
-    tertiary: Color(0xFF6E7681),
-    success: Color(0xFF238636),
+    background: Color(0xFF0F1218),
+    surface: Color(0xFF202632),
+    card: Color(0xFF181C24),
+    border: Color(0x14FFFFFF),
+    primary: Color(0xFF3B82F6),
+    secondary: Color(0xFF94A3B8),
+    tertiary: Color(0xFF64748B),
+    success: Color(0xFF10B981),
     onSuccess: Color(0xFFFFFFFF),
-    warning: Color(0xFFD29922),
-    error: Color(0xFFF85149),
-    textPrimary: Color(0xFFE6EDF3),
-    textSecondary: Color(0xFF7D8590),
-    textMuted: Color(0xFF6E7681),
-    straightBlock: Color(0xFF7D8590),
-    supersetBlock: Color(0xFF58A6FF),
+    warning: Color(0xFFF59E0B),
+    error: Color(0xFFFFB4AB),
+    textPrimary: Color(0xFFF9FAFB),
+    textSecondary: Color(0xFF94A3B8),
+    textMuted: Color(0xFF64748B),
+    straightBlock: Color(0xFF94A3B8),
+    supersetBlock: Color(0xFF3B82F6),
     triSetBlock: Color(0xFFBC8CFF),
     giantSetBlock: Color(0xFFF778BA),
-    dropSetBlock: Color(0xFFD29922),
-    restPauseBlock: Color(0xFF3FB950),
+    dropSetBlock: Color(0xFFF59E0B),
+    restPauseBlock: Color(0xFF10B981),
   );
 
   static const light = AppColors(
-    background: Color(0xFFFFFFFF),
-    surface: Color(0xFFF6F8FA),
-    card: Color(0xFFF6F8FA),
-    border: Color(0xFFD0D7DE),
-    primary: Color(0xFF0969DA),
-    secondary: Color(0xFF59636E),
-    tertiary: Color(0xFF818B98),
-    success: Color(0xFF1F883D),
+    background: Color(0xFFF3F5F8),
+    surface: Color(0xFFEAEEF3),
+    card: Color(0xFFFFFFFF),
+    border: Color(0x1A0F1218),
+    primary: Color(0xFF2563EB),
+    secondary: Color(0xFF475569),
+    tertiary: Color(0xFF64748B),
+    success: Color(0xFF059669),
     onSuccess: Color(0xFFFFFFFF),
-    warning: Color(0xFF9A6700),
-    error: Color(0xFFD1242F),
-    textPrimary: Color(0xFF1F2328),
-    textSecondary: Color(0xFF59636E),
-    textMuted: Color(0xFF818B98),
-    straightBlock: Color(0xFF59636E),
-    supersetBlock: Color(0xFF0969DA),
+    warning: Color(0xFFD97706),
+    error: Color(0xFFBA1A1A),
+    textPrimary: Color(0xFF0F1218),
+    textSecondary: Color(0xFF475569),
+    textMuted: Color(0xFF64748B),
+    straightBlock: Color(0xFF475569),
+    supersetBlock: Color(0xFF2563EB),
     triSetBlock: Color(0xFF8250DF),
     giantSetBlock: Color(0xFFBF3989),
-    dropSetBlock: Color(0xFF9A6700),
-    restPauseBlock: Color(0xFF1A7F37),
+    dropSetBlock: Color(0xFFD97706),
+    restPauseBlock: Color(0xFF059669),
   );
 
   @override
