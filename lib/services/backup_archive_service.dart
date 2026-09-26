@@ -31,7 +31,8 @@ class BackupManifest {
   factory BackupManifest.fromJson(Map<String, dynamic> json) => BackupManifest(
     schemaVersion: json['schemaVersion'] as int,
     createdAt: DateTime.parse(json['createdAt'] as String),
-    photoPaths: (json['photoPaths'] as Map<String, dynamic>?)?.map(
+    photoPaths:
+        (json['photoPaths'] as Map<String, dynamic>?)?.map(
           (key, value) => MapEntry(key, value as String),
         ) ??
         const {},
@@ -44,7 +45,10 @@ class PhotoRestoreEntry {
   final String originalPath;
   final File stagedFile;
 
-  const PhotoRestoreEntry({required this.originalPath, required this.stagedFile});
+  const PhotoRestoreEntry({
+    required this.originalPath,
+    required this.stagedFile,
+  });
 }
 
 /// The result of extracting a backup archive into a staging directory.
@@ -107,7 +111,11 @@ class BackupArchiveService {
       createdAt: DateTime.now().toUtc(),
       photoPaths: manifestPhotoPaths,
     );
-    _addBytes(archive, manifestEntry, utf8.encode(jsonEncode(manifest.toJson())));
+    _addBytes(
+      archive,
+      manifestEntry,
+      utf8.encode(jsonEncode(manifest.toJson())),
+    );
 
     final dbBytes = await databaseFile.readAsBytes();
     _addBytes(archive, databaseEntry, dbBytes);
@@ -147,7 +155,8 @@ class BackupArchiveService {
     final prefsArchiveFile = archive.findFile(preferencesEntry);
     if (prefsArchiveFile != null) {
       preferences.addAll(
-        jsonDecode(utf8.decode(prefsArchiveFile.content)) as Map<String, dynamic>,
+        jsonDecode(utf8.decode(prefsArchiveFile.content))
+            as Map<String, dynamic>,
       );
     }
 
@@ -158,7 +167,9 @@ class BackupArchiveService {
       final stagedFile = File('${stagingDir.path}/${entry.key}');
       await stagedFile.parent.create(recursive: true);
       await stagedFile.writeAsBytes(archiveFile.content);
-      photos.add(PhotoRestoreEntry(originalPath: entry.value, stagedFile: stagedFile));
+      photos.add(
+        PhotoRestoreEntry(originalPath: entry.value, stagedFile: stagedFile),
+      );
     }
 
     return ExtractedBackup(

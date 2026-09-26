@@ -543,7 +543,9 @@ class _FrequencyCard extends StatelessWidget {
                 final active = dates.contains(date);
                 return Container(
                   decoration: BoxDecoration(
-                    color: active ? context.colors.primary : context.colors.border,
+                    color: active
+                        ? context.colors.primary
+                        : context.colors.border,
                     borderRadius: BorderRadius.circular(3),
                   ),
                 );
@@ -575,10 +577,7 @@ class _ChartCard extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             subtitle,
-            style: TextStyle(
-              color: context.colors.textSecondary,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 16),
           child,
@@ -615,7 +614,10 @@ class _StreakCard extends StatelessWidget {
               ),
               Text(
                 'Day streak',
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
+                style: TextStyle(
+                  color: context.colors.textSecondary,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),

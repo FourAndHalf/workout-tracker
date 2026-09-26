@@ -17,9 +17,7 @@ WorkoutSession _session(int id, DateTime day) => WorkoutSession(
 
 DashboardAnalytics _analytics(List<DateTime> days, DateTime now) =>
     DashboardAnalytics.fromData(
-      sessions: [
-        for (var i = 0; i < days.length; i++) _session(i, days[i]),
-      ],
+      sessions: [for (var i = 0; i < days.length; i++) _session(i, days[i])],
       logs: const [],
       now: now,
     );

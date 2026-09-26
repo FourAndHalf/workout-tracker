@@ -77,11 +77,13 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       dayName: day.name,
     );
     state = state.copyWith(sessionId: sessionId, dayModel: day);
-    _ref.read(activeWorkoutSessionProvider.notifier).start(
-      dayId: state.dayId,
-      dayName: day.name,
-      startTime: state.startTime!,
-    );
+    _ref
+        .read(activeWorkoutSessionProvider.notifier)
+        .start(
+          dayId: state.dayId,
+          dayName: day.name,
+          startTime: state.startTime!,
+        );
   }
 
   /// Log a set for the current exercise

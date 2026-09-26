@@ -20,13 +20,15 @@ void main() {
     db = AppDatabase(NativeDatabase(dbFile));
     service = BackupArchiveService();
 
-    await db.into(db.programs).insert(
-      ProgramsCompanion.insert(
-        id: 'ffts-4week',
-        name: 'Four Week Split',
-        jsonData: '{"weeks":[]}',
-      ),
-    );
+    await db
+        .into(db.programs)
+        .insert(
+          ProgramsCompanion.insert(
+            id: 'ffts-4week',
+            name: 'Four Week Split',
+            jsonData: '{"weeks":[]}',
+          ),
+        );
 
     SharedPreferences.setMockInitialValues({
       'weekly_progress_check_ins': ['{"date":"2026-01-01T00:00:00.000"}'],
@@ -57,10 +59,15 @@ void main() {
       photoPaths: [foodPhoto.path, progressPhoto.path],
     );
 
-    final stagingDir = await Directory.systemTemp.createTemp('backup_extract_test_');
+    final stagingDir = await Directory.systemTemp.createTemp(
+      'backup_extract_test_',
+    );
     addTearDown(() => stagingDir.delete(recursive: true));
 
-    final extracted = await service.extractArchive(zipBytes, stagingDir: stagingDir);
+    final extracted = await service.extractArchive(
+      zipBytes,
+      stagingDir: stagingDir,
+    );
 
     expect(extracted.manifest.schemaVersion, db.schemaVersion);
 
@@ -70,15 +77,25 @@ void main() {
 
     expect(extracted.preferences['nutrition_shopping_list_enabled'], true);
     expect(extracted.preferences['some_count'], 3);
-    expect(
-      extracted.preferences['weekly_progress_check_ins'],
-      ['{"date":"2026-01-01T00:00:00.000"}'],
-    );
+    expect(extracted.preferences['weekly_progress_check_ins'], [
+      '{"date":"2026-01-01T00:00:00.000"}',
+    ]);
 
     expect(extracted.photos, hasLength(2));
-    final byOriginalPath = {for (final p in extracted.photos) p.originalPath: p};
-    expect(await byOriginalPath[foodPhoto.path]!.stagedFile.readAsBytes(), [1, 2, 3, 4]);
-    expect(await byOriginalPath[progressPhoto.path]!.stagedFile.readAsBytes(), [5, 6, 7]);
+    final byOriginalPath = {
+      for (final p in extracted.photos) p.originalPath: p,
+    };
+    expect(await byOriginalPath[foodPhoto.path]!.stagedFile.readAsBytes(), [
+      1,
+      2,
+      3,
+      4,
+    ]);
+    expect(await byOriginalPath[progressPhoto.path]!.stagedFile.readAsBytes(), [
+      5,
+      6,
+      7,
+    ]);
   });
 
   test('skips photo files that no longer exist on disk', () async {
@@ -91,22 +108,26 @@ void main() {
       photoPaths: ['${tempDir.path}/does_not_exist.jpg'],
     );
 
-    final stagingDir = await Directory.systemTemp.createTemp('backup_extract_test_');
+    final stagingDir = await Directory.systemTemp.createTemp(
+      'backup_extract_test_',
+    );
     addTearDown(() => stagingDir.delete(recursive: true));
 
-    final extracted = await service.extractArchive(zipBytes, stagingDir: stagingDir);
+    final extracted = await service.extractArchive(
+      zipBytes,
+      stagingDir: stagingDir,
+    );
     expect(extracted.photos, isEmpty);
   });
 
   test('throws when the archive is missing a manifest', () async {
-    final stagingDir = await Directory.systemTemp.createTemp('backup_extract_test_');
+    final stagingDir = await Directory.systemTemp.createTemp(
+      'backup_extract_test_',
+    );
     addTearDown(() => stagingDir.delete(recursive: true));
 
     expect(
-      () => service.extractArchive(
-        emptyZipBytes(),
-        stagingDir: stagingDir,
-      ),
+      () => service.extractArchive(emptyZipBytes(), stagingDir: stagingDir),
       throwsA(isA<BackupArchiveException>()),
     );
   });

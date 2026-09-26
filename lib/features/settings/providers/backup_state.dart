@@ -32,7 +32,9 @@ class BackupOperationNotifier extends StateNotifier<BackupOperationState> {
         await repository.signIn();
       }
 
-      state = const BackupOperationState(status: BackupOperationStatus.backingUp);
+      state = const BackupOperationState(
+        status: BackupOperationStatus.backingUp,
+      );
       await repository.createBackup();
 
       state = const BackupOperationState(status: BackupOperationStatus.success);
@@ -47,5 +49,5 @@ class BackupOperationNotifier extends StateNotifier<BackupOperationState> {
 
 final backupOperationProvider =
     StateNotifierProvider<BackupOperationNotifier, BackupOperationState>(
-  (ref) => BackupOperationNotifier(ref),
-);
+      (ref) => BackupOperationNotifier(ref),
+    );

@@ -62,7 +62,9 @@ final backupRepositoryProvider = FutureProvider<BackupRepository>((ref) async {
   final db = ref.watch(databaseProvider);
   final preferences = await SharedPreferences.getInstance();
   final progressRepository = await ref.watch(progressRepositoryProvider.future);
-  final supplementRepository = await ref.watch(supplementRepositoryProvider.future);
+  final supplementRepository = await ref.watch(
+    supplementRepositoryProvider.future,
+  );
   final docsDir = await getApplicationDocumentsDirectory();
   final databaseFile = File(p.join(docsDir.path, 'fitness_tracker.sqlite'));
 
@@ -83,7 +85,8 @@ void main() async {
 
   final preferences = await SharedPreferences.getInstance();
   final needsRestoreCheck =
-      !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ?? false);
+      !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ??
+          false);
 
   final themeMode = parseThemeMode(
     preferences.getString(themeModePreferenceKey),

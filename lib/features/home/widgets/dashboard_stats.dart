@@ -4,6 +4,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../home_providers.dart';
 
+const _tabular = [FontFeature.tabularFigures()];
+
 /// The dashboard's "week at a glance": streak + weekly goal ring, a week
 /// strip, three headline numbers and a contextual nudge.
 class DashboardStats extends StatelessWidget {
@@ -15,6 +17,8 @@ class DashboardStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
+      _CycleHeader(data: data),
+      const SizedBox(height: 12),
       _StreakCard(data: data),
       const SizedBox(height: 10),
       _WeekStrip(data: data, today: now.weekday),
@@ -33,7 +37,7 @@ class DashboardStats extends StatelessWidget {
           Expanded(
             child: _StatCard(
               icon: Icons.trending_up_rounded,
-              color: context.colors.secondary,
+              color: context.colors.primary,
               value: _compactKg(data.volumeThisWeek),
               label: 'Training volume',
               trend: volumeTrend(data.volumeThisWeek, data.volumeLastWeek),
@@ -89,6 +93,58 @@ String dashboardNudge(DashboardAnalytics data) {
   return '$left more ${left == 1 ? 'workout' : 'workouts'} to hit your weekly goal.';
 }
 
+class _CycleHeader extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _CycleHeader({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    const goal = DashboardAnalytics.weeklyGoal;
+    final done = data.workoutsThisWeek.clamp(0, goal);
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Training cycle & volume',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              Text(
+                'This week vs last week',
+                style: TextStyle(fontSize: 12, color: colors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: colors.primary.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: colors.primary.withValues(alpha: 0.3)),
+          ),
+          child: Text(
+            '$done of $goal done (${(done * 100 / goal).round()}%)',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: colors.primary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _StreakCard extends StatelessWidget {
   final DashboardAnalytics data;
 
@@ -101,8 +157,7 @@ class _StreakCard extends StatelessWidget {
     final progress = (data.workoutsThisWeek / goal).clamp(0.0, 1.0);
 
     return AppCard(
-      color: colors.warning.withValues(alpha: 0.08),
-      borderColor: colors.warning.withValues(alpha: 0.35),
+      borderColor: colors.warning.withValues(alpha: 0.3),
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
@@ -125,6 +180,8 @@ class _StreakCard extends StatelessWidget {
                         fontSize: 40,
                         height: 1,
                         fontWeight: FontWeight.w800,
+                        letterSpacing: -1.2,
+                        fontFeatures: _tabular,
                       ),
                     ),
                   ],
@@ -174,6 +231,7 @@ class _StreakCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
+                          fontFeatures: _tabular,
                         ),
                       ),
                       Text(
@@ -228,8 +286,8 @@ class _WeekStrip extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: data.trainedWeekdays.contains(day)
@@ -240,7 +298,7 @@ class _WeekStrip extends StatelessWidget {
                           ? colors.success
                           : day == today
                           ? colors.primary
-                          : colors.border,
+                          : colors.textPrimary.withValues(alpha: 0.1),
                       width: day == today ? 2 : 1,
                     ),
                   ),
@@ -293,6 +351,7 @@ class _StatCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
                     color: trend! >= 0 ? colors.success : colors.error,
                   ),
                 ),
@@ -304,7 +363,12 @@ class _StatCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               value,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+                fontFeatures: _tabular,
+              ),
             ),
           ),
           const SizedBox(height: 2),
@@ -343,8 +407,8 @@ class _NudgeCard extends StatelessWidget {
     final colors = context.colors;
     final lastLine = _lastWorkoutLine;
     return AppCard(
-      color: colors.primary.withValues(alpha: 0.08),
-      borderColor: colors.primary.withValues(alpha: 0.35),
+      color: colors.primary.withValues(alpha: 0.15),
+      borderColor: colors.primary.withValues(alpha: 0.3),
       child: Row(
         children: [
           Icon(Icons.bolt_rounded, color: colors.primary),

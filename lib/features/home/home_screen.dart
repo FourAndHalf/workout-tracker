@@ -8,6 +8,7 @@ import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
+import '../workout/providers/active_workout_session_notifier.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
 
@@ -54,9 +55,9 @@ class HomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                 children: [
                   _QuoteCard(quote: quote),
+                  const SizedBox(height: 12),
+                  _StartWorkoutCard(next: nextWorkout),
                   const SizedBox(height: 24),
-                  const _SectionLabel('Your week at a glance'),
-                  const SizedBox(height: 10),
                   analytics.when(
                     loading: () => const SizedBox(
                       height: 160,
@@ -70,46 +71,112 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-            child: SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.play_arrow_rounded),
-                label: Text(
-                  nextWorkout == null
-                      ? 'No workout due'
-                      : 'Start ${nextWorkout.dayName} Workout',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: nextWorkout == null
-                    ? null
-                    : () => context.push(
-                        '/programs/${nextWorkout.programId}/${nextWorkout.dayId}',
-                      ),
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 }
 
-class _SectionLabel extends StatelessWidget {
-  final String text;
+class _StartWorkoutCard extends ConsumerWidget {
+  final NextWorkoutInfo? next;
 
-  const _SectionLabel(this.text);
+  const _StartWorkoutCard({required this.next});
 
   @override
-  Widget build(BuildContext context) => Text(
-    text,
-    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = context.colors;
+    final next = this.next;
+    final active = ref.watch(activeWorkoutSessionProvider);
+    final resuming = active != null;
+    final enabled = resuming || next != null;
+    final accent = resuming ? colors.primary : colors.success;
+    final fill = enabled ? accent : colors.surface;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: enabled
+            ? [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.25),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : null,
+      ),
+      child: Material(
+        color: fill,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: resuming
+              ? () => context.push('/programs/ffts-4week/${active.dayId}')
+              : next == null
+              ? null
+              : () => context.push('/programs/${next.programId}/${next.dayId}'),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.play_arrow_rounded,
+                    size: 32,
+                    color: enabled ? Colors.white : colors.textMuted,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        resuming
+                            ? 'Go back to ${active.dayName} Workout'
+                            : next == null
+                            ? 'No workout due'
+                            : 'Start ${next.dayName} Workout',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.2,
+                          color: enabled ? Colors.white : colors.textMuted,
+                        ),
+                      ),
+                      if (resuming) ...[
+                        const SizedBox(height: 4),
+                        const Text(
+                          'Tap to return',
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
+                        ),
+                      ] else if (next != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          'Week ${next.weekNumber} \u00B7 ${next.exerciseCount} Exercises',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (enabled)
+                  const Icon(Icons.chevron_right_rounded, color: Colors.white),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _QuoteCard extends StatelessWidget {

@@ -58,9 +58,10 @@ class GoogleDriveFilesApi implements DriveBackupFilesApi {
 
   @override
   Future<Uint8List> download(String fileId) async {
-    final media =
-        await _api.files.get(fileId, downloadOptions: commons.DownloadOptions.fullMedia)
-            as commons.Media;
+    final media = await _api.files.get(
+      fileId,
+      downloadOptions: commons.DownloadOptions.fullMedia,
+    ) as commons.Media;
     final builder = BytesBuilder(copy: false);
     await for (final chunk in media.stream) {
       builder.add(chunk);
@@ -145,6 +146,8 @@ class GoogleDriveBackupService {
     final authorization =
         await account.authorizationClient.authorizationForScopes(scopes) ??
         await account.authorizationClient.authorizeScopes(scopes);
-    return GoogleDriveFilesApi(drive.DriveApi(authorization.authClient(scopes: scopes)));
+    return GoogleDriveFilesApi(
+      drive.DriveApi(authorization.authClient(scopes: scopes)),
+    );
   }
 }

@@ -67,7 +67,8 @@ class BackupRepository {
       preferences: preferences,
       photoPaths: photoPaths,
     );
-    final fileName = 'backup_${DateTime.now().toUtc().toIso8601String()}.ftbackup';
+    final fileName =
+        'backup_${DateTime.now().toUtc().toIso8601String()}.ftbackup';
     await driveService.uploadBackup(fileName, bytes);
   }
 
@@ -142,7 +143,9 @@ class BackupRepository {
     paths.addAll(foodPhotos.map((photo) => photo.filePath));
 
     final checkIns = await progressRepository.getCheckIns();
-    paths.addAll(checkIns.map((checkIn) => checkIn.photoPath).whereType<String>());
+    paths.addAll(
+      checkIns.map((checkIn) => checkIn.photoPath).whereType<String>(),
+    );
 
     final supplements = await supplementRepository.getSupplements();
     paths.addAll(

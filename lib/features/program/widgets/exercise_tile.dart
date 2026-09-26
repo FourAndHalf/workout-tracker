@@ -136,7 +136,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
     final active = widget.activeState;
 
     if (active == null) {
-      return _buildTile(context, child: null, borderColor: null, borderWidth: 1);
+      return _buildTile(
+        context,
+        child: null,
+        borderColor: null,
+        borderWidth: 1,
+      );
     }
 
     if (exercise.logMode == 'cumulative') {
@@ -169,7 +174,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
       child: AppCard(
         padding: const EdgeInsets.all(12),
         color: context.colors.surface,
-        borderColor: borderColor ?? context.colors.border.withValues(alpha: 0.5),
+        borderColor:
+            borderColor ?? context.colors.border.withValues(alpha: 0.5),
         borderWidth: borderWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +214,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
                           ),
                           if (widget.activeState != null)
                             IconButton(
-                              tooltip: 'Watch ${exercise.name} on YouTube Shorts',
+                              tooltip:
+                                  'Watch ${exercise.name} on YouTube Shorts',
                               icon: const Icon(Icons.open_in_new_rounded),
                               color: context.colors.primary,
                               onPressed: () => _openExerciseVideo(context),
@@ -413,7 +420,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
                     strokeWidth: 5,
                     backgroundColor: context.colors.border,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      isComplete ? context.colors.primary : context.colors.secondary,
+                      isComplete
+                          ? context.colors.primary
+                          : context.colors.secondary,
                     ),
                   ),
                   Text(

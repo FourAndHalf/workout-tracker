@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:fitness_tracker/core/widgets/app_card.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
@@ -13,7 +13,6 @@ void main() {
   // `appRouter` is a module-level singleton reused across every test in
   // this file, so reset it to a known location before each test.
   setUp(() => appRouter.go('/'));
-
 
   final mockProgram = ProgramModel(
     schemaVersion: 1,
@@ -69,7 +68,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.widgetWithText(ListTile, 'Arms'));
+    await tester.tap(find.widgetWithText(AppCard, 'Arms'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
   }
