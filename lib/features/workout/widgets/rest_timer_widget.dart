@@ -136,7 +136,7 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
           ),
           IconButton(
             icon: Icon(
-              Icons.close_rounded,
+              Icons.close_outlined,
               size: 20,
               color: context.colors.textMuted,
             ),

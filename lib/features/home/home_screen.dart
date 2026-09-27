@@ -33,7 +33,7 @@ class HomeScreen extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: 'Open Spotify',
-            icon: const Icon(Icons.music_note_rounded),
+            icon: const Icon(Icons.music_note_outlined),
             onPressed: () => launchUrl(
               Uri.parse('https://open.spotify.com/'),
               mode: LaunchMode.externalApplication,
@@ -126,7 +126,7 @@ class _StartWorkoutCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    Icons.play_arrow_rounded,
+                    Icons.play_arrow_outlined,
                     size: 32,
                     color: enabled ? Colors.white : colors.textMuted,
                   ),
@@ -193,7 +193,7 @@ class _QuoteCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.format_quote_rounded,
+            Icons.format_quote_outlined,
             color: context.colors.warning,
             size: 23,
           ),

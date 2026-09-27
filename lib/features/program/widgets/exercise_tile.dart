@@ -68,16 +68,16 @@ class _ExerciseTileState extends State<ExerciseTile> {
   IconData _getLogModeIcon(String logMode) {
     switch (logMode) {
       case 'cumulative':
-        return Icons.donut_large_rounded;
+        return Icons.donut_large_outlined;
       case 'failure':
-        return Icons.local_fire_department_rounded;
+        return Icons.local_fire_department_outlined;
       case 'time':
         return Icons.timer_outlined;
       case 'repsOnly':
-        return Icons.accessibility_new_rounded;
+        return Icons.accessibility_new_outlined;
       case 'weightReps':
       default:
-        return Icons.fitness_center_rounded;
+        return Icons.fitness_center_outlined;
     }
   }
 
@@ -216,7 +216,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                             IconButton(
                               tooltip:
                                   'Watch ${exercise.name} on YouTube Shorts',
-                              icon: const Icon(Icons.open_in_new_rounded),
+                              icon: const Icon(Icons.open_in_new_outlined),
                               color: context.colors.primary,
                               onPressed: () => _openExerciseVideo(context),
                               visualDensity: VisualDensity.compact,
@@ -291,7 +291,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.check_circle_rounded,
+                      Icons.check_circle_outlined,
                       color: context.colors.primary,
                       size: 16,
                     ),
@@ -385,7 +385,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
             width: double.infinity,
             height: 44,
             child: ElevatedButton.icon(
-              icon: const Icon(Icons.check_rounded),
+              icon: const Icon(Icons.check_outlined),
               label: Text(
                 'Log Set ${active.currentSetNumber}',
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -501,7 +501,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                     vertical: 14,
                   ),
                 ),
-                icon: const Icon(Icons.add_rounded, size: 20),
+                icon: const Icon(Icons.add_outlined, size: 20),
                 label: const Text(
                   'Add Chunk',
                   style: TextStyle(fontWeight: FontWeight.bold),
