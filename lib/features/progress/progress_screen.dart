@@ -44,7 +44,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
           final names = namesSnapshot.data!;
           if (names.isEmpty)
             return const EmptyState(
-              icon: Icons.show_chart_rounded,
+              icon: Icons.show_chart_outlined,
               message: 'Log a workout to see your progress',
               subtitle: 'Your strength and volume trends will show up here.',
             );
@@ -597,7 +597,7 @@ class _StreakCard extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.local_fire_department_rounded,
+            Icons.local_fire_department_outlined,
             color: context.colors.warning,
             size: 36,
           ),

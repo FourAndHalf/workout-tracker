@@ -79,7 +79,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
             child: Row(
               children: [
                 Icon(
-                  Icons.fitness_center_rounded,
+                  Icons.fitness_center_outlined,
                   size: 18,
                   color: Colors.white,
                 ),

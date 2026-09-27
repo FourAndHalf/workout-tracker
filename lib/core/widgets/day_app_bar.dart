@@ -65,7 +65,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
               const AppLogo(size: 16),
               const SizedBox(width: 6),
               Text(
-                'Fitness Tracker',
+                'Fitness',
                 style: textTheme.bodySmall?.copyWith(
                   color: context.colors.textMuted,
                 ),

@@ -134,7 +134,7 @@ class BlockCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.info_outline_rounded,
+                      Icons.info_outline,
                       size: 14,
                       color: context.colors.warning,
                     ),

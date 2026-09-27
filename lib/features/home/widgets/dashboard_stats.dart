@@ -27,7 +27,7 @@ class DashboardStats extends StatelessWidget {
         children: [
           Expanded(
             child: _StatCard(
-              icon: Icons.check_circle_outline_rounded,
+              icon: Icons.check_circle_outline_outlined,
               color: context.colors.success,
               value: '${data.setsThisWeek}',
               label: 'Sets',
@@ -36,7 +36,7 @@ class DashboardStats extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: _StatCard(
-              icon: Icons.trending_up_rounded,
+              icon: Icons.trending_up_outlined,
               color: context.colors.primary,
               value: _compactKg(data.volumeThisWeek),
               label: 'Training volume',
@@ -169,7 +169,7 @@ class _StreakCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Icon(
-                      Icons.local_fire_department_rounded,
+                      Icons.local_fire_department_outlined,
                       color: colors.warning,
                       size: 34,
                     ),
@@ -304,7 +304,7 @@ class _WeekStrip extends StatelessWidget {
                   ),
                   child: data.trainedWeekdays.contains(day)
                       ? Icon(
-                          Icons.check_rounded,
+                          Icons.check_outlined,
                           size: 18,
                           color: colors.onSuccess,
                         )
@@ -411,7 +411,7 @@ class _NudgeCard extends StatelessWidget {
       borderColor: colors.primary.withValues(alpha: 0.3),
       child: Row(
         children: [
-          Icon(Icons.bolt_rounded, color: colors.primary),
+          Icon(Icons.bolt_outlined, color: colors.primary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
