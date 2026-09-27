@@ -33,12 +33,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text(weekdayLabel(DateTime.now())), findsOneWidget);
-    expect(find.byIcon(Icons.music_note_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.music_note_outlined), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.play_arrow_outlined), findsOneWidget);
     expect(find.text('Training cycle & volume'), findsOneWidget);
     expect(
-      find.byIcon(Icons.format_quote_rounded, skipOffstage: false),
+      find.byIcon(Icons.format_quote_outlined, skipOffstage: false),
       findsOneWidget,
     );
     expect(find.text('Training volume'), findsOneWidget);

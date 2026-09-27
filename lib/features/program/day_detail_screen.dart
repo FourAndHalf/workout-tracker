@@ -311,7 +311,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                           child: Row(
                             children: [
                               Icon(
-                                Icons.warning_amber_rounded,
+                                Icons.warning_amber_outlined,
                                 color: context.colors.warning,
                                 size: 18,
                               ),
@@ -389,7 +389,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                             },
                           )
                         : ElevatedButton.icon(
-                            icon: const Icon(Icons.play_arrow_rounded),
+                            icon: const Icon(Icons.play_arrow_outlined),
                             label: Text(
                               'Start ${day.name} Workout',
                               style: const TextStyle(

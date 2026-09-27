@@ -26,7 +26,7 @@ void main() {
     );
 
     expect(find.text('Thursday'), findsOneWidget);
-    expect(find.text('Fitness Tracker'), findsOneWidget);
+    expect(find.text('Fitness'), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
   });
 }

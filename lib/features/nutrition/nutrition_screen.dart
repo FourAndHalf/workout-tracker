@@ -1185,7 +1185,7 @@ class _MealPlanCard extends StatelessWidget {
                 ),
                 if (meal.videoUrl != null && meal.videoUrl!.isNotEmpty)
                   ActionChip(
-                    avatar: const Icon(Icons.play_arrow_rounded, size: 18),
+                    avatar: const Icon(Icons.play_arrow_outlined, size: 18),
                     label: const Text('Video'),
                     onPressed: () => launchUrl(
                       Uri.parse(meal.videoUrl!),

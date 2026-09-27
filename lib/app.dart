@@ -24,7 +24,7 @@ class _FitnessTrackerAppState extends ConsumerState<FitnessTrackerApp> {
     final themeMode = ref.watch(themeModeProvider);
     if (_needsRestoreCheck) {
       return MaterialApp(
-        title: 'Fitness Tracker',
+        title: 'Fitness',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeMode,
@@ -36,7 +36,7 @@ class _FitnessTrackerAppState extends ConsumerState<FitnessTrackerApp> {
     }
 
     return MaterialApp.router(
-      title: 'Fitness Tracker',
+      title: 'Fitness',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,

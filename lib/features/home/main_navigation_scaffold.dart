@@ -48,22 +48,22 @@ class MainNavigationScaffold extends StatelessWidget {
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
+            selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
           NavigationDestination(
             icon: Icon(Icons.event_note_outlined),
-            selectedIcon: Icon(Icons.event_note_rounded),
+            selectedIcon: Icon(Icons.event_note),
             label: 'Programs',
           ),
           NavigationDestination(
-            icon: Icon(Icons.insights_outlined),
-            selectedIcon: Icon(Icons.insights_rounded),
+            icon: Icon(Icons.show_chart),
+            selectedIcon: Icon(Icons.show_chart),
             label: 'Progress',
           ),
           NavigationDestination(
             icon: Icon(Icons.restaurant_menu_outlined),
-            selectedIcon: Icon(Icons.restaurant_menu_rounded),
+            selectedIcon: Icon(Icons.restaurant_menu),
             label: 'Nutrition',
           ),
         ],
