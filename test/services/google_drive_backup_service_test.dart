@@ -23,7 +23,11 @@ void main() {
 
   group('sign-in state', () {
     setUp(() {
-      when(() => googleSignIn.initialize()).thenAnswer((_) async {});
+      when(
+        () => googleSignIn.initialize(
+          serverClientId: GoogleDriveBackupService.serverClientId,
+        ),
+      ).thenAnswer((_) async {});
     });
 
     test(

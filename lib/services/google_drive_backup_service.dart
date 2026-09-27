@@ -76,6 +76,11 @@ class GoogleDriveFilesApi implements DriveBackupFilesApi {
 /// Google Sign-In + Drive access for storing/retrieving app backups in the
 /// user's hidden `appDataFolder`. Has no knowledge of what a backup contains.
 class GoogleDriveBackupService {
+  /// Web OAuth client ID; Android's Credential Manager requires it as the
+  /// server client ID.
+  static const serverClientId =
+      '1020653540192-86kjcsccem69ha8n21nj003d6etb8l4m.apps.googleusercontent.com';
+
   final GoogleSignIn _googleSignIn;
   final DriveBackupFilesApi? _filesApiOverride;
   Future<void>? _initialization;
@@ -87,8 +92,8 @@ class GoogleDriveBackupService {
   }) : _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
        _filesApiOverride = filesApiForTesting;
 
-  Future<void> _ensureInitialized() =>
-      _initialization ??= _googleSignIn.initialize();
+  Future<void> _ensureInitialized() => _initialization ??= _googleSignIn
+      .initialize(serverClientId: serverClientId);
 
   Future<GoogleSignInAccount?> _restoreAccount() async {
     if (_account != null) return _account;
