@@ -93,6 +93,9 @@ void main() {
       // and an elapsed timer instead of a navigation to a new screen.
       expect(find.text('Arms'), findsOneWidget);
       expect(find.textContaining('Elapsed:'), findsOneWidget);
+      // Target comes from the day's estimated length (3 sets ≈ 8 min), not
+      // a fixed 45:00.
+      expect(find.text('Target: 08:00'), findsOneWidget);
       expect(find.text('Log Set 1'), findsOneWidget);
       expect(find.text('FINISH'), findsOneWidget);
       expect(find.text('Start Arms Workout'), findsNothing);
