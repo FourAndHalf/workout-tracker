@@ -1,0 +1,4902 @@
+{
+  "schemaVersion": 1,
+  "programId": "badminton-mobility-strength-12wk",
+  "programName": "12 Week Badminton Mobility & Strength",
+  "durationWeeks": 12,
+  "trainingDaysPerWeek": 5,
+  "logModes": {
+    "time": "Duration in seconds.",
+    "reps": "Number of repetitions.",
+    "distance": "Distance in meters.",
+    "sets": "Number of completed sets."
+  },
+  "blockTypes": {
+    "straight": "Exercises performed and rested independently.",
+    "circuit": "Exercises performed sequentially as a circuit.",
+    "warmup": "Low-intensity preparation before the main work.",
+    "mobility": "Mobility and flexibility work.",
+    "strength": "Resistance-based strength work.",
+    "conditioning": "Badminton-specific movement or conditioning.",
+    "recovery": "Low-intensity recovery work."
+  },
+  "weeks": [
+    {
+      "number": 1,
+      "id": "bmt-w1",
+      "title": "Movement Foundation",
+      "focus": "Learn movement patterns, establish baseline mobility and build basic strength.",
+      "days": [
+        {
+          "id": "bmt-w1-mon",
+          "name": "Lower Body + Mobility",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w1-mon-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "instructions": "Move continuously at low intensity. Do not force range of motion.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-mon-01",
+                  "order": 1,
+                  "name": "Ankle Rocks",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-02",
+                  "order": 2,
+                  "name": "90/90 Hip Rotations",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-03",
+                  "order": 3,
+                  "name": "Deep Squat Hold",
+                  "prescription": "30 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-mon-04",
+                  "order": 4,
+                  "name": "World's Greatest Stretch",
+                  "prescription": "5 each side",
+                  "targetSets": 1,
+                  "reps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-05",
+                  "order": 5,
+                  "name": "Glute Bridge",
+                  "prescription": "15 reps",
+                  "targetSets": 1,
+                  "reps": 15,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-mon-strength",
+              "name": "Lower Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "instructions": "Rest 60–90 sec between sets. Use a load that leaves approximately 2–3 good reps in reserve.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-mon-06",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-07",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-08",
+                  "order": 3,
+                  "name": "Cossack Squat",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-09",
+                  "order": 4,
+                  "name": "Standing Calf Raise",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-10",
+                  "order": 5,
+                  "name": "Tibialis Raise",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-mon-11",
+                  "order": 6,
+                  "name": "Copenhagen Plank",
+                  "prescription": "2 x 20 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-mon-mobility",
+              "name": "Post-Workout Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "instructions": "Stretch gently. No bouncing and no sharp pain.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-mon-12",
+                  "order": 1,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-mon-13",
+                  "order": 2,
+                  "name": "Hamstring Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-mon-14",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-mon-15",
+                  "order": 4,
+                  "name": "Calf Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-tue",
+          "name": "Badminton",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w1-tue-warmup",
+              "name": "Badminton Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w1-tue-01",
+                  "order": 1,
+                  "name": "Easy Jog",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-tue-02",
+                  "order": 2,
+                  "name": "Side Shuffle",
+                  "prescription": "2 x 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-tue-03",
+                  "order": 3,
+                  "name": "Split Step",
+                  "prescription": "3 x 20 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-tue-court",
+              "name": "Court Movement",
+              "type": "conditioning",
+              "targetSets": 3,
+              "instructions": "Keep intensity moderate. Prioritize footwork quality over speed.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-tue-04",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "3 x 30 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-tue-05",
+                  "order": 2,
+                  "name": "Lateral Shuffle",
+                  "prescription": "3 x 20 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-tue-play",
+              "name": "Badminton Play",
+              "type": "conditioning",
+              "targetSets": 1,
+              "instructions": "Play normally. Avoid maximum-intensity lunges during the first week.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-tue-06",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "45–60 min",
+                  "targetSets": 1,
+                  "durationSeconds": 3600,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-wed",
+          "name": "Upper Body + Mobility",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w1-wed-strength",
+              "name": "Upper Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "instructions": "Controlled repetitions. Avoid training to failure.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-wed-01",
+                  "order": 1,
+                  "name": "Pull-up or Assisted Pull-up",
+                  "prescription": "3 x 5–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-02",
+                  "order": 2,
+                  "name": "Push-up",
+                  "prescription": "3 x 10–15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-04",
+                  "order": 4,
+                  "name": "Dumbbell Overhead Press",
+                  "prescription": "3 x 8–10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-05",
+                  "order": 5,
+                  "name": "Dead Bug",
+                  "prescription": "3 x 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-wed-mobility",
+              "name": "Shoulder and Thoracic Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w1-wed-07",
+                  "order": 1,
+                  "name": "Thoracic Rotation",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-08",
+                  "order": 2,
+                  "name": "Wall Slides",
+                  "prescription": "10 reps",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-09",
+                  "order": 3,
+                  "name": "Band Pass-through",
+                  "prescription": "10 reps",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-wed-10",
+                  "order": 4,
+                  "name": "Child's Pose with Side Reach",
+                  "prescription": "30 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w1-thu-routine",
+              "name": "10 Minute Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "instructions": "This should feel restorative, not like a workout.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-thu-02",
+                  "order": 2,
+                  "name": "Ankle Rocks",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-thu-03",
+                  "order": 3,
+                  "name": "90/90 Hip Rotation",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-thu-04",
+                  "order": 4,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-thu-05",
+                  "order": 5,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w1-thu-06",
+                  "order": 6,
+                  "name": "Adductor Stretch",
+                  "prescription": "45 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-fri",
+          "name": "Full Body Strength",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w1-fri-strength",
+              "name": "Full Body",
+              "type": "strength",
+              "targetSets": 3,
+              "instructions": "Moderate intensity. Leave 2–3 reps in reserve.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-fri-01",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-fri-02",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-fri-03",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-fri-04",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-fri-05",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w1-fri-06",
+                  "order": 6,
+                  "name": "Plank",
+                  "prescription": "3 x 30 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w1-fri-footwork",
+              "name": "Basic Footwork",
+              "type": "conditioning",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w1-fri-07",
+                  "order": 1,
+                  "name": "Split Step",
+                  "prescription": "3 x 30 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w1-sat-play",
+              "name": "Badminton Session",
+              "type": "conditioning",
+              "targetSets": 1,
+              "instructions": "Play at moderate intensity. Focus on footwork and efficient recovery.",
+              "exercises": [
+                {
+                  "id": "bmt-w1-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60 min",
+                  "targetSets": 1,
+                  "durationSeconds": 3600,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w1-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 2,
+      "id": "bmt-w2",
+      "title": "Movement Foundation Progression",
+      "focus": "Increase volume slightly while maintaining movement quality.",
+      "progression": {
+        "strength": "Add 1–2 reps where technically possible before increasing weight.",
+        "mobility": "Increase holds by 10–15 seconds.",
+        "badminton": "Increase footwork intensity slightly."
+      },
+      "days": [
+        {
+          "id": "bmt-w2-mon",
+          "name": "Lower Body + Mobility",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w2-mon-strength",
+              "name": "Lower Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "instructions": "Same exercises as Week 1. Increase load slightly only if all repetitions are clean.",
+              "exercises": [
+                {
+                  "id": "bmt-w2-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 9 each leg",
+                  "targetSets": 3,
+                  "targetReps": 9,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 9",
+                  "targetSets": 3,
+                  "targetReps": 9,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-mon-03",
+                  "order": 3,
+                  "name": "Cossack Squat",
+                  "prescription": "3 x 7 each side",
+                  "targetSets": 3,
+                  "targetReps": 7,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-mon-04",
+                  "order": 4,
+                  "name": "Standing Calf Raise",
+                  "prescription": "3 x 17",
+                  "targetSets": 3,
+                  "targetReps": 17,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-mon-05",
+                  "order": 5,
+                  "name": "Tibialis Raise",
+                  "prescription": "3 x 17",
+                  "targetSets": 3,
+                  "targetReps": 17,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-mon-06",
+                  "order": 6,
+                  "name": "Copenhagen Plank",
+                  "prescription": "2 x 25 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 25,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w2-mon-mobility",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w2-mon-07",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "45 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-mon-08",
+                  "order": 2,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-mon-09",
+                  "order": 3,
+                  "name": "Hamstring Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-tue",
+          "name": "Badminton",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w2-tue-footwork",
+              "name": "Footwork",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w2-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 30 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-tue-02",
+                  "order": 2,
+                  "name": "Split Step",
+                  "prescription": "4 x 20 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w2-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w2-tue-03",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60 min",
+                  "targetSets": 1,
+                  "durationSeconds": 3600,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-wed",
+          "name": "Upper Body + Mobility",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w2-wed-strength",
+              "name": "Upper Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w2-wed-01",
+                  "order": 1,
+                  "name": "Pull-up or Assisted Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-wed-02",
+                  "order": 2,
+                  "name": "Push-up",
+                  "prescription": "3 x 12–15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 11",
+                  "targetSets": 3,
+                  "targetReps": 11,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-wed-04",
+                  "order": 4,
+                  "name": "Dumbbell Overhead Press",
+                  "prescription": "3 x 9–10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-wed-05",
+                  "order": 5,
+                  "name": "Dead Bug",
+                  "prescription": "3 x 11 each side",
+                  "targetSets": 3,
+                  "targetReps": 11,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 11 each side",
+                  "targetSets": 3,
+                  "targetReps": 11,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w2-thu-routine",
+              "name": "15 Minute Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w2-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-thu-02",
+                  "order": 2,
+                  "name": "Ankle Rocks",
+                  "prescription": "15 each side",
+                  "targetSets": 1,
+                  "reps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-thu-03",
+                  "order": 3,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-thu-04",
+                  "order": 4,
+                  "name": "Adductor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w2-thu-05",
+                  "order": 5,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-fri",
+          "name": "Full Body Strength",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w2-fri-strength",
+              "name": "Full Body",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w2-fri-01",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 11",
+                  "targetSets": 3,
+                  "targetReps": 11,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-fri-02",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 9 each leg",
+                  "targetSets": 3,
+                  "targetReps": 9,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-fri-03",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 9 each leg",
+                  "targetSets": 3,
+                  "targetReps": 9,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-fri-04",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 13",
+                  "targetSets": 3,
+                  "targetReps": 13,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-fri-05",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 11",
+                  "targetSets": 3,
+                  "targetReps": 11,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w2-fri-06",
+                  "order": 6,
+                  "name": "Plank",
+                  "prescription": "3 x 35 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 35,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w2-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w2-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–75 min",
+                  "targetSets": 1,
+                  "durationSeconds": 4500,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w2-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 3,
+      "id": "bmt-w3",
+      "title": "Range and Control",
+      "focus": "Build strength through progressively larger ranges of motion.",
+      "progression": {
+        "strength": "Increase load 2.5–5% if all Week 2 repetitions were comfortable.",
+        "mobility": "Increase range rather than forcing longer holds.",
+        "badminton": "Introduce deeper controlled lunges."
+      },
+      "days": [
+        {
+          "id": "bmt-w3-mon",
+          "name": "Lower Body + Mobility",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w3-mon-strength",
+              "name": "Lower Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "instructions": "Use full comfortable range of motion.",
+              "exercises": [
+                {
+                  "id": "bmt-w3-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-mon-03",
+                  "order": 3,
+                  "name": "Cossack Squat",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "3 x 18",
+                  "targetSets": 3,
+                  "targetReps": 18,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 20 sec each side",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w3-mon-mobility",
+              "name": "Lower Body Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w3-mon-06",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-mon-07",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-mon-08",
+                  "order": 3,
+                  "name": "Adductor Rock-back",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-tue",
+          "name": "Badminton + Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w3-tue-footwork",
+              "name": "Footwork",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w3-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 40 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 40,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-tue-02",
+                  "order": 2,
+                  "name": "Deep Forward Lunge",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w3-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w3-tue-03",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60 min",
+                  "targetSets": 1,
+                  "durationSeconds": 3600,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w3-wed-strength",
+              "name": "Upper Body",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w3-wed-01",
+                  "order": 1,
+                  "name": "Pull-up or Assisted Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-wed-02",
+                  "order": 2,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-wed-05",
+                  "order": 5,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w3-thu-routine",
+              "name": "15 Minute Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w3-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-thu-02",
+                  "order": 2,
+                  "name": "Ankle Rocks",
+                  "prescription": "15 each side",
+                  "targetSets": 1,
+                  "reps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-thu-03",
+                  "order": 3,
+                  "name": "90/90 Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-thu-04",
+                  "order": 4,
+                  "name": "Hamstring Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w3-thu-05",
+                  "order": 5,
+                  "name": "Adductor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-fri",
+          "name": "Full Body + Movement",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w3-fri-strength",
+              "name": "Full Body",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w3-fri-01",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-fri-02",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 10 each leg",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-fri-03",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 10 each leg",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-fri-04",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-fri-05",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w3-fri-06",
+                  "order": 6,
+                  "name": "Plank",
+                  "prescription": "3 x 40 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 40,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w3-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w3-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–75 min",
+                  "targetSets": 1,
+                  "durationSeconds": 4500,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w3-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 4,
+      "id": "bmt-w4",
+      "title": "Foundation Consolidation",
+      "focus": "Consolidate movement quality and prepare for heavier strength work.",
+      "progression": {
+        "strength": "Maintain volume and increase load slightly if technique is excellent.",
+        "mobility": "Prioritize controlled end-range positions.",
+        "badminton": "Normal recreational intensity."
+      },
+      "days": [
+        {
+          "id": "bmt-w4-mon",
+          "name": "Lower Body",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w4-mon-main",
+              "name": "Lower Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w4-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-mon-03",
+                  "order": 3,
+                  "name": "Cossack Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 25 sec each side",
+                  "targetSets": 3,
+                  "durationSeconds": 25,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w4-mon-mobility",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w4-mon-06",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w4-mon-07",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w4-mon-08",
+                  "order": 3,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-tue",
+          "name": "Badminton",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w4-tue-footwork",
+              "name": "Footwork",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w4-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 45 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w4-tue-02",
+                  "order": 2,
+                  "name": "Split Step",
+                  "prescription": "4 x 30 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w4-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w4-tue-03",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–75 min",
+                  "targetSets": 1,
+                  "durationSeconds": 4500,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w4-wed-main",
+              "name": "Upper Body",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w4-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-wed-02",
+                  "order": 2,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-wed-05",
+                  "order": 5,
+                  "name": "Dead Bug",
+                  "prescription": "3 x 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w4-thu-routine",
+              "name": "15 Minute Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w4-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "60 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w4-thu-02",
+                  "order": 2,
+                  "name": "Ankle Rocks",
+                  "prescription": "15 each side",
+                  "targetSets": 1,
+                  "reps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-thu-03",
+                  "order": 3,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w4-thu-04",
+                  "order": 4,
+                  "name": "Adductor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-fri",
+          "name": "Full Body",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w4-fri-main",
+              "name": "Full Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w4-fri-01",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-fri-02",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 10 each leg",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-fri-03",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 10 each leg",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-fri-04",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w4-fri-05",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w4-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w4-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w4-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 5,
+      "id": "bmt-w5",
+      "title": "Strength Through Range",
+      "focus": "Begin heavier strength work while maintaining mobility.",
+      "progression": {
+        "strength": "Use challenging loads with 2 reps in reserve.",
+        "mobility": "Introduce active mobility drills.",
+        "badminton": "Increase movement intensity."
+      },
+      "days": [
+        {
+          "id": "bmt-w5-mon",
+          "name": "Lower Body Strength",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w5-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w5-mon-01",
+                  "order": 1,
+                  "name": "Rear-Foot Elevated Split Squat",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-04",
+                  "order": 4,
+                  "name": "Standing Calf Raise",
+                  "prescription": "4 x 12",
+                  "targetSets": 4,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 30 sec each side",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w5-mon-active",
+              "name": "Active Mobility",
+              "type": "mobility",
+              "targetSets": 2,
+              "exercises": [
+                {
+                  "id": "bmt-w5-mon-06",
+                  "order": 1,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "2 x 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-07",
+                  "order": 2,
+                  "name": "90/90 Hip Lift-off",
+                  "prescription": "2 x 8 each side",
+                  "targetSets": 2,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-mon-08",
+                  "order": 3,
+                  "name": "Knee-to-wall Ankle Mobility",
+                  "prescription": "2 x 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-tue",
+          "name": "Badminton + Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w5-tue-footwork",
+              "name": "Court Movement",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w5-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 45 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w5-tue-02",
+                  "order": 2,
+                  "name": "Lateral Lunge",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Recovery",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w5-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w5-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–75 min",
+                  "targetSets": 1,
+                  "durationSeconds": 4500,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w5-wed-main",
+              "name": "Upper Body",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w5-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8–10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-wed-05",
+                  "order": 5,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-wed-06",
+                  "order": 6,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w5-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w5-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "75 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 75,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w5-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w5-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w5-thu-04",
+                  "order": 4,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "60 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-fri",
+          "name": "Full Body + Intro to Power",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w5-fri-power",
+              "name": "Power Introduction",
+              "type": "conditioning",
+              "targetSets": 3,
+              "instructions": "Maximum quality, not maximum fatigue. Stop if landing mechanics deteriorate.",
+              "exercises": [
+                {
+                  "id": "bmt-w5-fri-01",
+                  "order": 1,
+                  "name": "Pogo Jump",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "3 x 4 each side",
+                  "targetSets": 3,
+                  "targetReps": 4,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w5-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w5-fri-03",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-fri-04",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-fri-05",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-fri-06",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w5-fri-07",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w5-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w5-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w5-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 6,
+      "id": "bmt-w6",
+      "title": "Active Flexibility",
+      "focus": "Develop active control at longer muscle lengths.",
+      "progression": {
+        "strength": "Increase load 2.5–5% where appropriate.",
+        "mobility": "Prioritize active range of motion.",
+        "power": "Keep jumps low volume and high quality."
+      },
+      "days": [
+        {
+          "id": "bmt-w6-mon",
+          "name": "Lower Body + Active Mobility",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w6-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w6-mon-01",
+                  "order": 1,
+                  "name": "Rear-Foot Elevated Split Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 7 each side",
+                  "targetSets": 3,
+                  "targetReps": 7,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 12",
+                  "targetSets": 4,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 30 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w6-mon-active",
+              "name": "Active Mobility",
+              "type": "mobility",
+              "targetSets": 2,
+              "exercises": [
+                {
+                  "id": "bmt-w6-mon-06",
+                  "order": 1,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "2 x 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-07",
+                  "order": 2,
+                  "name": "90/90 Hip Lift-off",
+                  "prescription": "2 x 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-mon-08",
+                  "order": 3,
+                  "name": "Knee-to-wall Ankle Mobility",
+                  "prescription": "2 x 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-tue",
+          "name": "Badminton Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w6-tue-main",
+              "name": "Footwork",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w6-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 50 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 50,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w6-tue-02",
+                  "order": 2,
+                  "name": "Lateral Lunge",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Recovery",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w6-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w6-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w6-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w6-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8–10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8–10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w6-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w6-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w6-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "75 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 75,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w6-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "75 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 75,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w6-thu-04",
+                  "order": 4,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "75 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 75,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-fri",
+          "name": "Full Body + Power",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w6-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w6-fri-01",
+                  "order": 1,
+                  "name": "Pogo Jump",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "3 x 5 each side",
+                  "targetSets": 3,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w6-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w6-fri-03",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-fri-04",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-fri-05",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-fri-06",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w6-fri-07",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w6-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w6-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w6-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 7,
+      "id": "bmt-w7",
+      "title": "Strength and Lateral Range",
+      "focus": "Improve lateral strength and badminton-specific range.",
+      "progression": {
+        "strength": "Increase load while maintaining full range.",
+        "mobility": "Use deeper Cossack and lateral lunge positions.",
+        "power": "Introduce controlled jump height."
+      },
+      "days": [
+        {
+          "id": "bmt-w7-mon",
+          "name": "Lower Body",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w7-mon-main",
+              "name": "Lower Body Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w7-mon-01",
+                  "order": 1,
+                  "name": "Rear-Foot Elevated Split Squat",
+                  "prescription": "3 x 7 each leg",
+                  "targetSets": 3,
+                  "targetReps": 7,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 7",
+                  "targetSets": 3,
+                  "targetReps": 7,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 15",
+                  "targetSets": 4,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 35 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 35,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w7-mon-active",
+              "name": "Active Flexibility",
+              "type": "mobility",
+              "targetSets": 2,
+              "exercises": [
+                {
+                  "id": "bmt-w7-mon-06",
+                  "order": 1,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "2 x 12",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-07",
+                  "order": 2,
+                  "name": "90/90 Hip Lift-off",
+                  "prescription": "2 x 10",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-mon-08",
+                  "order": 3,
+                  "name": "Adductor Rock-back",
+                  "prescription": "2 x 10",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-tue",
+          "name": "Badminton Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w7-tue-main",
+              "name": "Court Movement",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w7-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 60 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w7-tue-02",
+                  "order": 2,
+                  "name": "Lateral Lunge",
+                  "prescription": "3 x 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Recovery",
+                  "prescription": "3 x 8 each side",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w7-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w7-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w7-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w7-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 7",
+                  "targetSets": 3,
+                  "targetReps": 7,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w7-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w7-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w7-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w7-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "75 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 75,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-fri",
+          "name": "Full Body + Power",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w7-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w7-fri-01",
+                  "order": 1,
+                  "name": "Squat Jump",
+                  "prescription": "3 x 5",
+                  "targetSets": 3,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "3 x 5 each side",
+                  "targetSets": 3,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w7-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w7-fri-03",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-fri-04",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-fri-05",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-fri-06",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w7-fri-07",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w7-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w7-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w7-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 8,
+      "id": "bmt-w8",
+      "title": "End-Range Strength",
+      "focus": "Make the new mobility strong and repeatable.",
+      "progression": {
+        "strength": "Use challenging but controlled loads.",
+        "mobility": "Prioritize strength at end range.",
+        "power": "Keep total jump contacts moderate."
+      },
+      "days": [
+        {
+          "id": "bmt-w8-mon",
+          "name": "Lower Body",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w8-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w8-mon-01",
+                  "order": 1,
+                  "name": "Rear-Foot Elevated Split Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 15",
+                  "targetSets": 4,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 40 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 40,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w8-mon-mobility",
+              "name": "Active Mobility",
+              "type": "mobility",
+              "targetSets": 2,
+              "exercises": [
+                {
+                  "id": "bmt-w8-mon-06",
+                  "order": 1,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "2 x 15",
+                  "targetSets": 2,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-07",
+                  "order": 2,
+                  "name": "90/90 Hip Lift-off",
+                  "prescription": "2 x 10",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-mon-08",
+                  "order": 3,
+                  "name": "Knee-to-wall Ankle Mobility",
+                  "prescription": "2 x 15",
+                  "targetSets": 2,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-tue",
+          "name": "Badminton",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w8-tue-footwork",
+              "name": "Footwork",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w8-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "4 x 60 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w8-tue-02",
+                  "order": 2,
+                  "name": "Lateral Lunge",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Recovery",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w8-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w8-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w8-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w8-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w8-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w8-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w8-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w8-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w8-thu-04",
+                  "order": 4,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-fri",
+          "name": "Full Body + Power",
+          "order": 5,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w8-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w8-fri-01",
+                  "order": 1,
+                  "name": "Squat Jump",
+                  "prescription": "3 x 5",
+                  "targetSets": 3,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w8-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w8-fri-03",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-fri-04",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-fri-05",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-fri-06",
+                  "order": 4,
+                  "name": "Push-up",
+                  "prescription": "3 x 15",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w8-fri-07",
+                  "order": 5,
+                  "name": "Row",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w8-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w8-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w8-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 9,
+      "id": "bmt-w9",
+      "title": "Explosive Movement",
+      "focus": "Convert strength and mobility into faster badminton movement.",
+      "progression": {
+        "strength": "Keep heavy work at moderate volume.",
+        "power": "Prioritize speed and landing quality.",
+        "badminton": "Increase court movement intensity."
+      },
+      "days": [
+        {
+          "id": "bmt-w9-mon",
+          "name": "Lower Body Strength",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w9-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w9-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 6 each leg",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 10",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 30 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 30,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-tue",
+          "name": "Badminton Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w9-tue-main",
+              "name": "High-Quality Footwork",
+              "type": "conditioning",
+              "targetSets": 5,
+              "instructions": "Move fast but remain technically controlled.",
+              "exercises": [
+                {
+                  "id": "bmt-w9-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "5 x 45 sec",
+                  "targetSets": 5,
+                  "durationSeconds": 45,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w9-tue-02",
+                  "order": 2,
+                  "name": "Split Step to Lateral Bound",
+                  "prescription": "4 x 5 each side",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Explosive Recovery",
+                  "prescription": "4 x 5 each side",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w9-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w9-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w9-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w9-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w9-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w9-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w9-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w9-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w9-thu-04",
+                  "order": 4,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-fri",
+          "name": "Explosive Full Body",
+          "order": 5,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w9-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 4,
+              "instructions": "Rest 60–90 sec between sets. Every repetition should be explosive.",
+              "exercises": [
+                {
+                  "id": "bmt-w9-fri-01",
+                  "order": 1,
+                  "name": "Box Jump",
+                  "prescription": "4 x 4",
+                  "targetSets": 4,
+                  "targetReps": 4,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "4 x 5 each side",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-fri-03",
+                  "order": 3,
+                  "name": "Split Step to Sprint",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w9-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w9-fri-04",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-fri-05",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8 each leg",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w9-fri-06",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w9-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w9-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w9-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 10,
+      "id": "bmt-w10",
+      "title": "Acceleration and Deceleration",
+      "focus": "Improve the ability to accelerate into and safely recover from lunges.",
+      "days": [
+        {
+          "id": "bmt-w10-mon",
+          "name": "Lower Body Strength",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w10-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w10-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 10",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 35 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 35,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-tue",
+          "name": "Badminton Movement",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w10-tue-main",
+              "name": "Movement",
+              "type": "conditioning",
+              "targetSets": 5,
+              "exercises": [
+                {
+                  "id": "bmt-w10-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "5 x 50 sec",
+                  "targetSets": 5,
+                  "durationSeconds": 50,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w10-tue-02",
+                  "order": 2,
+                  "name": "Forward Lunge and Explosive Recovery",
+                  "prescription": "4 x 6 each side",
+                  "targetSets": 4,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-tue-03",
+                  "order": 3,
+                  "name": "Lateral Bound and Stick",
+                  "prescription": "4 x 5 each side",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w10-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w10-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "60–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w10-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w10-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w10-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w10-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w10-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w10-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-fri",
+          "name": "Explosive Full Body",
+          "order": 5,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w10-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w10-fri-01",
+                  "order": 1,
+                  "name": "Box Jump",
+                  "prescription": "4 x 4",
+                  "targetSets": 4,
+                  "targetReps": 4,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-fri-03",
+                  "order": 3,
+                  "name": "Split Step to Sprint",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w10-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w10-fri-04",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-fri-05",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w10-fri-06",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w10-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w10-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w10-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 11,
+      "id": "bmt-w11",
+      "title": "Badminton-Specific Athleticism",
+      "focus": "Combine mobility, strength, acceleration and court movement.",
+      "days": [
+        {
+          "id": "bmt-w11-mon",
+          "name": "Lower Body Strength",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w11-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w11-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-mon-03",
+                  "order": 3,
+                  "name": "Weighted Cossack Squat",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "4 x 10",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 40 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 40,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-tue",
+          "name": "Badminton Footwork",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w11-tue-main",
+              "name": "Court Movement",
+              "type": "conditioning",
+              "targetSets": 5,
+              "exercises": [
+                {
+                  "id": "bmt-w11-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "5 x 60 sec",
+                  "targetSets": 5,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w11-tue-02",
+                  "order": 2,
+                  "name": "Split Step to Lateral Bound",
+                  "prescription": "4 x 6 each side",
+                  "targetSets": 4,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Explosive Recovery",
+                  "prescription": "4 x 6 each side",
+                  "targetSets": 4,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w11-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w11-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w11-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w11-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-thu",
+          "name": "Recovery Mobility",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w11-thu-main",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w11-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w11-thu-02",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w11-thu-03",
+                  "order": 3,
+                  "name": "Adductor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w11-thu-04",
+                  "order": 4,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-fri",
+          "name": "Power + Strength",
+          "order": 5,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w11-fri-power",
+              "name": "Power",
+              "type": "conditioning",
+              "targetSets": 4,
+              "exercises": [
+                {
+                  "id": "bmt-w11-fri-01",
+                  "order": 1,
+                  "name": "Box Jump",
+                  "prescription": "4 x 4",
+                  "targetSets": 4,
+                  "targetReps": 4,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-fri-03",
+                  "order": 3,
+                  "name": "Split Step to Sprint",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w11-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w11-fri-04",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-fri-05",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w11-fri-06",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-sat",
+          "name": "Badminton",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w11-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w11-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w11-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    },
+
+    {
+      "number": 12,
+      "id": "bmt-w12",
+      "title": "Performance and Assessment",
+      "focus": "Consolidate the program and assess improvements in mobility, strength and court movement.",
+      "days": [
+        {
+          "id": "bmt-w12-mon",
+          "name": "Strength + Mobility",
+          "order": 1,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w12-mon-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w12-mon-01",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-mon-02",
+                  "order": 2,
+                  "name": "Romanian Deadlift",
+                  "prescription": "3 x 6",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-mon-03",
+                  "order": 3,
+                  "name": "Cossack Squat",
+                  "prescription": "3 x 6 each side",
+                  "targetSets": 3,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-mon-04",
+                  "order": 4,
+                  "name": "Calf Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-mon-05",
+                  "order": 5,
+                  "name": "Copenhagen Plank",
+                  "prescription": "3 x 40 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 40,
+                  "logMode": "time"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w12-mon-mobility",
+              "name": "Mobility",
+              "type": "mobility",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w12-mon-06",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w12-mon-07",
+                  "order": 2,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w12-mon-08",
+                  "order": 3,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "2 x 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-tue",
+          "name": "Badminton Performance",
+          "order": 2,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w12-tue-footwork",
+              "name": "Court Movement Assessment",
+              "type": "conditioning",
+              "targetSets": 5,
+              "instructions": "Compare movement quality and fatigue against Week 1.",
+              "exercises": [
+                {
+                  "id": "bmt-w12-tue-01",
+                  "order": 1,
+                  "name": "Six-Corner Shadow Footwork",
+                  "prescription": "5 x 60 sec",
+                  "targetSets": 5,
+                  "durationSeconds": 60,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w12-tue-02",
+                  "order": 2,
+                  "name": "Lateral Lunge",
+                  "prescription": "3 x 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-tue-03",
+                  "order": 3,
+                  "name": "Forward Lunge and Explosive Recovery",
+                  "prescription": "4 x 6 each side",
+                  "targetSets": 4,
+                  "targetReps": 6,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w12-tue-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "exercises": [
+                {
+                  "id": "bmt-w12-tue-04",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-wed",
+          "name": "Upper Body + Core",
+          "order": 3,
+          "type": "strength",
+          "blocks": [
+            {
+              "id": "bmt-w12-wed-main",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w12-wed-01",
+                  "order": 1,
+                  "name": "Pull-up",
+                  "prescription": "3 x 6–8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-wed-02",
+                  "order": 2,
+                  "name": "Dumbbell Bench Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-wed-03",
+                  "order": 3,
+                  "name": "Dumbbell Row",
+                  "prescription": "3 x 10",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-wed-04",
+                  "order": 4,
+                  "name": "Overhead Press",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-wed-05",
+                  "order": 5,
+                  "name": "Hanging Knee Raise",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-wed-06",
+                  "order": 6,
+                  "name": "Pallof Press",
+                  "prescription": "3 x 12",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-thu",
+          "name": "Full Mobility Assessment",
+          "order": 4,
+          "type": "recovery",
+          "blocks": [
+            {
+              "id": "bmt-w12-thu-assessment",
+              "name": "Mobility Assessment",
+              "type": "mobility",
+              "targetSets": 1,
+              "instructions": "Compare your range and control against Week 1.",
+              "exercises": [
+                {
+                  "id": "bmt-w12-thu-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "90 sec",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                },
+                {
+                  "id": "bmt-w12-thu-02",
+                  "order": 2,
+                  "name": "Knee-to-wall Ankle Mobility",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-thu-03",
+                  "order": 3,
+                  "name": "90/90 Hip Rotation",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-thu-04",
+                  "order": 4,
+                  "name": "Cossack Squat",
+                  "prescription": "8 each side",
+                  "targetSets": 1,
+                  "reps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-thu-05",
+                  "order": 5,
+                  "name": "Active Hamstring Leg Raise",
+                  "prescription": "10 each side",
+                  "targetSets": 1,
+                  "reps": 10,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-thu-06",
+                  "order": 6,
+                  "name": "Adductor Stretch",
+                  "prescription": "90 sec each side",
+                  "targetSets": 1,
+                  "durationSeconds": 90,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-fri",
+          "name": "Final Power Session",
+          "order": 5,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w12-fri-power",
+              "name": "Explosive Movement",
+              "type": "conditioning",
+              "targetSets": 4,
+              "instructions": "This is a quality session, not a conditioning test.",
+              "exercises": [
+                {
+                  "id": "bmt-w12-fri-01",
+                  "order": 1,
+                  "name": "Box Jump",
+                  "prescription": "4 x 4",
+                  "targetSets": 4,
+                  "targetReps": 4,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-fri-02",
+                  "order": 2,
+                  "name": "Lateral Bound",
+                  "prescription": "4 x 5 each side",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-fri-03",
+                  "order": 3,
+                  "name": "Split Step to Sprint",
+                  "prescription": "4 x 5",
+                  "targetSets": 4,
+                  "targetReps": 5,
+                  "logMode": "reps"
+                }
+              ]
+            },
+            {
+              "id": "bmt-w12-fri-strength",
+              "name": "Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "exercises": [
+                {
+                  "id": "bmt-w12-fri-04",
+                  "order": 1,
+                  "name": "Goblet Squat",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-fri-05",
+                  "order": 2,
+                  "name": "Reverse Lunge",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                },
+                {
+                  "id": "bmt-w12-fri-06",
+                  "order": 3,
+                  "name": "Single-leg Romanian Deadlift",
+                  "prescription": "3 x 8",
+                  "targetSets": 3,
+                  "targetReps": 8,
+                  "logMode": "reps"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-sat",
+          "name": "Badminton Performance Session",
+          "order": 6,
+          "type": "conditioning",
+          "blocks": [
+            {
+              "id": "bmt-w12-sat-play",
+              "name": "Badminton",
+              "type": "conditioning",
+              "targetSets": 1,
+              "instructions": "Play normally and assess whether deep lunges, recovery and lateral movement feel easier than Week 1.",
+              "exercises": [
+                {
+                  "id": "bmt-w12-sat-01",
+                  "order": 1,
+                  "name": "Badminton",
+                  "prescription": "75–90 min",
+                  "targetSets": 1,
+                  "durationSeconds": 5400,
+                  "logMode": "time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bmt-w12-sun",
+          "name": "Rest",
+          "order": 7,
+          "type": "recovery",
+          "blocks": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,44 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../data/models/program_model.dart';
 import '../../data/database/app_database.dart';
+import '../../data/repositories/program_repository.dart';
+
+const selectedProgramPreferenceKey = 'selected_program_id';
+
+/// Overridden in `main()` with the stored value so the first frame already
+/// shows the last-used track.
+final initialProgramIdProvider = Provider<String>(
+  (ref) => ProgramRepository.defaultProgramId,
+);
+
+class SelectedProgramNotifier extends Notifier<String> {
+  @override
+  String build() => ref.watch(initialProgramIdProvider);
+
+  Future<void> select(String programId) async {
+    state = programId;
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(selectedProgramPreferenceKey, programId);
+  }
+}
+
+final selectedProgramIdProvider =
+    NotifierProvider<SelectedProgramNotifier, String>(
+      SelectedProgramNotifier.new,
+    );
+
+final availableProgramsProvider = FutureProvider<List<ProgramModel>>((ref) {
+  return ref.watch(programRepositoryProvider).loadBundledPrograms();
+});
 
 final currentProgramProvider = FutureProvider<ProgramModel>((ref) async {
   final repo = ref.watch(programRepositoryProvider);
-  return repo.loadDefaultProgram();
+  final programId = ref.watch(selectedProgramIdProvider);
+  return repo.loadBundledProgram(programId);
 });
 
 final selectedDayIdProvider = StateProvider<String?>((ref) => null);
@@ -15,7 +46,11 @@ final selectedDayIdProvider = StateProvider<String?>((ref) => null);
 final completedWorkoutSessionsProvider = FutureProvider<List<WorkoutSession>>((
   ref,
 ) async {
-  return ref.watch(workoutRepositoryProvider).getCompletedSessions();
+  final programId = ref.watch(selectedProgramIdProvider);
+  final sessions = await ref
+      .watch(workoutRepositoryProvider)
+      .getCompletedSessions();
+  return sessions.where((session) => session.programId == programId).toList();
 });
 
 class NextWorkoutInfo {

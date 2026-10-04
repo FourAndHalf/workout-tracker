@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
+import '../../core/widgets/sliding_segmented_control.dart';
 import '../../core/widgets/tag_pill.dart';
 import '../../data/models/program_model.dart';
+import '../workout/providers/active_workout_session_notifier.dart';
 import 'program_providers.dart';
 
 class ProgramListScreen extends ConsumerWidget {
@@ -37,6 +39,7 @@ class ProgramListScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              const _TrackSwitcher(),
               AppCard(
                 borderColor: colors.primary.withValues(alpha: 0.3),
                 padding: const EdgeInsets.all(20),
@@ -277,6 +280,42 @@ class _DayCard extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// Switches between the bundled workout tracks. Each track keeps its own
+/// progress because sessions are filtered by programId.
+class _TrackSwitcher extends ConsumerWidget {
+  const _TrackSwitcher();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final programs = ref.watch(availableProgramsProvider).value;
+    if (programs == null || programs.length < 2) return const SizedBox.shrink();
+
+    final selectedId = ref.watch(selectedProgramIdProvider);
+    final selectedIndex = programs.indexWhere((p) => p.programId == selectedId);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: SlidingSegmentedControl(
+        labels: [for (final program in programs) program.programName],
+        position: (selectedIndex < 0 ? 0 : selectedIndex).toDouble(),
+        onSelected: (index) {
+          if (ref.read(activeWorkoutSessionProvider) != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Finish your active workout before switching.'),
+              ),
+            );
+            return;
+          }
+          ref
+              .read(selectedProgramIdProvider.notifier)
+              .select(programs[index].programId);
+        },
       ),
     );
   }

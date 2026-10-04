@@ -69,9 +69,13 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   ActiveWorkoutNotifier(this._workoutRepo, this._ref, String dayId)
     : super(ActiveWorkoutState(dayId: dayId, startTime: DateTime.now()));
 
-  void initDay(DayModel day, {String weekId = 'w1'}) async {
+  void initDay(
+    DayModel day, {
+    String weekId = 'w1',
+    String programId = 'ffts-4week',
+  }) async {
     final sessionId = await _workoutRepo.startSession(
-      programId: 'ffts-4week',
+      programId: programId,
       weekId: weekId,
       dayId: day.id,
       dayName: day.name,
@@ -80,6 +84,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     _ref
         .read(activeWorkoutSessionProvider.notifier)
         .start(
+          programId: programId,
           dayId: state.dayId,
           dayName: day.name,
           startTime: state.startTime!,

@@ -71,7 +71,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
     return Material(
       color: context.colors.primary,
       child: InkWell(
-        onTap: () => context.push('/programs/ffts-4week/${info.dayId}'),
+        onTap: () => context.push('/programs/${info.programId}/${info.dayId}'),
         child: SafeArea(
           bottom: false,
           child: Padding(

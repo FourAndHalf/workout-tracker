@@ -110,7 +110,9 @@ class _StartWorkoutCard extends ConsumerWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: resuming
-              ? () => context.push('/programs/ffts-4week/${active.dayId}')
+              ? () => context.push(
+                  '/programs/${active.programId}/${active.dayId}',
+                )
               : next == null
               ? null
               : () => context.push('/programs/${next.programId}/${next.dayId}'),
