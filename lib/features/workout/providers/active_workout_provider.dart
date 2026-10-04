@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import '../../../main.dart';
 import '../../home/home_providers.dart';
 import '../../program/program_providers.dart';
+import '../../../core/utils/elapsed_time.dart';
 import '../../../data/models/program_model.dart';
 import '../../../data/repositories/workout_repository.dart';
 import 'active_workout_session_notifier.dart';
@@ -22,6 +23,15 @@ class ActiveWorkoutState {
   final int restSeconds;
   final DateTime? startTime;
 
+  /// When the current set/hold began; rest and paused time are excluded so
+  /// the duration saved with each set is time actually spent on the exercise.
+  final DateTime? setStartedAt;
+
+  /// Non-null while the whole workout is paused.
+  final DateTime? pausedAt;
+
+  bool get isPaused => pausedAt != null;
+
   ActiveWorkoutState({
     this.sessionId,
     required this.dayId,
@@ -33,6 +43,8 @@ class ActiveWorkoutState {
     this.isResting = false,
     this.restSeconds = 60,
     this.startTime,
+    this.setStartedAt,
+    this.pausedAt,
   });
 
   ActiveWorkoutState copyWith({
@@ -46,6 +58,9 @@ class ActiveWorkoutState {
     bool? isResting,
     int? restSeconds,
     DateTime? startTime,
+    DateTime? setStartedAt,
+    DateTime? pausedAt,
+    bool clearPausedAt = false,
   }) {
     return ActiveWorkoutState(
       sessionId: sessionId ?? this.sessionId,
@@ -58,6 +73,8 @@ class ActiveWorkoutState {
       isResting: isResting ?? this.isResting,
       restSeconds: restSeconds ?? this.restSeconds,
       startTime: startTime ?? this.startTime,
+      setStartedAt: setStartedAt ?? this.setStartedAt,
+      pausedAt: clearPausedAt ? null : (pausedAt ?? this.pausedAt),
     );
   }
 }
@@ -65,9 +82,21 @@ class ActiveWorkoutState {
 class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
   final WorkoutRepository _workoutRepo;
   final Ref _ref;
+  final DateTime Function() _now;
 
-  ActiveWorkoutNotifier(this._workoutRepo, this._ref, String dayId)
-    : super(ActiveWorkoutState(dayId: dayId, startTime: DateTime.now()));
+  ActiveWorkoutNotifier(
+    this._workoutRepo,
+    this._ref,
+    String dayId, {
+    DateTime Function()? now,
+  }) : _now = now ?? DateTime.now,
+       super(
+         ActiveWorkoutState(
+           dayId: dayId,
+           startTime: (now ?? DateTime.now)(),
+           setStartedAt: (now ?? DateTime.now)(),
+         ),
+       );
 
   void initDay(
     DayModel day, {
@@ -80,7 +109,11 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       dayId: day.id,
       dayName: day.name,
     );
-    state = state.copyWith(sessionId: sessionId, dayModel: day);
+    state = state.copyWith(
+      sessionId: sessionId,
+      dayModel: day,
+      setStartedAt: _now(),
+    );
     _ref
         .read(activeWorkoutSessionProvider.notifier)
         .start(
@@ -89,6 +122,45 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
           dayName: day.name,
           startTime: state.startTime!,
         );
+  }
+
+  /// Freezes elapsed time, the exercise clock and logging until [resume].
+  void pause() {
+    if (state.sessionId == null || state.isPaused) return;
+    state = state.copyWith(pausedAt: _now());
+  }
+
+  /// Shifts the start times forward by the paused gap so the workout's
+  /// elapsed time (and the banner's) and the current set's clock exclude it.
+  void resume() {
+    final pausedAt = state.pausedAt;
+    if (pausedAt == null) return;
+    final gap = _now().difference(pausedAt);
+    final startTime = state.startTime?.add(gap);
+    state = state.copyWith(
+      startTime: startTime,
+      setStartedAt: state.setStartedAt?.add(gap),
+      clearPausedAt: true,
+    );
+    final banner = _ref.read(activeWorkoutSessionProvider);
+    if (banner != null && startTime != null) {
+      _ref
+          .read(activeWorkoutSessionProvider.notifier)
+          .start(
+            programId: banner.programId,
+            dayId: banner.dayId,
+            dayName: banner.dayName,
+            startTime: startTime,
+          );
+    }
+  }
+
+  /// Seconds spent on the current set, unless a duration was supplied (timed
+  /// exercises) or there is nothing to measure.
+  int? _currentSetSeconds(String logMode, int? supplied) {
+    if (supplied != null || logMode == 'time') return supplied;
+    final started = state.setStartedAt;
+    return started == null ? null : elapsedSecondsSince(started, now: _now());
   }
 
   /// Log a set for the current exercise
@@ -100,10 +172,11 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     bool hitFailure = false,
     int? durationSeconds,
   }) async {
-    if (state.sessionId == null) return;
+    if (state.sessionId == null || state.isPaused) return;
 
     final currentSets = state.loggedSets[exercise.id] ?? [];
     final setNumber = currentSets.length + 1;
+    durationSeconds = _currentSetSeconds(exercise.logMode, durationSeconds);
 
     final logId = await _workoutRepo.logExerciseSet(
       sessionId: state.sessionId!,
@@ -170,6 +243,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       currentBlockIndex: nextBlockIdx,
       isResting: shouldTriggerRest,
       restSeconds: 60,
+      setStartedAt: _now(),
     );
   }
 
@@ -190,6 +264,15 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       return;
     }
 
+    if (exercise.logMode == 'time') {
+      await logSet(
+        exercise: exercise,
+        block: block,
+        durationSeconds: exercise.repScheme?.firstOrNull ?? 60,
+      );
+      return;
+    }
+
     await logSet(
       exercise: exercise,
       block: block,
@@ -203,7 +286,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     required BlockModel block,
     required int chunkReps,
   }) async {
-    if (state.sessionId == null) return;
+    if (state.sessionId == null || state.isPaused) return;
 
     final chunks = List<int>.from(state.restPauseChunks[exercise.id] ?? []);
     chunks.add(chunkReps);
@@ -218,16 +301,20 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       setNumber: chunks.length,
       reps: chunkReps,
       targetReps: exercise.repTarget,
+      durationSeconds: _currentSetSeconds(exercise.logMode, null),
     );
 
     final updatedChunks = Map<String, List<int>>.from(state.restPauseChunks);
     updatedChunks[exercise.id] = chunks;
 
-    state = state.copyWith(restPauseChunks: updatedChunks);
+    state = state.copyWith(
+      restPauseChunks: updatedChunks,
+      setStartedAt: _now(),
+    );
   }
 
   void dismissRestTimer() {
-    state = state.copyWith(isResting: false);
+    state = state.copyWith(isResting: false, setStartedAt: _now());
   }
 
   Future<void> finishWorkout({String? notes}) async {

@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../data/models/program_model.dart';
+import '../../workout/widgets/exercise_countdown_timer.dart';
 
 /// The live logging state/callbacks for an exercise mid-workout. Passing
 /// this to [ExerciseTile] switches it from the plain read-only preview
@@ -22,12 +23,16 @@ class ActiveExerciseLogState {
   onLogSet;
   final void Function(int chunkReps) onAddChunk;
 
+  /// The whole workout is paused: freezes the countdown, blocks logging.
+  final bool isPaused;
+
   const ActiveExerciseLogState({
     required this.currentSetNumber,
     required this.loggedSets,
     required this.restPauseChunks,
     required this.onLogSet,
     required this.onAddChunk,
+    this.isPaused = false,
   });
 }
 
@@ -48,9 +53,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
   final TextEditingController _repsController = TextEditingController(
     text: '20',
   );
-  final TextEditingController _timeController = TextEditingController(
-    text: '60',
-  );
   final TextEditingController _chunkController = TextEditingController(
     text: '20',
   );
@@ -60,7 +62,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
   void dispose() {
     _weightController.dispose();
     _repsController.dispose();
-    _timeController.dispose();
     _chunkController.dispose();
     super.dispose();
   }
@@ -114,15 +115,16 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   void _submitSet() {
     final active = widget.activeState!;
-    final weight = double.tryParse(_weightController.text);
-    final reps = int.tryParse(_repsController.text);
-    final duration = int.tryParse(_timeController.text);
-
+    final mode = widget.exercise.logMode;
+    // Only send what this mode's form actually shows; the controllers hold
+    // defaults (40 kg / 20 reps) that must not leak into other modes.
+    final usesWeight = mode == 'weightReps' || mode == 'failure';
     active.onLogSet(
-      weight: weight,
-      reps: reps,
+      weight: usesWeight ? double.tryParse(_weightController.text) : null,
+      reps: usesWeight || mode == 'repsOnly'
+          ? int.tryParse(_repsController.text)
+          : null,
       hitFailure: _hitFailure,
-      durationSeconds: duration,
     );
   }
 
@@ -260,6 +262,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   Widget _buildSetLoggerBody(ActiveExerciseLogState active, bool isDone) {
     final exercise = widget.exercise;
+    final isTimed = exercise.logMode == 'time';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -288,6 +291,10 @@ class _ExerciseTileState extends State<ExerciseTile> {
               final failureStr = set['hitFailure'] == true
                   ? ' \u{1F525} Failure'
                   : '';
+              final seconds = set['durationSeconds'] as int?;
+              final timeStr = seconds != null
+                  ? ' · ${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}'
+                  : '';
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 6),
@@ -300,7 +307,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Set $idx: $weightStr $repsStr$failureStr',
+                      'Set $idx: $weightStr $repsStr$failureStr$timeStr'
+                          .replaceAll(RegExp(r' {2,}'), ' ')
+                          .replaceFirst(': · ', ': '),
                       style: TextStyle(
                         fontSize: 13,
                         color: context.colors.textSecondary,
@@ -355,14 +364,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
               ),
             ),
 
-          if (exercise.logMode == 'time')
-            TextField(
-              controller: _timeController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Duration (seconds)',
-                isDense: true,
-              ),
+          if (isTimed)
+            ExerciseCountdownTimer(
+              // Keyed per set so the countdown starts fresh after each log.
+              key: ValueKey('${exercise.id}-${active.currentSetNumber}'),
+              targetSeconds: exercise.repScheme?.firstOrNull ?? 60,
+              paused: active.isPaused,
+              onLog: (seconds) => active.onLogSet(durationSeconds: seconds),
             ),
 
           if (exercise.logMode == 'failure') ...[
@@ -383,19 +391,21 @@ class _ExerciseTileState extends State<ExerciseTile> {
             ),
           ],
 
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 44,
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.check_outlined),
-              label: Text(
-                'Log Set ${active.currentSetNumber}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+          if (!isTimed) ...[
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check_outlined),
+                label: Text(
+                  'Log Set ${active.currentSetNumber}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onPressed: _submitSet,
               ),
-              onPressed: _submitSet,
             ),
-          ),
+          ],
         ],
       ],
     );
