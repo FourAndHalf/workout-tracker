@@ -9,11 +9,15 @@ class RestTimerWidget extends StatefulWidget {
   final VoidCallback onComplete;
   final VoidCallback onDismiss;
 
+  /// The workout is paused: the countdown holds still.
+  final bool paused;
+
   const RestTimerWidget({
     super.key,
     required this.initialSeconds,
     required this.onComplete,
     required this.onDismiss,
+    this.paused = false,
   });
 
   @override
@@ -33,6 +37,7 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (widget.paused) return;
       if (_secondsRemaining > 1) {
         setState(() {
           _secondsRemaining--;

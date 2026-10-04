@@ -133,7 +133,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
     final currentSet = _lockScreenSetLabel(state, day);
     final nextExercise = _nextExerciseName(state, day);
     final key =
-        '${state.currentBlockIndex}:${state.currentExerciseIndex}:$currentSet:$nextExercise';
+        '${state.currentBlockIndex}:${state.currentExerciseIndex}:$currentSet:$nextExercise:${state.startTime!.millisecondsSinceEpoch}';
     if (_lastLockScreenState == key) return;
     _lastLockScreenState = key;
     _alarmService.setActiveWorkoutActionHandler(() async {
@@ -166,6 +166,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
           currentSetNumber: loggedSets.length + 1,
           loggedSets: loggedSets,
           restPauseChunks: chunks,
+          isPaused: workoutState.isPaused,
           onLogSet: ({weight, reps, hitFailure = false, durationSeconds}) {
             notifier.logSet(
               exercise: exercise,
@@ -220,7 +221,10 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
 
           final elapsedSeconds = workoutState.startTime == null || !isActive
               ? 0
-              : elapsedSecondsSince(workoutState.startTime!);
+              : elapsedSecondsSince(
+                  workoutState.startTime!,
+                  now: workoutState.pausedAt,
+                );
 
           final activeExerciseStates = isActive
               ? _buildActiveExerciseStates(workoutState, workoutNotifier, day)
@@ -252,12 +256,29 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                               ),
                             ),
                           ),
+                          if (isActive)
+                            IconButton(
+                              tooltip: workoutState.isPaused
+                                  ? 'Resume workout'
+                                  : 'Pause workout',
+                              icon: Icon(
+                                workoutState.isPaused
+                                    ? Icons.play_circle_outline
+                                    : Icons.pause_circle_outline,
+                                color: context.colors.primary,
+                              ),
+                              onPressed: workoutState.isPaused
+                                  ? workoutNotifier.resume
+                                  : workoutNotifier.pause,
+                            ),
                           isActive
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      'Elapsed: ${_formatElapsed(elapsedSeconds)}',
+                                      workoutState.isPaused
+                                          ? 'Paused: ${_formatElapsed(elapsedSeconds)}'
+                                          : 'Elapsed: ${_formatElapsed(elapsedSeconds)}',
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
@@ -337,13 +358,24 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                         const SizedBox(height: 16),
                       ],
 
-                      ...day.blocks.asMap().entries.map((entry) {
-                        return BlockCard(
-                          block: entry.value,
-                          blockIndex: entry.key,
-                          activeExerciseStates: activeExerciseStates,
-                        );
-                      }),
+                      IgnorePointer(
+                        ignoring: workoutState.isPaused,
+                        child: Opacity(
+                          opacity: workoutState.isPaused ? 0.45 : 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...day.blocks.asMap().entries.map((entry) {
+                                return BlockCard(
+                                  block: entry.value,
+                                  blockIndex: entry.key,
+                                  activeExerciseStates: activeExerciseStates,
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -354,6 +386,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: RestTimerWidget(
                     initialSeconds: workoutState.restSeconds,
+                    paused: workoutState.isPaused,
                     onComplete: () => workoutNotifier.dismissRestTimer(),
                     onDismiss: () => workoutNotifier.dismissRestTimer(),
                   ),
