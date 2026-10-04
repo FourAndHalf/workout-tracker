@@ -296,7 +296,8 @@ class _TrackSwitcher extends ConsumerStatefulWidget {
 }
 
 class _TrackSwitcherState extends ConsumerState<_TrackSwitcher> {
-  static const _itemExtent = 44.0;
+  static const _itemExtent = 36.0;
+  bool _expanded = false;
   FixedExtentScrollController? _controller;
 
   @override
@@ -305,7 +306,12 @@ class _TrackSwitcherState extends ConsumerState<_TrackSwitcher> {
     super.dispose();
   }
 
+  void _setExpanded(bool value) {
+    if (_expanded != value && mounted) setState(() => _expanded = value);
+  }
+
   void _onSettled(List<ProgramModel> programs, int selectedIndex) {
+    _setExpanded(false);
     final index = _controller!.selectedItem;
     if (index == selectedIndex) return;
     if (ref.read(activeWorkoutSessionProvider) != null) {
@@ -342,51 +348,74 @@ class _TrackSwitcherState extends ConsumerState<_TrackSwitcher> {
       padding: const EdgeInsets.only(bottom: 16),
       child: AppCard(
         padding: const EdgeInsets.symmetric(vertical: 4),
-        child: SizedBox(
-          height: _itemExtent * 2.5,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              IgnorePointer(
-                child: Container(
-                  height: _itemExtent,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: colors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+        // The wheel is always laid out three rows tall (so its viewport never
+        // resizes mid-scroll); collapsing just crops it to the middle row.
+        child: TweenAnimationBuilder<double>(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          tween: Tween(end: _expanded ? 1.0 : 1 / 3),
+          builder: (context, factor, child) => ClipRect(
+            child: Align(heightFactor: factor, child: child),
+          ),
+          child: SizedBox(
+            height: _itemExtent * 3,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                IgnorePointer(
+                  child: Container(
+                    height: _itemExtent,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: colors.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-              ),
-              NotificationListener<ScrollEndNotification>(
-                onNotification: (_) {
-                  _onSettled(programs, selectedIndex);
-                  return false;
-                },
-                child: ListWheelScrollView(
-                  controller: _controller,
-                  itemExtent: _itemExtent,
-                  diameterRatio: 1.6,
-                  perspective: 0.003,
-                  physics: const FixedExtentScrollPhysics(),
-                  onSelectedItemChanged: (_) => HapticFeedback.selectionClick(),
-                  children: [
-                    for (final program in programs)
-                      Center(
-                        child: Text(
-                          program.programName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: colors.textPrimary,
+                Listener(
+                  onPointerDown: (_) => _setExpanded(true),
+                  onPointerUp: (_) =>
+                      Future.delayed(const Duration(milliseconds: 150), () {
+                        final c = _controller;
+                        if (c != null &&
+                            c.hasClients &&
+                            !c.position.isScrollingNotifier.value) {
+                          _setExpanded(false);
+                        }
+                      }),
+                  child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (_) {
+                      _onSettled(programs, selectedIndex);
+                      return false;
+                    },
+                    child: ListWheelScrollView(
+                      controller: _controller,
+                      itemExtent: _itemExtent,
+                      diameterRatio: 1.6,
+                      perspective: 0.003,
+                      physics: const FixedExtentScrollPhysics(),
+                      onSelectedItemChanged: (_) =>
+                          HapticFeedback.selectionClick(),
+                      children: [
+                        for (final program in programs)
+                          Center(
+                            child: Text(
+                              program.programName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: colors.textPrimary,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

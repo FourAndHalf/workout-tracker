@@ -56,7 +56,7 @@ void main() {
 
     expect(container.read(selectedProgramIdProvider), 'a');
 
-    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -44));
+    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -60));
     await tester.pumpAndSettle();
 
     expect(container.read(selectedProgramIdProvider), 'b');
