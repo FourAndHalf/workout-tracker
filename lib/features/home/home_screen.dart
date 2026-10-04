@@ -6,9 +6,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
+import '../../services/flux_widget_service.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
+import 'flux_widget_providers.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
 
@@ -23,6 +25,10 @@ class HomeScreen extends ConsumerWidget {
       if (data != null) {
         StreakWidgetService().updateStreak(data.currentStreak).ignore();
       }
+    });
+    ref.listen(fluxWidgetDataProvider, (_, next) {
+      final data = next.value;
+      if (data != null) FluxWidgetService().publish(data).ignore();
     });
     final nextWorkout = ref.watch(nextWorkoutDayProvider).value;
     final now = DateTime.now();
