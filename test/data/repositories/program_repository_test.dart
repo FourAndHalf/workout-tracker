@@ -49,4 +49,21 @@ void main() {
 
     expect(program.programId, ProgramRepository.defaultProgramId);
   });
+
+  test('badminton track parses with only supported log modes', () async {
+    final program = await repo.loadBundledProgram(
+      'badminton-mobility-strength-12wk',
+    );
+
+    expect(program.weeks, hasLength(12));
+    final exercises = program.weeks
+        .expand((w) => w.days)
+        .expand((d) => d.blocks)
+        .expand((b) => b.exercises)
+        .toList();
+    expect(exercises, isNotEmpty);
+    expect(exercises.map((e) => e.logMode).toSet(), {'repsOnly', 'time'});
+    // Every exercise shows a target.
+    expect(exercises.where((e) => e.repScheme == null), isEmpty);
+  });
 }

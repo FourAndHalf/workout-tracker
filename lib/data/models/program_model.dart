@@ -269,22 +269,35 @@ class ExerciseModel {
         });
   }
 
+  /// Accepts the simpler track format too: `logMode: "reps"`, a single
+  /// `reps`/`targetReps` per set, and `durationSeconds` for timed holds.
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
+    final targetSets = json['targetSets'] as int? ?? 1;
+    var repScheme = json['repScheme'] is int
+        ? [json['repScheme'] as int]
+        : (json['repScheme'] as List<dynamic>?)?.map((r) => r as int?).toList();
+    var repUnit = json['repUnit'] as String?;
+    final reps = (json['targetReps'] ?? json['reps']) as int?;
+    final duration = json['durationSeconds'] as int?;
+    if (repScheme == null && reps != null) {
+      repScheme = List.filled(targetSets, reps);
+    } else if (repScheme == null && duration != null) {
+      repScheme = [duration];
+      repUnit ??= 'sec';
+    }
+    final logMode = json['logMode'] as String? ?? 'weightReps';
+
     return ExerciseModel(
       id: json['id'] as String,
       order: json['order'] as int,
       name: json['name'] as String,
       prescription: json['prescription'] as String?,
       prescriptionComplete: json['prescriptionComplete'] as bool? ?? true,
-      targetSets: json['targetSets'] as int? ?? 1,
-      repScheme: json['repScheme'] is int
-          ? [json['repScheme'] as int]
-          : (json['repScheme'] as List<dynamic>?)
-                ?.map((r) => r as int?)
-                .toList(),
+      targetSets: targetSets,
+      repScheme: repScheme,
       repTarget: json['repTarget'] as int?,
-      repUnit: json['repUnit'] as String?,
-      logMode: json['logMode'] as String? ?? 'weightReps',
+      repUnit: repUnit,
+      logMode: logMode == 'reps' ? 'repsOnly' : logMode,
       videoUrl: json['videoUrl'] as String?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,

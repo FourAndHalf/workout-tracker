@@ -17,6 +17,8 @@ class ProgramRepository {
   static const bundledProgramAssets = {
     defaultProgramId: 'assets/programs/program_full.json',
     'mobility-10min': 'assets/programs/mobility_10min.json',
+    'badminton-mobility-strength-12wk':
+        'assets/programs/badminton_mobility_strength.json',
   };
 
   /// Load the complete bundled program and upgrade an older cached week-one copy.

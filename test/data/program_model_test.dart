@@ -87,6 +87,28 @@ void main() {
       );
     });
 
+    test('Normalizes the simple track format (reps, targetReps, duration)', () {
+      ExerciseModel parse(Map<String, dynamic> extra) => ExerciseModel.fromJson(
+        {'id': 'e', 'order': 1, 'name': 'Move', 'targetSets': 3, ...extra},
+      );
+
+      final reps = parse({'targetReps': 8, 'logMode': 'reps'});
+      expect(reps.logMode, 'repsOnly');
+      expect(reps.repScheme, [8, 8, 8]);
+
+      final hold = parse({'durationSeconds': 30, 'logMode': 'time'});
+      expect(hold.logMode, 'time');
+      expect(hold.repScheme, [30]);
+      expect(hold.repUnit, 'sec');
+
+      final explicit = parse({
+        'repScheme': [60],
+        'repUnit': 'sec',
+        'logMode': 'time',
+      });
+      expect(explicit.repScheme, [60]);
+    });
+
     test('Uses a configured exercise video or a Shorts search fallback', () {
       final configured = ExerciseModel(
         id: 'configured',
