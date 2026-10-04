@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -284,44 +285,110 @@ class _DayCard extends StatelessWidget {
   }
 }
 
-/// Switches between the bundled workout tracks. Each track keeps its own
-/// progress because sessions are filtered by programId.
-class _TrackSwitcher extends ConsumerWidget {
+/// Wheel picker for the bundled workout tracks: scroll it and the track under
+/// the highlight becomes active once the wheel settles. Each track keeps its
+/// own progress because sessions are filtered by programId.
+class _TrackSwitcher extends ConsumerStatefulWidget {
   const _TrackSwitcher();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_TrackSwitcher> createState() => _TrackSwitcherState();
+}
+
+class _TrackSwitcherState extends ConsumerState<_TrackSwitcher> {
+  static const _itemExtent = 44.0;
+  FixedExtentScrollController? _controller;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  void _onSettled(List<ProgramModel> programs, int selectedIndex) {
+    final index = _controller!.selectedItem;
+    if (index == selectedIndex) return;
+    if (ref.read(activeWorkoutSessionProvider) != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Finish your active workout before switching.'),
+        ),
+      );
+      _controller!.animateToItem(
+        selectedIndex,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+      return;
+    }
+    ref
+        .read(selectedProgramIdProvider.notifier)
+        .select(programs[index].programId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final programs = ref.watch(availableProgramsProvider).value;
     if (programs == null || programs.length < 2) return const SizedBox.shrink();
 
     final selectedId = ref.watch(selectedProgramIdProvider);
+    final selectedIndex = programs
+        .indexWhere((p) => p.programId == selectedId)
+        .clamp(0, programs.length - 1);
+    _controller ??= FixedExtentScrollController(initialItem: selectedIndex);
+
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          for (final program in programs)
-            ChoiceChip(
-              label: Text(program.programName),
-              selected: program.programId == selectedId,
-              onSelected: (_) {
-                if (ref.read(activeWorkoutSessionProvider) != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Finish your active workout before switching.',
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: SizedBox(
+          height: _itemExtent * 2.5,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              IgnorePointer(
+                child: Container(
+                  height: _itemExtent,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: colors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              NotificationListener<ScrollEndNotification>(
+                onNotification: (_) {
+                  _onSettled(programs, selectedIndex);
+                  return false;
+                },
+                child: ListWheelScrollView(
+                  controller: _controller,
+                  itemExtent: _itemExtent,
+                  diameterRatio: 1.6,
+                  perspective: 0.003,
+                  physics: const FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (_) => HapticFeedback.selectionClick(),
+                  children: [
+                    for (final program in programs)
+                      Center(
+                        child: Text(
+                          program.programName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: colors.textPrimary,
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                  return;
-                }
-                ref
-                    .read(selectedProgramIdProvider.notifier)
-                    .select(program.programId);
-              },
-            ),
-        ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
