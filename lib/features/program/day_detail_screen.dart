@@ -398,7 +398,11 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                               ),
                             ),
                             onPressed: () {
-                              workoutNotifier.initDay(day, weekId: week.id);
+                              workoutNotifier.initDay(
+                                day,
+                                weekId: week.id,
+                                programId: widget.programId,
+                              );
                             },
                           ),
                   ),

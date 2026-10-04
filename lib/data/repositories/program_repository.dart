@@ -11,16 +11,34 @@ class ProgramRepository {
 
   ProgramRepository(this.db);
 
+  static const defaultProgramId = 'ffts-4week';
+
+  /// Bundled workout tracks, keyed by programId.
+  static const bundledProgramAssets = {
+    defaultProgramId: 'assets/programs/program_full.json',
+    'mobility-10min': 'assets/programs/mobility_10min.json',
+  };
+
   /// Load the complete bundled program and upgrade an older cached week-one copy.
-  Future<ProgramModel> loadDefaultProgram() async {
-    final jsonString = await rootBundle.loadString(
-      'assets/programs/program_full.json',
-    );
+  Future<ProgramModel> loadDefaultProgram() =>
+      loadBundledProgram(defaultProgramId);
+
+  /// Load a bundled track by programId (falling back to the default) and
+  /// refresh its cached copy in SQLite.
+  Future<ProgramModel> loadBundledProgram(String programId) async {
+    final assetPath =
+        bundledProgramAssets[programId] ??
+        bundledProgramAssets[defaultProgramId]!;
+    final jsonString = await rootBundle.loadString(assetPath);
     final bundledJson = jsonDecode(jsonString) as Map<String, dynamic>;
     final bundledProgram = ProgramModel.fromJson(bundledJson);
     await saveProgram(bundledProgram, jsonString);
     return bundledProgram;
   }
+
+  /// Every bundled track, in the order they are listed in the switcher.
+  Future<List<ProgramModel>> loadBundledPrograms() =>
+      Future.wait(bundledProgramAssets.keys.map(loadBundledProgram));
 
   /// Save or update a program in SQLite
   Future<void> saveProgram(ProgramModel program, String rawJson) async {

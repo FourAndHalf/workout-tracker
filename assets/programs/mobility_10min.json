@@ -1,0 +1,399 @@
+{
+  "schemaVersion": 1,
+  "programId": "mobility-10min",
+  "programName": "10 Min Mobility",
+  "description": "Daily mobility routine designed to improve hip, ankle, hamstring, adductor, thoracic and shoulder mobility for badminton.",
+  "durationWeeks": 12,
+  "frequency": "daily",
+  "estimatedDurationSeconds": 600,
+  "difficulty": "beginner",
+  "primaryGoal": "Improve usable mobility and movement quality for badminton.",
+  "logModes": {
+    "time": "Duration in seconds.",
+    "reps": "Number of repetitions.",
+    "distance": "Distance in meters."
+  },
+  "blockTypes": {
+    "straight": "Exercises performed and rested independently."
+  },
+  "weeks": [
+    {
+      "number": 1,
+      "id": "mob-w1",
+      "title": "Daily Routine",
+      "focus": "Establish baseline mobility and learn controlled movement.",
+      "instructions": "Move slowly and stay within a comfortable range. Do not force stretches or bounce.",
+      "days": [
+        {
+          "id": "mob-w1-routine",
+          "name": "10 Min Mobility",
+          "order": 1,
+          "estimatedDurationSeconds": 600,
+          "instructions": "Perform the exercises in order. Maintain controlled breathing throughout.",
+          "blocks": [
+            {
+              "id": "mob-w1-b1",
+              "name": "Deep Squat Hold",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Keep heels grounded and chest relaxed. Use support if necessary.",
+              "exercises": [
+                {
+                  "id": "mob-w1-01",
+                  "order": 1,
+                  "name": "Deep Squat Hold",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "bilateral",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "ankle mobility",
+                    "hip mobility",
+                    "adductor mobility"
+                  ],
+                  "instructions": "Sit into your deepest comfortable squat while keeping your heels on the floor. Hold without forcing the position."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b2",
+              "name": "Ankle Rocks",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Move smoothly through the ankle range without lifting the heel.",
+              "exercises": [
+                {
+                  "id": "mob-w1-02",
+                  "order": 1,
+                  "name": "Ankle Rocks",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "each",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "ankle dorsiflexion",
+                    "lunge mobility"
+                  ],
+                  "instructions": "Drive the knee forward over the toes while keeping the heel planted. Return to the starting position and repeat."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b3",
+              "name": "90/90 Hip Rotations",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Move through the hips rather than forcing the knees down.",
+              "exercises": [
+                {
+                  "id": "mob-w1-03",
+                  "order": 1,
+                  "name": "90/90 Hip Rotations",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "bilateral",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "hip internal rotation",
+                    "hip external rotation"
+                  ],
+                  "instructions": "Sit with both knees bent at approximately 90 degrees. Rotate both knees from one side to the other under control."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b4",
+              "name": "90/90 Forward Fold (each side)",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Perform approximately 30 seconds on each side.",
+              "exercises": [
+                {
+                  "id": "mob-w1-04",
+                  "order": 1,
+                  "name": "90/90 Forward Fold",
+                  "prescription": "1 min each side",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "each",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "hip external rotation",
+                    "glutes",
+                    "adductors"
+                  ],
+                  "instructions": "From the 90/90 position, hinge forward over the front leg. Keep the movement controlled and stop before discomfort becomes sharp."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b5",
+              "name": "Cossack Squat",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Alternate sides continuously at a controlled pace.",
+              "exercises": [
+                {
+                  "id": "mob-w1-05",
+                  "order": 1,
+                  "name": "Cossack Squat",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "alternating",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "adductor mobility",
+                    "hip mobility",
+                    "ankle mobility",
+                    "lateral movement"
+                  ],
+                  "instructions": "Shift your weight onto one leg while extending the opposite leg. Keep the working heel grounded and move only as deep as you can control."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b6",
+              "name": "Hip Flexor Stretch",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Keep the pelvis tucked slightly instead of arching the lower back.",
+              "exercises": [
+                {
+                  "id": "mob-w1-06",
+                  "order": 1,
+                  "name": "Hip Flexor Stretch",
+                  "prescription": "1 min each side",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "each",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "hip flexors",
+                    "hip extension"
+                  ],
+                  "instructions": "Kneel with one foot forward. Gently shift the pelvis forward while keeping the torso upright."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b7",
+              "name": "Hamstring Stretch",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Maintain a long spine and avoid aggressively pulling the leg toward you.",
+              "exercises": [
+                {
+                  "id": "mob-w1-07",
+                  "order": 1,
+                  "name": "Hamstring Stretch",
+                  "prescription": "1 min each side",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "each",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "hamstrings",
+                    "posterior chain"
+                  ],
+                  "instructions": "Extend one leg and hinge forward from the hips until a comfortable hamstring stretch is felt."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b8",
+              "name": "Adductor Stretch",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Use a comfortable range. This should not produce groin pain.",
+              "exercises": [
+                {
+                  "id": "mob-w1-08",
+                  "order": 1,
+                  "name": "Adductor Stretch",
+                  "prescription": "1 min each side",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "each",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "adductors",
+                    "groin mobility",
+                    "lateral lunge mobility"
+                  ],
+                  "instructions": "Move into a wide stance and shift your weight toward one side while keeping the opposite leg extended."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b9",
+              "name": "Thoracic Rotations",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Rotate through the upper back rather than twisting aggressively through the lower back.",
+              "exercises": [
+                {
+                  "id": "mob-w1-09",
+                  "order": 1,
+                  "name": "Thoracic Rotations",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "alternating",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "thoracic mobility",
+                    "rotation",
+                    "overhead movement"
+                  ],
+                  "instructions": "Rotate the upper body slowly from side to side while keeping the pelvis relatively stable."
+                }
+              ]
+            },
+            {
+              "id": "mob-w1-b10",
+              "name": "Shoulder Mobility",
+              "type": "straight",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Use a pain-free range and keep the shoulders relaxed.",
+              "exercises": [
+                {
+                  "id": "mob-w1-10",
+                  "order": 1,
+                  "name": "Shoulder Mobility",
+                  "prescription": "1 min",
+                  "targetSets": 1,
+                  "repScheme": [
+                    60
+                  ],
+                  "repUnit": "sec",
+                  "side": "bilateral",
+                  "logMode": "time",
+                  "difficulty": "beginner",
+                  "equipment": "none",
+                  "focus": [
+                    "shoulder mobility",
+                    "overhead range",
+                    "scapular control"
+                  ],
+                  "instructions": "Perform controlled shoulder circles, arm raises and overhead movements through a comfortable range."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "progression": {
+    "type": "mobility-adaptation",
+    "weeks": [
+      {
+        "week": 1,
+        "goal": "Learn movement patterns and establish a comfortable baseline."
+      },
+      {
+        "week": 2,
+        "goal": "Increase range slightly without increasing discomfort."
+      },
+      {
+        "week": 3,
+        "goal": "Improve control at the end of the available range."
+      },
+      {
+        "week": 4,
+        "goal": "Increase consistency and breathing control."
+      },
+      {
+        "week": 5,
+        "goal": "Begin emphasizing active mobility."
+      },
+      {
+        "week": 6,
+        "goal": "Increase active control through larger ranges."
+      },
+      {
+        "week": 7,
+        "goal": "Improve lateral hip and adductor mobility."
+      },
+      {
+        "week": 8,
+        "goal": "Build strength and control at end range."
+      },
+      {
+        "week": 9,
+        "goal": "Transfer mobility into faster movement."
+      },
+      {
+        "week": 10,
+        "goal": "Improve mobility under badminton-specific movement demands."
+      },
+      {
+        "week": 11,
+        "goal": "Maintain mobility while increasing movement quality."
+      },
+      {
+        "week": 12,
+        "goal": "Reassess mobility and compare movement quality with Week 1."
+      }
+    ]
+  }
+}

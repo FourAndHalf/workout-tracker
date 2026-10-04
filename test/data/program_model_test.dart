@@ -6,12 +6,12 @@ import 'package:fitness_tracker/data/models/program_model.dart';
 
 void main() {
   group('ProgramModel Deserialization Tests', () {
-    test('Parses program_week1.json correctly', () {
-      final file = File('assets/programs/program_week1.json');
+    test('Parses program_full.json correctly', () {
+      final file = File('assets/programs/program_full.json');
       expect(
         file.existsSync(),
         isTrue,
-        reason: 'assets/programs/program_week1.json must exist',
+        reason: 'assets/programs/program_full.json must exist',
       );
 
       final jsonString = file.readAsStringSync();
@@ -21,7 +21,7 @@ void main() {
 
       expect(program.programId, equals('ffts-4week'));
       expect(program.programName, equals('4 Week Program'));
-      expect(program.weeks.length, equals(1));
+      expect(program.weeks.length, equals(4));
 
       final week1 = program.weeks.first;
       expect(week1.number, equals(1));
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('Serializes to JSON and back cleanly', () {
-      final file = File('assets/programs/program_week1.json');
+      final file = File('assets/programs/program_full.json');
       final jsonString = file.readAsStringSync();
       final Map<String, dynamic> originalMap = jsonDecode(jsonString);
 

@@ -86,6 +86,11 @@ class _ExerciseTileState extends State<ExerciseTile> {
     if (exercise.repTarget != null) {
       return '${exercise.targetSets} Sets · Target: ${exercise.repTarget} reps';
     }
+    if (exercise.logMode == 'time' &&
+        exercise.repScheme != null &&
+        exercise.repScheme!.isNotEmpty) {
+      return '${exercise.repScheme!.first} ${exercise.repUnit ?? 'sec'}';
+    }
     if (exercise.repScheme != null && exercise.repScheme!.isNotEmpty) {
       final unit = exercise.repUnit != null ? ' ${exercise.repUnit}' : '';
       return '${exercise.targetSets} Sets · (${exercise.repScheme!.join(", ")})$unit';
