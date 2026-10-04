@@ -103,10 +103,10 @@ void main() {
     expect(find.text('10 Min Mobility'), findsOneWidget);
 
     await tester.runAsync(() async {
-      await tester.tap(find.text('10 Min Mobility'));
+      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -44));
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
-        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
         if (find.text('Week 1: "Daily Routine"').evaluate().isNotEmpty) break;
       }
     });
