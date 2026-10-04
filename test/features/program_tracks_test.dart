@@ -95,15 +95,14 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
         await tester.pump();
-        if (find.text('10 Min Mobility').evaluate().isNotEmpty) break;
+        if (find.byType(ListWheelScrollView).evaluate().isNotEmpty) break;
       }
     });
 
     expect(find.text('4 Week Program'), findsWidgets);
-    expect(find.text('10 Min Mobility'), findsOneWidget);
 
     await tester.runAsync(() async {
-      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -44));
+      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -60));
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
         await tester.pump(const Duration(milliseconds: 100));

@@ -227,8 +227,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
               : null;
 
           final estimatedSeconds = estimateWorkoutMinutes(day) * 60;
-          final targetSeconds =
-              estimatedSeconds > 0 ? estimatedSeconds : _fallbackTargetSeconds;
+          final targetSeconds = estimatedSeconds > 0
+              ? estimatedSeconds
+              : _fallbackTargetSeconds;
 
           return Column(
             children: [
