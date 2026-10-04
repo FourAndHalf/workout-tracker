@@ -217,15 +217,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
                               ),
                             ),
                           ),
-                          if (widget.activeState != null)
-                            IconButton(
-                              tooltip:
-                                  'Watch ${exercise.name} on YouTube Shorts',
-                              icon: const Icon(Icons.open_in_new_outlined),
-                              color: context.colors.primary,
-                              onPressed: () => _openExerciseVideo(context),
-                              visualDensity: VisualDensity.compact,
-                            ),
+                          IconButton(
+                            tooltip: 'Watch ${exercise.name} on YouTube Shorts',
+                            icon: const Icon(Icons.open_in_new_outlined),
+                            color: context.colors.primary,
+                            onPressed: () => _openExerciseVideo(context),
+                            visualDensity: VisualDensity.compact,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 4),

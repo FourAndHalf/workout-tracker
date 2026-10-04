@@ -28,7 +28,16 @@ class BlockCard extends StatelessWidget {
       case 'dropSet':
         return context.colors.dropSetBlock;
       case 'restPause':
+      case 'recovery':
         return context.colors.restPauseBlock;
+      case 'warmup':
+      case 'mobility':
+        return context.colors.supersetBlock;
+      case 'strength':
+        return context.colors.dropSetBlock;
+      case 'conditioning':
+      case 'circuit':
+        return context.colors.triSetBlock;
       case 'straight':
       default:
         return context.colors.straightBlock;
@@ -47,6 +56,18 @@ class BlockCard extends StatelessWidget {
         return 'DROP SET';
       case 'restPause':
         return 'REST PAUSE';
+      case 'warmup':
+        return 'WARM-UP';
+      case 'mobility':
+        return 'MOBILITY';
+      case 'strength':
+        return 'STRENGTH';
+      case 'conditioning':
+        return 'CONDITIONING';
+      case 'recovery':
+        return 'RECOVERY';
+      case 'circuit':
+        return 'CIRCUIT';
       case 'straight':
       default:
         return 'STRAIGHT';

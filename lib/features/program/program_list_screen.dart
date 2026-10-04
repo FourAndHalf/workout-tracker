@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
-import '../../core/widgets/sliding_segmented_control.dart';
 import '../../core/widgets/tag_pill.dart';
 import '../../data/models/program_model.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
@@ -296,26 +295,33 @@ class _TrackSwitcher extends ConsumerWidget {
     if (programs == null || programs.length < 2) return const SizedBox.shrink();
 
     final selectedId = ref.watch(selectedProgramIdProvider);
-    final selectedIndex = programs.indexWhere((p) => p.programId == selectedId);
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: SlidingSegmentedControl(
-        labels: [for (final program in programs) program.programName],
-        position: (selectedIndex < 0 ? 0 : selectedIndex).toDouble(),
-        onSelected: (index) {
-          if (ref.read(activeWorkoutSessionProvider) != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Finish your active workout before switching.'),
-              ),
-            );
-            return;
-          }
-          ref
-              .read(selectedProgramIdProvider.notifier)
-              .select(programs[index].programId);
-        },
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final program in programs)
+            ChoiceChip(
+              label: Text(program.programName),
+              selected: program.programId == selectedId,
+              onSelected: (_) {
+                if (ref.read(activeWorkoutSessionProvider) != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Finish your active workout before switching.',
+                      ),
+                    ),
+                  );
+                  return;
+                }
+                ref
+                    .read(selectedProgramIdProvider.notifier)
+                    .select(program.programId);
+              },
+            ),
+        ],
       ),
     );
   }
