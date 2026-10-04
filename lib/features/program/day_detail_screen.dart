@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/utils/elapsed_time.dart';
 import '../../data/models/program_model.dart';
 import '../../services/daily_workout_alarm_service.dart';
+import '../../services/flux_widget_service.dart';
 import '../../main.dart';
 import '../workout/providers/active_workout_provider.dart';
 import '../workout/widgets/rest_timer_widget.dart';
@@ -32,7 +33,7 @@ class DayDetailScreen extends ConsumerStatefulWidget {
 
 class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
     with WidgetsBindingObserver {
-  static const _targetSeconds = 45 * 60;
+  static const _fallbackTargetSeconds = 45 * 60;
   Timer? _elapsedTimer;
   bool _wasActive = false;
   String? _lastLockScreenState;
@@ -225,6 +226,10 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
               ? _buildActiveExerciseStates(workoutState, workoutNotifier, day)
               : null;
 
+          final estimatedSeconds = estimateWorkoutMinutes(day) * 60;
+          final targetSeconds =
+              estimatedSeconds > 0 ? estimatedSeconds : _fallbackTargetSeconds;
+
           return Column(
             children: [
               Expanded(
@@ -259,7 +264,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                                       ),
                                     ),
                                     Text(
-                                      'Target: 45:00',
+                                      'Target: ${_formatElapsed(targetSeconds)}',
                                       style: TextStyle(
                                         fontSize: 10,
                                         color: context.colors.textMuted,
@@ -283,7 +288,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                         ClipRRect(
                           borderRadius: BorderRadius.circular(3),
                           child: LinearProgressIndicator(
-                            value: (elapsedSeconds / _targetSeconds).clamp(
+                            value: (elapsedSeconds / targetSeconds).clamp(
                               0.0,
                               1.0,
                             ),
