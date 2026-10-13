@@ -49,7 +49,8 @@ class _LogoPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRect(Offset.zero & size, Paint()..color = Colors.black);
-    canvas.scale(size.width / 128, size.height / 128);
+    canvas.translate(size.width * 0.125, size.height * 0.125);
+    canvas.scale(size.width / 128 * 0.75, size.height / 128 * 0.75);
     canvas.drawPath(
       Path()..addPolygon(_points, true),
       Paint()..color = const Color(0xFFEDEDED),
