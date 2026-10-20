@@ -128,3 +128,17 @@ int activeWeekIndex(ProgramModel program, List<WorkoutSession> sessions) {
   }
   return program.weeks.length - 1;
 }
+
+/// The week holding [dayId] and that day, falling back to the first week and
+/// day when the id is unknown.
+(WeekModel, DayModel) locateDay(ProgramModel program, String dayId) {
+  final week = program.weeks.firstWhere(
+    (candidate) => candidate.days.any((day) => day.id == dayId),
+    orElse: () => program.weeks.first,
+  );
+  final day = week.days.firstWhere(
+    (candidate) => candidate.id == dayId,
+    orElse: () => week.days.first,
+  );
+  return (week, day);
+}

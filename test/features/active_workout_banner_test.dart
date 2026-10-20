@@ -56,7 +56,12 @@ void main() {
   );
 
   Future<void> startArmsWorkout(WidgetTester tester) async {
-    await tester.tap(find.text('Programs'));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Programs'),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -219,5 +224,35 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.textContaining('in progress'), findsNothing);
+  });
+
+  testWidgets('Home Start workout begins the session directly', (
+    WidgetTester tester,
+  ) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(() => db.close());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          currentProgramProvider.overrideWith((ref) async => mockProgram),
+        ],
+        child: const FitnessTrackerApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(find.text('Start workout'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('Elapsed'), findsOneWidget);
+    expect(find.text('Start Arms Workout'), findsNothing);
+
+    await tester.tap(find.text('Finish workout'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
   });
 }

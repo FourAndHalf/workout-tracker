@@ -4,18 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const themeModePreferenceKey = 'theme_mode';
 
-/// Light (Pearl Ledger) is the default; anything unrecognised falls back to
-/// it.
+/// Dark (Pearl Ledger graphite) is the default; anything unrecognised falls
+/// back to it.
 ThemeMode parseThemeMode(String? value) {
   return ThemeMode.values.firstWhere(
     (mode) => mode.name == value,
-    orElse: () => ThemeMode.light,
+    orElse: () => ThemeMode.dark,
   );
 }
 
 /// Overridden in `main()` with the stored value so the first frame already
 /// uses the right theme.
-final initialThemeModeProvider = Provider<ThemeMode>((ref) => ThemeMode.light);
+final initialThemeModeProvider = Provider<ThemeMode>((ref) => ThemeMode.dark);
 
 class ThemeModeNotifier extends Notifier<ThemeMode> {
   @override

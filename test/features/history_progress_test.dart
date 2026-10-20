@@ -111,27 +111,24 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // These cards sit below the fold in the Progress ListView, so scroll
-      // down to mount them before asserting.
+      // The summary strip sits at the top: streak and average duration.
+      expect(find.text('Day streak'), findsOneWidget);
+      expect(find.text('Avg workout'), findsOneWidget);
+      expect(find.text('40 min'), findsOneWidget);
+
+      // The remaining cards sit below the fold, so scroll to mount them.
+      await tester.scrollUntilVisible(
+        find.text('Workout type breakdown'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.textContaining('Push day'), findsOneWidget);
+
       await tester.scrollUntilVisible(
         find.text('Estimated calories burned'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
-
-      // Streak card (today's session counts as a 1-day streak, unless the
-      // fixture date isn't "today" — assert the label/shell instead of the
-      // exact number, which depends on wall-clock date.
-      expect(find.text('Day streak'), findsOneWidget);
-
-      // Workout type breakdown donut.
-      expect(find.text('Workout type breakdown'), findsOneWidget);
-      expect(find.textContaining('Push day'), findsOneWidget);
-
-      // Average workout time: 40 minutes.
-      expect(find.text('Average workout time'), findsOneWidget);
-      expect(find.text('40 min'), findsOneWidget);
-
       // Estimated calories chart.
       expect(find.text('Estimated calories burned'), findsOneWidget);
     },

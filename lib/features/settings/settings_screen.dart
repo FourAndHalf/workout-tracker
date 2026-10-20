@@ -7,7 +7,10 @@ import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/theme/theme_mode_provider.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/ledger.dart';
 import '../../main.dart';
 import '../../services/flux_widget_service.dart';
 import '../home/flux_widget_providers.dart';
@@ -285,161 +288,273 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     });
     final backupState = ref.watch(backupOperationProvider);
 
+    final dailyBurn =
+        ref.watch(dailyBurnKcalProvider).value ?? defaultDailyBurnKcal;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
         children: [
-          const Text(
-            'Appearance',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          const _SectionLabel('Appearance'),
+          SizedBox(
+            width: double.infinity,
+            child: SegmentedButton<ThemeMode>(
+              showSelectedIcon: false,
+              segments: const [
+                ButtonSegment(value: ThemeMode.system, label: Text('System')),
+                ButtonSegment(value: ThemeMode.light, label: Text('Light')),
+                ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
+              ],
+              selected: {ref.watch(themeModeProvider)},
+              onSelectionChanged: (selection) =>
+                  ref.read(themeModeProvider.notifier).setMode(selection.first),
+            ),
           ),
-          const SizedBox(height: 8),
-          SegmentedButton<ThemeMode>(
-            segments: const [
-              ButtonSegment(value: ThemeMode.system, label: Text('System')),
-              ButtonSegment(value: ThemeMode.light, label: Text('Light')),
-              ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
+          const _SectionLabel('Data'),
+          _Group(
+            children: [
+              _SettingsRow(
+                icon: Icons.cloud_upload_outlined,
+                busy: backupState.isInProgress,
+                title: 'Back up to Google Drive',
+                subtitle: _backupStatusLabel(backupState),
+                onTap: backupState.isInProgress
+                    ? null
+                    : () => ref
+                          .read(backupOperationProvider.notifier)
+                          .backupNow(),
+              ),
             ],
-            selected: {ref.watch(themeModeProvider)},
-            onSelectionChanged: (selection) =>
-                ref.read(themeModeProvider.notifier).setMode(selection.first),
           ),
-          const SizedBox(height: 24),
-          const Text(
-            'Data',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: ListTile(
-              leading: backupState.isInProgress
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.cloud_upload_outlined),
-              title: const Text('Back up to Google Drive'),
-              subtitle: Text(_backupStatusLabel(backupState)),
-              onTap: backupState.isInProgress
-                  ? null
-                  : () =>
-                        ref.read(backupOperationProvider.notifier).backupNow(),
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'Widgets',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.local_fire_department_outlined),
-              title: const Text('Daily calorie burn'),
-              subtitle: Text(
-                '${ref.watch(dailyBurnKcalProvider).value ?? defaultDailyBurnKcal} kcal \u00b7 used by the Kinetic Flux widgets',
+          const _SectionLabel('Widgets'),
+          _Group(
+            children: [
+              _SettingsRow(
+                icon: Icons.local_fire_department_outlined,
+                title: 'Daily calorie burn',
+                subtitle: '$dailyBurn kcal · used by the Kinetic Flux widgets',
+                onTap: () => _editDailyBurn(dailyBurn),
               ),
-              onTap: () => _editDailyBurn(
-                ref.read(dailyBurnKcalProvider).value ?? defaultDailyBurnKcal,
+            ],
+          ),
+          const _SectionLabel('Nutrition'),
+          _Group(
+            children: [
+              _SettingsRow(
+                icon: Icons.shopping_cart_outlined,
+                title: 'Weekly shopping list',
+                onTap: _loadingNutritionSettings
+                    ? null
+                    : () => _toggleShoppingList(!_shoppingListEnabled),
+                trailing: Switch(
+                  value: _shoppingListEnabled,
+                  onChanged: _loadingNutritionSettings
+                      ? null
+                      : _toggleShoppingList,
+                ),
               ),
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'Nutrition',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: SwitchListTile.adaptive(
-              secondary: const Icon(Icons.shopping_cart_outlined),
-              title: const Text('Weekly shopping list'),
-              value: _shoppingListEnabled,
-              onChanged: _loadingNutritionSettings ? null : _toggleShoppingList,
-            ),
-          ),
-          const SizedBox(height: 8),
-          ref
-              .watch(supplementRepositoryProvider)
-              .when(
-                loading: () => const Card(
-                  child: ListTile(title: Text('Loading supplements...')),
-                ),
-                error: (_, _) => const Card(
-                  child: ListTile(title: Text('Supplements unavailable')),
-                ),
-                data: (repository) {
-                  _supplements ??= repository.getSupplements();
-                  return FutureBuilder<List<SupplementItem>>(
-                    future: _supplements,
-                    builder: (context, snapshot) {
-                      final supplements =
-                          snapshot.data ?? const <SupplementItem>[];
-                      return Card(
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.medication_outlined),
-                              title: const Text('Supplements'),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.add),
-                                tooltip: 'Add supplement',
-                                onPressed: () => _addSupplement(repository),
-                              ),
-                            ),
-                            if (supplements.isEmpty)
-                              const ListTile(
-                                title: Text('No supplements added yet'),
-                              ),
-                            ...supplements.map(
-                              (supplement) => ListTile(
-                                leading: supplement.photoPath == null
-                                    ? const Icon(Icons.medication_outlined)
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(6),
-                                        child: Image.file(
-                                          File(supplement.photoPath!),
-                                          width: 42,
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                title: Text(supplement.name),
+              ref
+                  .watch(supplementRepositoryProvider)
+                  .when(
+                    loading: () => const _SettingsRow(
+                      icon: Icons.medication_outlined,
+                      title: 'Loading supplements...',
+                    ),
+                    error: (_, _) => const _SettingsRow(
+                      icon: Icons.medication_outlined,
+                      title: 'Supplements unavailable',
+                    ),
+                    data: (repository) {
+                      _supplements ??= repository.getSupplements();
+                      return FutureBuilder<List<SupplementItem>>(
+                        future: _supplements,
+                        builder: (context, snapshot) {
+                          final supplements =
+                              snapshot.data ?? const <SupplementItem>[];
+                          return Column(
+                            children: [
+                              _SettingsRow(
+                                icon: Icons.medication_outlined,
+                                title: 'Supplements',
+                                subtitle: supplements.isEmpty
+                                    ? 'No supplements added yet'
+                                    : '${supplements.length} tracked daily',
+                                onTap: () => _addSupplement(repository),
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.delete_outline),
-                                  tooltip: 'Remove supplement',
-                                  onPressed: () async {
-                                    await repository.deleteSupplement(
-                                      supplement.id,
-                                    );
-                                    if (mounted)
-                                      setState(
-                                        () => _supplements = repository
-                                            .getSupplements(),
-                                      );
-                                  },
+                                  icon: const Icon(Icons.add_rounded),
+                                  tooltip: 'Add supplement',
+                                  onPressed: () => _addSupplement(repository),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              for (final supplement in supplements)
+                                _SettingsRow(
+                                  leading: supplement.photoPath == null
+                                      ? null
+                                      : ClipOval(
+                                          child: Image.file(
+                                            File(supplement.photoPath!),
+                                            width: 36,
+                                            height: 36,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                  icon: Icons.medication_outlined,
+                                  title: supplement.name,
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.close_rounded),
+                                    tooltip: 'Remove supplement',
+                                    onPressed: () async {
+                                      await repository.deleteSupplement(
+                                        supplement.id,
+                                      );
+                                      if (mounted) {
+                                        setState(
+                                          () => _supplements = repository
+                                              .getSupplements(),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+            ],
+          ),
+          const _SectionLabel('Danger zone'),
+          _Group(
+            children: [
+              _SettingsRow(
+                icon: Icons.delete_outline,
+                destructive: true,
+                title: 'Delete saved data',
+                subtitle: 'Clear workout and nutrition history',
+                onTap: () => _confirmDelete(context),
               ),
-          const SizedBox(height: 24),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.delete_outline, color: context.colors.error),
-              title: const Text('Delete saved data'),
-              subtitle: const Text('Clear workout and nutrition history'),
-              onTap: () => _confirmDelete(context),
-            ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  final String label;
+  const _SectionLabel(this.label);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+    child: Text(
+      label,
+      style: Theme.of(context).textTheme.bodySmall
+          ?.copyWith(color: context.colors.textSecondary),
+    ),
+  );
+}
+
+/// A list group: one module with hairline dividers inset past the icon.
+class _Group extends StatelessWidget {
+  final List<Widget> children;
+  const _Group({required this.children});
+
+  @override
+  Widget build(BuildContext context) => AppCard(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    child: Column(
+      children: [
+        for (var i = 0; i < children.length; i++) ...[
+          if (i > 0) Divider(indent: 48, color: context.colors.divider),
+          children[i],
+        ],
+      ],
+    ),
+  );
+}
+
+/// A 56px navigation row: 36px icon chip, label, optional subtitle and
+/// trailing control.
+class _SettingsRow extends StatelessWidget {
+  final IconData icon;
+  final Widget? leading;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final bool busy;
+  final bool destructive;
+
+  const _SettingsRow({
+    required this.icon,
+    required this.title,
+    this.leading,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    this.busy = false,
+    this.destructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final tint = destructive ? colors.error : colors.textPrimary;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              busy
+                  ? const SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : leading ?? IconChip(icon, color: tint),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: tint,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (trailing != null)
+                trailing!
+              else if (onTap != null)
+                Icon(Icons.chevron_right_rounded, color: colors.textMuted),
+            ],
+          ),
+        ),
       ),
     );
   }

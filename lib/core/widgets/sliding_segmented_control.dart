@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 
-/// Rectangular side-by-side tabs with a highlight that slides between them.
+/// Pill segmented control: a recessed track with a raised pill that slides
+/// between the segments (design "Segmented controls").
 ///
 /// [position] is the (possibly fractional) index of the highlighted tab, so
 /// callers can feed it an animation value and the highlight glides smoothly.
@@ -25,14 +27,13 @@ class SlidingSegmentedControl extends StatelessWidget {
 
     return Center(
       child: FractionallySizedBox(
-        widthFactor: 0.9,
+        widthFactor: 1,
         child: Container(
           height: 44,
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: colors.card,
-            border: Border.all(color: colors.border),
-            borderRadius: BorderRadius.circular(12),
+            color: colors.surface,
+            borderRadius: BorderRadius.circular(999),
           ),
           child: Stack(
             children: [
@@ -46,8 +47,13 @@ class SlidingSegmentedControl extends StatelessWidget {
                   heightFactor: 1,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: colors.primary,
-                      borderRadius: BorderRadius.circular(9),
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? colors.barMuted
+                          : colors.raised,
+                      borderRadius: BorderRadius.circular(999),
+                      boxShadow: AppShadows.raised(
+                        Theme.of(context).brightness,
+                      ),
                     ),
                   ),
                 ),
@@ -57,16 +63,16 @@ class SlidingSegmentedControl extends StatelessWidget {
                   for (var i = 0; i < count; i++)
                     Expanded(
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(9),
+                        borderRadius: BorderRadius.circular(999),
                         onTap: () => onSelected(i),
                         child: Center(
                           child: Text(
                             labels[i],
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                               color: Color.lerp(
                                 colors.textSecondary,
-                                colors.onPrimary,
+                                colors.textPrimary,
                                 (1 - (position - i).abs()).clamp(0.0, 1.0),
                               ),
                             ),

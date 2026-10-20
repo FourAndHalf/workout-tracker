@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/empty_state.dart';
+import '../../core/widgets/ledger.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
@@ -20,7 +24,6 @@ class HistoryScreen extends ConsumerStatefulWidget {
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   late Future<List<WorkoutSession>> _sessions;
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
-  bool _calendar = true;
 
   @override
   void initState() {
@@ -34,89 +37,58 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     });
   }
 
-  Widget _viewToggleButton() {
-    return IconButton(
-      tooltip: _calendar ? 'Show list' : 'Show calendar',
-      icon: Icon(
-        _calendar ? Icons.view_list_outlined : Icons.calendar_month_outlined,
-      ),
-      onPressed: () => setState(() => _calendar = !_calendar),
-    );
-  }
-
-  /// The app bar action has no home when embedded, so it sits above the body.
-  Widget _withEmbeddedToggle(Widget body) {
-    if (!widget.embedded) return body;
-    return Column(
-      children: [
-        Align(alignment: Alignment.centerRight, child: _viewToggleButton()),
-        Expanded(child: body),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: widget.embedded
           ? null
-          : AppBar(
-              title: const Text('Workout History'),
-              actions: [_viewToggleButton()],
-            ),
-      body: _withEmbeddedToggle(
-        FutureBuilder<List<WorkoutSession>>(
-          future: _sessions,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Unable to load workout history'),
-              );
-            }
-            final sessions = snapshot.data ?? const <WorkoutSession>[];
-            if (sessions.isEmpty) {
-              return RefreshIndicator(
-                onRefresh: () async => _refresh(),
-                child: ListView(
-                  children: const [
-                    SizedBox(height: 160),
-                    EmptyState(
-                      icon: Icons.event_available_outlined,
-                      message: 'Complete a workout to see it here',
-                      subtitle: 'Your training history and calendar will fill in as you go.',
-                    ),
-                  ],
-                ),
-              );
-            }
+          : AppBar(title: const Text('Workout History')),
+      body: FutureBuilder<List<WorkoutSession>>(
+        future: _sessions,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('Unable to load workout history'));
+          }
+          final sessions = snapshot.data ?? const <WorkoutSession>[];
+          if (sessions.isEmpty) {
             return RefreshIndicator(
               onRefresh: () async => _refresh(),
-              child: _calendar
-                  ? _CalendarView(
-                      month: _month,
-                      sessions: sessions,
-                      onPrevious: () => setState(
-                        () => _month = DateTime(_month.year, _month.month - 1),
-                      ),
-                      onNext: () => setState(
-                        () => _month = DateTime(_month.year, _month.month + 1),
-                      ),
-                      onDayTap: (date, daySessions) =>
-                          _showDayDetails(context, date, daySessions),
-                      onSessionTap: (session) =>
-                          context.push('/history/${session.id}'),
-                    )
-                  : _SessionList(
-                      sessions: sessions,
-                      onSessionTap: (session) =>
-                          context.push('/history/${session.id}'),
-                    ),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 160),
+                  EmptyState(
+                    icon: Icons.event_available_outlined,
+                    message: 'Complete a workout to see it here',
+                    subtitle: 'Your training history and calendar will fill in as you go.',
+                    actionLabel: 'Choose a workout',
+                    onAction: () => GoRouter.maybeOf(context)?.go('/programs'),
+                  ),
+                ],
+              ),
             );
-          },
-        ),
+          }
+          return RefreshIndicator(
+            onRefresh: () async => _refresh(),
+            child: _CalendarView(
+              month: _month,
+              sessions: sessions,
+              onPrevious: () => setState(
+                () => _month = DateTime(_month.year, _month.month - 1),
+              ),
+              onNext: () => setState(
+                () => _month = DateTime(_month.year, _month.month + 1),
+              ),
+              onDayTap: (date, daySessions) => daySessions.length == 1
+                  // One session that day: go straight to it.
+                  ? context.push('/history/${daySessions.single.id}')
+                  : _showDayDetails(context, date, daySessions),
+              onSessionTap: (session) => context.push('/history/${session.id}'),
+            ),
+          );
+        },
       ),
     );
   }
@@ -234,24 +206,32 @@ class _CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     final firstWeekday = DateTime(month.year, month.month, 1).weekday;
+    final now = DateTime.now();
     final byDay = <int, List<WorkoutSession>>{};
+    final monthSessions = <WorkoutSession>[];
     for (final session in sessions) {
       if (session.startedAt.year == month.year &&
           session.startedAt.month == month.month) {
         byDay.putIfAbsent(session.startedAt.day, () => []).add(session);
+        monthSessions.add(session);
       }
     }
+    final minutes = monthSessions.fold<int>(
+      0,
+      (total, s) => s.finishedAt == null
+          ? total
+          : total + s.finishedAt!.difference(s.startedAt).inMinutes,
+    );
     final cells = <Widget>[
       for (final label in ['M', 'T', 'W', 'T', 'F', 'S', 'S'])
         Center(
           child: Text(
             label,
-            style: TextStyle(
-              color: context.colors.textMuted,
-              fontWeight: FontWeight.bold,
-            ),
+            style: textTheme.bodySmall?.copyWith(color: colors.textSecondary),
           ),
         ),
       for (var i = 1; i < firstWeekday; i++) const SizedBox(),
@@ -259,6 +239,10 @@ class _CalendarView extends StatelessWidget {
         _DayCell(
           day: day,
           sessions: byDay[day] ?? const [],
+          isToday:
+              now.year == month.year &&
+              now.month == month.month &&
+              now.day == day,
           onTap: () => onDayTap(
             DateTime(month.year, month.month, day),
             byDay[day] ?? const [],
@@ -266,48 +250,79 @@ class _CalendarView extends StatelessWidget {
         ),
     ];
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: onPrevious,
-              icon: const Icon(Icons.chevron_left),
-            ),
-            Text(
-              '${_monthName(month.month)} ${month.year}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            IconButton(
-              onPressed: onNext,
-              icon: const Icon(Icons.chevron_right),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        GridView.count(
-          crossAxisCount: 7,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          children: cells,
+        AppCard(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${_monthName(month.month)} ${month.year}',
+                      style: textTheme.titleMedium,
+                    ),
+                  ),
+                  RoundIconButton(
+                    tooltip: 'Previous month',
+                    icon: Icons.chevron_left_rounded,
+                    size: 36,
+                    onPressed: onPrevious,
+                  ),
+                  const SizedBox(width: 8),
+                  RoundIconButton(
+                    tooltip: 'Next month',
+                    icon: Icons.chevron_right_rounded,
+                    size: 36,
+                    onPressed: onNext,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              GridView.count(
+                crossAxisCount: 7,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+                children: cells,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 20),
-        Text(
-          '${sessions.length} completed session${sessions.length == 1 ? '' : 's'}',
-          style: TextStyle(color: context.colors.textSecondary),
+        ModuleHeader(
+          'Sessions',
+          subtitle:
+              '${monthSessions.length} in ${_monthName(month.month)} · $minutes min trained',
         ),
-        const SizedBox(height: 8),
-        ...sessions
-            .take(3)
-            .map(
-              (session) => _SessionTile(
-                session: session,
-                onTap: () => onSessionTap(session),
+        const SizedBox(height: 10),
+        if (monthSessions.isEmpty)
+          AppCard(
+            flat: true,
+            color: colors.surface,
+            child: Text(
+              'No sessions this month. Tap a day to add a note.',
+              style: textTheme.bodyMedium?.copyWith(
+                color: colors.textSecondary,
               ),
             ),
+          )
+        else
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Column(
+              children: [
+                for (var i = 0; i < monthSessions.length; i++) ...[
+                  if (i > 0) Divider(indent: 52, color: colors.divider),
+                  _SessionTile(
+                    session: monthSessions[i],
+                    onTap: () => onSessionTap(monthSessions[i]),
+                  ),
+                ],
+              ],
+            ),
+          ),
       ],
     );
   }
@@ -316,55 +331,41 @@ class _CalendarView extends StatelessWidget {
 class _DayCell extends StatelessWidget {
   final int day;
   final List<WorkoutSession> sessions;
+  final bool isToday;
   final VoidCallback onTap;
   const _DayCell({
     required this.day,
     required this.sessions,
+    required this.isToday,
     required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) => InkWell(
-    onTap: onTap,
-    borderRadius: BorderRadius.circular(8),
-    child: Container(
-      decoration: BoxDecoration(
-        color: sessions.isEmpty
-            ? context.colors.card
-            : context.colors.primary.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: sessions.isEmpty
-              ? context.colors.border
-              : context.colors.primary,
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final trained = sessions.isNotEmpty;
+    return InkWell(
+      onTap: onTap,
+      customBorder: const CircleBorder(),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: trained ? colors.primary : Colors.transparent,
+          border: isToday && !trained
+              ? Border.all(color: colors.primary, width: 1.5)
+              : null,
+        ),
+        child: Text(
+          '$day',
+          style: AppText.metricTable.copyWith(
+            fontSize: 12,
+            color: trained ? colors.onPrimary : colors.textPrimary,
+          ),
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('$day'),
-          if (sessions.isNotEmpty)
-            Icon(Icons.check_circle, size: 13, color: context.colors.primary),
-        ],
-      ),
-    ),
-  );
-}
-
-class _SessionList extends StatelessWidget {
-  final List<WorkoutSession> sessions;
-  final ValueChanged<WorkoutSession> onSessionTap;
-  const _SessionList({required this.sessions, required this.onSessionTap});
-  @override
-  Widget build(BuildContext context) => ListView.separated(
-    padding: const EdgeInsets.all(16),
-    itemCount: sessions.length,
-    separatorBuilder: (_, __) => const SizedBox(height: 8),
-    itemBuilder: (_, index) => _SessionTile(
-      session: sessions[index],
-      onTap: () => onSessionTap(sessions[index]),
-    ),
-  );
+    );
+  }
 }
 
 class _SessionTile extends StatelessWidget {
@@ -372,18 +373,60 @@ class _SessionTile extends StatelessWidget {
   final VoidCallback onTap;
   const _SessionTile({required this.session, required this.onTap});
   @override
-  Widget build(BuildContext context) => Card(
-    child: ListTile(
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final date = session.startedAt;
+    return InkWell(
       onTap: onTap,
-      leading: const Icon(Icons.fitness_center),
-      title: Text(session.dayName),
-      subtitle: Text(
-        '${_dateLabel(session.startedAt)}  •  ${_duration(session)}',
+      child: SizedBox(
+        height: 60,
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: colors.raised,
+                shape: BoxShape.circle,
+                border: Border.all(color: colors.border),
+              ),
+              child: Text('${date.day}', style: AppText.metricTable),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    session.dayName,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '${weekdayLabel(date)} · ${_timeLabel(date)}',
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(_duration(session), style: AppText.metricTable),
+            const SizedBox(width: 4),
+            Icon(Icons.chevron_right_rounded, color: colors.textMuted),
+          ],
+        ),
       ),
-      trailing: const Icon(Icons.chevron_right),
-    ),
-  );
+    );
+  }
 }
+
+String _timeLabel(DateTime date) =>
+    '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
 
 String _monthName(int month) => const [
   'January',
@@ -399,8 +442,6 @@ String _monthName(int month) => const [
   'November',
   'December',
 ][month - 1];
-String _dateLabel(DateTime date) =>
-    '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
 String _duration(WorkoutSession session) => session.finishedAt == null
     ? 'In progress'
     : '${session.finishedAt!.difference(session.startedAt).inMinutes} min';

@@ -1,15 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:fitness_tracker/core/widgets/app_card.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/main.dart';
+import 'package:fitness_tracker/router.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
 import 'package:fitness_tracker/features/program/program_list_screen.dart';
 import 'package:fitness_tracker/features/program/program_providers.dart';
 
 void main() {
+  setUp(() => appRouter.go('/'));
+
   final mockProgram = ProgramModel(
     schemaVersion: 1,
     programId: 'ffts-4week',
@@ -91,7 +95,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     // Tap on Programs tab in bottom navigation bar
-    await tester.tap(find.text('Programs'));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Programs'),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -131,7 +140,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     // Tap Programs tab
-    await tester.tap(find.text('Programs'));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Programs'),
+      ),
+    );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -146,5 +160,47 @@ void main() {
     expect(find.text('Start Arms Workout'), findsOneWidget);
     expect(find.text('Rope Extensions'), findsOneWidget);
     expect(find.text('Incline Skull Crush'), findsAtLeast(1));
+  });
+
+  testWidgets('Start on today\'s day begins the workout in one tap', (
+    WidgetTester tester,
+  ) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(() => db.close());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(db),
+          currentProgramProvider.overrideWith((ref) async => mockProgram),
+        ],
+        child: const FitnessTrackerApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Programs'),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    // Arms is the next day due, so only its card offers Start.
+    expect(find.widgetWithText(ElevatedButton, 'Start'), findsOneWidget);
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    // Straight into the running session, no second Start tap.
+    expect(find.text('Elapsed'), findsOneWidget);
+    expect(find.text('Finish workout'), findsOneWidget);
+
+    await tester.tap(find.text('Finish workout'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
   });
 }

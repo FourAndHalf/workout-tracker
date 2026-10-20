@@ -368,7 +368,9 @@ class AppTheme {
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: SegmentedButton.styleFrom(
           backgroundColor: c.surface,
-          selectedBackgroundColor: c.raised,
+          selectedBackgroundColor: brightness == Brightness.dark
+              ? c.barMuted
+              : c.raised,
           selectedForegroundColor: c.textPrimary,
           foregroundColor: c.textSecondary,
           side: BorderSide.none,

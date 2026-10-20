@@ -398,18 +398,8 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
     );
   }
 
-  (WeekModel, DayModel) _findDay(ProgramModel program) {
-    final week = program.weeks.firstWhere(
-      (candidate) =>
-          candidate.days.any((candidateDay) => candidateDay.id == widget.dayId),
-      orElse: () => program.weeks.first,
-    );
-    final day = week.days.firstWhere(
-      (d) => d.id == widget.dayId,
-      orElse: () => week.days.first,
-    );
-    return (week, day);
-  }
+  (WeekModel, DayModel) _findDay(ProgramModel program) =>
+      locateDay(program, widget.dayId);
 
   /// Sets logged against sets planned; a rest-pause target counts as one.
   (int, int) _setProgress(ActiveWorkoutState state, DayModel day) {

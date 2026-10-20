@@ -21,11 +21,11 @@ class _ProgressHubScreenState extends State<ProgressHubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DayAppBar(),
+      appBar: const DayAppBar(title: 'Progress'),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
             child: TweenAnimationBuilder<double>(
               tween: Tween(end: _tab.index.toDouble()),
               duration: const Duration(milliseconds: 250),

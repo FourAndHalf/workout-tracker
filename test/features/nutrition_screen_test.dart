@@ -10,6 +10,8 @@ import 'package:fitness_tracker/features/nutrition/nutrition_screen.dart';
 import 'package:fitness_tracker/main.dart';
 
 void main() {
+  suggestionTests();
+
   testWidgets('NutritionScreen exposes camera and gallery photo actions', (
     tester,
   ) async {
@@ -44,6 +46,14 @@ void main() {
     expect(find.text('Shopping list'), findsOneWidget);
     expect(find.byTooltip('Edit item'), findsWidgets);
     expect(find.byTooltip('Remove item'), findsWidgets);
+    expect(find.byTooltip('Buy on Blinkit'), findsWidgets);
+
+    // Tapping a row ticks the item off (and does not leave the app).
+    String left() => tester.widget<Text>(find.textContaining(' left')).data!;
+    final before = left();
+    await tester.tap(find.byKey(const ValueKey('shopping-row')).first);
+    await tester.pumpAndSettle();
+    expect(left(), isNot(before));
   });
 
   testWidgets('autoCapture opens the camera picker on arrival', (tester) async {
@@ -120,5 +130,15 @@ void main() {
     await tester.tap(find.text('Custom label'));
     await tester.pumpAndSettle();
     expect(find.byType(TextField), findsOneWidget);
+  });
+}
+
+void suggestionTests() {
+  test('suggestedMealLabel follows the time of day', () {
+    expect(suggestedMealLabel(DateTime(2026, 10, 20, 7)), 'Breakfast');
+    expect(suggestedMealLabel(DateTime(2026, 10, 20, 13)), 'Lunch');
+    expect(suggestedMealLabel(DateTime(2026, 10, 20, 20)), 'Dinner');
+    expect(suggestedMealLabel(DateTime(2026, 10, 20, 16, 30)), 'Snack');
+    expect(suggestedMealLabel(DateTime(2026, 10, 20, 2)), 'Snack');
   });
 }

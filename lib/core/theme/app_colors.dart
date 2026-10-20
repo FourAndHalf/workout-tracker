@@ -288,8 +288,8 @@ class AppColors extends ThemeExtension<AppColors> {
 }
 
 extension AppColorsContext on BuildContext {
-  /// Falls back to the light (default) palette when no [AppTheme] is
+  /// Falls back to the dark (default) palette when no [AppTheme] is
   /// installed.
   AppColors get colors =>
-      Theme.of(this).extension<AppColors>() ?? AppColors.light;
+      Theme.of(this).extension<AppColors>() ?? AppColors.dark;
 }

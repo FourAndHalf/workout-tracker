@@ -12,10 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/ledger.dart';
 import '../../core/widgets/sliding_segmented_control.dart';
-import '../../core/widgets/tag_pill.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
 
@@ -48,6 +49,15 @@ final shoppingListEnabledProvider = FutureProvider<bool>((ref) async {
   final preferences = await SharedPreferences.getInstance();
   return preferences.getBool(shoppingListEnabledKey) ?? true;
 });
+
+/// The meal most likely being logged at [now], offered first when labelling.
+String suggestedMealLabel(DateTime now) {
+  final hour = now.hour;
+  if (hour >= 5 && hour < 11) return 'Breakfast';
+  if (hour >= 11 && hour < 16) return 'Lunch';
+  if (hour >= 18 && hour < 23) return 'Dinner';
+  return 'Snack';
+}
 
 class NutritionScreen extends ConsumerStatefulWidget {
   /// Opens the camera on arrival (used by the launcher widget deep link).
@@ -134,48 +144,83 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
   }
 
   Future<String?> _pickMealLabel() {
+    final suggested = suggestedMealLabel(DateTime.now());
+    final labels = [
+      suggested,
+      ...['Breakfast', 'Lunch', 'Dinner', 'Snack'].where((l) => l != suggested),
+    ];
     return showModalBottomSheet<String?>(
       context: context,
-      backgroundColor: context.colors.surface,
       isScrollControlled: true,
-      builder: (context) => SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ListTile(
-                title: Text(
-                  'Meal',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+      builder: (context) {
+        final colors = context.colors;
+        final textTheme = Theme.of(context).textTheme;
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colors.border,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
                 ),
-                subtitle: Text('Add a label to find this photo later'),
-              ),
-              ...['Breakfast', 'Lunch', 'Dinner', 'Snack'].map(
-                (label) => ListTile(
-                  leading: const Icon(Icons.restaurant_outlined),
-                  title: Text(label),
-                  onTap: () => Navigator.pop(context, label),
+                const SizedBox(height: 16),
+                Text('Label this meal', style: textTheme.titleMedium),
+                const SizedBox(height: 2),
+                Text(
+                  'So you can find the photo later',
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
+                  ),
                 ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit_outlined),
-                title: const Text('Custom label'),
-                onTap: () async {
-                  final custom = await _askCustomLabel(context);
-                  if (context.mounted && custom != null) {
-                    Navigator.pop(context, custom);
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.remove_circle_outline),
-                title: const Text('Skip label'),
-                onTap: () => Navigator.pop(context),
-              ),
-            ],
+                const SizedBox(height: 12),
+                for (final label in labels)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: IconChip(
+                      Icons.restaurant_outlined,
+                      color: label == suggested ? colors.textPrimary : null,
+                    ),
+                    title: Text(label),
+                    trailing: label == suggested
+                        ? StatusBadge(
+                            'Suggested',
+                            foreground: colors.onPrimary,
+                            background: colors.primary,
+                          )
+                        : null,
+                    onTap: () => Navigator.pop(context, label),
+                  ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const IconChip(Icons.edit_outlined),
+                  title: const Text('Custom label'),
+                  onTap: () async {
+                    final custom = await _askCustomLabel(context);
+                    if (context.mounted && custom != null) {
+                      Navigator.pop(context, custom);
+                    }
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const IconChip(Icons.remove_circle_outline),
+                  title: const Text('Skip label'),
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -241,25 +286,18 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
       length: 2,
       child: Scaffold(
         appBar: DayAppBar(
+          title: 'Nutrition',
           actions: [
             if (shoppingListEnabled)
-              IconButton(
+              RoundIconButton(
                 tooltip: 'Shopping list',
-                icon: const Icon(Icons.shopping_cart_outlined),
-                onPressed: () => showDialog<void>(
+                icon: Icons.shopping_cart_outlined,
+                onPressed: () => showModalBottomSheet<void>(
                   context: context,
-                  builder: (_) => Dialog(
-                    insetPadding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 24,
-                    ),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: 460,
-                        maxHeight: 560,
-                      ),
-                      child: _ShoppingListTab(),
-                    ),
+                  isScrollControlled: true,
+                  builder: (context) => FractionallySizedBox(
+                    heightFactor: 0.85,
+                    child: const _ShoppingListTab(),
                   ),
                 ),
               ),
@@ -268,7 +306,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
               child: Builder(
                 builder: (context) {
                   final controller = DefaultTabController.of(context);
@@ -292,16 +330,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       children: [
-                        Text(
-                          'Log a meal',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.2,
-                            color: context.colors.textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
@@ -309,7 +337,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                                 icon: Icons.camera_alt_outlined,
                                 label: 'Snap Meal',
                                 caption: 'Use the camera',
-                                color: context.colors.success,
+                                primary: true,
                                 onTap: () => _choosePhoto(ImageSource.camera),
                               ),
                             ),
@@ -319,7 +347,6 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                                 icon: Icons.photo_library_outlined,
                                 label: 'Upload Photo',
                                 caption: 'Pick from gallery',
-                                color: context.colors.primary,
                                 onTap: () => _choosePhoto(ImageSource.gallery),
                               ),
                             ),
@@ -330,22 +357,9 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                           const LinearProgressIndicator(),
                         ],
                         const SizedBox(height: 24),
-                        Text(
+                        ModuleHeader(
                           "Today's meals",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.2,
-                            color: context.colors.textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '${photos.value?.length ?? 0} meals logged',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: context.colors.textSecondary,
-                          ),
+                          subtitle: '${photos.value?.length ?? 0} meals logged',
                         ),
                         const SizedBox(height: 12),
                         photos.when(
@@ -584,102 +598,151 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
         final remaining = items
             .where((item) => !_checkedItems.contains(item))
             .length;
+        final colors = context.colors;
         return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
           children: [
-            Row(
-              children: [
-                const Icon(Icons.shopping_cart_outlined, size: 22),
-                const SizedBox(width: 10),
-                const Expanded(
-                  child: Text(
-                    'Shopping list',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Text(
-                  '$remaining left',
-                  style: TextStyle(color: context.colors.textSecondary),
-                ),
-                IconButton(
-                  tooltip: 'Add item',
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    _customItems ??= List<String>.from(items);
-                    _editItem('', adding: true);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 2),
-            Padding(
-              padding: EdgeInsets.only(left: 32),
-              child: Text(
-                'This week’s ingredients',
-                style: TextStyle(
-                  color: context.colors.textSecondary,
-                  fontSize: 12,
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: colors.border,
+                  borderRadius: BorderRadius.circular(999),
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            ModuleHeader(
+              'Shopping list',
+              subtitle: 'This week’s ingredients · $remaining left',
+              trailing: RoundIconButton(
+                tooltip: 'Add item',
+                icon: Icons.add_rounded,
+                size: 40,
+                onPressed: () {
+                  _customItems ??= List<String>.from(items);
+                  _editItem('', adding: true);
+                },
+              ),
+            ),
             const SizedBox(height: 12),
+            if (items.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(
+                  value: (items.length - remaining) / items.length,
+                  minHeight: 4,
+                ),
+              ),
+            const SizedBox(height: 8),
             if (items.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 40),
                 child: Center(child: Text('No ingredients this week')),
               ),
-            ...items.map((item) {
-              final checked = _checkedItems.contains(item);
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Checkbox(
-                    value: checked,
-                    onChanged: (value) => _toggleItem(item, value ?? false),
-                  ),
-                  title: InkWell(
-                    onTap: () => _openBlinkit(item),
-                    child: Text(
-                      item,
-                      style: TextStyle(
-                        decoration: checked ? TextDecoration.lineThrough : null,
-                        color: checked
-                            ? context.colors.textMuted
-                            : context.colors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: 'Edit item',
-                        visualDensity: VisualDensity.compact,
-                        icon: const Icon(Icons.edit_outlined, size: 19),
-                        onPressed: () {
-                          _customItems ??= List<String>.from(items);
-                          _editItem(item);
-                        },
-                      ),
-                      IconButton(
-                        tooltip: 'Remove item',
-                        visualDensity: VisualDensity.compact,
-                        icon: const Icon(Icons.delete_outline, size: 19),
-                        onPressed: () {
-                          _customItems ??= List<String>.from(items);
-                          _removeItem(item);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
+            for (final item in items)
+              _ShoppingRow(
+                item: item,
+                checked: _checkedItems.contains(item),
+                // The whole row ticks the item off; shopping is a separate,
+                // explicit action.
+                onToggle: () =>
+                    _toggleItem(item, !_checkedItems.contains(item)),
+                onBuy: () => _openBlinkit(item),
+                onEdit: () {
+                  _customItems ??= List<String>.from(items);
+                  _editItem(item);
+                },
+                onRemove: () {
+                  _customItems ??= List<String>.from(items);
+                  _removeItem(item);
+                },
+              ),
           ],
         );
       },
+    );
+  }
+}
+
+class _ShoppingRow extends StatelessWidget {
+  final String item;
+  final bool checked;
+  final VoidCallback onToggle;
+  final VoidCallback onBuy;
+  final VoidCallback onEdit;
+  final VoidCallback onRemove;
+
+  const _ShoppingRow({
+    required this.item,
+    required this.checked,
+    required this.onToggle,
+    required this.onBuy,
+    required this.onEdit,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return InkWell(
+      key: const ValueKey('shopping-row'),
+      onTap: onToggle,
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: SizedBox(
+        height: 52,
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: checked ? colors.primary : Colors.transparent,
+                border: Border.all(
+                  color: checked ? colors.primary : colors.border,
+                  width: 1.5,
+                ),
+              ),
+              child: checked
+                  ? Icon(Icons.check_rounded, size: 14, color: colors.onPrimary)
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                item,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  decoration: checked ? TextDecoration.lineThrough : null,
+                  color: checked ? colors.textMuted : colors.textPrimary,
+                ),
+              ),
+            ),
+            IconButton(
+              tooltip: 'Buy on Blinkit',
+              visualDensity: VisualDensity.compact,
+              icon: const Icon(Icons.open_in_new_rounded, size: 18),
+              onPressed: onBuy,
+            ),
+            IconButton(
+              tooltip: 'Edit item',
+              visualDensity: VisualDensity.compact,
+              icon: const Icon(Icons.edit_outlined, size: 18),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              tooltip: 'Remove item',
+              visualDensity: VisualDensity.compact,
+              icon: const Icon(Icons.close_rounded, size: 18),
+              onPressed: onRemove,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -717,7 +780,7 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
   }) async {
     final draft = await showDialog<_MealPlanDraft>(
       context: context,
-      builder: (_) => _MealPlanEditor(meal: meal),
+      builder: (_) => _MealPlanEditor(meal: meal, initialDay: _selectedDay),
     );
     if (draft == null) return;
 
@@ -785,17 +848,15 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                     children: [
                       Text(
                         'DAILY PLANNED TARGET',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.55,
+                        style: AppText.labelUppercase.copyWith(
                           color: colors.textSecondary,
                         ),
                       ),
                       const Spacer(),
-                      TagPill(
+                      Text(
                         '${dayMeals.length} ${dayMeals.length == 1 ? 'meal' : 'meals'}',
-                        color: colors.primary,
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: colors.textSecondary),
                       ),
                     ],
                   ),
@@ -803,26 +864,17 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                   Text.rich(
                     TextSpan(
                       text: sum((m) => m.calories).toStringAsFixed(0),
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.7,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
+                      style: AppText.metricHero,
                       children: [
                         TextSpan(
                           text: ' kcal',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 0,
-                            color: colors.textSecondary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colors.textSecondary),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   if (macroTotal > 0)
                     ClipRRect(
                       borderRadius: BorderRadius.circular(999),
@@ -830,9 +882,9 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                         height: 8,
                         child: Row(
                           children: [
-                            _MacroSegment(protein, colors.success),
-                            _MacroSegment(carbs, colors.primary),
-                            _MacroSegment(fat, colors.warning),
+                            _MacroSegment(protein, _macroTone(colors, 0)),
+                            _MacroSegment(carbs, _macroTone(colors, 1)),
+                            _MacroSegment(fat, _macroTone(colors, 2)),
                           ],
                         ),
                       ),
@@ -841,14 +893,24 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                   Row(
                     children: [
                       Expanded(
-                        child: _MacroStat('Protein', protein, colors.success),
+                        child: _MacroStat(
+                          'Protein',
+                          protein,
+                          _macroTone(colors, 0),
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: _MacroStat('Carbs', carbs, colors.primary),
+                        child: _MacroStat(
+                          'Carbs',
+                          carbs,
+                          _macroTone(colors, 1),
+                        ),
                       ),
                       const SizedBox(width: 8),
-                      Expanded(child: _MacroStat('Fat', fat, colors.warning)),
+                      Expanded(
+                        child: _MacroStat('Fat', fat, _macroTone(colors, 2)),
+                      ),
                     ],
                   ),
                 ],
@@ -863,23 +925,38 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                     children: [
                       Text(
                         'Planned Meals (${mealPlanDayNames[_selectedDay - 1]})',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.2,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        'Tap a meal to edit it',
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: colors.textSecondary),
                       ),
                     ],
                   ),
                 ),
                 FilledButton.icon(
-                  icon: const Icon(Icons.add),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(0, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                  ),
+                  icon: const Icon(Icons.add_rounded, size: 18),
                   label: const Text('Add Meal'),
                   onPressed: () => _editMeal(context, ref),
                 ),
               ],
             ),
             const SizedBox(height: 12),
+            if (dayMeals.isEmpty)
+              AppCard(
+                flat: true,
+                color: colors.surface,
+                child: Text(
+                  'Nothing planned for ${mealPlanDayNames[_selectedDay - 1]} yet.',
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: colors.textSecondary),
+                ),
+              ),
             ...dayMeals.indexed.map(
               (entry) => _MealPlanCard(
                 meal: entry.$2,
@@ -900,6 +977,10 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
     );
   }
 }
+
+/// Macros are categories, not meaning: tone steps from charcoal to light.
+Color _macroTone(AppColors colors, int index) =>
+    Color.lerp(colors.primary, colors.track, index / 2)!;
 
 class _WeekDayStrip extends StatelessWidget {
   static const _letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -924,22 +1005,16 @@ class _WeekDayStrip extends StatelessWidget {
           for (var day = 1; day <= 7; day++)
             Expanded(
               child: InkWell(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(999),
                 onTap: () => onSelected(day),
                 child: Container(
                   height: 48,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: day == selected
-                        ? colors.success.withValues(alpha: 0.15)
+                        ? colors.primary
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: day == selected
-                          ? colors.success
-                          : Colors.transparent,
-                      width: 1.5,
-                    ),
+                    borderRadius: BorderRadius.circular(999),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -947,10 +1022,10 @@ class _WeekDayStrip extends StatelessWidget {
                       Text(
                         _letters[day - 1],
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                           color: day == selected
-                              ? colors.success
+                              ? colors.onPrimary
                               : colors.textSecondary,
                         ),
                       ),
@@ -961,7 +1036,9 @@ class _WeekDayStrip extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: day == today
-                              ? colors.primary
+                              ? (day == selected
+                                    ? colors.onPrimary
+                                    : colors.primary)
                               : Colors.transparent,
                         ),
                       ),
@@ -1001,29 +1078,28 @@ class _MacroStat extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
     decoration: BoxDecoration(
       color: context.colors.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(AppRadius.md),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.8,
-            color: color,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: context.colors.textSecondary),
+            ),
+          ],
         ),
         const SizedBox(height: 4),
-        Text(
-          '${grams.toStringAsFixed(0)}g',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            fontFeatures: [FontFeature.tabularFigures()],
-          ),
-        ),
+        Text('${grams.toStringAsFixed(0)}g', style: AppText.metricCard),
       ],
     ),
   );
@@ -1039,17 +1115,20 @@ class _MacroPill extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
     decoration: BoxDecoration(
-      color: color.withValues(alpha: 0.12),
-      borderRadius: BorderRadius.circular(6),
+      color: context.colors.surface,
+      borderRadius: BorderRadius.circular(AppRadius.sm),
     ),
-    child: Text(
-      label,
-      style: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w700,
-        color: color,
-        fontFeatures: const [FontFeature.tabularFigures()],
-      ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Text(label, style: AppText.metricTable.copyWith(fontSize: 12)),
+      ],
     ),
   );
 }
@@ -1080,6 +1159,7 @@ class _MealPlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: AppCard(
+        onTap: onEdit,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1087,13 +1167,9 @@ class _MealPlanCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'MEAL $index \u00B7 ${dayName.toUpperCase()}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.55,
-                      color: colors.warning,
-                    ),
+                    'Meal $index \u00B7 $dayName',
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: colors.textSecondary),
                   ),
                 ),
                 SizedBox(
@@ -1119,14 +1195,7 @@ class _MealPlanCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              meal.mealName,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.2,
-              ),
-            ),
+            Text(meal.mealName, style: Theme.of(context).textTheme.titleLarge),
             if (ingredients.isNotEmpty) ...[
               const SizedBox(height: 10),
               Wrap(
@@ -1141,22 +1210,19 @@ class _MealPlanCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: colors.surface,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: colors.border),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                       ),
                       child: Text(
                         item,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colors.textSecondary,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: colors.textSecondary),
                       ),
                     ),
                 ],
               ),
             ],
             const SizedBox(height: 12),
-            Divider(color: colors.border, height: 1),
+            Divider(color: colors.divider, height: 1),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -1165,23 +1231,19 @@ class _MealPlanCard extends StatelessWidget {
               children: [
                 Text(
                   '${meal.calories.toStringAsFixed(0)} kcal',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    fontFeatures: [FontFeature.tabularFigures()],
-                  ),
+                  style: AppText.metricTable,
                 ),
                 _MacroPill(
                   'P ${meal.proteinG.toStringAsFixed(0)}g',
-                  colors.success,
+                  _macroTone(colors, 0),
                 ),
                 _MacroPill(
                   'C ${meal.carbsG.toStringAsFixed(0)}g',
-                  colors.primary,
+                  _macroTone(colors, 1),
                 ),
                 _MacroPill(
                   'F ${meal.fatG.toStringAsFixed(0)}g',
-                  colors.warning,
+                  _macroTone(colors, 2),
                 ),
                 if (meal.videoUrl != null && meal.videoUrl!.isNotEmpty)
                   ActionChip(
@@ -1226,7 +1288,10 @@ class _MealPlanDraft {
 class _MealPlanEditor extends StatefulWidget {
   final MealPlan? meal;
 
-  const _MealPlanEditor({this.meal});
+  /// New meals default to the day being viewed.
+  final int initialDay;
+
+  const _MealPlanEditor({this.meal, this.initialDay = 1});
 
   @override
   State<_MealPlanEditor> createState() => _MealPlanEditorState();
@@ -1248,7 +1313,7 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
     super.initState();
     final meal = widget.meal;
     _showVideo = meal?.videoUrl?.isNotEmpty ?? false;
-    _day = meal?.dayOfWeek ?? 1;
+    _day = meal?.dayOfWeek ?? widget.initialDay;
     _name = TextEditingController(text: meal?.mealName ?? '');
     _ingredients = TextEditingController(text: meal?.ingredients ?? '');
     _calories = TextEditingController(text: meal?.calories.toString() ?? '');
@@ -1404,47 +1469,59 @@ class _PhotoActionTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final String caption;
-  final Color color;
+  final bool primary;
   final VoidCallback onTap;
 
   const _PhotoActionTile({
     required this.icon,
     required this.label,
     required this.caption,
-    required this.color,
     required this.onTap,
+    this.primary = false,
   });
 
   @override
-  Widget build(BuildContext context) => AppCard(
-    onTap: onTap,
-    color: color.withValues(alpha: 0.08),
-    borderColor: color.withValues(alpha: 0.3),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final ink = primary ? colors.onPrimary : colors.textPrimary;
+    return AppCard(
+      onTap: onTap,
+      color: primary ? colors.primary : null,
+      borderColor: primary ? colors.primary : null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primary
+                  ? colors.onPrimary.withValues(alpha: 0.14)
+                  : colors.raised,
+              border: primary ? null : Border.all(color: colors.border),
+            ),
+            child: Icon(icon, color: ink, size: 20),
           ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          caption,
-          style: TextStyle(fontSize: 12, color: context.colors.textSecondary),
-        ),
-      ],
-    ),
-  );
+          const SizedBox(height: 16),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(color: ink),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            caption,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: primary
+                  ? colors.onPrimary.withValues(alpha: 0.7)
+                  : colors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SavedPhoto {
@@ -1473,7 +1550,7 @@ class _PhotoGrid extends StatelessWidget {
     itemBuilder: (context, index) {
       final photo = photos[index];
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -1491,8 +1568,8 @@ class _PhotoGrid extends StatelessWidget {
               bottom: 8,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(4),
+                  color: const Color(0xB31C1C1E),
+                  borderRadius: BorderRadius.circular(999),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -1503,7 +1580,8 @@ class _PhotoGrid extends StatelessWidget {
                     photo.mealLabel ?? 'Meal',
                     style: const TextStyle(
                       fontSize: 11,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFFF2F2F3),
                     ),
                   ),
                 ),
@@ -1523,13 +1601,27 @@ class _EmptyPhotos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 150,
+    height: 140,
     alignment: Alignment.center,
     decoration: BoxDecoration(
       color: context.colors.surface,
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(color: context.colors.border),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
     ),
-    child: Text(message, style: TextStyle(color: context.colors.textSecondary)),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.restaurant_outlined,
+          color: context.colors.textSecondary,
+          size: 22,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          message,
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: context.colors.textSecondary),
+        ),
+      ],
+    ),
   );
 }

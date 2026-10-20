@@ -54,7 +54,8 @@ void main() {
     await tester.tap(find.text('History'));
     await tester.pumpAndSettle();
     expect(find.text('Complete a workout to see it here'), findsOneWidget);
-    // Embedded history exposes its calendar/list toggle without an app bar.
-    expect(find.byTooltip('Show list'), findsOneWidget);
+    // With no sessions yet, History shows only its empty state and a way
+    // to go train.
+    expect(find.text('Choose a workout'), findsOneWidget);
   });
 }

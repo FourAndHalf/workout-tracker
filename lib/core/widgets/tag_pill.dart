@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Small uppercase status/modality pill (design `badge-tag`): tinted fill,
-/// tinted outline, [color] text.
+import '../theme/app_theme.dart';
+
+/// Small status pill (design "Badges & status pills"): 22px, a soft
+/// container of [color] with [color] text. Uppercase is reserved for these
+/// tiny status codes.
 class TagPill extends StatelessWidget {
   final String label;
   final Color color;
@@ -10,20 +13,16 @@ class TagPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+    height: 22,
+    alignment: Alignment.center,
+    padding: const EdgeInsets.symmetric(horizontal: 8),
     decoration: BoxDecoration(
-      color: color.withValues(alpha: 0.1),
+      color: color.withValues(alpha: 0.14),
       borderRadius: BorderRadius.circular(999),
-      border: Border.all(color: color.withValues(alpha: 0.4)),
     ),
     child: Text(
       label.toUpperCase(),
-      style: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.8,
-        color: color,
-      ),
+      style: AppText.labelUppercase.copyWith(color: color),
     ),
   );
 }

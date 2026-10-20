@@ -57,7 +57,7 @@ void main() {
       expect(seen, AppColors.light);
     });
 
-    testWidgets('context.colors falls back to light without AppTheme', (
+    testWidgets('context.colors falls back to dark without AppTheme', (
       tester,
     ) async {
       late AppColors seen;
@@ -71,7 +71,7 @@ void main() {
           ),
         ),
       );
-      expect(seen, AppColors.light);
+      expect(seen, AppColors.dark);
     });
   });
 }
