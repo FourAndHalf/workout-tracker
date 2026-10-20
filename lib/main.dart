@@ -8,11 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'core/theme/theme_mode_provider.dart';
 import 'data/database/app_database.dart';
 import 'data/repositories/backup_repository.dart';
 import 'data/repositories/program_repository.dart';
-import 'features/program/program_providers.dart';
 import 'data/repositories/workout_repository.dart';
 import 'data/repositories/nutrition_repository.dart';
 import 'data/repositories/progress_repository.dart';
@@ -87,26 +85,7 @@ void main() async {
   // the first frame, which is what dismisses the native splash screen.
   unawaited(DailyWorkoutAlarmService().initialize());
 
-  final preferences = await SharedPreferences.getInstance();
-  final needsRestoreCheck =
-      !(preferences.getBool(BackupRepository.firstLaunchRestoreCheckKey) ??
-          false);
-
-  final themeMode = parseThemeMode(
-    preferences.getString(themeModePreferenceKey),
-  );
-
-  final selectedProgramId =
-      preferences.getString(selectedProgramPreferenceKey) ??
-      ProgramRepository.defaultProgramId;
-
   runApp(
-    ProviderScope(
-      overrides: [
-        initialThemeModeProvider.overrideWithValue(themeMode),
-        initialProgramIdProvider.overrideWithValue(selectedProgramId),
-      ],
-      child: FitnessTrackerApp(needsRestoreCheck: needsRestoreCheck),
-    ),
+    ProviderScope(child: const FitnessTrackerApp(needsRestoreCheck: null)),
   );
 }
