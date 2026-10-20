@@ -62,7 +62,6 @@ dependencies:
   extension_google_sign_in_as_googleapis_auth: ^3.0.0
   archive: ^4.3.0
   _discoveryapis_commons: ^1.0.8
-  google_fonts: ^8.2.1
   home_widget: ^0.10.0
 
 dev_dependencies:
@@ -86,3 +85,14 @@ flutter:
     - assets/programs/program_full.json
     - assets/programs/mobility_10min.json
     - assets/programs/badminton_mobility_strength.json
+
+  # Bundled (not downloaded) so the app renders offline; see design/DESIGN.md.
+  fonts:
+    - family: JetBrains Mono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/JetBrainsMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/JetBrainsMono-SemiBold.ttf
+          weight: 600

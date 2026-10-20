@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../data/models/program_model.dart';
 import 'exercise_tile.dart';
@@ -74,99 +75,115 @@ class BlockCard extends StatelessWidget {
     }
   }
 
+  bool _isComplete(BlockModel block) {
+    final states = activeExerciseStates;
+    if (states == null || block.exercises.isEmpty) return false;
+    return block.exercises.every((exercise) {
+      final state = states[exercise.id];
+      if (state == null) return false;
+      if (exercise.logMode == 'cumulative') {
+        final total = state.restPauseChunks.fold(0, (sum, v) => sum + v);
+        return total >= (exercise.repTarget ?? 100);
+      }
+      return state.loggedSets.length >= exercise.targetSets;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
     final badgeColor = _getBlockBadgeColor(context, block.type);
-    final badgeText = _getBlockBadgeText(block.type);
+    final isActive = activeExerciseStates != null;
+    final complete = _isComplete(block);
+    final sets =
+        '${block.targetSets} ${block.targetSets == 1 ? 'set' : 'sets'}';
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 12),
       child: AppCard(
-        padding: EdgeInsets.zero,
-        borderColor: block.type == 'straight'
-            ? context.colors.border
-            : badgeColor.withValues(alpha: 0.5),
-        borderWidth: block.type == 'straight' ? 1 : 1.5,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: context.colors.surface,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
+            Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: complete ? colors.primary : colors.surface,
+                  ),
+                  child: complete
+                      ? Icon(
+                          Icons.check_rounded,
+                          size: 16,
+                          color: colors.onPrimary,
+                        )
+                      : Text(
+                          (blockIndex + 1).toString().padLeft(2, '0'),
+                          style: AppText.metricDelta.copyWith(
+                            color: colors.textSecondary,
+                          ),
+                        ),
                 ),
-                border: Border(
-                  bottom: BorderSide(
-                    color: context.colors.border.withValues(alpha: 0.5),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(block.name, style: textTheme.titleMedium),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          // Straight sets are the default; only special
+                          // block types get a badge.
+                          if (block.type != 'straight') ...[
+                            _BlockBadge(
+                              label: _getBlockBadgeText(block.type),
+                              color: badgeColor,
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          Text(
+                            sets,
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: badgeColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: badgeColor, width: 1),
-                    ),
-                    child: Text(
-                      badgeText,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: badgeColor,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      block.name,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: context.colors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    '${block.targetSets} Sets',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: context.colors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
+              ],
             ),
 
             if (block.instructions != null && block.instructions!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.info_outline,
+                      Icons.info_outline_rounded,
                       size: 14,
-                      color: context.colors.warning,
+                      color: colors.textSecondary,
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         block.instructions!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: context.colors.warning,
-                          fontStyle: FontStyle.italic,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
                         ),
                       ),
                     ),
@@ -174,22 +191,55 @@ class BlockCard extends StatelessWidget {
                 ),
               ),
 
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: block.exercises
-                    .map(
-                      (e) => ExerciseTile(
-                        exercise: e,
-                        activeState: activeExerciseStates?[e.id],
-                      ),
-                    )
-                    .toList(),
+            SizedBox(height: isActive ? 12 : 4),
+            for (var i = 0; i < block.exercises.length; i++) ...[
+              if (!isActive && i > 0)
+                Divider(indent: 48, color: colors.divider),
+              ExerciseTile(
+                exercise: block.exercises[i],
+                activeState: activeExerciseStates?[block.exercises[i].id],
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
+}
+
+/// Block type as a small neutral badge with a colored dot, so the type reads
+/// without tinting the module.
+class _BlockBadge extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _BlockBadge({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    height: 20,
+    padding: const EdgeInsets.symmetric(horizontal: 8),
+    decoration: BoxDecoration(
+      color: context.colors.raised,
+      borderRadius: BorderRadius.circular(AppRadius.sm),
+      border: Border.all(color: context.colors.border),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: AppText.labelUppercase.copyWith(
+            color: context.colors.textPrimary,
+          ),
+        ),
+      ],
+    ),
+  );
 }

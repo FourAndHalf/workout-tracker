@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/core/widgets/day_app_bar.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
+import 'package:fitness_tracker/features/home/home_providers.dart';
 import 'package:fitness_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,12 +34,17 @@ void main() {
       findsNothing,
     );
 
-    // Every tab shares the same day header.
-    for (final tab in ['Programs', 'Progress', 'Nutrition', 'Home']) {
+    // Every tab but Home shares the same day header; Home opens with its own
+    // greeting instead.
+    for (final tab in ['Programs', 'Progress', 'Nutrition']) {
       await tester.tap(find.descendant(of: bar, matching: find.text(tab)));
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byType(DayAppBar), findsOneWidget, reason: tab);
     }
+    await tester.tap(find.descendant(of: bar, matching: find.text('Home')));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.byType(DayAppBar), findsNothing);
+    expect(find.text(greetingFor(DateTime.now())), findsOneWidget);
 
     await tester.tap(find.descendant(of: bar, matching: find.text('Progress')));
     await tester.pumpAndSettle();

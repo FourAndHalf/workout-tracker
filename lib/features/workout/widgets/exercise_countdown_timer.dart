@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/ledger.dart';
 
 /// Countdown for a duration-based exercise (e.g. a 60 s hold). Reaching 00:00
 /// logs the full target; "Log early" logs the time actually held. While
@@ -83,70 +85,54 @@ class _ExerciseCountdownTimerState extends State<ExerciseCountdownTimer> {
         : 0.0;
     final started = _elapsed > 0;
 
-    return Column(
+    return Row(
       children: [
-        Row(
-          children: [
-            SizedBox(
-              width: 72,
-              height: 72,
-              child: Stack(
-                alignment: Alignment.center,
+        GaugeArc(
+          value: progress,
+          size: 76,
+          stroke: 6,
+          child: Text(
+            _clock(remaining),
+            key: const Key('countdownReadout'),
+            style: AppText.metricTable.copyWith(color: colors.textPrimary),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(
+                  _running ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                  size: 18,
+                ),
+                label: Text(
+                  _running ? 'Pause' : (started ? 'Resume' : 'Start'),
+                ),
+                onPressed: widget.paused ? null : (_running ? _pause : _start),
+              ),
+              const SizedBox(height: 4),
+              Row(
                 children: [
-                  SizedBox.expand(
-                    child: CircularProgressIndicator(
-                      value: progress,
-                      strokeWidth: 5,
-                      backgroundColor: colors.border,
-                      valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: started ? _reset : null,
+                      child: const Text('Reset'),
                     ),
                   ),
-                  Text(
-                    _clock(remaining),
-                    key: const Key('countdownReadout'),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: colors.textPrimary,
+                  Expanded(
+                    child: TextButton(
+                      onPressed: started && !widget.paused
+                          ? () => _log(_elapsed)
+                          : null,
+                      child: const Text('Log early'),
                     ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  ElevatedButton.icon(
-                    icon: Icon(
-                      _running
-                          ? Icons.pause_outlined
-                          : Icons.play_arrow_outlined,
-                    ),
-                    label: Text(
-                      _running ? 'Pause' : (started ? 'Resume' : 'Start'),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: widget.paused
-                        ? null
-                        : (_running ? _pause : _start),
-                  ),
-                  TextButton(
-                    onPressed: started ? _reset : null,
-                    child: const Text('Reset'),
-                  ),
-                  TextButton(
-                    onPressed: started && !widget.paused
-                        ? () => _log(_elapsed)
-                        : null,
-                    child: const Text('Log early'),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

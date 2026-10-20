@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
+import '../../core/widgets/ledger.dart';
 import '../../services/flux_widget_service.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
@@ -35,153 +37,193 @@ class HomeScreen extends ConsumerWidget {
     final quote = dailyMotivationQuote(now);
 
     return Scaffold(
-      appBar: DayAppBar(
-        actions: [
-          IconButton(
-            tooltip: 'Open Spotify',
-            icon: const Icon(Icons.music_note_outlined),
-            onPressed: () => launchUrl(
-              Uri.parse('https://open.spotify.com/'),
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
-          IconButton(
-            tooltip: 'Settings',
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () => context.push('/settings'),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                children: [
-                  _QuoteCard(quote: quote),
-                  const SizedBox(height: 12),
-                  _StartWorkoutCard(next: nextWorkout),
-                  const SizedBox(height: 24),
-                  analytics.when(
-                    loading: () => const SizedBox(
-                      height: 160,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                    error: (error, _) =>
-                        const _AnalyticsMessage('Analytics unavailable'),
-                    data: (data) => DashboardStats(data: data, now: now),
+      body: SafeArea(
+        bottom: false,
+        child: RefreshIndicator(
+          onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _Header(now: now),
+                const SizedBox(height: 20),
+                _TodayCard(
+                  next: nextWorkout,
+                  trainedToday: analytics.value?.trainedToday ?? false,
+                ),
+                const SizedBox(height: 12),
+                analytics.when(
+                  loading: () => const SizedBox(
+                    height: 160,
+                    child: Center(child: CircularProgressIndicator()),
                   ),
-                ],
-              ),
+                  error: (error, _) =>
+                      const _AnalyticsMessage('Analytics unavailable'),
+                  data: (data) => DashboardStats(data: data, now: now),
+                ),
+                const SizedBox(height: 12),
+                _QuoteCard(quote: quote),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _StartWorkoutCard extends ConsumerWidget {
-  final NextWorkoutInfo? next;
+/// Greeting in `headline-xl-mobile` with the date beneath, actions right.
+class _Header extends StatelessWidget {
+  final DateTime now;
 
-  const _StartWorkoutCard({required this.next});
+  const _Header({required this.now});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(greetingFor(now), style: textTheme.headlineSmall),
+              const SizedBox(height: 2),
+              Text(
+                '${weekdayLabel(now)}, ${shortDateLabel(now)}',
+                style: textTheme.bodyMedium?.copyWith(
+                  color: context.colors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        RoundIconButton(
+          tooltip: 'Open Spotify',
+          icon: Icons.music_note_outlined,
+          onPressed: () => launchUrl(
+            Uri.parse('https://open.spotify.com/'),
+            mode: LaunchMode.externalApplication,
+          ),
+        ),
+        const SizedBox(width: 8),
+        RoundIconButton(
+          tooltip: 'Settings',
+          icon: Icons.settings_outlined,
+          onPressed: () => context.push('/settings'),
+        ),
+      ],
+    );
+  }
+}
+
+/// The hero module: the session to do next (or the one in progress), on the
+/// screen's one decorative pearl gradient.
+class _TodayCard extends ConsumerWidget {
+  final NextWorkoutInfo? next;
+  final bool trainedToday;
+
+  const _TodayCard({required this.next, required this.trainedToday});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
     final next = this.next;
     final active = ref.watch(activeWorkoutSessionProvider);
     final resuming = active != null;
-    final enabled = resuming || next != null;
-    final accent = resuming ? colors.primary : colors.success;
-    final fill = enabled ? accent : colors.surface;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: enabled
-            ? [
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.25),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ]
-            : null,
+
+    final String eyebrow;
+    final String title;
+    final String? details;
+    if (resuming) {
+      eyebrow = 'In progress';
+      title = active.dayName;
+      details = 'Pick up where you left off';
+    } else if (next != null) {
+      eyebrow = trainedToday ? 'Up next' : "Today's session";
+      title = next.dayName;
+      details = [
+        'Week ${next.weekNumber}',
+        '${next.exerciseCount} exercises',
+        if (next.estimatedMinutes > 0) '~${next.estimatedMinutes} min',
+      ].join(' · ');
+    } else {
+      eyebrow = 'Today';
+      title = 'No workout due';
+      details = null;
+    }
+
+    final VoidCallback? onStart = resuming
+        ? () => context.push('/programs/${active.programId}/${active.dayId}')
+        : next == null
+        ? null
+        : () => context.push('/programs/${next.programId}/${next.dayId}');
+
+    return AppCard(
+      radius: AppRadius.xl,
+      padding: const EdgeInsets.all(20),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [colors.heroStart, colors.heroEnd],
       ),
-      child: Material(
-        color: fill,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: resuming
-              ? () => context.push(
-                  '/programs/${active.programId}/${active.dayId}',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  eyebrow,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
+                  ),
+                ),
+              ),
+              if (resuming)
+                StatusBadge(
+                  'Live',
+                  icon: Icons.circle,
+                  foreground: colors.info,
+                  background: colors.infoContainer,
                 )
-              : next == null
-              ? null
-              : () => context.push('/programs/${next.programId}/${next.dayId}'),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.play_arrow_outlined,
-                    size: 32,
-                    color: enabled ? Colors.white : colors.textMuted,
-                  ),
+              else if (trainedToday)
+                StatusBadge(
+                  'Trained today',
+                  icon: Icons.check_rounded,
+                  foreground: colors.success,
+                  background: colors.successContainer,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        resuming
-                            ? 'Go back to ${active.dayName} Workout'
-                            : next == null
-                            ? 'No workout due'
-                            : 'Start ${next.dayName} Workout',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                          color: enabled ? Colors.white : colors.textMuted,
-                        ),
-                      ),
-                      if (resuming) ...[
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Tap to return',
-                          style: TextStyle(fontSize: 13, color: Colors.white70),
-                        ),
-                      ] else if (next != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          'Week ${next.weekNumber} \u00B7 ${next.exerciseCount} Exercises',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                if (enabled)
-                  const Icon(Icons.chevron_right_rounded, color: Colors.white),
-              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(title, style: textTheme.headlineSmall),
+          if (details != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              details,
+              style: textTheme.bodyMedium?.copyWith(
+                color: colors.textSecondary,
+              ),
+            ),
+          ],
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              icon: Icon(
+                resuming
+                    ? Icons.arrow_forward_rounded
+                    : Icons.play_arrow_outlined,
+              ),
+              label: Text(resuming ? 'Resume workout' : 'Start workout'),
+              onPressed: onStart,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -193,37 +235,31 @@ class _QuoteCard extends StatelessWidget {
   const _QuoteCard({required this.quote});
 
   @override
-  Widget build(BuildContext context) => AppCard(
-    padding: const EdgeInsets.fromLTRB(16, 15, 16, 14),
-    child: SizedBox(
-      width: double.infinity,
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    return AppCard(
+      flat: true,
+      color: colors.surface,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             Icons.format_quote_outlined,
-            color: context.colors.warning,
-            size: 23,
+            color: colors.textSecondary,
+            size: 20,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  quote.quote,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.35,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(quote.quote, style: textTheme.bodyMedium),
                 const SizedBox(height: 6),
                 Text(
                   quote.source,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: context.colors.textMuted,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
                   ),
                 ),
               ],
@@ -231,8 +267,8 @@ class _QuoteCard extends StatelessWidget {
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _AnalyticsMessage extends StatelessWidget {
@@ -242,6 +278,7 @@ class _AnalyticsMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppCard(
+    flat: true,
     color: context.colors.surface,
     padding: const EdgeInsets.all(20),
     child: Center(

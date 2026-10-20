@@ -12,15 +12,25 @@ void main() {
       expect(AppTheme.lightTheme.extension<AppColors>(), AppColors.light);
     });
 
-    test('uses Kinetic Obsidian canvas colors for the scaffold', () {
+    test('uses Pearl Ledger canvas colors for the scaffold', () {
       expect(
         AppTheme.darkTheme.scaffoldBackgroundColor,
-        const Color(0xFF0F1218),
+        const Color(0xFF0F0F11),
       );
       expect(
         AppTheme.lightTheme.scaffoldBackgroundColor,
-        const Color(0xFFF3F5F8),
+        const Color(0xFFE8E8EA),
       );
+    });
+
+    test('sets JetBrains Mono everywhere and a charcoal primary', () {
+      final theme = AppTheme.lightTheme;
+      expect(theme.textTheme.bodyMedium?.fontFamily, AppText.family);
+      expect(theme.textTheme.displayLarge?.fontFamily, AppText.family);
+      expect(theme.colorScheme.primary, const Color(0xFF2A2A2D));
+      expect(theme.colorScheme.onPrimary, Colors.white);
+      // The anchor inverts to light on the graphite theme.
+      expect(AppTheme.darkTheme.colorScheme.primary, const Color(0xFFECECEE));
     });
   });
 
@@ -47,7 +57,7 @@ void main() {
       expect(seen, AppColors.light);
     });
 
-    testWidgets('context.colors falls back to dark without AppTheme', (
+    testWidgets('context.colors falls back to light without AppTheme', (
       tester,
     ) async {
       late AppColors seen;
@@ -61,7 +71,7 @@ void main() {
           ),
         ),
       );
-      expect(seen, AppColors.dark);
+      expect(seen, AppColors.light);
     });
   });
 }

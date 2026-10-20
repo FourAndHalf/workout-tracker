@@ -32,16 +32,31 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text(weekdayLabel(DateTime.now())), findsOneWidget);
+    final now = DateTime.now();
+    expect(find.text(greetingFor(now)), findsOneWidget);
+    expect(
+      find.text('${weekdayLabel(now)}, ${shortDateLabel(now)}'),
+      findsOneWidget,
+    );
     expect(find.byIcon(Icons.music_note_outlined), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
     expect(find.byIcon(Icons.play_arrow_outlined), findsOneWidget);
-    expect(find.text('Training cycle & volume'), findsOneWidget);
+    expect(find.text('Start workout'), findsOneWidget);
+    expect(find.text('This week'), findsOneWidget);
+    expect(find.text('Training volume', skipOffstage: false), findsOneWidget);
+    expect(find.text('Consistency', skipOffstage: false), findsOneWidget);
+    expect(find.text('Personal records', skipOffstage: false), findsOneWidget);
+    expect(find.text('Next milestone', skipOffstage: false), findsOneWidget);
     expect(
       find.byIcon(Icons.format_quote_outlined, skipOffstage: false),
       findsOneWidget,
     );
-    expect(find.text('Training volume'), findsOneWidget);
+  });
+
+  test('greetingFor follows the time of day', () {
+    expect(greetingFor(DateTime(2026, 10, 20, 7)), 'Good morning');
+    expect(greetingFor(DateTime(2026, 10, 20, 13)), 'Good afternoon');
+    expect(greetingFor(DateTime(2026, 10, 20, 21)), 'Good evening');
   });
 
   test('DashboardAnalytics calculates weekly metrics from persisted data', () {

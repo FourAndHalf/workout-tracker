@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/app_card.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/ledger.dart';
 import '../../../data/models/program_model.dart';
 import '../../workout/widgets/exercise_countdown_timer.dart';
 
@@ -84,8 +85,10 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
   String _formatSetsReps() {
     final exercise = widget.exercise;
+    final sets =
+        '${exercise.targetSets} ${exercise.targetSets == 1 ? 'set' : 'sets'}';
     if (exercise.repTarget != null) {
-      return '${exercise.targetSets} Sets · Target: ${exercise.repTarget} reps';
+      return '$sets · target ${exercise.repTarget} reps';
     }
     if (exercise.logMode == 'time' &&
         exercise.repScheme != null &&
@@ -94,9 +97,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
     }
     if (exercise.repScheme != null && exercise.repScheme!.isNotEmpty) {
       final unit = exercise.repUnit != null ? ' ${exercise.repUnit}' : '';
-      return '${exercise.targetSets} Sets · (${exercise.repScheme!.join(", ")})$unit';
+      return '$sets · ${exercise.repScheme!.join(", ")}$unit';
     }
-    return '${exercise.targetSets} Sets';
+    return sets;
   }
 
   Future<void> _openExerciseVideo(BuildContext context) async {
@@ -143,226 +146,195 @@ class _ExerciseTileState extends State<ExerciseTile> {
     final active = widget.activeState;
 
     if (active == null) {
-      return _buildTile(
-        context,
-        child: null,
-        borderColor: null,
-        borderWidth: 1,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: _buildHeader(context, trailing: null),
       );
     }
 
+    final Widget body;
+    final bool isDone;
     if (exercise.logMode == 'cumulative') {
-      return _buildTile(
-        context,
-        borderColor: null,
-        borderWidth: 1,
-        child: _buildCumulativeBody(active, exercise.repTarget ?? 100),
-      );
+      final target = exercise.repTarget ?? 100;
+      isDone = active.restPauseChunks.fold(0, (sum, v) => sum + v) >= target;
+      body = _buildCumulativeBody(active, target);
+    } else {
+      isDone = active.currentSetNumber > exercise.targetSets;
+      body = _buildSetLoggerBody(active, isDone);
     }
 
-    final isDone = active.currentSetNumber > exercise.targetSets;
-    return _buildTile(
-      context,
-      borderColor: isDone ? context.colors.primary : null,
-      borderWidth: isDone ? 1.5 : 1,
-      child: _buildSetLoggerBody(active, isDone),
-    );
-  }
-
-  Widget _buildTile(
-    BuildContext context, {
-    required Widget? child,
-    required Color? borderColor,
-    required double borderWidth,
-  }) {
-    final exercise = widget.exercise;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: AppCard(
-        padding: const EdgeInsets.all(12),
-        color: context.colors.surface,
-        borderColor:
-            borderColor ?? context.colors.border.withValues(alpha: 0.5),
-        borderWidth: borderWidth,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: context.colors.card,
-                  child: Icon(
-                    _getLogModeIcon(exercise.logMode),
-                    size: 16,
-                    color: context.colors.primary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => _openExerciseVideo(context),
-                              child: Text(
-                                exercise.name,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: context.colors.textPrimary,
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            tooltip: 'Watch ${exercise.name} on YouTube Shorts',
-                            icon: const Icon(Icons.open_in_new_outlined),
-                            color: context.colors.primary,
-                            onPressed: () => _openExerciseVideo(context),
-                            visualDensity: VisualDensity.compact,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _formatSetsReps(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: context.colors.secondary,
-                        ),
-                      ),
-                      if (exercise.prescription != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          exercise.prescription!,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: context.colors.textSecondary,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (child != null) ...[const SizedBox(height: 12), child],
-          ],
-        ),
+    final colors = context.colors;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(
+            context,
+            trailing: isDone
+                ? StatusBadge(
+                    'Done',
+                    icon: Icons.check_rounded,
+                    foreground: colors.success,
+                    background: colors.successContainer,
+                  )
+                : null,
+          ),
+          const SizedBox(height: 12),
+          body,
+        ],
       ),
     );
   }
 
-  Widget _buildSetLoggerBody(ActiveExerciseLogState active, bool isDone) {
+  Widget _buildHeader(BuildContext context, {required Widget? trailing}) {
     final exercise = widget.exercise;
-    final isTimed = exercise.logMode == 'time';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    return Row(
       children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            'Set ${active.currentSetNumber > exercise.targetSets ? exercise.targetSets : active.currentSetNumber} / ${exercise.targetSets}',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: isDone ? context.colors.primary : context.colors.secondary,
-            ),
+        IconChip(_getLogModeIcon(exercise.logMode)),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () => _openExerciseVideo(context),
+                child: Text(
+                  exercise.name,
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                _formatSetsReps(),
+                style: textTheme.bodySmall?.copyWith(
+                  color: colors.textSecondary,
+                ),
+              ),
+              if (exercise.prescription != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  exercise.prescription!,
+                  style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
+                ),
+              ],
+            ],
           ),
         ),
-        const SizedBox(height: 8),
+        if (trailing != null) ...[const SizedBox(width: 8), trailing],
+        IconButton(
+          tooltip: 'Watch ${exercise.name} on YouTube Shorts',
+          icon: const Icon(Icons.smart_display_outlined, size: 20),
+          color: colors.textSecondary,
+          onPressed: () => _openExerciseVideo(context),
+        ),
+      ],
+    );
+  }
+
+  String _setSummary(int index, Map<String, dynamic> set) {
+    final weightStr = set['weight'] != null ? '${set['weight']} kg' : '';
+    final repsStr = set['reps'] != null ? '${set['reps']} reps' : '';
+    final failureStr = set['hitFailure'] == true ? ' · failure' : '';
+    final seconds = set['durationSeconds'] as int?;
+    final timeStr = seconds != null
+        ? ' · ${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}'
+        : '';
+    return 'Set $index: $weightStr $repsStr$failureStr$timeStr'
+        .replaceAll(RegExp(r' {2,}'), ' ')
+        .replaceFirst(': · ', ': ');
+  }
+
+  Widget _buildSetLoggerBody(ActiveExerciseLogState active, bool isDone) {
+    final exercise = widget.exercise;
+    final colors = context.colors;
+    final isTimed = exercise.logMode == 'time';
+    final usesWeight =
+        exercise.logMode == 'weightReps' || exercise.logMode == 'failure';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: SegmentProgress(
+                total: exercise.targetSets,
+                filled: active.loggedSets.length.clamp(0, exercise.targetSets),
+                height: 4,
+              ),
+            ),
+            if (!isDone) ...[
+              const SizedBox(width: 12),
+              Text(
+                'Set ${active.currentSetNumber}/${exercise.targetSets}',
+                style: AppText.metricTable.copyWith(
+                  fontSize: 12,
+                  color: colors.textSecondary,
+                ),
+              ),
+            ],
+          ],
+        ),
 
         if (active.loggedSets.isNotEmpty) ...[
-          Column(
-            children: active.loggedSets.asMap().entries.map((entry) {
-              final idx = entry.key + 1;
-              final set = entry.value;
-              final weightStr = set['weight'] != null
-                  ? '${set['weight']} kg'
-                  : '';
-              final repsStr = set['reps'] != null ? '${set['reps']} reps' : '';
-              final failureStr = set['hitFailure'] == true
-                  ? ' \u{1F525} Failure'
-                  : '';
-              final seconds = set['durationSeconds'] as int?;
-              final timeStr = seconds != null
-                  ? ' · ${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}'
-                  : '';
-
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle_outlined,
-                      color: context.colors.primary,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Set $idx: $weightStr $repsStr$failureStr$timeStr'
-                          .replaceAll(RegExp(r' {2,}'), ' ')
-                          .replaceFirst(': · ', ': '),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: context.colors.textSecondary,
-                        fontWeight: FontWeight.w500,
+          const SizedBox(height: 10),
+          for (final entry in active.loggedSets.asMap().entries)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(
+                children: [
+                  Icon(Icons.check_rounded, color: colors.success, size: 14),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _setSummary(entry.key + 1, entry.value),
+                      style: AppText.metricTable.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: colors.textSecondary,
                       ),
                     ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 8),
+                  ),
+                ],
+              ),
+            ),
         ],
 
         if (!isDone) ...[
-          if (exercise.logMode == 'weightReps' || exercise.logMode == 'failure')
+          const SizedBox(height: 12),
+          if (usesWeight)
             Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: _StepperField(
+                    label: 'Weight (kg)',
                     controller: _weightController,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: const InputDecoration(
-                      labelText: 'Weight (kg)',
-                      isDense: true,
-                    ),
+                    step: 2.5,
+                    decimal: true,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: TextField(
+                  child: _StepperField(
+                    label: 'Reps',
                     controller: _repsController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Reps',
-                      isDense: true,
-                    ),
+                    step: 1,
                   ),
                 ),
               ],
             ),
 
           if (exercise.logMode == 'repsOnly')
-            TextField(
-              controller: _repsController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Reps',
-                isDense: true,
-              ),
-            ),
+            _StepperField(label: 'Reps', controller: _repsController, step: 1),
 
           if (isTimed)
             ExerciseCountdownTimer(
@@ -374,17 +346,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
             ),
 
           if (exercise.logMode == 'failure') ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 4),
             SwitchListTile(
               value: _hitFailure,
               onChanged: (val) => setState(() => _hitFailure = val),
               title: Text(
-                'Hit Failure \u{1F525}',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: context.colors.error,
-                ),
+                'Reached failure',
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               contentPadding: EdgeInsets.zero,
               dense: true,
@@ -392,18 +360,11 @@ class _ExerciseTileState extends State<ExerciseTile> {
           ],
 
           if (!isTimed) ...[
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.check_outlined),
-                label: Text(
-                  'Log Set ${active.currentSetNumber}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onPressed: _submitSet,
-              ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.check_rounded, size: 18),
+              label: Text('Log Set ${active.currentSetNumber}'),
+              onPressed: _submitSet,
             ),
           ],
         ],
@@ -412,6 +373,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
   }
 
   Widget _buildCumulativeBody(ActiveExerciseLogState active, int targetReps) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
     final total = active.restPauseChunks.fold(0, (sum, val) => sum + val);
     final progress = targetReps > 0
         ? (total / targetReps).clamp(0.0, 1.0)
@@ -419,37 +382,16 @@ class _ExerciseTileState extends State<ExerciseTile> {
     final isComplete = total >= targetReps;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            SizedBox(
-              width: 56,
-              height: 56,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    value: progress,
-                    strokeWidth: 5,
-                    backgroundColor: context.colors.border,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      isComplete
-                          ? context.colors.primary
-                          : context.colors.secondary,
-                    ),
-                  ),
-                  Text(
-                    '$total',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: isComplete
-                          ? context.colors.primary
-                          : context.colors.textPrimary,
-                    ),
-                  ),
-                ],
-              ),
+            GaugeArc(
+              value: progress,
+              size: 64,
+              stroke: 6,
+              color: isComplete ? colors.success : null,
+              child: Text('$total', style: AppText.metricTable),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -457,32 +399,19 @@ class _ExerciseTileState extends State<ExerciseTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isComplete
-                        ? 'TARGET REACHED! \u{1F389}'
-                        : 'REST-PAUSE PROGRESS',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: isComplete
-                          ? context.colors.primary
-                          : context.colors.textSecondary,
+                    isComplete ? 'Target reached' : 'Rest-pause progress',
+                    style: textTheme.bodySmall?.copyWith(
+                      color: isComplete ? colors.success : colors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    '$total / $targetReps Reps Completed',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('$total / $targetReps reps', style: AppText.metricCard),
                   if (active.restPauseChunks.isNotEmpty) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
-                      'Chunks: ${active.restPauseChunks.join(" → ")}',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: context.colors.textMuted,
+                      'Chunks ${active.restPauseChunks.join(" → ")}',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colors.textMuted,
                       ),
                     ),
                   ],
@@ -491,39 +420,134 @@ class _ExerciseTileState extends State<ExerciseTile> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
 
-        if (!isComplete)
+        if (!isComplete) ...[
+          const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: TextField(
+                child: _StepperField(
+                  label: 'Reps in chunk',
                   controller: _chunkController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Reps in chunk',
-                    isDense: true,
-                  ),
+                  step: 1,
                 ),
               ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
+              const SizedBox(width: 10),
+              SizedBox(
+                height: 52,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.add_rounded, size: 18),
+                  label: const Text('Add chunk'),
+                  onPressed: _submitChunk,
                 ),
-                icon: const Icon(Icons.add_outlined, size: 20),
-                label: const Text(
-                  'Add Chunk',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onPressed: _submitChunk,
               ),
             ],
           ),
+        ],
       ],
     );
   }
+}
+
+/// A 52px numeric input with − / + steppers and its label above, so most
+/// sets can be logged without opening the keyboard.
+class _StepperField extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+  final double step;
+  final bool decimal;
+
+  const _StepperField({
+    required this.label,
+    required this.controller,
+    required this.step,
+    this.decimal = false,
+  });
+
+  void _bump(int direction) {
+    final current = double.tryParse(controller.text) ?? 0;
+    final next = (current + step * direction).clamp(0, 9999).toDouble();
+    controller.text = decimal
+        ? (next == next.roundToDouble()
+              ? next.toStringAsFixed(0)
+              : next.toStringAsFixed(1))
+        : next.round().toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium
+              ?.copyWith(color: colors.textSecondary),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          height: 52,
+          decoration: BoxDecoration(
+            color: colors.raised,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: colors.border),
+          ),
+          child: Row(
+            children: [
+              _StepButton(
+                icon: Icons.remove_rounded,
+                tooltip: 'Decrease $label',
+                onTap: () => _bump(-1),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: decimal,
+                  ),
+                  style: AppText.metricCard,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ),
+              _StepButton(
+                icon: Icons.add_rounded,
+                tooltip: 'Increase $label',
+                onTap: () => _bump(1),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StepButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _StepButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+    tooltip: tooltip,
+    icon: Icon(icon, size: 18),
+    color: context.colors.textPrimary,
+    onPressed: onTap,
+  );
 }

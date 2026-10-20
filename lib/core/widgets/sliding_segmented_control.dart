@@ -66,7 +66,7 @@ class SlidingSegmentedControl extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: Color.lerp(
                                 colors.textSecondary,
-                                Colors.white,
+                                colors.onPrimary,
                                 (1 - (position - i).abs()).clamp(0.0, 1.0),
                               ),
                             ),

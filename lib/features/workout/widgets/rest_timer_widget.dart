@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/ledger.dart';
 
 class RestTimerWidget extends StatefulWidget {
   final int initialSeconds;
@@ -66,42 +69,25 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
     final progress = widget.initialSeconds > 0
         ? _secondsRemaining / widget.initialSeconds
         : 0.0;
+    final clock =
+        '${_secondsRemaining ~/ 60}:${(_secondsRemaining % 60).toString().padLeft(2, '0')}';
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: context.colors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.colors.primary, width: 1.5),
-      ),
+    return AppCard(
+      padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
       child: Row(
         children: [
-          SizedBox(
-            width: 36,
-            height: 36,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 3.5,
-                  backgroundColor: context.colors.border,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    context.colors.primary,
-                  ),
-                ),
-                Text(
-                  '$_secondsRemaining',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: context.colors.primary,
-                  ),
-                ),
-              ],
+          GaugeArc(
+            value: progress,
+            size: 48,
+            stroke: 4,
+            child: Text(
+              '$_secondsRemaining',
+              style: AppText.metricDelta.copyWith(color: colors.textPrimary),
             ),
           ),
           const SizedBox(width: 12),
@@ -111,39 +97,36 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'REST TIMER',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: context.colors.primary,
-                    letterSpacing: 0.5,
+                  'Rest',
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
                   ),
                 ),
                 Text(
                   _secondsRemaining > 0
-                      ? 'Resting... $_secondsRemaining s'
-                      : 'Rest Complete! Ready for next set.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: context.colors.textPrimary,
+                      ? 'Next set in $clock'
+                      : 'Ready for the next set',
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
           ),
-          TextButton(
-            onPressed: () => _addSeconds(30),
-            child: Text(
-              '+30s',
-              style: TextStyle(color: context.colors.secondary, fontSize: 12),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(56, 36),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
             ),
+            onPressed: () => _addSeconds(30),
+            child: const Text('+30s'),
           ),
           IconButton(
+            tooltip: 'Skip rest',
             icon: Icon(
-              Icons.close_outlined,
+              Icons.close_rounded,
               size: 20,
-              color: context.colors.textMuted,
+              color: colors.textSecondary,
             ),
             onPressed: widget.onDismiss,
           ),

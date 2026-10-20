@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/utils/elapsed_time.dart';
+import '../../core/widgets/app_card.dart';
+import '../../core/widgets/ledger.dart';
 import '../../data/models/program_model.dart';
 import '../../services/daily_workout_alarm_service.dart';
 import '../../services/flux_widget_service.dart';
@@ -200,20 +203,23 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
     final isActive = workoutState.sessionId != null;
     _syncActiveTracking(isActive);
 
+    final dayWeek = programAsync.whenOrNull(
+      data: (program) => _findDay(program),
+    );
+
     return Scaffold(
-      appBar: AppBar(title: Text(widget.dayId.toUpperCase())),
+      appBar: AppBar(
+        title: dayWeek == null
+            ? null
+            : Text(
+                'Week ${dayWeek.$1.number} · Day ${dayWeek.$2.order}',
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: context.colors.textSecondary),
+              ),
+      ),
       body: programAsync.when(
         data: (program) {
-          final week = program.weeks.firstWhere(
-            (candidate) => candidate.days.any(
-              (candidateDay) => candidateDay.id == widget.dayId,
-            ),
-            orElse: () => program.weeks.first,
-          );
-          final day = week.days.firstWhere(
-            (d) => d.id == widget.dayId,
-            orElse: () => week.days.first,
-          );
+          final (week, day) = _findDay(program);
 
           if (isActive) {
             _syncLockScreenNotification(workoutState, day);
@@ -234,144 +240,93 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
           final targetSeconds = estimatedSeconds > 0
               ? estimatedSeconds
               : _fallbackTargetSeconds;
+          final (setsDone, setsTotal) = _setProgress(workoutState, day);
 
           return Column(
             children: [
+              if (isActive)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                  child: _SessionPanel(
+                    elapsed: _formatElapsed(elapsedSeconds),
+                    target: _formatElapsed(targetSeconds),
+                    isPaused: workoutState.isPaused,
+                    setsDone: setsDone,
+                    setsTotal: setsTotal,
+                    nowLabel: _lockScreenSetLabel(workoutState, day),
+                    onTogglePause: workoutState.isPaused
+                        ? workoutNotifier.resume
+                        : workoutNotifier.pause,
+                  ),
+                ),
               Expanded(
+                // Not a lazy ListView: exercise tiles hold their typed
+                // weight/reps, which must survive scrolling out of view.
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              day.name,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: context.colors.primary,
-                              ),
-                            ),
-                          ),
-                          if (isActive)
-                            IconButton(
-                              tooltip: workoutState.isPaused
-                                  ? 'Resume workout'
-                                  : 'Pause workout',
-                              icon: Icon(
-                                workoutState.isPaused
-                                    ? Icons.play_circle_outline
-                                    : Icons.pause_circle_outline,
-                                color: context.colors.primary,
-                              ),
-                              onPressed: workoutState.isPaused
-                                  ? workoutNotifier.resume
-                                  : workoutNotifier.pause,
-                            ),
-                          isActive
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      workoutState.isPaused
-                                          ? 'Paused: ${_formatElapsed(elapsedSeconds)}'
-                                          : 'Elapsed: ${_formatElapsed(elapsedSeconds)}',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: context.colors.primary,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Target: ${_formatElapsed(targetSeconds)}',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: context.colors.textMuted,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  '${day.blocks.length} Blocks',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: context.colors.textSecondary,
-                                  ),
-                                ),
-                        ],
+                      Text(
+                        day.name,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 2),
+                      Text(
+                        week.title,
+                        style: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(color: context.colors.textSecondary),
+                      ),
+                      const SizedBox(height: 16),
 
-                      if (isActive) ...[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(3),
-                          child: LinearProgressIndicator(
-                            value: (elapsedSeconds / targetSeconds).clamp(
-                              0.0,
-                              1.0,
-                            ),
-                            minHeight: 3,
-                            backgroundColor: context.colors.border,
-                            color: context.colors.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
+                      if (!isActive) ...[
+                        _OverviewStrip(day: day),
+                        const SizedBox(height: 12),
                       ],
 
                       if (day.reviewNote != null) ...[
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: context.colors.warning.withValues(
-                              alpha: 0.1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: context.colors.warning,
-                              width: 0.5,
-                            ),
+                            color: context.colors.warningContainer,
+                            borderRadius: BorderRadius.circular(AppRadius.md),
                           ),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(
-                                Icons.warning_amber_outlined,
+                                Icons.warning_amber_rounded,
                                 color: context.colors.warning,
-                                size: 18,
+                                size: 16,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   day.reviewNote!,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: context.colors.warning,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: context.colors.warning),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 12),
                       ],
 
                       IgnorePointer(
                         ignoring: workoutState.isPaused,
-                        child: Opacity(
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 220),
                           opacity: workoutState.isPaused ? 0.45 : 1,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              ...day.blocks.asMap().entries.map((entry) {
-                                return BlockCard(
+                              for (final entry in day.blocks.asMap().entries)
+                                BlockCard(
                                   block: entry.value,
                                   blockIndex: entry.key,
                                   activeExerciseStates: activeExerciseStates,
-                                );
-                              }),
+                                ),
                             ],
                           ),
                         ),
@@ -383,7 +338,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
 
               if (isActive && workoutState.isResting)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                   child: RestTimerWidget(
                     initialSeconds: workoutState.restSeconds,
                     paused: workoutState.isPaused,
@@ -393,25 +348,19 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                 ),
 
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                 decoration: BoxDecoration(
-                  color: context.colors.surface,
+                  color: context.colors.card,
                   border: Border(top: BorderSide(color: context.colors.border)),
                 ),
                 child: SafeArea(
+                  top: false,
                   child: SizedBox(
                     width: double.infinity,
-                    height: 48,
                     child: isActive
                         ? ElevatedButton.icon(
-                            icon: const Icon(Icons.check_circle_outline),
-                            label: const Text(
-                              'FINISH',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            icon: const Icon(Icons.flag_outlined, size: 18),
+                            label: const Text('Finish workout'),
                             onPressed: () async {
                               await _alarmService.stopWorkoutTimer();
                               await workoutNotifier.finishWorkout();
@@ -419,23 +368,15 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text(
-                                      'Workout Session Completed! 🎉',
-                                    ),
+                                    content: Text('Workout saved. Nice work.'),
                                   ),
                                 );
                               }
                             },
                           )
                         : ElevatedButton.icon(
-                            icon: const Icon(Icons.play_arrow_outlined),
-                            label: Text(
-                              'Start ${day.name} Workout',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            icon: const Icon(Icons.play_arrow_rounded),
+                            label: Text('Start ${day.name} Workout'),
                             onPressed: () {
                               workoutNotifier.initDay(
                                 day,
@@ -450,11 +391,201 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
             ],
           );
         },
-        loading: () => Center(
-          child: CircularProgressIndicator(color: context.colors.primary),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) =>
             Center(child: Text('Error loading day detail: $err')),
+      ),
+    );
+  }
+
+  (WeekModel, DayModel) _findDay(ProgramModel program) {
+    final week = program.weeks.firstWhere(
+      (candidate) =>
+          candidate.days.any((candidateDay) => candidateDay.id == widget.dayId),
+      orElse: () => program.weeks.first,
+    );
+    final day = week.days.firstWhere(
+      (d) => d.id == widget.dayId,
+      orElse: () => week.days.first,
+    );
+    return (week, day);
+  }
+
+  /// Sets logged against sets planned; a rest-pause target counts as one.
+  (int, int) _setProgress(ActiveWorkoutState state, DayModel day) {
+    var done = 0;
+    var total = 0;
+    for (final block in day.blocks) {
+      for (final exercise in block.exercises) {
+        if (exercise.logMode == 'cumulative') {
+          total++;
+          final reps = (state.restPauseChunks[exercise.id] ?? const <int>[])
+              .fold(0, (sum, v) => sum + v);
+          if (reps >= (exercise.repTarget ?? 100)) done++;
+        } else {
+          total += exercise.targetSets;
+          done += (state.loggedSets[exercise.id]?.length ?? 0).clamp(
+            0,
+            exercise.targetSets,
+          );
+        }
+      }
+    }
+    return (done, total);
+  }
+}
+
+/// Pinned above the plan while a workout runs: the clock, pause, and how far
+/// through the day's sets the user is.
+class _SessionPanel extends StatelessWidget {
+  final String elapsed;
+  final String target;
+  final bool isPaused;
+  final int setsDone;
+  final int setsTotal;
+  final String nowLabel;
+  final VoidCallback onTogglePause;
+
+  const _SessionPanel({
+    required this.elapsed,
+    required this.target,
+    required this.isPaused,
+    required this.setsDone,
+    required this.setsTotal,
+    required this.nowLabel,
+    required this.onTogglePause,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final muted = textTheme.bodySmall?.copyWith(color: colors.textSecondary);
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(isPaused ? 'Paused' : 'Elapsed', style: muted),
+                        const SizedBox(width: 8),
+                        if (isPaused)
+                          StatusBadge(
+                            'On hold',
+                            foreground: colors.warning,
+                            background: colors.warningContainer,
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      elapsed,
+                      style: AppText.metricHero.copyWith(
+                        color: isPaused ? colors.textSecondary : null,
+                      ),
+                    ),
+                    Text('Target $target', style: muted),
+                  ],
+                ),
+              ),
+              RoundIconButton(
+                tooltip: isPaused ? 'Resume workout' : 'Pause workout',
+                icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                filled: isPaused,
+                onPressed: onTogglePause,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: setsTotal == 0 ? 0 : setsDone / setsTotal),
+              duration: const Duration(milliseconds: 250),
+              builder: (context, value, _) =>
+                  LinearProgressIndicator(value: value, minHeight: 6),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Text(
+                '$setsDone of $setsTotal sets',
+                style: AppText.metricTable.copyWith(fontSize: 12),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  nowLabel,
+                  textAlign: TextAlign.end,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: muted,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The pre-start summary: what the session asks of the user.
+class _OverviewStrip extends StatelessWidget {
+  final DayModel day;
+
+  const _OverviewStrip({required this.day});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final exercises = day.blocks.fold<int>(
+      0,
+      (total, block) => total + block.exercises.length,
+    );
+    final sets = day.blocks.fold<int>(
+      0,
+      (total, block) =>
+          total + block.exercises.fold<int>(0, (sum, e) => sum + e.targetSets),
+    );
+    final minutes = estimateWorkoutMinutes(day);
+    final items = [
+      ('Exercises', '$exercises'),
+      ('Sets', '$sets'),
+      ('Est. time', '${minutes}m'),
+      ('Blocks', '${day.blocks.length}'),
+    ];
+    return AppCard(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0) VerticalDivider(width: 1, color: colors.border),
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      items[i].$1,
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: colors.textSecondary),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(items[i].$2, style: AppText.metricCard),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
