@@ -6,6 +6,7 @@ import '../../main.dart';
 import '../../data/models/program_model.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/program_repository.dart';
+import '../../services/flux_widget_service.dart';
 
 const selectedProgramPreferenceKey = 'selected_program_id';
 
@@ -59,6 +60,7 @@ class NextWorkoutInfo {
   final String dayName;
   final int weekNumber;
   final int exerciseCount;
+  final int estimatedMinutes;
 
   const NextWorkoutInfo({
     required this.programId,
@@ -66,6 +68,7 @@ class NextWorkoutInfo {
     required this.dayName,
     this.weekNumber = 1,
     this.exerciseCount = 0,
+    this.estimatedMinutes = 0,
   });
 }
 
@@ -107,6 +110,7 @@ NextWorkoutInfo? nextWorkoutFor(
       0,
       (total, block) => total + block.exercises.length,
     ),
+    estimatedMinutes: estimateWorkoutMinutes(nextDay),
   );
 }
 

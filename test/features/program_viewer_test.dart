@@ -6,6 +6,7 @@ import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/main.dart';
 import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
+import 'package:fitness_tracker/features/program/program_list_screen.dart';
 import 'package:fitness_tracker/features/program/program_providers.dart';
 
 void main() {
@@ -98,8 +99,13 @@ void main() {
     expect(find.text('4 Week Program'), findsOneWidget);
     expect(find.text('Weekly Training Split'), findsOneWidget);
 
-    // Verify 5 Days present
-    expect(find.text('Arms', skipOffstage: false), findsOneWidget);
+    // Verify 5 Days present (Home stays mounted offstage and names the
+    // next day too, so look only inside the program list).
+    Finder inProgramList(String text) => find.descendant(
+      of: find.byType(ProgramListScreen, skipOffstage: false),
+      matching: find.text(text, skipOffstage: false),
+    );
+    expect(inProgramList('Arms'), findsOneWidget);
     expect(find.text('Shoulders', skipOffstage: false), findsOneWidget);
     expect(find.text('Back', skipOffstage: false), findsOneWidget);
     expect(find.text('Chest + Abs', skipOffstage: false), findsOneWidget);

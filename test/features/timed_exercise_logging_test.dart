@@ -83,8 +83,10 @@ void main() {
     expect(find.text('Duration (seconds)'), findsNothing);
     expect(find.text('Log Set 1'), findsNothing);
 
+    await tester.ensureVisible(find.text('Start'));
     await tester.tap(find.text('Start'));
     await tester.pump(const Duration(seconds: 3));
+    await tester.ensureVisible(find.text('Log early'));
     await tester.tap(find.text('Log early'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));

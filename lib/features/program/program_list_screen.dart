@@ -210,7 +210,7 @@ class _DayCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: isToday ? Colors.white : accent,
+                    color: isToday ? colors.onPrimary : accent,
                   ),
                 ),
               ),

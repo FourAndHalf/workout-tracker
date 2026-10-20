@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/day_app_bar.dart';
+import '../../../core/widgets/ledger.dart';
 import '../home_providers.dart';
 
-const _tabular = [FontFeature.tabularFigures()];
-
-/// The dashboard's "week at a glance": streak + weekly goal ring, a week
-/// strip, three headline numbers and a contextual nudge.
+/// The dashboard below the "Today" hero: a KPI strip, the current week
+/// against the goal, the volume trend, consistency, recent personal records
+/// and the next milestone.
 class DashboardStats extends StatelessWidget {
   final DashboardAnalytics data;
   final DateTime now;
@@ -16,57 +18,46 @@ class DashboardStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      _CycleHeader(data: data),
-      const SizedBox(height: 12),
-      _StreakCard(data: data),
-      const SizedBox(height: 10),
-      _WeekStrip(data: data, today: now.weekday),
-      const SizedBox(height: 10),
-      Row(
-        children: [
-          Expanded(
-            child: _StatCard(
-              icon: Icons.check_circle_outline_outlined,
-              color: context.colors.success,
-              value: '${data.setsThisWeek}',
-              label: 'Sets',
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _StatCard(
-              icon: Icons.trending_up_outlined,
-              color: context.colors.primary,
-              value: _compactKg(data.volumeThisWeek),
-              label: 'Training volume',
-              trend: volumeTrend(data.volumeThisWeek, data.volumeLastWeek),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _StatCard(
-              icon: Icons.emoji_events_outlined,
-              color: context.colors.warning,
-              value: data.topExerciseWeight == null
-                  ? '—'
-                  : '${data.topExerciseWeight!.toStringAsFixed(0)} kg',
-              label: data.topExerciseName ?? 'Top lift',
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 10),
-      _NudgeCard(message: dashboardNudge(data), latest: data),
+      _KpiStrip(data: data),
+      const SizedBox(height: _gutter),
+      _WeekModule(data: data, today: now.weekday),
+      const SizedBox(height: _gutter),
+      _VolumeModule(data: data),
+      const SizedBox(height: _gutter),
+      _ConsistencyModule(data: data, now: now),
+      const SizedBox(height: _gutter),
+      _RecordsModule(data: data),
+      const SizedBox(height: _gutter),
+      _MilestoneModule(totalWorkouts: data.totalWorkouts),
     ],
   );
 }
 
-String _compactKg(double kg) => kg >= 10000
-    ? '${(kg / 1000).toStringAsFixed(1)}t'
-    : '${kg.toStringAsFixed(0)} kg';
+const _gutter = 12.0;
 
-/// Percentage change against last week, or null when there is no baseline.
+/// `12,345` style digit grouping.
+String groupThousands(num value) {
+  final digits = value.round().abs().toString();
+  final buffer = StringBuffer(value < 0 ? '-' : '');
+  for (var i = 0; i < digits.length; i++) {
+    if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(',');
+    buffer.write(digits[i]);
+  }
+  return buffer.toString();
+}
+
+/// Volume in kg, compacted to tonnes past 10 t.
+String compactKg(double kg) => kg >= 10000
+    ? '${(kg / 1000).toStringAsFixed(1)}t'
+    : '${groupThousands(kg)} kg';
+
+String _kg(double kg) =>
+    '${kg == kg.roundToDouble() ? kg.toStringAsFixed(0) : kg.toStringAsFixed(1)} kg';
+
+/// Percentage change against last week (to date), or null when there is no
+/// baseline.
 int? volumeTrend(double thisWeek, double lastWeek) =>
     lastWeek <= 0 ? null : ((thisWeek - lastWeek) / lastWeek * 100).round();
 
@@ -75,13 +66,13 @@ String dashboardNudge(DashboardAnalytics data) {
   const goal = DashboardAnalytics.weeklyGoal;
   final since = data.daysSinceLastWorkout;
   if (since == null) {
-    return 'Every streak starts with day one. Log your first workout!';
+    return 'Every streak starts with day one. Log your first workout.';
   }
   if (data.trainedToday) {
     return 'Nice work today. Refuel and recover.';
   }
   if (data.workoutsThisWeek >= goal) {
-    return 'Weekly goal smashed. Anything extra is a bonus.';
+    return 'Weekly goal met. Anything extra is a bonus.';
   }
   if (data.currentStreak > 0) {
     return 'Train today to keep your ${data.currentStreak}-day streak alive.';
@@ -93,306 +84,134 @@ String dashboardNudge(DashboardAnalytics data) {
   return '$left more ${left == 1 ? 'workout' : 'workouts'} to hit your weekly goal.';
 }
 
-class _CycleHeader extends StatelessWidget {
+class _KpiStrip extends StatelessWidget {
   final DashboardAnalytics data;
 
-  const _CycleHeader({required this.data});
+  const _KpiStrip({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    const goal = DashboardAnalytics.weeklyGoal;
-    final done = data.workoutsThisWeek.clamp(0, goal);
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final trend = volumeTrend(data.volumeThisWeek, data.volumeLastWeekToDate);
+    final volumes = data.weeklyVolumes.length > 8
+        ? data.weeklyVolumes.sublist(data.weeklyVolumes.length - 8)
+        : data.weeklyVolumes;
+    final tiles = [
+      _KpiTile(
+        label: 'Streak',
+        value:
+            '${data.currentStreak} ${data.currentStreak == 1 ? 'day' : 'days'}',
+        caption: 'Best ${data.bestStreak}',
+      ),
+      _KpiTile(
+        label: 'Sessions',
+        value: '${data.workoutsThisWeek}/${DashboardAnalytics.weeklyGoal}',
+        caption: 'Weekly goal',
+      ),
+      _KpiTile(
+        label: 'Volume',
+        value: compactKg(data.volumeThisWeek),
+        badge: trend == null ? null : DeltaPill(trend),
+        caption: trend == null ? 'So far this week' : null,
+        sparkline: volumes.any((v) => v > 0) ? volumes : null,
+      ),
+      _KpiTile(
+        label: 'Sets',
+        value: '${data.setsThisWeek}',
+        caption: '${data.minutesThisWeek} min trained',
+      ),
+    ];
+    return AppCard(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: IntrinsicHeight(
+          child: Row(
             children: [
-              const Text(
-                'Training cycle & volume',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.2,
-                ),
-              ),
-              Text(
-                'This week vs last week',
-                style: TextStyle(fontSize: 12, color: colors.textSecondary),
-              ),
+              for (var i = 0; i < tiles.length; i++) ...[
+                if (i > 0)
+                  VerticalDivider(
+                    width: 33,
+                    thickness: 1,
+                    color: context.colors.border,
+                  ),
+                tiles[i],
+              ],
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: colors.primary.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: colors.primary.withValues(alpha: 0.3)),
-          ),
-          child: Text(
-            '$done of $goal done (${(done * 100 / goal).round()}%)',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: colors.primary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _StreakCard extends StatelessWidget {
-  final DashboardAnalytics data;
-
-  const _StreakCard({required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    const goal = DashboardAnalytics.weeklyGoal;
-    final progress = (data.workoutsThisWeek / goal).clamp(0.0, 1.0);
-
-    return AppCard(
-      borderColor: colors.warning.withValues(alpha: 0.3),
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Icon(
-                      Icons.local_fire_department_outlined,
-                      color: colors.warning,
-                      size: 34,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${data.currentStreak}',
-                      style: const TextStyle(
-                        fontSize: 40,
-                        height: 1,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1.2,
-                        fontFeatures: _tabular,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'day streak',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Best: ${data.bestStreak} ${data.bestStreak == 1 ? 'day' : 'days'}',
-                  style: TextStyle(fontSize: 12, color: colors.textSecondary),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 84,
-            height: 84,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(end: progress),
-              duration: const Duration(milliseconds: 700),
-              curve: Curves.easeOutCubic,
-              builder: (context, value, _) => Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox.expand(
-                    child: CircularProgressIndicator(
-                      value: value,
-                      strokeWidth: 8,
-                      strokeCap: StrokeCap.round,
-                      backgroundColor: colors.border,
-                      color: data.workoutsThisWeek >= goal
-                          ? colors.success
-                          : colors.primary,
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '${data.workoutsThisWeek}/$goal',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          fontFeatures: _tabular,
-                        ),
-                      ),
-                      Text(
-                        'this week',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
 }
 
-class _WeekStrip extends StatelessWidget {
-  static const _letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
-  final DashboardAnalytics data;
-  final int today;
-
-  const _WeekStrip({required this.data, required this.today});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return AppCard(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (var day = 1; day <= 7; day++)
-            Column(
-              children: [
-                Text(
-                  _letters[day - 1],
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: day == today
-                        ? FontWeight.w800
-                        : FontWeight.w500,
-                    color: day == today
-                        ? colors.textPrimary
-                        : colors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: data.trainedWeekdays.contains(day)
-                        ? colors.success
-                        : Colors.transparent,
-                    border: Border.all(
-                      color: data.trainedWeekdays.contains(day)
-                          ? colors.success
-                          : day == today
-                          ? colors.primary
-                          : colors.textPrimary.withValues(alpha: 0.1),
-                      width: day == today ? 2 : 1,
-                    ),
-                  ),
-                  child: data.trainedWeekdays.contains(day)
-                      ? Icon(
-                          Icons.check_outlined,
-                          size: 18,
-                          color: colors.onSuccess,
-                        )
-                      : null,
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String value;
+class _KpiTile extends StatelessWidget {
   final String label;
-  final int? trend;
+  final String value;
+  final String? caption;
+  final Widget? badge;
+  final List<double>? sparkline;
 
-  const _StatCard({
-    required this.icon,
-    required this.color,
-    required this.value,
+  const _KpiTile({
     required this.label,
-    this.trend,
+    required this.value,
+    this.caption,
+    this.badge,
+    this.sparkline,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return AppCard(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+    final textTheme = Theme.of(context).textTheme;
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 104),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(icon, size: 20, color: color),
-              if (trend != null)
-                Text(
-                  '${trend! >= 0 ? '▲' : '▼'} ${trend!.abs()}%',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.8,
-                    color: trend! >= 0 ? colors.success : colors.error,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.5,
-                fontFeatures: _tabular,
-              ),
-            ),
-          ),
-          const SizedBox(height: 2),
           Text(
             label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 11, color: colors.textSecondary),
+            style: textTheme.bodySmall?.copyWith(color: colors.textSecondary),
           ),
+          const SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(value, style: AppText.metricCard),
+              if (sparkline != null) ...[
+                const SizedBox(width: 12),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Sparkline(sparkline!, width: 44, height: 16),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 6),
+          if (badge != null)
+            badge!
+          else if (caption != null)
+            Text(
+              caption!,
+              style: textTheme.bodySmall?.copyWith(color: colors.textSecondary),
+            ),
         ],
       ),
     );
   }
 }
 
-class _NudgeCard extends StatelessWidget {
-  final String message;
-  final DashboardAnalytics latest;
+class _WeekModule extends StatelessWidget {
+  static const _letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-  const _NudgeCard({required this.message, required this.latest});
+  final DashboardAnalytics data;
+  final int today;
+
+  const _WeekModule({required this.data, required this.today});
 
   String? get _lastWorkoutLine {
-    final name = latest.latestWorkoutName;
-    final since = latest.daysSinceLastWorkout;
+    final name = data.latestWorkoutName;
+    final since = data.daysSinceLastWorkout;
     if (name == null || since == null) return null;
     final when = since == 0
         ? 'today'
@@ -405,34 +224,397 @@ class _NudgeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    const goal = DashboardAnalytics.weeklyGoal;
+    final met = data.workoutsThisWeek >= goal;
     final lastLine = _lastWorkoutLine;
     return AppCard(
-      color: colors.primary.withValues(alpha: 0.15),
-      borderColor: colors.primary.withValues(alpha: 0.3),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.bolt_outlined, color: colors.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('This week', style: textTheme.titleMedium),
+                    const SizedBox(height: 6),
+                    Text(dashboardNudge(data), style: textTheme.bodyMedium),
+                    if (lastLine != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        lastLine,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              GaugeArc(
+                value: data.workoutsThisWeek / goal,
+                size: 84,
+                color: met ? colors.success : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${data.workoutsThisWeek}/$goal',
+                      style: AppText.metricCard,
+                    ),
+                    Text(
+                      'goal',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colors.textSecondary,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (var day = 1; day <= 7; day++)
+                _DayDot(
+                  letter: _letters[day - 1],
+                  trained: data.trainedWeekdays.contains(day),
+                  isToday: day == today,
+                  isFuture: day > today,
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DayDot extends StatelessWidget {
+  final String letter;
+  final bool trained;
+  final bool isToday;
+  final bool isFuture;
+
+  const _DayDot({
+    required this.letter,
+    required this.trained,
+    required this.isToday,
+    required this.isFuture,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Column(
+      children: [
+        Text(
+          letter,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: isToday ? FontWeight.w600 : FontWeight.w400,
+            color: isToday ? colors.textPrimary : colors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: trained
+                ? colors.primary
+                : isFuture
+                ? Colors.transparent
+                : colors.surface,
+            border: Border.all(
+              color: trained
+                  ? colors.primary
+                  : isToday
+                  ? colors.primary
+                  : colors.border,
+              width: isToday && !trained ? 1.5 : 1,
+            ),
+          ),
+          child: trained
+              ? Icon(Icons.check_rounded, size: 16, color: colors.onPrimary)
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class _VolumeModule extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _VolumeModule({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final volumes = data.weeklyVolumes;
+    final hasData = volumes.any((v) => v > 0);
+    final trend = volumeTrend(data.volumeThisWeek, data.volumeLastWeekToDate);
+    final axisStyle = textTheme.bodySmall?.copyWith(
+      color: colors.textSecondary,
+      fontSize: 10,
+    );
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ModuleHeader(
+            'Training volume',
+            subtitle: 'Weight × reps, last ${volumes.length} weeks',
+            trailing: trend == null ? null : DeltaPill(trend),
+          ),
+          const SizedBox(height: 16),
+          if (!hasData)
+            Text(
+              'Log weighted sets to see your volume trend.',
+              style: textTheme.bodyMedium?.copyWith(
+                color: colors.textSecondary,
+              ),
+            )
+          else ...[
+            ThinBarChart(
+              values: volumes,
+              highlightIndex: volumes.length - 1,
+              callout: compactKg(volumes.last),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  data.weekStarts.isEmpty
+                      ? ''
+                      : shortDateLabel(data.weekStarts.first),
+                  style: axisStyle,
                 ),
-                if (lastLine != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    lastLine,
-                    style: TextStyle(fontSize: 12, color: colors.textSecondary),
-                  ),
-                ],
+                Text(
+                  'This week',
+                  style: axisStyle?.copyWith(color: colors.textPrimary),
+                ),
               ],
             ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ConsistencyModule extends StatelessWidget {
+  final DashboardAnalytics data;
+  final DateTime now;
+
+  const _ConsistencyModule({required this.data, required this.now});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final today = DateTime(now.year, now.month, now.day);
+    final columns = <List<bool>>[];
+    var trainedDays = 0;
+    for (final start in data.weekStarts) {
+      final column = <bool>[];
+      for (var d = 0; d < 7; d++) {
+        final day = DateTime(start.year, start.month, start.day + d);
+        final trained = !day.isAfter(today) && data.trainingDays.contains(day);
+        if (trained) trainedDays++;
+        column.add(trained);
+      }
+      columns.add(column);
+    }
+    final weeksMet = (data.goalHitRate * data.weekStarts.length).round();
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ModuleHeader(
+            'Consistency',
+            subtitle:
+                '$trainedDays training days · goal met $weeksMet of ${data.weekStarts.length} weeks',
+          ),
+          const SizedBox(height: 16),
+          if (columns.isNotEmpty)
+            DotMatrix(
+              columns: columns,
+              dot: 10,
+              gap: 5,
+              highlightColumn: columns.length - 1,
+            ),
+          const SizedBox(height: 4),
+          Text(
+            'Each column is a week, Monday at the top.',
+            style: textTheme.bodySmall?.copyWith(
+              color: colors.textSecondary,
+              fontSize: 10,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecordsModule extends StatelessWidget {
+  final DashboardAnalytics data;
+
+  const _RecordsModule({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final records = data.personalRecords;
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const ModuleHeader('Personal records', subtitle: 'Last 30 days'),
+          const SizedBox(height: 8),
+          if (records.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                data.topExerciseName == null
+                    ? 'Beat a previous best weight and it will show up here.'
+                    : 'Heaviest lift this week: ${data.topExerciseName} at ${_kg(data.topExerciseWeight!)}. Beat a previous best to set a record.',
+                style: textTheme.bodyMedium?.copyWith(
+                  color: colors.textSecondary,
+                ),
+              ),
+            )
+          else
+            for (var i = 0; i < records.length; i++) ...[
+              if (i > 0) Divider(indent: 48, color: colors.divider),
+              SizedBox(
+                height: 56,
+                child: Row(
+                  children: [
+                    const IconChip(Icons.emoji_events_outlined),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            records[i].exerciseName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Was ${_kg(records[i].previousBest)} · ${shortDateLabel(records[i].achievedAt)}',
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          _kg(records[i].weight),
+                          style: AppText.metricTable,
+                        ),
+                        const SizedBox(height: 2),
+                        DeltaPill(
+                          1,
+                          label: _kg(
+                            records[i].weight - records[i].previousBest,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The screen's one champagne element: progress to the next total-workout
+/// milestone.
+class _MilestoneModule extends StatelessWidget {
+  final int totalWorkouts;
+
+  const _MilestoneModule({required this.totalWorkouts});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final target = nextWorkoutMilestone(totalWorkouts);
+    final left = target - totalWorkouts;
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text('Next milestone', style: textTheme.titleMedium),
+              ),
+              StatusBadge(
+                '$target workouts',
+                icon: Icons.workspace_premium_outlined,
+                foreground: colors.tertiary,
+                background: colors.tertiaryContainer,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text('$totalWorkouts', style: AppText.metricHero),
+              const SizedBox(width: 8),
+              Text(
+                'workouts logged',
+                style: textTheme.bodyMedium?.copyWith(
+                  color: colors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: target == 0 ? 0 : totalWorkouts / target,
+              minHeight: 6,
+              color: colors.tertiary,
+              backgroundColor: colors.track,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '$left to go',
+            style: textTheme.bodySmall?.copyWith(color: colors.textSecondary),
           ),
         ],
       ),

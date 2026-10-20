@@ -81,14 +81,14 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
                 Icon(
                   Icons.fitness_center_outlined,
                   size: 18,
-                  color: Colors.white,
+                  color: context.colors.onPrimary,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     '${info.dayName} in progress · $mm:$ss',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: context.colors.onPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
@@ -96,9 +96,9 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
                   ),
                 ),
                 Text(
-                  'TAP TO RETURN',
+                  'Return',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: context.colors.onPrimary,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
@@ -108,7 +108,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
                 Icon(
                   Icons.chevron_right_rounded,
                   size: 18,
-                  color: Colors.white,
+                  color: context.colors.onPrimary,
                 ),
               ],
             ),

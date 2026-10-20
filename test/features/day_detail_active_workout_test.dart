@@ -92,14 +92,15 @@ void main() {
       // Same page: still showing the Arms day, now with logging controls
       // and an elapsed timer instead of a navigation to a new screen.
       expect(find.text('Arms'), findsOneWidget);
-      expect(find.textContaining('Elapsed:'), findsOneWidget);
+      expect(find.text('Elapsed'), findsOneWidget);
       // Target comes from the day's estimated length (3 sets ≈ 8 min), not
       // a fixed 45:00.
-      expect(find.text('Target: 08:00'), findsOneWidget);
+      expect(find.text('Target 08:00'), findsOneWidget);
       expect(find.text('Log Set 1'), findsOneWidget);
-      expect(find.text('FINISH'), findsOneWidget);
+      expect(find.text('Finish workout'), findsOneWidget);
       expect(find.text('Start Arms Workout'), findsNothing);
 
+      await tester.ensureVisible(find.text('Log Set 1'));
       await tester.tap(find.text('Log Set 1'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -107,13 +108,61 @@ void main() {
       expect(find.textContaining('Set 1:'), findsOneWidget);
       expect(find.text('Log Set 2'), findsOneWidget);
 
-      await tester.tap(find.text('FINISH'));
+      await tester.tap(find.text('Finish workout'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
       // Back to preview mode on the same page.
       expect(find.text('Start Arms Workout'), findsOneWidget);
-      expect(find.textContaining('Elapsed:'), findsNothing);
+      expect(find.text('Elapsed'), findsNothing);
     },
   );
+
+  testWidgets('overview, steppers and set progress guide the session', (
+    WidgetTester tester,
+  ) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(() => db.close());
+
+    await pumpAppAtArmsDay(tester, db);
+
+    // Before starting: what the session asks for.
+    expect(find.text('Week 1 · Day 1'), findsOneWidget);
+    expect(find.text('Exercises'), findsOneWidget);
+    expect(find.text('8m'), findsOneWidget);
+
+    await tester.tap(find.text('Start Arms Workout'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('0 of 3 sets'), findsOneWidget);
+    expect(find.text('Set 1/3'), findsOneWidget);
+
+    // Steppers adjust the prefilled values without the keyboard.
+    final increaseWeight = find.byTooltip('Increase Weight (kg)');
+    await tester.ensureVisible(increaseWeight);
+    await tester.tap(increaseWeight);
+    await tester.tap(find.byTooltip('Decrease Reps'));
+    await tester.pump();
+
+    await tester.ensureVisible(find.text('Log Set 1'));
+    await tester.tap(find.text('Log Set 1'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.textContaining('Set 1: 42.5 kg 19 reps'), findsOneWidget);
+    expect(find.text('1 of 3 sets'), findsOneWidget);
+    expect(find.text('Set 2/3'), findsOneWidget);
+
+    // Pausing swaps the clock label.
+    await tester.tap(find.byTooltip('Pause workout'));
+    await tester.pump();
+    expect(find.text('Paused'), findsOneWidget);
+    await tester.tap(find.byTooltip('Resume workout'));
+    await tester.pump();
+
+    await tester.tap(find.text('Finish workout'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+  });
 }

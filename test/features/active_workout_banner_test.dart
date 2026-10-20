@@ -88,7 +88,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.textContaining('in progress'), findsNothing);
-    expect(find.textContaining('Go back to'), findsNothing);
+    expect(find.text('Resume workout'), findsNothing);
   });
 
   testWidgets('banner is suppressed while already on the active day\'s page', (
@@ -110,12 +110,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     await startArmsWorkout(tester);
-    expect(find.textContaining('Elapsed:'), findsOneWidget);
+    expect(find.text('Elapsed'), findsOneWidget);
 
     // Still on the Arms day-detail page: the banner would be redundant here.
     expect(find.textContaining('in progress'), findsNothing);
 
-    await tester.tap(find.text('FINISH'));
+    await tester.tap(find.text('Finish workout'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
   });
@@ -139,7 +139,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       await startArmsWorkout(tester);
-      expect(find.textContaining('Elapsed:'), findsOneWidget);
+      expect(find.text('Elapsed'), findsOneWidget);
 
       // Leave the day-detail page without finishing the workout.
       await tester.tap(
@@ -153,23 +153,23 @@ void main() {
 
       expect(find.textContaining('Arms in progress'), findsOneWidget);
 
-      // Home swaps the start card for a "Go back" button instead of the banner.
+      // Home swaps the start card for a "Resume" button instead of the banner.
       await tester.tap(find.text('Home'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.textContaining('in progress'), findsNothing);
-      expect(find.text('Go back to Arms Workout'), findsOneWidget);
+      expect(find.text('Resume workout'), findsOneWidget);
       expect(find.text('Start Arms Workout'), findsNothing);
 
-      await tester.tap(find.text('Go back to Arms Workout'));
+      await tester.tap(find.text('Resume workout'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.textContaining('Elapsed:'), findsOneWidget);
+      expect(find.text('Elapsed'), findsOneWidget);
 
       // Finish the workout so no periodic timers are left running past the
       // end of this test, which would otherwise bleed into the next one.
-      await tester.tap(find.text('FINISH'));
+      await tester.tap(find.text('Finish workout'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
     },
@@ -210,7 +210,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.text('FINISH'));
+    await tester.tap(find.text('Finish workout'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
