@@ -26,7 +26,7 @@ ProgramModel _program(String id, String name) => ProgramModel(
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  testWidgets('scrolling the wheel switches the selected track', (
+  testWidgets('tapping a track chip switches the selected track', (
     tester,
   ) async {
     final db = AppDatabase(NativeDatabase.memory());
@@ -56,7 +56,9 @@ void main() {
 
     expect(container.read(selectedProgramIdProvider), 'a');
 
-    await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -60));
+    expect(find.widgetWithText(ChoiceChip, 'Track A'), findsOneWidget);
+    expect(find.widgetWithText(ChoiceChip, 'Track B'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('track-b')));
     await tester.pumpAndSettle();
 
     expect(container.read(selectedProgramIdProvider), 'b');

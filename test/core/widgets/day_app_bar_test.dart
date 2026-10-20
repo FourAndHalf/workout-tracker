@@ -11,13 +11,14 @@ void main() {
     expect(weekdayLabel(DateTime(2026, 9, 27)), 'Sunday');
   });
 
-  testWidgets('DayAppBar shows the day, the app name and its actions', (
+  testWidgets('DayAppBar shows the title, the date and its actions', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           appBar: DayAppBar(
+            title: 'Programs',
             today: DateTime(2026, 9, 24),
             actions: const [Icon(Icons.settings_outlined)],
           ),
@@ -25,8 +26,8 @@ void main() {
       ),
     );
 
-    expect(find.text('Thursday'), findsOneWidget);
-    expect(find.text('Fitness'), findsOneWidget);
+    expect(find.text('Programs'), findsOneWidget);
+    expect(find.text('Thursday, 24 Sep'), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
   });
 }

@@ -12,6 +12,7 @@ import '../../services/flux_widget_service.dart';
 import '../../services/streak_widget_service.dart';
 import '../program/program_providers.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
+import '../workout/start_workout.dart';
 import 'flux_widget_providers.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
@@ -156,11 +157,21 @@ class _TodayCard extends ConsumerWidget {
       details = null;
     }
 
+    final program = ref.watch(currentProgramProvider).value;
     final VoidCallback? onStart = resuming
         ? () => context.push('/programs/${active.programId}/${active.dayId}')
-        : next == null
+        : next == null || program == null
         ? null
-        : () => context.push('/programs/${next.programId}/${next.dayId}');
+        : () {
+            final (week, day) = locateDay(program, next.dayId);
+            startWorkoutAndOpen(
+              context,
+              ref,
+              programId: next.programId,
+              week: week,
+              day: day,
+            );
+          };
 
     return AppCard(
       radius: AppRadius.xl,
@@ -211,17 +222,30 @@ class _TodayCard extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              icon: Icon(
-                resuming
-                    ? Icons.arrow_forward_rounded
-                    : Icons.play_arrow_outlined,
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  icon: Icon(
+                    resuming
+                        ? Icons.arrow_forward_rounded
+                        : Icons.play_arrow_outlined,
+                  ),
+                  label: Text(resuming ? 'Resume workout' : 'Start workout'),
+                  onPressed: onStart,
+                ),
               ),
-              label: Text(resuming ? 'Resume workout' : 'Start workout'),
-              onPressed: onStart,
-            ),
+              if (!resuming && next != null) ...[
+                const SizedBox(width: 8),
+                RoundIconButton(
+                  icon: Icons.list_alt_rounded,
+                  tooltip: 'Preview ${next.dayName}',
+                  size: 48,
+                  onPressed: () =>
+                      context.push('/programs/${next.programId}/${next.dayId}'),
+                ),
+              ],
+            ],
           ),
         ],
       ),

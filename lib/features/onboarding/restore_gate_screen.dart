@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/theme/app_colors.dart';
+import '../../core/widgets/day_app_bar.dart';
+import '../../core/widgets/ledger.dart';
 import '../../data/repositories/backup_repository.dart';
 import '../../main.dart';
 
@@ -71,7 +74,13 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Padding(padding: const EdgeInsets.all(24), child: _content()),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: _content(),
+            ),
+          ),
         ),
       ),
     );
@@ -83,21 +92,26 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_download_outlined, size: 48),
+            IconChip(Icons.cloud_download_outlined, size: 56),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Restore your data?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'If you\'ve backed up your fitness data to Google Drive before, '
               'you can restore it now.',
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: context.colors.textSecondary),
             ),
             const SizedBox(height: 24),
             FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _checkForBackup,
               child: const Text('Sign in & Check for Backup'),
             ),
@@ -121,16 +135,19 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.cloud_done_outlined, size: 48),
+            IconChip(Icons.cloud_done_outlined, size: 56),
             const SizedBox(height: 16),
             Text(
               backup.createdAt == null
                   ? 'A backup was found on Google Drive.'
-                  : 'A backup from ${backup.createdAt} was found on Google Drive.',
+                  : 'A backup from ${shortDateLabel(backup.createdAt!)} ${backup.createdAt!.year} was found on Google Drive.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _restore,
               child: const Text('Restore this backup'),
             ),
@@ -153,7 +170,7 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48),
+            IconChip(Icons.error_outline, size: 56),
             const SizedBox(height: 16),
             Text(
               'Something went wrong: $_errorMessage',
@@ -161,6 +178,9 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
             ),
             const SizedBox(height: 24),
             FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _checkForBackup,
               child: const Text('Retry'),
             ),

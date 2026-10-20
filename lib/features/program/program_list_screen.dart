@@ -4,11 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
+import '../../core/widgets/ledger.dart';
 import '../../core/widgets/tag_pill.dart';
 import '../../data/models/program_model.dart';
+import '../../services/flux_widget_service.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
+import '../workout/start_workout.dart';
 import 'program_providers.dart';
 
 class ProgramListScreen extends ConsumerWidget {
@@ -19,7 +23,7 @@ class ProgramListScreen extends ConsumerWidget {
     final programAsync = ref.watch(currentProgramProvider);
 
     return Scaffold(
-      appBar: const DayAppBar(),
+      appBar: const DayAppBar(title: 'Programs'),
       body: programAsync.when(
         data: (program) {
           final sessionsAsync = ref.watch(completedWorkoutSessionsProvider);
@@ -30,129 +34,92 @@ class ProgramListScreen extends ConsumerWidget {
               .map((session) => session.dayId)
               .toSet();
           final colors = context.colors;
+          final textTheme = Theme.of(context).textTheme;
           final nextDayId = nextWorkoutFor(program, sessions)?.dayId;
+          final active = ref.watch(activeWorkoutSessionProvider);
           final doneCount = week.days
               .where((day) => completedDays.contains(day.id))
               .length;
           final totalDays = week.days.length;
-          final progress = totalDays == 0 ? 0.0 : doneCount / totalDays;
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
             children: [
               const _TrackSwitcher(),
               AppCard(
-                borderColor: colors.primary.withValues(alpha: 0.3),
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        TagPill('Program', color: colors.primary),
-                        const Spacer(),
-                        TagPill(
-                          'Week ${week.number} of ${program.weeks.length}',
-                          color: colors.textSecondary,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      program.programName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Week ${week.number}: "${week.title}"',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: colors.textSecondary,
-                      ),
-                    ),
-                    if (program.sourceNote != null) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        program.sourceNote!,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: colors.textMuted,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    Divider(color: colors.border),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Week completion',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: colors.textSecondary,
+                        Expanded(
+                          child: Text(
+                            'Week ${week.number} of ${program.weeks.length}',
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
                         ),
                         Text(
-                          '$doneCount of $totalDays done (${(progress * 100).round()}%)',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: colors.primary,
-                          ),
+                          '$doneCount/$totalDays done',
+                          style: AppText.metricTable.copyWith(fontSize: 12),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(999),
-                      child: LinearProgressIndicator(
-                        value: progress,
-                        minHeight: 8,
-                        backgroundColor: colors.surface,
-                        color: colors.primary,
+                    Text(program.programName, style: textTheme.headlineSmall),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Week ${week.number}: "${week.title}"',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colors.textSecondary,
                       ),
                     ),
+                    if (program.sourceNote != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        program.sourceNote!,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textMuted,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                    SegmentProgress(total: totalDays, filled: doneCount),
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
-              const Text(
+              const SizedBox(height: 20),
+              ModuleHeader(
                 'Weekly Training Split',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.2,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                '$totalDays sessions',
-                style: TextStyle(fontSize: 12, color: colors.textSecondary),
+                subtitle:
+                    '$totalDays sessions · tap a day to preview, Start to train',
               ),
               const SizedBox(height: 12),
               for (final day in week.days)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: _DayCard(
                     day: day,
                     isCompleted: completedDays.contains(day.id),
                     isToday: day.id == nextDayId,
+                    isRunning: active?.dayId == day.id,
                     onTap: () => context.push(
                       '/programs/${program.programId}/${day.id}',
+                    ),
+                    onStart: () => startWorkoutAndOpen(
+                      context,
+                      ref,
+                      programId: program.programId,
+                      week: week,
+                      day: day,
                     ),
                   ),
                 ),
             ],
           );
         },
-        loading: () => Center(
-          child: CircularProgressIndicator(color: context.colors.primary),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) =>
             Center(child: Text('Error loading program: $err')),
       ),
@@ -164,259 +131,179 @@ class _DayCard extends StatelessWidget {
   final DayModel day;
   final bool isCompleted;
   final bool isToday;
+  final bool isRunning;
   final VoidCallback onTap;
+  final VoidCallback onStart;
 
   const _DayCard({
     required this.day,
     required this.isCompleted,
     required this.isToday,
+    required this.isRunning,
     required this.onTap,
+    required this.onStart,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final exercises = [for (final block in day.blocks) ...block.exercises];
-    final accent = isCompleted
-        ? colors.success
-        : isToday
-        ? colors.primary
-        : colors.textSecondary;
+    final textTheme = Theme.of(context).textTheme;
+    final exercises = day.blocks.fold<int>(
+      0,
+      (total, block) => total + block.exercises.length,
+    );
+    final minutes = estimateWorkoutMinutes(day);
+    final emphasised = isToday || isRunning;
+
+    final Widget trailing;
+    if (isRunning) {
+      trailing = _PillButton(label: 'Resume', onPressed: onStart);
+    } else if (isToday) {
+      trailing = _PillButton(label: 'Start', onPressed: onStart);
+    } else if (isCompleted) {
+      trailing = StatusBadge(
+        'Done',
+        icon: Icons.check_rounded,
+        foreground: colors.success,
+        background: colors.successContainer,
+      );
+    } else {
+      trailing = Icon(Icons.chevron_right_rounded, color: colors.textMuted);
+    }
+
     return AppCard(
       onTap: onTap,
-      borderColor: isToday ? colors.primary : null,
-      borderWidth: isToday ? 1.5 : 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+      borderColor: emphasised ? colors.primary : null,
+      borderWidth: emphasised ? 1.5 : 1,
+      child: Row(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: isToday
-                      ? colors.primary
-                      : accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                  border: isToday
-                      ? null
-                      : Border.all(color: accent.withValues(alpha: 0.3)),
-                ),
-                child: Text(
-                  '${day.order}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: isToday ? colors.onPrimary : accent,
+          Container(
+            width: 40,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: emphasised || isCompleted
+                  ? colors.primary
+                  : colors.surface,
+            ),
+            child: isCompleted && !emphasised
+                ? Icon(Icons.check_rounded, size: 18, color: colors.onPrimary)
+                : Text(
+                    '${day.order}',
+                    style: AppText.metricTable.copyWith(
+                      color: emphasised ? colors.onPrimary : colors.textPrimary,
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      day.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    Flexible(
+                      child: Text(
+                        day.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.titleMedium,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${day.blocks.length} Blocks \u00B7 ${exercises.length} Exercises',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.textSecondary,
-                      ),
-                    ),
+                    if (day.needsReview == true) ...[
+                      const SizedBox(width: 8),
+                      TagPill('Review', color: colors.warning),
+                    ],
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              if (isCompleted)
-                TagPill('Completed', color: colors.success)
-              else if (isToday)
-                TagPill('Today', color: colors.primary)
-              else
-                TagPill('Upcoming', color: colors.textMuted),
-            ],
-          ),
-          if (exercises.isNotEmpty || day.needsReview == true) ...[
-            const SizedBox(height: 12),
-            Divider(color: colors.border, height: 1),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                if (exercises.isNotEmpty)
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'Primary: ',
-                        style: TextStyle(fontSize: 12, color: colors.textMuted),
-                        children: [
-                          TextSpan(
-                            text: exercises.first.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: colors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                const SizedBox(height: 2),
+                Text(
+                  '$exercises exercises · ~$minutes min',
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
                   ),
-                if (day.needsReview == true) ...[
-                  const SizedBox(width: 8),
-                  TagPill('Review', color: colors.warning),
-                ],
+                ),
               ],
             ),
-          ],
+          ),
+          const SizedBox(width: 8),
+          trailing,
         ],
       ),
     );
   }
 }
 
-/// Wheel picker for the bundled workout tracks: scroll it and the track under
-/// the highlight becomes active once the wheel settles. Each track keeps its
-/// own progress because sessions are filtered by programId.
-class _TrackSwitcher extends ConsumerStatefulWidget {
+class _PillButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  const _PillButton({required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton.icon(
+    style: ElevatedButton.styleFrom(
+      minimumSize: const Size(0, 40),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+    ),
+    icon: const Icon(Icons.play_arrow_rounded, size: 18),
+    label: Text(label),
+    onPressed: onPressed,
+  );
+}
+
+/// The bundled workout tracks as one row of chips: every option visible,
+/// one tap to switch. Each track keeps its own progress because sessions are
+/// filtered by programId.
+class _TrackSwitcher extends ConsumerWidget {
   const _TrackSwitcher();
 
   @override
-  ConsumerState<_TrackSwitcher> createState() => _TrackSwitcherState();
-}
-
-class _TrackSwitcherState extends ConsumerState<_TrackSwitcher> {
-  static const _itemExtent = 36.0;
-  bool _expanded = false;
-  FixedExtentScrollController? _controller;
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  void _setExpanded(bool value) {
-    if (_expanded != value && mounted) setState(() => _expanded = value);
-  }
-
-  void _onSettled(List<ProgramModel> programs, int selectedIndex) {
-    _setExpanded(false);
-    final index = _controller!.selectedItem;
-    if (index == selectedIndex) return;
-    if (ref.read(activeWorkoutSessionProvider) != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Finish your active workout before switching.'),
-        ),
-      );
-      _controller!.animateToItem(
-        selectedIndex,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-      );
-      return;
-    }
-    ref
-        .read(selectedProgramIdProvider.notifier)
-        .select(programs[index].programId);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final programs = ref.watch(availableProgramsProvider).value;
     if (programs == null || programs.length < 2) return const SizedBox.shrink();
-
     final selectedId = ref.watch(selectedProgramIdProvider);
-    final selectedIndex = programs
-        .indexWhere((p) => p.programId == selectedId)
-        .clamp(0, programs.length - 1);
-    _controller ??= FixedExtentScrollController(initialItem: selectedIndex);
 
-    final colors = context.colors;
+    void select(String programId) {
+      if (programId == selectedId) return;
+      if (ref.read(activeWorkoutSessionProvider) != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Finish your active workout before switching.'),
+          ),
+        );
+        return;
+      }
+      HapticFeedback.selectionClick();
+      ref.read(selectedProgramIdProvider.notifier).select(programId);
+    }
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: AppCard(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        // The wheel is always laid out three rows tall (so its viewport never
-        // resizes mid-scroll); collapsing just crops it to the middle row.
-        child: TweenAnimationBuilder<double>(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
-          tween: Tween(end: _expanded ? 1.0 : 1 / 3),
-          builder: (context, factor, child) => ClipRect(
-            child: Align(heightFactor: factor, child: child),
-          ),
-          child: SizedBox(
-            height: _itemExtent * 3,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                IgnorePointer(
-                  child: Container(
-                    height: _itemExtent,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: colors.primary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+      padding: const EdgeInsets.only(bottom: 12),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final program in programs) ...[
+              ChoiceChip(
+                key: ValueKey('track-${program.programId}'),
+                label: Text(
+                  program.programName,
+                  style: TextStyle(
+                    color: program.programId == selectedId
+                        ? context.colors.onPrimary
+                        : context.colors.textPrimary,
                   ),
                 ),
-                Listener(
-                  onPointerDown: (_) => _setExpanded(true),
-                  onPointerUp: (_) =>
-                      Future.delayed(const Duration(milliseconds: 150), () {
-                        final c = _controller;
-                        if (c != null &&
-                            c.hasClients &&
-                            !c.position.isScrollingNotifier.value) {
-                          _setExpanded(false);
-                        }
-                      }),
-                  child: NotificationListener<ScrollEndNotification>(
-                    onNotification: (_) {
-                      _onSettled(programs, selectedIndex);
-                      return false;
-                    },
-                    child: ListWheelScrollView(
-                      controller: _controller,
-                      itemExtent: _itemExtent,
-                      diameterRatio: 1.6,
-                      perspective: 0.003,
-                      physics: const FixedExtentScrollPhysics(),
-                      onSelectedItemChanged: (_) =>
-                          HapticFeedback.selectionClick(),
-                      children: [
-                        for (final program in programs)
-                          Center(
-                            child: Text(
-                              program.programName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: colors.textPrimary,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                selected: program.programId == selectedId,
+                showCheckmark: false,
+                onSelected: (_) => select(program.programId),
+              ),
+              const SizedBox(width: 8),
+            ],
+          ],
         ),
       ),
     );

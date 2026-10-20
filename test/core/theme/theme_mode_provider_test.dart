@@ -13,12 +13,12 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   group('parseThemeMode', () {
-    test('parses stored names and defaults to light', () {
+    test('parses stored names and defaults to dark', () {
       expect(parseThemeMode('light'), ThemeMode.light);
       expect(parseThemeMode('system'), ThemeMode.system);
       expect(parseThemeMode('dark'), ThemeMode.dark);
-      expect(parseThemeMode(null), ThemeMode.light);
-      expect(parseThemeMode('bogus'), ThemeMode.light);
+      expect(parseThemeMode(null), ThemeMode.dark);
+      expect(parseThemeMode('bogus'), ThemeMode.dark);
     });
   });
 
@@ -59,9 +59,9 @@ void main() {
       ),
     );
 
-    expect(container.read(themeModeProvider), ThemeMode.light);
-    await tester.tap(find.text('Dark'));
-    await tester.pumpAndSettle();
     expect(container.read(themeModeProvider), ThemeMode.dark);
+    await tester.tap(find.text('Light'));
+    await tester.pumpAndSettle();
+    expect(container.read(themeModeProvider), ThemeMode.light);
   });
 }

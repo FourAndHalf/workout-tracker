@@ -95,14 +95,14 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
         await tester.pump();
-        if (find.byType(ListWheelScrollView).evaluate().isNotEmpty) break;
+        if (find.byType(ChoiceChip).evaluate().isNotEmpty) break;
       }
     });
 
     expect(find.text('4 Week Program'), findsWidgets);
 
     await tester.runAsync(() async {
-      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -60));
+      await tester.tap(find.byKey(const ValueKey('track-mobility-10min')));
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
         await tester.pump(const Duration(milliseconds: 100));
