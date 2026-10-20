@@ -1,10 +1,9 @@
-"""Derives every Android launcher/splash bitmap from the source icons in
+"""Derives every Android launcher/splash bitmap from the source icon in
 this folder:
 
-  app_icon.png       -> launcher icon set (ic_launcher*)
-  app_girl_icon.png  -> splash logo (splash_logo)
+  app_icon.png -> launcher icon set (ic_launcher*) and splash logo (splash_logo)
 
-Each source is a light mark on a dark rounded-square tile. The mark is
+The source is a light mark on a dark rounded-square tile. The mark is
 lifted off the tile via a luminance threshold (light mark, dark tile) and
 re-rendered at the right scale for each derived asset; the legacy
 (pre-API 26) icon is the source tile itself, cropped and corner-masked.
@@ -48,7 +47,6 @@ SPLASH_DP = 288
 LEGACY_CORNER = 0.22
 
 ICON_SOURCE = "app_icon.png"
-SPLASH_SOURCE = "app_girl_icon.png"
 
 
 def _extract_mark(img):
@@ -139,7 +137,7 @@ def main():
     icon = Image.open(ICON_SOURCE)
     mark = _extract_mark(icon)
     tile = _extract_tile(icon)
-    splash = _extract_mark(Image.open(SPLASH_SOURCE))
+    splash = mark
     for bucket, mult in DENSITIES.items():
         adaptive = round(ADAPTIVE_DP * mult)
         _save(_place(mark, adaptive, diagonal=ADAPTIVE_DIAGONAL),
@@ -152,7 +150,7 @@ def main():
         size = round(SPLASH_DP * mult)
         _save(_place(splash, size, diagonal=SPLASH_DIAGONAL),
               f"drawable-{bucket}", "splash_logo.png")
-    print(f"Wrote ic_launcher set from {ICON_SOURCE}, splash_logo from {SPLASH_SOURCE}")
+    print(f"Wrote ic_launcher set and splash_logo from {ICON_SOURCE}")
 
 
 if __name__ == "__main__":
