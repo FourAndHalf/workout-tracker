@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -82,7 +83,9 @@ final backupRepositoryProvider = FutureProvider<BackupRepository>((ref) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DailyWorkoutAlarmService().initialize();
+  // Fire-and-forget: a stuck or failing plugin call here must never block
+  // the first frame, which is what dismisses the native splash screen.
+  unawaited(DailyWorkoutAlarmService().initialize());
 
   final preferences = await SharedPreferences.getInstance();
   final needsRestoreCheck =
