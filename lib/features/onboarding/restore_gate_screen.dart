@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -92,7 +93,7 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconChip(Icons.cloud_download_outlined, size: 56),
+            IconChip(LucideIcons600.cloudDownload, size: 56),
             const SizedBox(height: 16),
             Text(
               'Restore your data?',
@@ -135,7 +136,7 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconChip(Icons.cloud_done_outlined, size: 56),
+            IconChip(LucideIcons600.cloudCheck, size: 56),
             const SizedBox(height: 16),
             Text(
               backup.createdAt == null
@@ -170,7 +171,7 @@ class _RestoreGateScreenState extends ConsumerState<RestoreGateScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconChip(Icons.error_outline, size: 56),
+            IconChip(LucideIcons600.xCircle, size: 56),
             const SizedBox(height: 16),
             Text(
               'Something went wrong: $_errorMessage',

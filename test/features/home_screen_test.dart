@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/core/widgets/day_app_bar.dart';
@@ -38,9 +38,9 @@ void main() {
       find.text('${weekdayLabel(now)}, ${shortDateLabel(now)}'),
       findsOneWidget,
     );
-    expect(find.byIcon(Icons.music_note_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.play_arrow_outlined), findsOneWidget);
+    expect(find.byIcon(LucideIcons600.music), findsOneWidget);
+    expect(find.byIcon(LucideIcons600.settings), findsOneWidget);
+    expect(find.byIcon(LucideIcons600.play), findsOneWidget);
     expect(find.text('Start workout'), findsOneWidget);
     expect(find.text('This week'), findsOneWidget);
     expect(find.text('Training volume', skipOffstage: false), findsOneWidget);
@@ -48,7 +48,7 @@ void main() {
     expect(find.text('Personal records', skipOffstage: false), findsOneWidget);
     expect(find.text('Next milestone', skipOffstage: false), findsOneWidget);
     expect(
-      find.byIcon(Icons.format_quote_outlined, skipOffstage: false),
+      find.byIcon(LucideIcons600.quote, skipOffstage: false),
       findsOneWidget,
     );
   });

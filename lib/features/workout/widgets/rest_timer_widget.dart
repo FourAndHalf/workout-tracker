@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -124,7 +125,7 @@ class _RestTimerWidgetState extends State<RestTimerWidget> {
           IconButton(
             tooltip: 'Skip rest',
             icon: Icon(
-              Icons.close_rounded,
+              LucideIcons600.x,
               size: 20,
               color: colors.textSecondary,
             ),

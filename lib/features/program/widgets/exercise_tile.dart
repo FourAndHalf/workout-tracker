@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -70,16 +71,16 @@ class _ExerciseTileState extends State<ExerciseTile> {
   IconData _getLogModeIcon(String logMode) {
     switch (logMode) {
       case 'cumulative':
-        return Icons.donut_large_outlined;
+        return LucideIcons600.donut;
       case 'failure':
-        return Icons.local_fire_department_outlined;
+        return LucideIcons600.flame;
       case 'time':
-        return Icons.timer_outlined;
+        return LucideIcons600.timer;
       case 'repsOnly':
-        return Icons.accessibility_new_outlined;
+        return LucideIcons600.personStanding;
       case 'weightReps':
       default:
-        return Icons.fitness_center_outlined;
+        return LucideIcons600.dumbbell;
     }
   }
 
@@ -179,7 +180,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
             trailing: isDone
                 ? StatusBadge(
                     'Done',
-                    icon: Icons.check_rounded,
+                    icon: LucideIcons600.check,
                     foreground: colors.success,
                     background: colors.successContainer,
                   )
@@ -233,7 +234,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
         if (trailing != null) ...[const SizedBox(width: 8), trailing],
         IconButton(
           tooltip: 'Watch ${exercise.name} on YouTube Shorts',
-          icon: const Icon(Icons.smart_display_outlined, size: 20),
+          icon: const Icon(LucideIcons600.playCircle, size: 20),
           color: colors.textSecondary,
           onPressed: () => _openExerciseVideo(context),
         ),
@@ -292,7 +293,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
-                  Icon(Icons.check_rounded, color: colors.success, size: 14),
+                  Icon(LucideIcons600.check, color: colors.success, size: 14),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -362,7 +363,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
           if (!isTimed) ...[
             const SizedBox(height: 12),
             ElevatedButton.icon(
-              icon: const Icon(Icons.check_rounded, size: 18),
+              icon: const Icon(LucideIcons600.check, size: 18),
               label: Text('Log Set ${active.currentSetNumber}'),
               onPressed: _submitSet,
             ),
@@ -437,7 +438,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
               SizedBox(
                 height: 52,
                 child: ElevatedButton.icon(
-                  icon: const Icon(Icons.add_rounded, size: 18),
+                  icon: const Icon(LucideIcons600.plus, size: 18),
                   label: const Text('Add chunk'),
                   onPressed: _submitChunk,
                 ),
@@ -497,7 +498,7 @@ class _StepperField extends StatelessWidget {
           child: Row(
             children: [
               _StepButton(
-                icon: Icons.remove_rounded,
+                icon: LucideIcons600.minus,
                 tooltip: 'Decrease $label',
                 onTap: () => _bump(-1),
               ),
@@ -520,7 +521,7 @@ class _StepperField extends StatelessWidget {
                 ),
               ),
               _StepButton(
-                icon: Icons.add_rounded,
+                icon: LucideIcons600.plus,
                 tooltip: 'Increase $label',
                 onTap: () => _bump(1),
               ),

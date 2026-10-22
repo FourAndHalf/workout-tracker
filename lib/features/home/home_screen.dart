@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -103,7 +104,7 @@ class _Header extends StatelessWidget {
         ),
         RoundIconButton(
           tooltip: 'Open Spotify',
-          icon: Icons.music_note_outlined,
+          icon: LucideIcons600.music,
           onPressed: () => launchUrl(
             Uri.parse('https://open.spotify.com/'),
             mode: LaunchMode.externalApplication,
@@ -112,7 +113,7 @@ class _Header extends StatelessWidget {
         const SizedBox(width: 8),
         RoundIconButton(
           tooltip: 'Settings',
-          icon: Icons.settings_outlined,
+          icon: LucideIcons600.settings,
           onPressed: () => context.push('/settings'),
         ),
       ],
@@ -197,14 +198,14 @@ class _TodayCard extends ConsumerWidget {
               if (resuming)
                 StatusBadge(
                   'Live',
-                  icon: Icons.circle,
+                  icon: LucideIcons600.circle,
                   foreground: colors.info,
                   background: colors.infoContainer,
                 )
               else if (trainedToday)
                 StatusBadge(
                   'Trained today',
-                  icon: Icons.check_rounded,
+                  icon: LucideIcons600.check,
                   foreground: colors.success,
                   background: colors.successContainer,
                 ),
@@ -228,8 +229,8 @@ class _TodayCard extends ConsumerWidget {
                 child: ElevatedButton.icon(
                   icon: Icon(
                     resuming
-                        ? Icons.arrow_forward_rounded
-                        : Icons.play_arrow_outlined,
+                        ? LucideIcons600.arrowRight
+                        : LucideIcons600.play,
                   ),
                   label: Text(resuming ? 'Resume workout' : 'Start workout'),
                   onPressed: onStart,
@@ -238,7 +239,7 @@ class _TodayCard extends ConsumerWidget {
               if (!resuming && next != null) ...[
                 const SizedBox(width: 8),
                 RoundIconButton(
-                  icon: Icons.list_alt_rounded,
+                  icon: LucideIcons600.listChecks,
                   tooltip: 'Preview ${next.dayName}',
                   size: 48,
                   onPressed: () =>
@@ -269,7 +270,7 @@ class _QuoteCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            Icons.format_quote_outlined,
+            LucideIcons600.quote,
             color: colors.textSecondary,
             size: 20,
           ),

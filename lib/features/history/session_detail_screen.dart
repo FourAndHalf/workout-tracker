@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -294,7 +295,7 @@ class _ExerciseLedger extends StatelessWidget {
                               ? Tooltip(
                                   message: 'Reached failure',
                                   child: Icon(
-                                    Icons.flag_outlined,
+                                    LucideIcons600.flag,
                                     size: 14,
                                     color: colors.warning,
                                   ),

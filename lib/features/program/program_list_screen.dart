@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -163,12 +164,12 @@ class _DayCard extends StatelessWidget {
     } else if (isCompleted) {
       trailing = StatusBadge(
         'Done',
-        icon: Icons.check_rounded,
+        icon: LucideIcons600.check,
         foreground: colors.success,
         background: colors.successContainer,
       );
     } else {
-      trailing = Icon(Icons.chevron_right_rounded, color: colors.textMuted);
+      trailing = Icon(LucideIcons600.chevronRight, color: colors.textMuted);
     }
 
     return AppCard(
@@ -189,7 +190,7 @@ class _DayCard extends StatelessWidget {
                   : colors.surface,
             ),
             child: isCompleted && !emphasised
-                ? Icon(Icons.check_rounded, size: 18, color: colors.onPrimary)
+                ? Icon(LucideIcons600.check, size: 18, color: colors.onPrimary)
                 : Text(
                     '${day.order}',
                     style: AppText.metricTable.copyWith(
@@ -248,7 +249,7 @@ class _PillButton extends StatelessWidget {
       minimumSize: const Size(0, 40),
       padding: const EdgeInsets.symmetric(horizontal: 14),
     ),
-    icon: const Icon(Icons.play_arrow_rounded, size: 18),
+    icon: const Icon(LucideIcons600.play, size: 18),
     label: Text(label),
     onPressed: onPressed,
   );
