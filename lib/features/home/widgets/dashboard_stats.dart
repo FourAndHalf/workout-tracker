@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -345,7 +346,7 @@ class _DayDot extends StatelessWidget {
             ),
           ),
           child: trained
-              ? Icon(Icons.check_rounded, size: 16, color: colors.onPrimary)
+              ? Icon(LucideIcons600.check, size: 16, color: colors.onPrimary)
               : null,
         ),
       ],
@@ -505,7 +506,7 @@ class _RecordsModule extends StatelessWidget {
                 height: 56,
                 child: Row(
                   children: [
-                    const IconChip(Icons.emoji_events_outlined),
+                    const IconChip(LucideIcons600.trophy),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -580,7 +581,7 @@ class _MilestoneModule extends StatelessWidget {
               ),
               StatusBadge(
                 '$target workouts',
-                icon: Icons.workspace_premium_outlined,
+                icon: LucideIcons600.award,
                 foreground: colors.tertiary,
                 background: colors.tertiaryContainer,
               ),

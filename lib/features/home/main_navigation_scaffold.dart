@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons_400.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 
 import '../workout/widgets/active_workout_banner.dart';
 
@@ -47,23 +49,23 @@ class MainNavigationScaffold extends StatelessWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
+            icon: Icon(LucideIcons400.house),
+            selectedIcon: Icon(LucideIcons600.house),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.event_note_outlined),
-            selectedIcon: Icon(Icons.event_note),
+            icon: Icon(LucideIcons400.calendarDays),
+            selectedIcon: Icon(LucideIcons600.calendarDays),
             label: 'Programs',
           ),
           NavigationDestination(
-            icon: Icon(Icons.show_chart),
-            selectedIcon: Icon(Icons.show_chart),
+            icon: Icon(LucideIcons400.chartLine),
+            selectedIcon: Icon(LucideIcons600.chartLine),
             label: 'Progress',
           ),
           NavigationDestination(
-            icon: Icon(Icons.restaurant_menu_outlined),
-            selectedIcon: Icon(Icons.restaurant_menu),
+            icon: Icon(LucideIcons400.utensils),
+            selectedIcon: Icon(LucideIcons600.utensils),
             label: 'Nutrition',
           ),
         ],

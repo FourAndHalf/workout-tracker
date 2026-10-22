@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -295,7 +296,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(
-                                Icons.warning_amber_rounded,
+                                LucideIcons600.triangleAlert,
                                 color: context.colors.warning,
                                 size: 16,
                               ),
@@ -359,7 +360,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                     width: double.infinity,
                     child: isActive
                         ? ElevatedButton.icon(
-                            icon: const Icon(Icons.flag_outlined, size: 18),
+                            icon: const Icon(LucideIcons600.flag, size: 18),
                             label: const Text('Finish workout'),
                             onPressed: () async {
                               await _alarmService.stopWorkoutTimer();
@@ -375,7 +376,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                             },
                           )
                         : ElevatedButton.icon(
-                            icon: const Icon(Icons.play_arrow_rounded),
+                            icon: const Icon(LucideIcons600.play),
                             label: Text('Start ${day.name} Workout'),
                             onPressed: () {
                               workoutNotifier.initDay(
@@ -487,7 +488,7 @@ class _SessionPanel extends StatelessWidget {
               ),
               RoundIconButton(
                 tooltip: isPaused ? 'Resume workout' : 'Pause workout',
-                icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                icon: isPaused ? LucideIcons600.play : LucideIcons600.pause,
                 filled: isPaused,
                 onPressed: onTogglePause,
               ),

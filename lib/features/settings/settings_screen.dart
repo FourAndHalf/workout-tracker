@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -120,7 +121,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       );
                       if (picked != null) setDialogState(() => photo = picked);
                     },
-                    icon: const Icon(Icons.camera_alt_outlined),
+                    icon: const Icon(LucideIcons600.camera),
                   ),
                   const SizedBox(width: 8),
                   IconButton.outlined(
@@ -131,7 +132,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       );
                       if (picked != null) setDialogState(() => photo = picked);
                     },
-                    icon: const Icon(Icons.photo_library_outlined),
+                    icon: const Icon(LucideIcons600.images),
                   ),
                 ],
               ),
@@ -315,7 +316,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _Group(
             children: [
               _SettingsRow(
-                icon: Icons.cloud_upload_outlined,
+                icon: LucideIcons600.cloudUpload,
                 busy: backupState.isInProgress,
                 title: 'Back up to Google Drive',
                 subtitle: _backupStatusLabel(backupState),
@@ -331,7 +332,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _Group(
             children: [
               _SettingsRow(
-                icon: Icons.local_fire_department_outlined,
+                icon: LucideIcons600.flame,
                 title: 'Daily calorie burn',
                 subtitle: '$dailyBurn kcal · used by the Kinetic Flux widgets',
                 onTap: () => _editDailyBurn(dailyBurn),
@@ -342,7 +343,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _Group(
             children: [
               _SettingsRow(
-                icon: Icons.shopping_cart_outlined,
+                icon: LucideIcons600.shoppingCart,
                 title: 'Weekly shopping list',
                 onTap: _loadingNutritionSettings
                     ? null
@@ -358,11 +359,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   .watch(supplementRepositoryProvider)
                   .when(
                     loading: () => const _SettingsRow(
-                      icon: Icons.medication_outlined,
+                      icon: LucideIcons600.pill,
                       title: 'Loading supplements...',
                     ),
                     error: (_, _) => const _SettingsRow(
-                      icon: Icons.medication_outlined,
+                      icon: LucideIcons600.pill,
                       title: 'Supplements unavailable',
                     ),
                     data: (repository) {
@@ -375,14 +376,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           return Column(
                             children: [
                               _SettingsRow(
-                                icon: Icons.medication_outlined,
+                                icon: LucideIcons600.pill,
                                 title: 'Supplements',
                                 subtitle: supplements.isEmpty
                                     ? 'No supplements added yet'
                                     : '${supplements.length} tracked daily',
                                 onTap: () => _addSupplement(repository),
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.add_rounded),
+                                  icon: const Icon(LucideIcons600.plus),
                                   tooltip: 'Add supplement',
                                   onPressed: () => _addSupplement(repository),
                                 ),
@@ -399,10 +400,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                  icon: Icons.medication_outlined,
+                                  icon: LucideIcons600.pill,
                                   title: supplement.name,
                                   trailing: IconButton(
-                                    icon: const Icon(Icons.close_rounded),
+                                    icon: const Icon(LucideIcons600.x),
                                     tooltip: 'Remove supplement',
                                     onPressed: () async {
                                       await repository.deleteSupplement(
@@ -429,7 +430,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _Group(
             children: [
               _SettingsRow(
-                icon: Icons.delete_outline,
+                icon: LucideIcons600.trash2,
                 destructive: true,
                 title: 'Delete saved data',
                 subtitle: 'Clear workout and nutrition history',
@@ -551,7 +552,7 @@ class _SettingsRow extends StatelessWidget {
               if (trailing != null)
                 trailing!
               else if (onTap != null)
-                Icon(Icons.chevron_right_rounded, color: colors.textMuted),
+                Icon(LucideIcons600.chevronRight, color: colors.textMuted),
             ],
           ),
         ),

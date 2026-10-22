@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,7 +87,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
           final names = namesSnapshot.data!;
           if (names.isEmpty) {
             return EmptyState(
-              icon: Icons.show_chart_outlined,
+              icon: LucideIcons600.chartLine,
               message: 'Log a workout to see your progress',
               subtitle: 'Your strength and volume trends will show up here.',
               actionLabel: 'Choose a workout',
@@ -187,7 +188,7 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                   ),
                   onPressed: () => _addCheckIn(context, repository, latest),
-                  icon: const Icon(Icons.add_rounded, size: 18),
+                  icon: const Icon(LucideIcons600.plus, size: 18),
                   label: const Text('Check in'),
                 ),
               ),
@@ -287,7 +288,7 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                         );
                         if (photo != null) setDialogState(() => _photo = photo);
                       },
-                      icon: const Icon(Icons.camera_alt_outlined),
+                      icon: const Icon(LucideIcons600.camera),
                     ),
                     const SizedBox(width: 8),
                     IconButton.outlined(
@@ -298,7 +299,7 @@ class _WeeklyCheckInCardState extends ConsumerState<_WeeklyCheckInCard> {
                         );
                         if (photo != null) setDialogState(() => _photo = photo);
                       },
-                      icon: const Icon(Icons.photo_library_outlined),
+                      icon: const Icon(LucideIcons600.images),
                     ),
                   ],
                 ),
@@ -643,7 +644,7 @@ class _ExercisePicker extends StatelessWidget {
               ),
             ),
             Icon(
-              Icons.expand_more_rounded,
+              LucideIcons600.chevronDown,
               size: 18,
               color: colors.textPrimary,
             ),

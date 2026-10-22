@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -79,7 +80,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
             child: Row(
               children: [
                 Icon(
-                  Icons.fitness_center_outlined,
+                  LucideIcons600.dumbbell,
                   size: 18,
                   color: context.colors.onPrimary,
                 ),
@@ -106,7 +107,7 @@ class _ActiveWorkoutBannerState extends ConsumerState<ActiveWorkoutBanner>
                 ),
                 const SizedBox(width: 2),
                 Icon(
-                  Icons.chevron_right_rounded,
+                  LucideIcons600.chevronRight,
                   size: 18,
                   color: context.colors.onPrimary,
                 ),

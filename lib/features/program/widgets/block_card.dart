@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -118,7 +119,7 @@ class BlockCard extends StatelessWidget {
                   ),
                   child: complete
                       ? Icon(
-                          Icons.check_rounded,
+                          LucideIcons600.check,
                           size: 16,
                           color: colors.onPrimary,
                         )
@@ -174,7 +175,7 @@ class BlockCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.info_outline_rounded,
+                      LucideIcons600.info,
                       size: 14,
                       color: colors.textSecondary,
                     ),

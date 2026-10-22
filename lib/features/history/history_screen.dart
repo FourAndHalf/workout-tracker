@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,7 +61,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 children: [
                   const SizedBox(height: 160),
                   EmptyState(
-                    icon: Icons.event_available_outlined,
+                    icon: LucideIcons600.calendarCheck,
                     message: 'Complete a workout to see it here',
                     subtitle: 'Your training history and calendar will fill in as you go.',
                     actionLabel: 'Choose a workout',
@@ -156,7 +157,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         subtitle: Text(_logSummary(log)),
                         trailing: log.hitFailure
                             ? Icon(
-                                Icons.flag,
+                                LucideIcons600.flag,
                                 color: context.colors.warning,
                                 size: 18,
                               )
@@ -265,14 +266,14 @@ class _CalendarView extends StatelessWidget {
                   ),
                   RoundIconButton(
                     tooltip: 'Previous month',
-                    icon: Icons.chevron_left_rounded,
+                    icon: LucideIcons600.chevronLeft,
                     size: 36,
                     onPressed: onPrevious,
                   ),
                   const SizedBox(width: 8),
                   RoundIconButton(
                     tooltip: 'Next month',
-                    icon: Icons.chevron_right_rounded,
+                    icon: LucideIcons600.chevronRight,
                     size: 36,
                     onPressed: onNext,
                   ),
@@ -417,7 +418,7 @@ class _SessionTile extends StatelessWidget {
             ),
             Text(_duration(session), style: AppText.metricTable),
             const SizedBox(width: 4),
-            Icon(Icons.chevron_right_rounded, color: colors.textMuted),
+            Icon(LucideIcons600.chevronRight, color: colors.textMuted),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image/image.dart' as img;
@@ -186,7 +187,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: IconChip(
-                      Icons.restaurant_outlined,
+                      LucideIcons600.utensils,
                       color: label == suggested ? colors.textPrimary : null,
                     ),
                     title: Text(label),
@@ -201,7 +202,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                   ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const IconChip(Icons.edit_outlined),
+                  leading: const IconChip(LucideIcons600.pencil),
                   title: const Text('Custom label'),
                   onTap: () async {
                     final custom = await _askCustomLabel(context);
@@ -212,7 +213,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const IconChip(Icons.remove_circle_outline),
+                  leading: const IconChip(LucideIcons600.minusCircle),
                   title: const Text('Skip label'),
                   onTap: () => Navigator.pop(context),
                 ),
@@ -291,7 +292,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
             if (shoppingListEnabled)
               RoundIconButton(
                 tooltip: 'Shopping list',
-                icon: Icons.shopping_cart_outlined,
+                icon: LucideIcons600.shoppingCart,
                 onPressed: () => showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
@@ -334,7 +335,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                           children: [
                             Expanded(
                               child: _PhotoActionTile(
-                                icon: Icons.camera_alt_outlined,
+                                icon: LucideIcons600.camera,
                                 label: 'Snap Meal',
                                 caption: 'Use the camera',
                                 primary: true,
@@ -344,7 +345,7 @@ class _NutritionScreenState extends ConsumerState<NutritionScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: _PhotoActionTile(
-                                icon: Icons.photo_library_outlined,
+                                icon: LucideIcons600.images,
                                 label: 'Upload Photo',
                                 caption: 'Pick from gallery',
                                 onTap: () => _choosePhoto(ImageSource.gallery),
@@ -618,7 +619,7 @@ class _ShoppingListTabState extends ConsumerState<_ShoppingListTab> {
               subtitle: 'This week’s ingredients · $remaining left',
               trailing: RoundIconButton(
                 tooltip: 'Add item',
-                icon: Icons.add_rounded,
+                icon: LucideIcons600.plus,
                 size: 40,
                 onPressed: () {
                   _customItems ??= List<String>.from(items);
@@ -707,7 +708,7 @@ class _ShoppingRow extends StatelessWidget {
                 ),
               ),
               child: checked
-                  ? Icon(Icons.check_rounded, size: 14, color: colors.onPrimary)
+                  ? Icon(LucideIcons600.check, size: 14, color: colors.onPrimary)
                   : null,
             ),
             const SizedBox(width: 12),
@@ -725,19 +726,19 @@ class _ShoppingRow extends StatelessWidget {
             IconButton(
               tooltip: 'Buy on Blinkit',
               visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.open_in_new_rounded, size: 18),
+              icon: const Icon(LucideIcons600.externalLink, size: 18),
               onPressed: onBuy,
             ),
             IconButton(
               tooltip: 'Edit item',
               visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.edit_outlined, size: 18),
+              icon: const Icon(LucideIcons600.pencil, size: 18),
               onPressed: onEdit,
             ),
             IconButton(
               tooltip: 'Remove item',
               visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.close_rounded, size: 18),
+              icon: const Icon(LucideIcons600.x, size: 18),
               onPressed: onRemove,
             ),
           ],
@@ -940,7 +941,7 @@ class _MealPlanTabState extends ConsumerState<_MealPlanTab> {
                     minimumSize: const Size(0, 40),
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                   ),
-                  icon: const Icon(Icons.add_rounded, size: 18),
+                  icon: const Icon(LucideIcons600.plus, size: 18),
                   label: const Text('Add Meal'),
                   onPressed: () => _editMeal(context, ref),
                 ),
@@ -1247,7 +1248,7 @@ class _MealPlanCard extends StatelessWidget {
                 ),
                 if (meal.videoUrl != null && meal.videoUrl!.isNotEmpty)
                   ActionChip(
-                    avatar: const Icon(Icons.play_arrow_outlined, size: 18),
+                    avatar: const Icon(LucideIcons600.play, size: 18),
                     label: const Text('Video'),
                     onPressed: () => launchUrl(
                       Uri.parse(meal.videoUrl!),
@@ -1449,7 +1450,7 @@ class _MealPlanEditorState extends State<_MealPlanEditor> {
           else
             TextButton.icon(
               onPressed: () => setState(() => _showVideo = true),
-              icon: const Icon(Icons.add, size: 18),
+              icon: const Icon(LucideIcons600.plus, size: 18),
               label: const Text('Add cooking video'),
             ),
         ],
@@ -1559,7 +1560,7 @@ class _PhotoGrid extends StatelessWidget {
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => ColoredBox(
                 color: context.colors.card,
-                child: Icon(Icons.broken_image_outlined),
+                child: Icon(LucideIcons600.imageOff),
               ),
             ),
             Positioned(
@@ -1611,7 +1612,7 @@ class _EmptyPhotos extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
-          Icons.restaurant_outlined,
+          LucideIcons600.utensils,
           color: context.colors.textSecondary,
           size: 22,
         ),

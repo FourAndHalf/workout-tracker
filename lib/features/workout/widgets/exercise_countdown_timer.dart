@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -104,7 +105,7 @@ class _ExerciseCountdownTimerState extends State<ExerciseCountdownTimer> {
             children: [
               ElevatedButton.icon(
                 icon: Icon(
-                  _running ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                  _running ? LucideIcons600.pause : LucideIcons600.play,
                   size: 18,
                 ),
                 label: Text(
