@@ -31,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
               HomeWidgetData.compute(
                 now: now,
                 trainingDays: data.trainingDays,
-                quote: dailyMotivationQuote(now),
+                quoteFor: dailyMotivationQuote,
               ),
             )
             .ignore();
