@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/database/app_database.dart';
 import '../../main.dart';
+import 'library_mindset_quotes.dart';
 
 class MotivationQuote {
   final String quote;
@@ -10,7 +11,7 @@ class MotivationQuote {
   const MotivationQuote({required this.quote, required this.source});
 }
 
-const _motivationQuotes = [
+final _motivationQuotes = [
   MotivationQuote(
     quote: 'We are what we repeatedly do. Excellence is a habit.',
     source: 'Aristotle',
@@ -100,6 +101,8 @@ const _motivationQuotes = [
     quote: 'The best time to plant a tree was 20 years ago. The second best time is now.',
     source: 'Chinese proverb',
   ),
+  for (final (quote, source) in libraryMindsetQuotes)
+    MotivationQuote(quote: quote, source: source),
 ];
 
 /// "Good morning" / "Good afternoon" / "Good evening" for the header.

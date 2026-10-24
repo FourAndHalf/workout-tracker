@@ -2,18 +2,23 @@ import 'package:fitness_tracker/features/home/home_providers.dart';
 import 'package:fitness_tracker/services/home_widget_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _quote = MotivationQuote(quote: 'Keep going.', source: 'Someone');
+MotivationQuote _quoteFor(DateTime date) =>
+    MotivationQuote(quote: 'Day ${date.day}.', source: 'Someone');
 
 void main() {
   group('HomeWidgetData.compute', () {
-    test('formats the quote and its source', () {
+    test('publishes a dated quote for each of the next 7 days', () {
       final data = HomeWidgetData.compute(
-        now: DateTime(2026, 10, 24),
+        now: DateTime(2026, 10, 24, 15),
         trainingDays: const {},
-        quote: _quote,
+        quoteFor: _quoteFor,
       ).values;
-      expect(data['quote_text'], '“Keep going.”');
-      expect(data['quote_source'], '— Someone');
+      expect(data['day0_date'], '2026-10-24');
+      expect(data['day0_quote'], '“Day 24.”');
+      expect(data['day0_source'], '— Someone');
+      expect(data['day1_date'], '2026-10-25');
+      expect(data['day1_quote'], '“Day 25.”');
+      expect(data['day6_date'], '2026-10-30');
     });
 
     test('marks Monday-Sunday as done, missed, today and upcoming', () {
@@ -21,10 +26,10 @@ void main() {
       final data = HomeWidgetData.compute(
         now: DateTime(2026, 10, 22, 9),
         trainingDays: {DateTime(2026, 10, 19), DateTime(2026, 10, 21)},
-        quote: _quote,
+        quoteFor: _quoteFor,
       ).values;
       expect(
-        data['week_states'],
+        data['day0_states'],
         'done,missed,done,today,upcoming,upcoming,upcoming',
       );
     });
@@ -33,11 +38,28 @@ void main() {
       final data = HomeWidgetData.compute(
         now: DateTime(2026, 10, 25), // Sunday
         trainingDays: {DateTime(2026, 10, 25)},
-        quote: _quote,
+        quoteFor: _quoteFor,
       ).values;
       expect(
-        data['week_states'],
+        data['day0_states'],
         'missed,missed,missed,missed,missed,missed,done',
+      );
+    });
+
+    test('later days roll over: an untrained today becomes missed', () {
+      // Sunday 2026-10-25 untrained; by Monday the new week starts fresh.
+      final data = HomeWidgetData.compute(
+        now: DateTime(2026, 10, 25),
+        trainingDays: const {},
+        quoteFor: _quoteFor,
+      ).values;
+      expect(
+        data['day0_states'],
+        'missed,missed,missed,missed,missed,missed,today',
+      );
+      expect(
+        data['day1_states'],
+        'today,upcoming,upcoming,upcoming,upcoming,upcoming,upcoming',
       );
     });
   });
@@ -51,9 +73,9 @@ void main() {
         refresh: (name) async => calls.add('refresh $name'),
       );
 
-      await service.publish(const HomeWidgetData({'quote_text': 'a'}));
+      await service.publish(const HomeWidgetData({'day0_date': 'a'}));
 
-      expect(calls, ['save quote_text=a', 'refresh QuoteWeekWidgetProvider']);
+      expect(calls, ['save day0_date=a', 'refresh QuoteWeekWidgetProvider']);
     },
   );
 }
