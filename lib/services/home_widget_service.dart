@@ -58,9 +58,12 @@ class HomeWidgetData {
   }
 }
 
-/// Publishes [HomeWidgetData] to the quote + week Android launcher widget.
+/// Publishes [HomeWidgetData] to the quote + week and quote-only widgets.
 class HomeWidgetService {
-  static const androidWidgetName = 'QuoteWeekWidgetProvider';
+  static const androidWidgetNames = [
+    'QuoteWeekWidgetProvider',
+    'QuoteWidgetProvider',
+  ];
 
   final Future<void> Function(String key, String value) _save;
   final Future<void> Function(String androidName) _refresh;
@@ -76,6 +79,8 @@ class HomeWidgetService {
     for (final entry in data.values.entries) {
       await _save(entry.key, entry.value);
     }
-    await _refresh(androidWidgetName);
+    for (final name in androidWidgetNames) {
+      await _refresh(name);
+    }
   }
 }
