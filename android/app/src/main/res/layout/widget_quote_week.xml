@@ -73,11 +73,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_0"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -86,11 +87,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_1"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -99,11 +101,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_2"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -112,11 +115,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_3"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -125,11 +129,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_4"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -138,11 +143,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_5"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
 
@@ -151,11 +157,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <View
+            <ImageView
                 android:id="@+id/widget_day_6"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:background="@drawable/widget_day_idle" />
         </FrameLayout>
     </LinearLayout>
