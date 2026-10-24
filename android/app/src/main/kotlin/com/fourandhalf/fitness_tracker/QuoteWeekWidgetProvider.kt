@@ -43,10 +43,10 @@ class QuoteWeekWidgetProvider : HomeWidgetProvider() {
                     when (state) {
                         "done" -> R.drawable.widget_day_done
                         "today" -> R.drawable.widget_day_today
+                        "missed" -> R.drawable.widget_day_missed
                         else -> R.drawable.widget_day_idle
                     },
                 )
-                views.setTextViewText(viewId, if (state == "done") "✓" else "")
             }
             views.setOnClickPendingIntent(
                 R.id.widget_root,
