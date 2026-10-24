@@ -2,6 +2,7 @@
 <resources>
     <!-- Pearl Ledger tokens (dark) -->
     <color name="widget_card">#161618</color>
+    <color name="widget_surface">#1C1C1F</color>
     <color name="widget_border">#2C2C30</color>
     <color name="widget_text">#ECECEE</color>
     <color name="widget_text_secondary">#A0A0A6</color>
