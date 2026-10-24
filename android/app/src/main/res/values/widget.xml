@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_streak_label">Day streak</string>
-    <string name="widget_camera_label">Log a meal photo</string>
-    <string name="flux_widget_name">Kinetic Flux</string>
-    <string name="flux_widget_compact_name">Kinetic Flux Mini</string>
-    <string name="flux_widget_description">Energy balance, streak and your next workout.</string>
-    <string name="flux_widget_compact_description">Net calories and streak at a glance.</string>
-    <color name="widget_text">#1F2328</color>
-    <color name="widget_text_secondary">#656D76</color>
+    <string name="quote_week_widget_name">Quote &amp; Week</string>
+    <string name="quote_week_widget_description">Today\'s quote and your 7-day workout status.</string>
+    <!-- Pearl Ledger tokens (light) -->
+    <color name="widget_card">#F1F1F3</color>
+    <color name="widget_border">#DADADD</color>
+    <color name="widget_text">#1C1C1E</color>
+    <color name="widget_text_secondary">#626267</color>
+    <color name="widget_primary">#2A2A2D</color>
+    <color name="widget_on_primary">#FFFFFF</color>
+    <color name="widget_track">#D4D4D8</color>
 </resources>

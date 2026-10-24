@@ -11,7 +11,7 @@ import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/ledger.dart';
 import '../../core/widgets/tag_pill.dart';
 import '../../data/models/program_model.dart';
-import '../../services/flux_widget_service.dart';
+import '../../core/utils/workout_estimate.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
 import '../workout/start_workout.dart';
 import 'program_providers.dart';
