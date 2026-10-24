@@ -75,7 +75,11 @@ void main() {
 
       await service.publish(const HomeWidgetData({'day0_date': 'a'}));
 
-      expect(calls, ['save day0_date=a', 'refresh QuoteWeekWidgetProvider']);
+      expect(calls, [
+      'save day0_date=a',
+      'refresh QuoteWeekWidgetProvider',
+      'refresh QuoteWidgetProvider',
+    ]);
     },
   );
 }

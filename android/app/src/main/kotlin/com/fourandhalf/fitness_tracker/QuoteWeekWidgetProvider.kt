@@ -8,18 +8,23 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Bundle
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 import java.util.Calendar
 import java.util.Locale
 
-class QuoteWeekWidgetProvider : HomeWidgetProvider() {
-    private val dayViews = intArrayOf(
-        R.id.widget_day_0, R.id.widget_day_1, R.id.widget_day_2, R.id.widget_day_3,
-        R.id.widget_day_4, R.id.widget_day_5, R.id.widget_day_6,
-    )
+/** The 4x2 widget: today's quote with the Monday-Sunday workout status beneath. */
+class QuoteWeekWidgetProvider : QuoteWidgetBase(showWeek = true, fallbackHeightDp = 130f)
 
+/** The 4x1 widget: just today's quote. */
+class QuoteWidgetProvider : QuoteWidgetBase(showWeek = false, fallbackHeightDp = 70f)
+
+abstract class QuoteWidgetBase(
+    private val showWeek: Boolean,
+    private val fallbackHeightDp: Float,
+) : HomeWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -27,27 +32,23 @@ class QuoteWeekWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences,
     ) {
         val day = todaysEntry(widgetData)
-        val states = (widgetData.getString("day${day}_states", null) ?: "").split(",")
+        val quote = widgetData.getString("day${day}_quote", "") ?: ""
+        val source = widgetData.getString("day${day}_source", "") ?: ""
+        val states = if (showWeek) {
+            (widgetData.getString("day${day}_states", null) ?: "").split(",")
+        } else {
+            null
+        }
         appWidgetIds.forEach { widgetId ->
+            val options = appWidgetManager.getAppWidgetOptions(widgetId)
+            // Portrait is width = min width, height = max height.
+            val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0).let { if (it > 0) it.toFloat() else 320f }
+            val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0).let { if (it > 0) it.toFloat() else fallbackHeightDp }
             val views = RemoteViews(context.packageName, R.layout.widget_quote_week)
-            views.setTextViewText(R.id.widget_quote, widgetData.getString("day${day}_quote", "") ?: "")
-            views.setTextViewText(
-                R.id.widget_quote_source,
-                widgetData.getString("day${day}_source", "") ?: "",
+            views.setImageViewBitmap(
+                R.id.widget_image,
+                QuoteCardRenderer.render(context, width, height, quote, source, states),
             )
-            dayViews.forEachIndexed { index, viewId ->
-                val state = states.getOrNull(index)
-                views.setInt(
-                    viewId,
-                    "setBackgroundResource",
-                    when (state) {
-                        "done" -> R.drawable.widget_day_done
-                        "today" -> R.drawable.widget_day_today
-                        "missed" -> R.drawable.widget_day_missed
-                        else -> R.drawable.widget_day_idle
-                    },
-                )
-            }
             views.setOnClickPendingIntent(
                 R.id.widget_root,
                 HomeWidgetLaunchIntent.getActivity(
@@ -59,6 +60,22 @@ class QuoteWeekWidgetProvider : HomeWidgetProvider() {
             appWidgetManager.updateAppWidget(widgetId, views)
         }
         scheduleMidnightRefresh(context, appWidgetManager)
+    }
+
+    /** Resizing changes the size the card is drawn at, so draw it again. */
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle,
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        onUpdate(
+            context,
+            appWidgetManager,
+            intArrayOf(appWidgetId),
+            context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE),
+        )
     }
 
     override fun onDisabled(context: Context) {
@@ -85,7 +102,7 @@ class QuoteWeekWidgetProvider : HomeWidgetProvider() {
 
     /** Re-renders the widget just after midnight so the quote and week strip roll over. */
     private fun scheduleMidnightRefresh(context: Context, appWidgetManager: AppWidgetManager) {
-        val ids = appWidgetManager.getAppWidgetIds(ComponentName(context, QuoteWeekWidgetProvider::class.java))
+        val ids = appWidgetManager.getAppWidgetIds(ComponentName(context, javaClass))
         val midnight = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, 1)
             set(Calendar.HOUR_OF_DAY, 0)
@@ -101,7 +118,7 @@ class QuoteWeekWidgetProvider : HomeWidgetProvider() {
         PendingIntent.getBroadcast(
             context,
             0,
-            Intent(context, QuoteWeekWidgetProvider::class.java).apply {
+            Intent(context, javaClass).apply {
                 action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
             },

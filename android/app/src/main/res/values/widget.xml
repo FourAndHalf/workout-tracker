@@ -2,13 +2,6 @@
 <resources>
     <string name="quote_week_widget_name">Quote &amp; Week</string>
     <string name="quote_week_widget_description">Today\'s quote and your 7-day workout status.</string>
-    <!-- Pearl Ledger tokens (light) -->
-    <color name="widget_card">#F1F1F3</color>
-    <color name="widget_surface">#ECECEE</color>
-    <color name="widget_border">#DADADD</color>
-    <color name="widget_text">#1C1C1E</color>
-    <color name="widget_text_secondary">#626267</color>
-    <color name="widget_primary">#2A2A2D</color>
-    <color name="widget_on_primary">#FFFFFF</color>
-    <color name="widget_track">#D4D4D8</color>
+    <string name="quote_widget_name">Quote</string>
+    <string name="quote_widget_description">Today\'s motivational quote.</string>
 </resources>
