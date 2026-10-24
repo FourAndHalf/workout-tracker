@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="widget_text">#E6EDF3</color>
-    <color name="widget_text_secondary">#8B949E</color>
+    <!-- Pearl Ledger tokens (dark) -->
+    <color name="widget_card">#161618</color>
+    <color name="widget_border">#2C2C30</color>
+    <color name="widget_text">#ECECEE</color>
+    <color name="widget_text_secondary">#A0A0A6</color>
+    <color name="widget_primary">#ECECEE</color>
+    <color name="widget_on_primary">#161618</color>
+    <color name="widget_track">#2C2C30</color>
 </resources>

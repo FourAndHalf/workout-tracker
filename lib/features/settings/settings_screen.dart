@@ -13,8 +13,6 @@ import '../../core/theme/theme_mode_provider.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/ledger.dart';
 import '../../main.dart';
-import '../../services/flux_widget_service.dart';
-import '../home/flux_widget_providers.dart';
 import '../home/home_providers.dart';
 import '../nutrition/nutrition_screen.dart';
 import '../../data/repositories/supplement_repository.dart';
@@ -54,44 +52,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool(shoppingListEnabledKey, enabled);
     ref.invalidate(shoppingListEnabledProvider);
-  }
-
-  Future<void> _editDailyBurn(int current) async {
-    final controller = TextEditingController(text: '$current');
-    final saved = await showDialog<int>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Daily calorie burn'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: 'kcal per day',
-            helperText: 'Your maintenance burn, before workouts',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final value = int.tryParse(controller.text.trim());
-              if (value != null && value > 0) {
-                Navigator.pop(dialogContext, value);
-              }
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      ),
-    );
-    if (saved == null) return;
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setInt(dailyBurnPreferenceKey, saved);
-    ref.invalidate(dailyBurnKcalProvider);
   }
 
   Future<void> _addSupplement(SupplementRepository repository) async {
@@ -289,9 +249,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     });
     final backupState = ref.watch(backupOperationProvider);
 
-    final dailyBurn =
-        ref.watch(dailyBurnKcalProvider).value ?? defaultDailyBurnKcal;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
@@ -325,17 +282,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     : () => ref
                           .read(backupOperationProvider.notifier)
                           .backupNow(),
-              ),
-            ],
-          ),
-          const _SectionLabel('Widgets'),
-          _Group(
-            children: [
-              _SettingsRow(
-                icon: LucideIcons600.flame,
-                title: 'Daily calorie burn',
-                subtitle: '$dailyBurn kcal · used by the Kinetic Flux widgets',
-                onTap: () => _editDailyBurn(dailyBurn),
               ),
             ],
           ),

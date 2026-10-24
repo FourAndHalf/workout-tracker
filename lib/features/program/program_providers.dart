@@ -6,7 +6,7 @@ import '../../main.dart';
 import '../../data/models/program_model.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/program_repository.dart';
-import '../../services/flux_widget_service.dart';
+import '../../core/utils/workout_estimate.dart';
 
 const selectedProgramPreferenceKey = 'selected_program_id';
 
