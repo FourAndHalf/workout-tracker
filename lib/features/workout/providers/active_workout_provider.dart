@@ -171,6 +171,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
     int? reps,
     bool hitFailure = false,
     int? durationSeconds,
+    double? distanceMeters,
   }) async {
     if (state.sessionId == null || state.isPaused) return;
 
@@ -191,6 +192,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       targetReps: exercise.repTarget,
       hitFailure: hitFailure,
       durationSeconds: durationSeconds,
+      distanceMeters: distanceMeters,
     );
     _ref.invalidate(dashboardAnalyticsProvider);
 
@@ -204,6 +206,7 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       'reps': reps,
       'hitFailure': hitFailure,
       'durationSeconds': durationSeconds,
+      'distanceMeters': distanceMeters,
     });
     updatedSets[exercise.id] = setList;
 
@@ -237,12 +240,15 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
       }
     }
 
+    // A block can set its own rest; 0 means go straight to the next set.
+    final restSeconds = block.restSeconds ?? BlockModel.defaultRestSeconds;
+
     state = state.copyWith(
       loggedSets: updatedSets,
       currentExerciseIndex: nextExerciseIdx,
       currentBlockIndex: nextBlockIdx,
-      isResting: shouldTriggerRest,
-      restSeconds: 60,
+      isResting: shouldTriggerRest && restSeconds > 0,
+      restSeconds: restSeconds > 0 ? restSeconds : state.restSeconds,
       setStartedAt: _now(),
     );
   }
@@ -269,6 +275,16 @@ class ActiveWorkoutNotifier extends StateNotifier<ActiveWorkoutState> {
         exercise: exercise,
         block: block,
         durationSeconds: exercise.repScheme?.firstOrNull ?? 60,
+      );
+      return;
+    }
+
+    if (exercise.logMode == 'distance') {
+      // Time comes from the set clock.
+      await logSet(
+        exercise: exercise,
+        block: block,
+        distanceMeters: exercise.distanceMeters,
       );
       return;
     }

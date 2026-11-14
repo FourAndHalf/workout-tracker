@@ -93,4 +93,65 @@ void main() {
     expect(find.text('New'), findsOneWidget);
     expect(find.text('Previous best 60 kg'), findsOneWidget);
   });
+
+  testWidgets('runs show distance, time and pace; lifts keep KG and REPS', (
+    tester,
+  ) async {
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    final at = DateTime(2026, 11, 10, 7);
+    late int id;
+    await tester.runAsync(() async {
+      id = await _session(db, at, [('Bench', 60)]);
+      // Lifting sets also carry the set clock's elapsed time.
+      await (db.update(db.exerciseLogs))
+          .write(const ExerciseLogsCompanion(durationSeconds: Value(40)));
+      for (final (n, meters, seconds) in [(1, 400.0, 96), (2, 400.0, 104)]) {
+        await db
+            .into(db.exerciseLogs)
+            .insert(
+              ExerciseLogsCompanion.insert(
+                sessionId: id,
+                blockId: 'b',
+                exerciseId: 'rep',
+                exerciseName: '400 m Repeat',
+                blockType: 'intervals',
+                logMode: 'distance',
+                setNumber: n,
+                distanceMeters: Value(meters),
+                durationSeconds: Value(seconds),
+                loggedAt: Value(at),
+              ),
+            );
+      }
+    });
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          workoutRepositoryProvider.overrideWithValue(WorkoutRepository(db)),
+        ],
+        child: MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: SessionDetailScreen(sessionId: id),
+        ),
+      ),
+    );
+    for (var i = 0; i < 5; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
+      await tester.pump();
+    }
+
+    // 800 m in 200 s is 4:10 /km.
+    expect(find.text('2 sets · 800 m · 4:10 /km'), findsOneWidget);
+    expect(find.text('DIST'), findsOneWidget);
+    expect(find.text('400 m'), findsNWidgets(2));
+    expect(find.text('1:36'), findsOneWidget);
+    // The lift is not mistaken for a timed hold.
+    expect(find.text('KG'), findsOneWidget);
+    expect(find.text('REPS'), findsOneWidget);
+    expect(find.text('60'), findsOneWidget);
+  });
 }

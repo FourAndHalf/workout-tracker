@@ -202,7 +202,29 @@ class _ExerciseLedger extends StatelessWidget {
     );
     final previous = previousBest?.weight;
     final change = previous == null || best == 0 ? null : best - previous;
-    final timed = logs.every((log) => log.durationSeconds != null);
+    final distance = logs.any((log) => log.distanceMeters != null);
+    // Every set carries its elapsed time, so "timed" means nothing else was
+    // logged against it.
+    final timed =
+        !distance &&
+        logs.every(
+          (log) =>
+              log.durationSeconds != null &&
+              log.weight == null &&
+              log.reps == null,
+        );
+    final totalMeters = logs.fold<double>(
+      0,
+      (total, log) => total + (log.distanceMeters ?? 0),
+    );
+    final pacedLogs = logs.where(
+      (log) => log.distanceMeters != null && log.durationSeconds != null,
+    );
+    final pace = paceSecondsPerKmFor(
+      pacedLogs.fold<double>(0, (total, log) => total + log.distanceMeters!),
+      pacedLogs.fold<int>(0, (total, log) => total + log.durationSeconds!),
+    );
+    final setCount = '${logs.length} ${logs.length == 1 ? 'set' : 'sets'}';
 
     Widget? badge;
     if (hasPrevious && previousBest == null) {
@@ -224,7 +246,13 @@ class _ExerciseLedger extends StatelessWidget {
         children: [
           ModuleHeader(
             name,
-            subtitle: '${logs.length} ${logs.length == 1 ? 'set' : 'sets'}',
+            subtitle: distance
+                ? [
+                    setCount,
+                    formatDistance(totalMeters),
+                    if (pace != null) formatPace(pace),
+                  ].join(' · ')
+                : setCount,
             trailing: badge,
           ),
           const SizedBox(height: 12),
@@ -241,7 +269,11 @@ class _ExerciseLedger extends StatelessWidget {
                     SizedBox(width: 44, child: Text('SET', style: header)),
                     Expanded(
                       child: Text(
-                        timed ? 'TIME' : 'KG',
+                        distance
+                            ? 'DIST'
+                            : timed
+                            ? 'TIME'
+                            : 'KG',
                         textAlign: TextAlign.right,
                         style: header,
                       ),
@@ -249,7 +281,7 @@ class _ExerciseLedger extends StatelessWidget {
                     if (!timed)
                       Expanded(
                         child: Text(
-                          'REPS',
+                          distance ? 'TIME' : 'REPS',
                           textAlign: TextAlign.right,
                           style: header,
                         ),
@@ -272,7 +304,11 @@ class _ExerciseLedger extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            timed
+                            distance
+                                ? (log.distanceMeters == null
+                                      ? '—'
+                                      : formatDistance(log.distanceMeters!))
+                                : timed
                                 ? _clock(log.durationSeconds!)
                                 : log.weight == null
                                 ? '—'
@@ -284,7 +320,13 @@ class _ExerciseLedger extends StatelessWidget {
                         if (!timed)
                           Expanded(
                             child: Text(
-                              log.reps == null ? '—' : '${log.reps}',
+                              distance
+                                  ? (log.durationSeconds == null
+                                        ? '—'
+                                        : _clock(log.durationSeconds!))
+                                  : log.reps == null
+                                  ? '—'
+                                  : '${log.reps}',
                               textAlign: TextAlign.right,
                               style: cell,
                             ),

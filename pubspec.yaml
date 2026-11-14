@@ -86,6 +86,7 @@ flutter:
     - assets/programs/program_full.json
     - assets/programs/mobility_10min.json
     - assets/programs/badminton_mobility_strength.json
+    - assets/programs/endurance_run_8wk.json
     - assets/icon/splash_logo.png
 
   # Bundled (not downloaded) so the app renders offline; see design/DESIGN.md.
