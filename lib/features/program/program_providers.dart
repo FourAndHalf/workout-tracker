@@ -89,16 +89,17 @@ NextWorkoutInfo? nextWorkoutFor(
 
   final weekIndex = activeWeekIndex(program, sessions);
   final week = program.weeks[weekIndex];
-  if (week.days.isEmpty) return null;
+  final trainingDays = week.trainingDays;
+  if (trainingDays.isEmpty) return null;
 
   final completedDayIds = sessions
       .where((session) => session.weekId == week.id)
       .map((session) => session.dayId)
       .toSet();
 
-  final nextDay = week.days.firstWhere(
+  final nextDay = trainingDays.firstWhere(
     (day) => !completedDayIds.contains(day.id),
-    orElse: () => week.days.first,
+    orElse: () => trainingDays.first,
   );
 
   return NextWorkoutInfo(
@@ -114,6 +115,8 @@ NextWorkoutInfo? nextWorkoutFor(
   );
 }
 
+/// The first week with a training day still to do. Rest days have nothing to
+/// log, so they never hold a week open.
 int activeWeekIndex(ProgramModel program, List<WorkoutSession> sessions) {
   for (var weekIndex = 0; weekIndex < program.weeks.length - 1; weekIndex++) {
     final week = program.weeks[weekIndex];
@@ -121,8 +124,9 @@ int activeWeekIndex(ProgramModel program, List<WorkoutSession> sessions) {
         .where((session) => session.weekId == week.id)
         .map((session) => session.dayId)
         .toSet();
-    if (week.days.isEmpty ||
-        !week.days.every((day) => completedDays.contains(day.id))) {
+    final trainingDays = week.trainingDays;
+    if (trainingDays.isEmpty ||
+        !trainingDays.every((day) => completedDays.contains(day.id))) {
       return weekIndex;
     }
   }

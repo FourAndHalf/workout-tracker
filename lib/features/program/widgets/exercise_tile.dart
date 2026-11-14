@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ledger.dart';
 import '../../../data/models/program_model.dart';
+import '../../../data/repositories/workout_repository.dart';
 import '../../workout/widgets/exercise_countdown_timer.dart';
 
 /// The live logging state/callbacks for an exercise mid-workout. Passing
@@ -21,6 +22,7 @@ class ActiveExerciseLogState {
     int? reps,
     bool hitFailure,
     int? durationSeconds,
+    double? distanceMeters,
   })
   onLogSet;
   final void Function(int chunkReps) onAddChunk;
@@ -58,10 +60,56 @@ class _ExerciseTileState extends State<ExerciseTile> {
   final TextEditingController _chunkController = TextEditingController(
     text: '20',
   );
+  final TextEditingController _distanceController = TextEditingController();
+  final TextEditingController _minutesController = TextEditingController(
+    text: '0',
+  );
+  final TextEditingController _secondsController = TextEditingController(
+    text: '0',
+  );
   bool _hitFailure = false;
 
   @override
+  void initState() {
+    super.initState();
+    final meters = widget.exercise.distanceMeters;
+    _distanceController.text = meters == null ? '1' : _kmText(meters / 1000);
+    // The pace readout follows the fields as they change.
+    for (final controller in [
+      _distanceController,
+      _minutesController,
+      _secondsController,
+    ]) {
+      controller.addListener(_onDistanceFieldChanged);
+    }
+  }
+
+  void _onDistanceFieldChanged() {
+    if (mounted && widget.exercise.logMode == 'distance') setState(() {});
+  }
+
+  static String _kmText(double km) =>
+      km.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0+$'), '');
+
+  double? get _enteredMeters {
+    final km = double.tryParse(_distanceController.text);
+    return km == null || km <= 0 ? null : km * 1000;
+  }
+
+  /// Null while the time fields are left at 0:00, which hands timing to the
+  /// set clock.
+  int? get _enteredSeconds {
+    final total =
+        (int.tryParse(_minutesController.text) ?? 0) * 60 +
+        (int.tryParse(_secondsController.text) ?? 0);
+    return total > 0 ? total : null;
+  }
+
+  @override
   void dispose() {
+    _distanceController.dispose();
+    _minutesController.dispose();
+    _secondsController.dispose();
     _weightController.dispose();
     _repsController.dispose();
     _chunkController.dispose();
@@ -76,6 +124,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
         return LucideIcons600.flame;
       case 'time':
         return LucideIcons600.timer;
+      case 'distance':
+        return LucideIcons600.footprints;
       case 'repsOnly':
         return LucideIcons600.personStanding;
       case 'weightReps':
@@ -91,10 +141,19 @@ class _ExerciseTileState extends State<ExerciseTile> {
     if (exercise.repTarget != null) {
       return '$sets · target ${exercise.repTarget} reps';
     }
+    final perSide = exercise.side == 'each' ? ' each side' : '';
+    if (exercise.logMode == 'distance' && exercise.distanceMeters != null) {
+      final distance = formatDistance(exercise.distanceMeters!);
+      return exercise.targetSets == 1
+          ? distance
+          : '${exercise.targetSets} × $distance';
+    }
     if (exercise.logMode == 'time' &&
         exercise.repScheme != null &&
         exercise.repScheme!.isNotEmpty) {
-      return '${exercise.repScheme!.first} ${exercise.repUnit ?? 'sec'}';
+      final hold =
+          '${exercise.repScheme!.first} ${exercise.repUnit ?? 'sec'}$perSide';
+      return exercise.targetSets == 1 ? hold : '$sets · $hold';
     }
     if (exercise.repScheme != null && exercise.repScheme!.isNotEmpty) {
       final unit = exercise.repUnit != null ? ' ${exercise.repUnit}' : '';
@@ -123,6 +182,14 @@ class _ExerciseTileState extends State<ExerciseTile> {
     // Only send what this mode's form actually shows; the controllers hold
     // defaults (40 kg / 20 reps) that must not leak into other modes.
     final usesWeight = mode == 'weightReps' || mode == 'failure';
+    if (mode == 'distance') {
+      final meters = _enteredMeters;
+      if (meters == null) return;
+      active.onLogSet(distanceMeters: meters, durationSeconds: _enteredSeconds);
+      _minutesController.text = '0';
+      _secondsController.text = '0';
+      return;
+    }
     active.onLogSet(
       weight: usesWeight ? double.tryParse(_weightController.text) : null,
       reps: usesWeight || mode == 'repsOnly'
@@ -228,6 +295,13 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
                 ),
               ],
+              if (exercise.instructions != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  exercise.instructions!,
+                  style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
+                ),
+              ],
             ],
           ),
         ),
@@ -243,6 +317,17 @@ class _ExerciseTileState extends State<ExerciseTile> {
   }
 
   String _setSummary(int index, Map<String, dynamic> set) {
+    final meters = set['distanceMeters'] as double?;
+    if (meters != null) {
+      final seconds = set['durationSeconds'] as int?;
+      final pace = paceSecondsPerKmFor(meters, seconds);
+      return [
+        'Set $index: ${formatDistance(meters)}',
+        if (seconds != null)
+          '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
+        if (pace != null) formatPace(pace),
+      ].join(' · ');
+    }
     final weightStr = set['weight'] != null ? '${set['weight']} kg' : '';
     final repsStr = set['reps'] != null ? '${set['reps']} reps' : '';
     final failureStr = set['hitFailure'] == true ? ' · failure' : '';
@@ -337,6 +422,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
           if (exercise.logMode == 'repsOnly')
             _StepperField(label: 'Reps', controller: _repsController, step: 1),
 
+          if (exercise.logMode == 'distance') _buildDistanceFields(),
+
           if (isTimed)
             ExerciseCountdownTimer(
               // Keyed per set so the countdown starts fresh after each log.
@@ -369,6 +456,58 @@ class _ExerciseTileState extends State<ExerciseTile> {
             ),
           ],
         ],
+      ],
+    );
+  }
+
+  /// Distance plus the time it took, with the resulting pace. Leaving the
+  /// time at 0:00 saves the set clock's elapsed time instead.
+  Widget _buildDistanceFields() {
+    final colors = context.colors;
+    final pace = paceSecondsPerKmFor(_enteredMeters, _enteredSeconds);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _StepperField(
+          key: const Key('distanceField'),
+          label: 'Distance (km)',
+          controller: _distanceController,
+          step: 0.1,
+          decimal: true,
+          decimals: 2,
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: _StepperField(
+                key: const Key('minutesField'),
+                label: 'Time (min)',
+                controller: _minutesController,
+                step: 1,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _StepperField(
+                key: const Key('secondsField'),
+                label: 'Sec',
+                controller: _secondsController,
+                step: 5,
+                max: 59,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          pace != null
+              ? 'Pace ${formatPace(pace)}'
+              : 'Leave the time at 0:00 to use the set clock.',
+          key: const Key('paceReadout'),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: colors.textSecondary),
+        ),
       ],
     );
   }
@@ -459,20 +598,25 @@ class _StepperField extends StatelessWidget {
   final double step;
   final bool decimal;
 
+  /// Decimal places kept when [decimal]; trailing zeros are dropped.
+  final int decimals;
+  final double max;
+
   const _StepperField({
+    super.key,
     required this.label,
     required this.controller,
     required this.step,
     this.decimal = false,
+    this.decimals = 1,
+    this.max = 9999,
   });
 
   void _bump(int direction) {
     final current = double.tryParse(controller.text) ?? 0;
-    final next = (current + step * direction).clamp(0, 9999).toDouble();
+    final next = (current + step * direction).clamp(0, max).toDouble();
     controller.text = decimal
-        ? (next == next.roundToDouble()
-              ? next.toStringAsFixed(0)
-              : next.toStringAsFixed(1))
+        ? next.toStringAsFixed(decimals).replaceFirst(RegExp(r'\.?0+$'), '')
         : next.round().toString();
   }
 

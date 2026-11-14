@@ -12,17 +12,33 @@ const fluxStreakTargetDays = 21;
 /// Rough motivational estimate, matching the Progress tab's session estimate.
 const _kcalPerWorkoutMinute = 7;
 
-/// Rough session length for the widget's Start button: timed exercises use
-/// their duration, everything else ~2.5 min per set (work plus rest).
+/// Easy-run pace used to size distance work when no duration is authored.
+const _estimateSecondsPerKm = 390;
+
+/// Rough session length for the widget's Start button. A duration authored
+/// on the day wins. Otherwise timed exercises use their duration and
+/// distance work an easy-run pace, each plus the block's rest between sets;
+/// bodyweight reps take ~75 s per set and loaded sets ~2.5 min (work plus
+/// rest).
 int estimateWorkoutMinutes(DayModel day) {
+  final authored = day.estimatedDurationSeconds;
+  if (authored != null && authored > 0) return (authored / 60).round();
+
   var seconds = 0.0;
   for (final block in day.blocks) {
+    final rest = block.restSeconds ?? 0;
     for (final exercise in block.exercises) {
+      final sets = exercise.targetSets;
       final scheme = exercise.repScheme;
+      final distance = exercise.distanceMeters;
       if (exercise.logMode == 'time' && scheme != null && scheme.isNotEmpty) {
-        seconds += exercise.targetSets * (scheme.first ?? 30);
+        seconds += sets * ((scheme.first ?? 30) + rest);
+      } else if (exercise.logMode == 'distance' && distance != null) {
+        seconds += sets * (distance / 1000 * _estimateSecondsPerKm + rest);
+      } else if (exercise.logMode == 'repsOnly') {
+        seconds += sets * 75;
       } else {
-        seconds += exercise.targetSets * 150;
+        seconds += sets * 150;
       }
     }
   }

@@ -588,7 +588,7 @@
           "id": "bmt-w1-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -992,7 +992,7 @@
           "id": "bmt-w2-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -1378,7 +1378,7 @@
           "id": "bmt-w3-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -1754,7 +1754,7 @@
           "id": "bmt-w4-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -2166,7 +2166,7 @@
           "id": "bmt-w5-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -2577,7 +2577,7 @@
           "id": "bmt-w6-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -2979,7 +2979,7 @@
           "id": "bmt-w7-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -3390,7 +3390,7 @@
           "id": "bmt-w8-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -3759,7 +3759,7 @@
           "id": "bmt-w9-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -4112,7 +4112,7 @@
           "id": "bmt-w10-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -4474,7 +4474,7 @@
           "id": "bmt-w11-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]
@@ -4893,7 +4893,7 @@
           "id": "bmt-w12-sun",
           "name": "Rest",
           "order": 7,
-          "type": "recovery",
+          "type": "rest",
           "blocks": []
         }
       ]

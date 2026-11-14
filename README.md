@@ -14,7 +14,8 @@ I use the app to turn my training plan into a repeatable daily routine:
    and quick access back to an unfinished session.
 2. I open **Programs** and follow the current week and day. The bundled plans
    cover a 4-week strength program, a 12-week badminton strength/mobility
-   program, and a 10-minute daily mobility routine.
+   program, an 8-week running endurance block, and a 10-minute daily mobility
+   routine.
 3. During a workout, I start the session and log each set as I go. Depending on
    the exercise, I can record weight and reps, reps only, time, distance, or
    cumulative/rest-pause reps. The workout view shows elapsed session time,

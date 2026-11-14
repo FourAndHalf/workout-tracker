@@ -127,6 +127,12 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                     _VolumeCard(volumes: snapshot.data ?? const []),
               ),
               const SizedBox(height: 12),
+              FutureBuilder<List<WeeklyEndurance>>(
+                future: repository.getWeeklyEndurance(),
+                builder: (context, snapshot) =>
+                    EnduranceCard(weeks: snapshot.data ?? const []),
+              ),
+              const SizedBox(height: 12),
               FutureBuilder<List<WorkoutSession>>(
                 future: repository.getCompletedSessions(),
                 builder: (context, snapshot) {
@@ -693,6 +699,64 @@ class _VolumeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(shortDateLabel(volumes.first.start), style: axisStyle),
+                Text(
+                  'This week',
+                  style: axisStyle?.copyWith(color: colors.textPrimary),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Weekly running distance as bars, with the latest week's average pace.
+class EnduranceCard extends StatelessWidget {
+  final List<WeeklyEndurance> weeks;
+  const EnduranceCard({super.key, required this.weeks});
+
+  static String _km(double km) => '${km.toStringAsFixed(1)} km';
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final axisStyle = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(color: colors.textSecondary, fontSize: 10);
+    final values = [for (final week in weeks) week.distanceKm];
+    final total = values.fold<double>(0, (a, b) => a + b);
+    final lastPace = weeks.isEmpty ? null : weeks.last.paceSecondsPerKm;
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ModuleHeader(
+            'Weekly distance',
+            subtitle: total == 0
+                ? 'Runs and intervals logged with distance'
+                : '${_km(total)} over ${weeks.length} weeks'
+                      '${lastPace == null ? '' : ' · ${formatPace(lastPace)} this week'}',
+          ),
+          const SizedBox(height: 16),
+          if (total == 0)
+            Text(
+              'No distance logged yet.',
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: colors.textSecondary),
+            )
+          else ...[
+            ThinBarChart(
+              values: values,
+              highlightIndex: values.length - 1,
+              callout: _km(values.last),
+              barWidth: 8,
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(shortDateLabel(weeks.first.start), style: axisStyle),
                 Text(
                   'This week',
                   style: axisStyle?.copyWith(color: colors.textPrimary),

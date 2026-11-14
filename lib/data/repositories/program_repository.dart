@@ -19,6 +19,7 @@ class ProgramRepository {
     'mobility-10min': 'assets/programs/mobility_10min.json',
     'badminton-mobility-strength-12wk':
         'assets/programs/badminton_mobility_strength.json',
+    'endurance-run-8wk': 'assets/programs/endurance_run_8wk.json',
   };
 
   /// Load the complete bundled program and upgrade an older cached week-one copy.

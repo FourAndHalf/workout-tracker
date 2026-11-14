@@ -62,6 +62,7 @@ class WorkoutRepository {
     int? targetReps,
     bool hitFailure = false,
     int? durationSeconds,
+    double? distanceMeters,
     String? notes,
   }) async {
     return await db
@@ -80,6 +81,7 @@ class WorkoutRepository {
             targetReps: Value(targetReps),
             hitFailure: Value(hitFailure),
             durationSeconds: Value(durationSeconds),
+            distanceMeters: Value(distanceMeters),
             notes: Value(notes),
             loggedAt: Value(DateTime.now()),
           ),
@@ -155,6 +157,45 @@ class WorkoutRepository {
     return volumes;
   }
 
+  /// Distance and moving time per week from `distance` logs, oldest first.
+  Future<List<WeeklyEndurance>> getWeeklyEndurance({
+    int weeks = 8,
+    DateTime? now,
+  }) async {
+    final logs = await getAllExerciseLogs();
+    final currentMonday = _startOfWeek(now ?? DateTime.now());
+    final result = <WeeklyEndurance>[];
+    for (var index = weeks - 1; index >= 0; index--) {
+      final start = currentMonday.subtract(Duration(days: index * 7));
+      final end = start.add(const Duration(days: 7));
+      var meters = 0.0;
+      var pacedMeters = 0.0;
+      var pacedSeconds = 0;
+      for (final log in logs) {
+        final distance = log.distanceMeters;
+        if (distance == null || distance <= 0) continue;
+        if (log.loggedAt.isBefore(start) || !log.loggedAt.isBefore(end)) {
+          continue;
+        }
+        meters += distance;
+        final seconds = log.durationSeconds;
+        if (seconds != null && seconds > 0) {
+          pacedMeters += distance;
+          pacedSeconds += seconds;
+        }
+      }
+      result.add(
+        WeeklyEndurance(
+          start: start,
+          distanceMeters: meters,
+          pacedMeters: pacedMeters,
+          pacedSeconds: pacedSeconds,
+        ),
+      );
+    }
+    return result;
+  }
+
   Future<Set<DateTime>> getWorkoutDates() async {
     final sessions = await getCompletedSessions();
     return sessions
@@ -179,4 +220,49 @@ class WeeklyVolume {
   final double volume;
 
   const WeeklyVolume({required this.start, required this.volume});
+}
+
+class WeeklyEndurance {
+  final DateTime start;
+  final double distanceMeters;
+
+  /// Distance and time of the logs that carry a duration, for average pace.
+  final double pacedMeters;
+  final int pacedSeconds;
+
+  const WeeklyEndurance({
+    required this.start,
+    required this.distanceMeters,
+    this.pacedMeters = 0,
+    this.pacedSeconds = 0,
+  });
+
+  double get distanceKm => distanceMeters / 1000;
+
+  /// Average pace in seconds per km, or null without timed distance.
+  double? get paceSecondsPerKm =>
+      paceSecondsPerKmFor(pacedMeters, pacedSeconds);
+}
+
+/// Seconds per km for a distance covered in [seconds]; null when either
+/// is missing.
+double? paceSecondsPerKmFor(double? meters, int? seconds) {
+  if (meters == null || seconds == null || meters <= 0 || seconds <= 0) {
+    return null;
+  }
+  return seconds / (meters / 1000);
+}
+
+/// `5:42 /km`.
+String formatPace(double secondsPerKm) {
+  final total = secondsPerKm.round();
+  return '${total ~/ 60}:${(total % 60).toString().padLeft(2, '0')} /km';
+}
+
+/// `400 m` under a kilometre, otherwise `5 km` / `7.5 km`.
+String formatDistance(double meters) {
+  if (meters < 1000) return '${meters.round()} m';
+  final km = meters / 1000;
+  final text = km.toStringAsFixed(2).replaceFirst(RegExp(r'\.?0+$'), '');
+  return '$text km';
 }
