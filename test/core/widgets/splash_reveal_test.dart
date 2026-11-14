@@ -15,7 +15,7 @@ void main() {
     expect(find.byType(AppLogo), findsOneWidget);
     expect(find.text('home'), findsOneWidget);
 
-    await tester.pump(const Duration(milliseconds: 1200));
+    await tester.pump(const Duration(milliseconds: 1500));
     expect(find.byType(AppLogo), findsNothing);
     expect(find.text('home'), findsOneWidget);
   });

@@ -10,6 +10,7 @@ import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/empty_state.dart';
 import '../../core/widgets/ledger.dart';
 import '../../data/database/app_database.dart';
+import '../../data/repositories/workout_repository.dart';
 import '../../main.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
@@ -449,6 +450,13 @@ String _duration(WorkoutSession session) => session.finishedAt == null
 
 String _logSummary(ExerciseLog log) {
   final parts = <String>[];
+  final meters = log.distanceMeters;
+  if (meters != null) {
+    parts.add(formatDistance(meters));
+    final pace = paceSecondsPerKmFor(meters, log.durationSeconds);
+    if (pace != null) parts.add(formatPace(pace));
+    return parts.join('  •  ');
+  }
   if (log.weight != null) parts.add('${log.weight!.toStringAsFixed(1)} kg');
   if (log.reps != null) parts.add('${log.reps} reps');
   if (log.durationSeconds != null) parts.add('${log.durationSeconds}s');

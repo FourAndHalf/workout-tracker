@@ -30,6 +30,7 @@
       --phase-8: #38bdf8;
       --phase-9: #2f81f7;
       --phase-10: #a371f7;
+      --phase-11: #3fb950;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1156,6 +1157,66 @@
         <div class="task-content">
           <div class="task-text">Quote &amp; week launcher widget (4x2 / 4x1) <span class="tag tag-modify">modify</span></div>
           <div class="task-detail">Replace the streak/camera and Kinetic Flux widgets with a single Pearl Ledger (light/dark) widget: today's Home quote on top, Monday-Sunday workout status below; HomeWidgetService publishes pre-formatted values via home_widget; remove the daily-burn setting; unit tests for the data and service</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section class="phase" data-phase="11">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-11);">11</span>
+      <span class="phase-title">Endurance Track &amp; Track Fixes</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Track model: keep the fields the bundled tracks already author <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">ProgramModel keeps week focus/instructions, day type/instructions/estimatedDurationSeconds, block restSeconds and exercise instructions/side/distanceMeters instead of dropping them; week focus, day and exercise instructions are shown in the Programs and day views; round-trip tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Distance &amp; pace logging <span class="tag tag-new">new</span></div>
+          <div class="task-detail">New <code>distance</code> log mode: exercise_logs.distance_meters column (schema v4 migration), distance + min/sec form with a live pace readout in the exercise tile, distance/time columns and average pace in session detail and history, lock-screen completion logs the target distance; unit, widget and migration tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Rest days no longer stall a track <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">Days marked <code>type: "rest"</code> are listed but never started or counted: activeWeekIndex/nextWorkoutFor skip them, so the 12-week badminton track can advance past week 1; its weekly Rest day is re-typed from recovery to rest; tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Per-block rest and realistic session estimates <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">The rest timer uses the block's restSeconds (0 skips it, fixing the mobility routine's forced 60 s rests) instead of a fixed 60 s; estimateWorkoutMinutes prefers an authored day duration and sizes distance, timed and bodyweight work separately; the lock-screen target follows the estimate instead of a fixed 45 min; tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">8 Wk Endurance track <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Bundled moderate-to-hard running block (assets/programs/endurance_run_8wk.json): 5 sessions + 2 rest days a week (easy run, intervals, tempo, runner strength, long run), ~23 km building to ~42 km in week 7 with deloads in weeks 4 and 8, ending in a 10K time trial; interval recoveries drive the rest timer; registered in ProgramRepository and pubspec; content tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Weekly distance on the Progress tab <span class="tag tag-new">new</span></div>
+          <div class="task-detail">WorkoutRepository.getWeeklyEndurance aggregates distance and average pace per week; EnduranceCard charts the last 8 weeks beside the weekly volume card; unit and widget tests</div>
         </div>
       </li>
 

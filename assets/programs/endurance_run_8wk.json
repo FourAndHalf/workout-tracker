@@ -1,0 +1,3421 @@
+{
+  "schemaVersion": 1,
+  "programId": "endurance-run-8wk",
+  "programName": "8 Wk Endurance",
+  "sourceNote": "Moderate-to-hard running block. Start it only if you can already run 5 km without stopping. Efforts use RPE on a 1–10 scale.",
+  "durationWeeks": 8,
+  "trainingDaysPerWeek": 5,
+  "logModes": {
+    "distance": "Distance in km plus the time it took; pace is derived.",
+    "time": "Duration in seconds.",
+    "reps": "Number of repetitions."
+  },
+  "blockTypes": {
+    "warmup": "Low-intensity preparation before the main work.",
+    "endurance": "Continuous running at one effort.",
+    "intervals": "Repeated hard efforts with timed recoveries.",
+    "conditioning": "Short, fast running such as strides.",
+    "strength": "Resistance work for running durability.",
+    "cooldown": "Easy running to bring the session down."
+  },
+  "weeks": [
+    {
+      "number": 1,
+      "id": "end-w1",
+      "title": "Base Camp",
+      "focus": "Settle into five sessions a week and find your easy, tempo and interval efforts.",
+      "days": [
+        {
+          "id": "end-w1-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 1800,
+          "blocks": [
+            {
+              "id": "end-w1-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w1-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 5000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w1-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 2400,
+          "blocks": [
+            {
+              "id": "end-w1-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w1-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w1-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w1-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w1-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-intervals-main",
+              "name": "6 × 400 m",
+              "type": "intervals",
+              "targetSets": 6,
+              "restSeconds": 90,
+              "instructions": "Jog or walk the 90 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w1-intervals-05",
+                  "order": 1,
+                  "name": "400 m Repeat",
+                  "prescription": "RPE 9, fast and smooth",
+                  "targetSets": 6,
+                  "distanceMeters": 400,
+                  "logMode": "distance",
+                  "instructions": "Roughly your best 3 km effort. Quick turnover, relaxed shoulders."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w1-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w1-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w1-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 2100,
+          "blocks": [
+            {
+              "id": "end-w1-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w1-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w1-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w1-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w1-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w1-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 3000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w1-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w1-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 2400,
+          "blocks": [
+            {
+              "id": "end-w1-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w1-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w1-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w1-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w1-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "3 × 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w1-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "3 × 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w1-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w1-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "3 × 45 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 45,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w1-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "3 × 30 sec each side",
+                  "targetSets": 6,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w1-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w1-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w1-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w1-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 8000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w1-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "end-w2",
+      "title": "Longer Reps",
+      "focus": "Intervals double in length. Keep the easy days truly easy so the hard days can be hard.",
+      "days": [
+        {
+          "id": "end-w2-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 2700,
+          "blocks": [
+            {
+              "id": "end-w2-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w2-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 6000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w2-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w2-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w2-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w2-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w2-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w2-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w2-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-intervals-main",
+              "name": "5 × 800 m",
+              "type": "intervals",
+              "targetSets": 5,
+              "restSeconds": 120,
+              "instructions": "Jog or walk the 120 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w2-intervals-05",
+                  "order": 1,
+                  "name": "800 m Repeat",
+                  "prescription": "RPE 8–9, hard but even",
+                  "targetSets": 5,
+                  "distanceMeters": 800,
+                  "logMode": "distance",
+                  "instructions": "About 5 km race effort. You should finish each one wanting the recovery."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w2-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w2-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w2-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 2400,
+          "blocks": [
+            {
+              "id": "end-w2-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w2-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w2-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w2-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w2-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w2-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 4000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w2-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w2-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 2400,
+          "blocks": [
+            {
+              "id": "end-w2-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w2-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w2-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w2-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w2-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "3 × 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w2-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "3 × 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w2-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w2-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "3 × 45 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 45,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w2-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "3 × 30 sec each side",
+                  "targetSets": 6,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w2-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w2-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 3300,
+          "blocks": [
+            {
+              "id": "end-w2-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w2-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 9000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w2-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "end-w3",
+      "title": "Build",
+      "focus": "Biggest week of the first block: more interval volume, a longer tempo and a longer long run.",
+      "days": [
+        {
+          "id": "end-w3-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 2700,
+          "blocks": [
+            {
+              "id": "end-w3-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w3-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 6000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w3-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w3-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 3300,
+          "blocks": [
+            {
+              "id": "end-w3-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w3-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w3-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w3-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w3-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-intervals-main",
+              "name": "6 × 800 m",
+              "type": "intervals",
+              "targetSets": 6,
+              "restSeconds": 120,
+              "instructions": "Jog or walk the 120 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w3-intervals-05",
+                  "order": 1,
+                  "name": "800 m Repeat",
+                  "prescription": "RPE 8–9, hard but even",
+                  "targetSets": 6,
+                  "distanceMeters": 800,
+                  "logMode": "distance",
+                  "instructions": "About 5 km race effort. You should finish each one wanting the recovery."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w3-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w3-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w3-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 2700,
+          "blocks": [
+            {
+              "id": "end-w3-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w3-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w3-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w3-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w3-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w3-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 5000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w3-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w3-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 2700,
+          "blocks": [
+            {
+              "id": "end-w3-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w3-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 3,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w3-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w3-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w3-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "3 × 15 each side",
+                  "targetSets": 3,
+                  "targetReps": 15,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w3-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "3 × 12 each side",
+                  "targetSets": 3,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w3-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w3-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "3 × 60 sec",
+                  "targetSets": 3,
+                  "durationSeconds": 60,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w3-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "3 × 35 sec each side",
+                  "targetSets": 6,
+                  "durationSeconds": 35,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w3-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "3 × 10 each side",
+                  "targetSets": 3,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w3-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 4200,
+          "blocks": [
+            {
+              "id": "end-w3-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w3-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 11000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w3-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "end-w4",
+      "title": "Absorb",
+      "focus": "Deload. Volume drops by about a quarter so the first three weeks can sink in. Don't add extra.",
+      "days": [
+        {
+          "id": "end-w4-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 2100,
+          "blocks": [
+            {
+              "id": "end-w4-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w4-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 5000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w4-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w4-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 2400,
+          "blocks": [
+            {
+              "id": "end-w4-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w4-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w4-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w4-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w4-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-intervals-main",
+              "name": "6 × 400 m",
+              "type": "intervals",
+              "targetSets": 6,
+              "restSeconds": 90,
+              "instructions": "Jog or walk the 90 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w4-intervals-05",
+                  "order": 1,
+                  "name": "400 m Repeat",
+                  "prescription": "RPE 9, fast and smooth",
+                  "targetSets": 6,
+                  "distanceMeters": 400,
+                  "logMode": "distance",
+                  "instructions": "Roughly your best 3 km effort. Quick turnover, relaxed shoulders."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w4-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w4-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w4-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 2100,
+          "blocks": [
+            {
+              "id": "end-w4-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w4-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w4-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w4-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w4-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w4-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 3000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w4-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w4-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 1800,
+          "blocks": [
+            {
+              "id": "end-w4-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w4-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 2,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w4-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w4-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w4-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "2 × 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w4-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "2 × 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w4-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w4-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "2 × 45 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 45,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w4-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "2 × 30 sec each side",
+                  "targetSets": 4,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w4-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w4-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w4-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w4-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 8000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w4-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "end-w5",
+      "title": "Threshold",
+      "focus": "Second block starts. Kilometre repeats and a steady finish on the long run raise the ceiling.",
+      "days": [
+        {
+          "id": "end-w5-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w5-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w5-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 7000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w5-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w5-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w5-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w5-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w5-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w5-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w5-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-intervals-main",
+              "name": "4 × 1 km",
+              "type": "intervals",
+              "targetSets": 4,
+              "restSeconds": 150,
+              "instructions": "Jog or walk the 150 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w5-intervals-05",
+                  "order": 1,
+                  "name": "1 km Repeat",
+                  "prescription": "RPE 8, strong and controlled",
+                  "targetSets": 4,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "About 5–10 km race effort. Settle in for the first 200 m, then hold."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w5-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w5-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w5-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 2700,
+          "blocks": [
+            {
+              "id": "end-w5-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w5-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w5-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w5-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w5-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w5-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 5000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w5-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w5-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 3300,
+          "blocks": [
+            {
+              "id": "end-w5-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w5-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 4,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w5-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w5-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w5-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "4 × 15 each side",
+                  "targetSets": 4,
+                  "targetReps": 15,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w5-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "4 × 12 each side",
+                  "targetSets": 4,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w5-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w5-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "4 × 60 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 60,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w5-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "4 × 40 sec each side",
+                  "targetSets": 8,
+                  "durationSeconds": 40,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w5-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w5-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 4500,
+          "blocks": [
+            {
+              "id": "end-w5-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w5-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 10000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                },
+                {
+                  "id": "end-w5-long-02",
+                  "order": 2,
+                  "name": "Steady Finish",
+                  "prescription": "RPE 6, strong but controlled",
+                  "targetSets": 1,
+                  "distanceMeters": 2000,
+                  "logMode": "distance",
+                  "instructions": "Lift the effort for the final stretch without sprinting. Practise running well when tired."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w5-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "end-w6",
+      "title": "Grind",
+      "focus": "Sustained work at uncomfortable efforts. Sleep and food matter as much as the sessions this week.",
+      "days": [
+        {
+          "id": "end-w6-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w6-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w6-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 7000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 6,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w6-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "6 × 20 sec · build to RPE 8",
+                  "targetSets": 6,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w6-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 3300,
+          "blocks": [
+            {
+              "id": "end-w6-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w6-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w6-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w6-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w6-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-intervals-main",
+              "name": "5 × 1 km",
+              "type": "intervals",
+              "targetSets": 5,
+              "restSeconds": 150,
+              "instructions": "Jog or walk the 150 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w6-intervals-05",
+                  "order": 1,
+                  "name": "1 km Repeat",
+                  "prescription": "RPE 8, strong and controlled",
+                  "targetSets": 5,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "About 5–10 km race effort. Settle in for the first 200 m, then hold."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w6-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w6-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w6-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 3000,
+          "blocks": [
+            {
+              "id": "end-w6-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w6-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w6-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w6-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w6-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-tempo-main",
+              "name": "Tempo",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Lock into one effort and hold it. Don't race the first kilometre.",
+              "exercises": [
+                {
+                  "id": "end-w6-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Run",
+                  "prescription": "RPE 7, comfortably hard",
+                  "targetSets": 1,
+                  "distanceMeters": 6000,
+                  "logMode": "distance",
+                  "instructions": "Around the pace you could hold for an hour-long race."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w6-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w6-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 3600,
+          "blocks": [
+            {
+              "id": "end-w6-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w6-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 4,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w6-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w6-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w6-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "4 × 18 each side",
+                  "targetSets": 4,
+                  "targetReps": 18,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w6-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "4 × 12 each side",
+                  "targetSets": 4,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w6-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w6-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "4 × 75 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 75,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w6-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "4 × 40 sec each side",
+                  "targetSets": 8,
+                  "durationSeconds": 40,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w6-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w6-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 5100,
+          "blocks": [
+            {
+              "id": "end-w6-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w6-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 12000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                },
+                {
+                  "id": "end-w6-long-02",
+                  "order": 2,
+                  "name": "Steady Finish",
+                  "prescription": "RPE 6, strong but controlled",
+                  "targetSets": 1,
+                  "distanceMeters": 2000,
+                  "logMode": "distance",
+                  "instructions": "Lift the effort for the final stretch without sprinting. Practise running well when tired."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w6-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "end-w7",
+      "title": "Peak",
+      "focus": "The hardest week of the plan: mile repeats, broken tempo and the longest run. Then you taper.",
+      "days": [
+        {
+          "id": "end-w7-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 3600,
+          "blocks": [
+            {
+              "id": "end-w7-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w7-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 8000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 6,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w7-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "6 × 20 sec · build to RPE 8",
+                  "targetSets": 6,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w7-intervals",
+          "name": "Intervals",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 3300,
+          "blocks": [
+            {
+              "id": "end-w7-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w7-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w7-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w7-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w7-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-intervals-main",
+              "name": "3 × 1.6 km",
+              "type": "intervals",
+              "targetSets": 3,
+              "restSeconds": 180,
+              "instructions": "Jog or walk the 180 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w7-intervals-05",
+                  "order": 1,
+                  "name": "1.6 km Repeat",
+                  "prescription": "RPE 8, strong and controlled",
+                  "targetSets": 3,
+                  "distanceMeters": 1600,
+                  "logMode": "distance",
+                  "instructions": "About 10 km race effort. Split it into four laps and keep each one the same."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w7-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w7-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w7-tempo",
+          "name": "Tempo Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Comfortably hard: you can say a few words, not hold a conversation.",
+          "estimatedDurationSeconds": 4200,
+          "blocks": [
+            {
+              "id": "end-w7-tempo-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w7-tempo-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w7-tempo-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w7-tempo-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w7-tempo-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "2 × 20 sec · build to RPE 8",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-tempo-main",
+              "name": "2 × 4 km Tempo",
+              "type": "endurance",
+              "targetSets": 2,
+              "restSeconds": 180,
+              "instructions": "Easy jog for the 3 min recovery between efforts.",
+              "exercises": [
+                {
+                  "id": "end-w7-tempo-05",
+                  "order": 1,
+                  "name": "Tempo Effort",
+                  "prescription": "RPE 7–8, comfortably hard",
+                  "targetSets": 2,
+                  "distanceMeters": 4000,
+                  "logMode": "distance",
+                  "instructions": "Same effort on each. The second should feel harder, not go slower."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-tempo-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w7-tempo-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w7-strength",
+          "name": "Runner Strength",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 3600,
+          "blocks": [
+            {
+              "id": "end-w7-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w7-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 4,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w7-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w7-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w7-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "4 × 20 each side",
+                  "targetSets": 4,
+                  "targetReps": 20,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w7-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "4 × 12 each side",
+                  "targetSets": 4,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w7-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w7-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "4 × 75 sec",
+                  "targetSets": 4,
+                  "durationSeconds": 75,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w7-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "4 × 45 sec each side",
+                  "targetSets": 8,
+                  "durationSeconds": 45,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w7-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "4 × 10 each side",
+                  "targetSets": 4,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w7-long",
+          "name": "Long Run",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Time on feet is the goal. Carry water past 75 minutes and start slower than you want to.",
+          "estimatedDurationSeconds": 6000,
+          "blocks": [
+            {
+              "id": "end-w7-long-run",
+              "name": "Long Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w7-long-01",
+                  "order": 1,
+                  "name": "Long Run",
+                  "prescription": "RPE 4, steady and relaxed",
+                  "targetSets": 1,
+                  "distanceMeters": 13000,
+                  "logMode": "distance",
+                  "instructions": "Hold back early. You should finish feeling you could run a little further."
+                },
+                {
+                  "id": "end-w7-long-02",
+                  "order": 2,
+                  "name": "Steady Finish",
+                  "prescription": "RPE 6, strong but controlled",
+                  "targetSets": 1,
+                  "distanceMeters": 3000,
+                  "logMode": "distance",
+                  "instructions": "Lift the effort for the final stretch without sprinting. Practise running well when tired."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w7-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "Full rest. Eat well and get to bed early.",
+          "blocks": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "end-w8",
+      "title": "Taper & Test",
+      "focus": "Volume drops so you arrive fresh. Finish the block with an all-out 10K time trial.",
+      "days": [
+        {
+          "id": "end-w8-easy",
+          "name": "Easy Run",
+          "order": 1,
+          "type": "endurance",
+          "instructions": "Fully conversational. If you can't speak in full sentences, slow down.",
+          "estimatedDurationSeconds": 2100,
+          "blocks": [
+            {
+              "id": "end-w8-easy-run",
+              "name": "Easy Run",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w8-easy-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3–4, conversational",
+                  "targetSets": 1,
+                  "distanceMeters": 5000,
+                  "logMode": "distance",
+                  "instructions": "Easy days build the aerobic base that the hard days draw on. Keep it honest."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-easy-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w8-easy-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed. Stay tall and loose."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w8-intervals",
+          "name": "Sharpener",
+          "order": 2,
+          "type": "intervals",
+          "instructions": "Hard day. Aim for even splits — the last rep should match the first.",
+          "estimatedDurationSeconds": 2100,
+          "blocks": [
+            {
+              "id": "end-w8-intervals-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w8-intervals-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w8-intervals-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w8-intervals-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w8-intervals-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "3 × 20 sec · build to RPE 8",
+                  "targetSets": 3,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-intervals-main",
+              "name": "4 × 400 m",
+              "type": "intervals",
+              "targetSets": 4,
+              "restSeconds": 120,
+              "instructions": "Jog or walk the 120 sec recovery. The rest timer is your recovery clock.",
+              "exercises": [
+                {
+                  "id": "end-w8-intervals-05",
+                  "order": 1,
+                  "name": "400 m Repeat",
+                  "prescription": "RPE 8, quick but not straining",
+                  "targetSets": 4,
+                  "distanceMeters": 400,
+                  "logMode": "distance",
+                  "instructions": "Fast and relaxed with full recoveries. You're waking the legs up, not building fitness."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-intervals-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w8-intervals-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w8-rest1",
+          "name": "Rest",
+          "order": 3,
+          "type": "rest",
+          "instructions": "Full rest or an easy walk. No running.",
+          "blocks": []
+        },
+        {
+          "id": "end-w8-tempo",
+          "name": "Shakeout Run",
+          "order": 4,
+          "type": "endurance",
+          "instructions": "Short and easy with a few strides to stay sharp.",
+          "estimatedDurationSeconds": 1800,
+          "blocks": [
+            {
+              "id": "end-w8-tempo-run",
+              "name": "Shakeout",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w8-tempo-01",
+                  "order": 1,
+                  "name": "Easy Run",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 4000,
+                  "logMode": "distance",
+                  "instructions": "Legs should feel better at the end than at the start."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-tempo-strides",
+              "name": "Strides",
+              "type": "conditioning",
+              "targetSets": 4,
+              "restSeconds": 60,
+              "instructions": "Walk back between each one.",
+              "exercises": [
+                {
+                  "id": "end-w8-tempo-02",
+                  "order": 1,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Smooth and quick. Remind your legs what fast feels like."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w8-strength",
+          "name": "Activation",
+          "order": 5,
+          "type": "strength",
+          "instructions": "Controlled reps, bodyweight or light dumbbells. This is durability work, not a max-effort lift.",
+          "estimatedDurationSeconds": 1800,
+          "blocks": [
+            {
+              "id": "end-w8-strength-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w8-strength-01",
+                  "order": 1,
+                  "name": "Easy Jog or Bike",
+                  "prescription": "5 min",
+                  "targetSets": 1,
+                  "durationSeconds": 300,
+                  "logMode": "time",
+                  "instructions": "Just enough to feel warm."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-strength-legs",
+              "name": "Single-Leg Strength",
+              "type": "strength",
+              "targetSets": 2,
+              "restSeconds": 45,
+              "instructions": "Finish all sets of one exercise before moving on.",
+              "exercises": [
+                {
+                  "id": "end-w8-strength-02",
+                  "order": 1,
+                  "name": "Bulgarian Split Squat",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Front shin close to vertical; lower under control for 3 seconds."
+                },
+                {
+                  "id": "end-w8-strength-03",
+                  "order": 2,
+                  "name": "Single-Leg Romanian Deadlift",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Hinge at the hip with a flat back. Keep hips square to the floor."
+                },
+                {
+                  "id": "end-w8-strength-04",
+                  "order": 3,
+                  "name": "Single-Leg Calf Raise",
+                  "prescription": "2 × 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Full range off a step: pause at the top, 3 seconds down."
+                },
+                {
+                  "id": "end-w8-strength-05",
+                  "order": 4,
+                  "name": "Single-Leg Glute Bridge",
+                  "prescription": "2 × 12 each side",
+                  "targetSets": 2,
+                  "targetReps": 12,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Drive through the heel and keep the pelvis level."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-strength-core",
+              "name": "Core",
+              "type": "strength",
+              "targetSets": 1,
+              "restSeconds": 30,
+              "exercises": [
+                {
+                  "id": "end-w8-strength-06",
+                  "order": 1,
+                  "name": "Front Plank",
+                  "prescription": "2 × 45 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 45,
+                  "logMode": "time",
+                  "instructions": "Ribs down, glutes squeezed. Stop the set when your hips sag."
+                },
+                {
+                  "id": "end-w8-strength-07",
+                  "order": 2,
+                  "name": "Side Plank",
+                  "prescription": "2 × 30 sec each side",
+                  "targetSets": 4,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Straight line from ear to ankle. Alternate sides each set."
+                },
+                {
+                  "id": "end-w8-strength-08",
+                  "order": 3,
+                  "name": "Dead Bug",
+                  "prescription": "2 × 10 each side",
+                  "targetSets": 2,
+                  "targetReps": 10,
+                  "logMode": "reps",
+                  "side": "each",
+                  "instructions": "Lower back stays pressed into the floor throughout."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w8-long",
+          "name": "10K Time Trial",
+          "order": 6,
+          "type": "endurance",
+          "instructions": "Test day. Run the first 2 km slightly easier than you think you should, then build.",
+          "estimatedDurationSeconds": 4200,
+          "blocks": [
+            {
+              "id": "end-w8-long-warmup",
+              "name": "Warm-up",
+              "type": "warmup",
+              "targetSets": 1,
+              "restSeconds": 20,
+              "instructions": "Start slower than feels necessary. The session only works if you arrive warm.",
+              "exercises": [
+                {
+                  "id": "end-w8-long-01",
+                  "order": 1,
+                  "name": "Warm-up Jog",
+                  "prescription": "RPE 3, very easy",
+                  "targetSets": 1,
+                  "distanceMeters": 1500,
+                  "logMode": "distance"
+                },
+                {
+                  "id": "end-w8-long-02",
+                  "order": 2,
+                  "name": "Leg Swings",
+                  "prescription": "30 sec each side",
+                  "targetSets": 2,
+                  "durationSeconds": 30,
+                  "logMode": "time",
+                  "instructions": "Front to back, then side to side. Hold a wall for balance. Alternate sides each set."
+                },
+                {
+                  "id": "end-w8-long-03",
+                  "order": 3,
+                  "name": "A-Skips",
+                  "prescription": "2 × 20 sec",
+                  "targetSets": 2,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Quick, light contacts. Drive the knee up and land under your hips."
+                },
+                {
+                  "id": "end-w8-long-04",
+                  "order": 4,
+                  "name": "Strides",
+                  "prescription": "4 × 20 sec · build to RPE 8",
+                  "targetSets": 4,
+                  "durationSeconds": 20,
+                  "logMode": "time",
+                  "instructions": "Accelerate smoothly to fast-but-relaxed, then walk back. Not a sprint."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-long-main",
+              "name": "10K Time Trial",
+              "type": "endurance",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "instructions": "Even effort wins. Log your distance and time to see your pace.",
+              "exercises": [
+                {
+                  "id": "end-w8-long-05",
+                  "order": 1,
+                  "name": "10K Time Trial",
+                  "prescription": "RPE 9, best sustainable effort",
+                  "targetSets": 1,
+                  "distanceMeters": 10000,
+                  "logMode": "distance",
+                  "instructions": "Hold steady through 7 km, then spend whatever is left over the final 3 km."
+                }
+              ]
+            },
+            {
+              "id": "end-w8-long-cooldown",
+              "name": "Cool-down",
+              "type": "cooldown",
+              "targetSets": 1,
+              "restSeconds": 0,
+              "exercises": [
+                {
+                  "id": "end-w8-long-06",
+                  "order": 1,
+                  "name": "Cool-down Jog",
+                  "prescription": "RPE 2–3, shuffle pace",
+                  "targetSets": 1,
+                  "distanceMeters": 1000,
+                  "logMode": "distance",
+                  "instructions": "Let your breathing come all the way down before you stop."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "end-w8-rest2",
+          "name": "Rest",
+          "order": 7,
+          "type": "rest",
+          "instructions": "You finished the block. Take the day completely off.",
+          "blocks": []
+        }
+      ]
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/elapsed_time.dart';
 import '../../core/widgets/app_card.dart';
+import '../../core/widgets/empty_state.dart';
 import '../../core/widgets/ledger.dart';
 import '../../data/models/program_model.dart';
 import '../../services/daily_workout_alarm_service.dart';
@@ -132,6 +133,11 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
     return 'Workout complete';
   }
 
+  int _targetSeconds(DayModel day) {
+    final estimated = estimateWorkoutMinutes(day) * 60;
+    return estimated > 0 ? estimated : _fallbackTargetSeconds;
+  }
+
   void _syncLockScreenNotification(ActiveWorkoutState state, DayModel day) {
     if (state.sessionId == null || state.startTime == null) return;
     final currentSet = _lockScreenSetLabel(state, day);
@@ -149,7 +155,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
       _alarmService.updateWorkoutTimer(
         state.startTime!,
         workoutName: day.name,
-        targetEndAt: state.startTime!.add(const Duration(minutes: 45)),
+        targetEndAt: state.startTime!.add(
+          Duration(seconds: _targetSeconds(day)),
+        ),
         currentSet: currentSet,
         nextExercise: nextExercise,
       );
@@ -171,16 +179,24 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
           loggedSets: loggedSets,
           restPauseChunks: chunks,
           isPaused: workoutState.isPaused,
-          onLogSet: ({weight, reps, hitFailure = false, durationSeconds}) {
-            notifier.logSet(
-              exercise: exercise,
-              block: block,
-              weight: weight,
-              reps: reps,
-              hitFailure: hitFailure,
-              durationSeconds: durationSeconds,
-            );
-          },
+          onLogSet:
+              ({
+                weight,
+                reps,
+                hitFailure = false,
+                durationSeconds,
+                distanceMeters,
+              }) {
+                notifier.logSet(
+                  exercise: exercise,
+                  block: block,
+                  weight: weight,
+                  reps: reps,
+                  hitFailure: hitFailure,
+                  durationSeconds: durationSeconds,
+                  distanceMeters: distanceMeters,
+                );
+              },
           onAddChunk: (chunkReps) {
             notifier.addRestPauseChunk(
               exercise: exercise,
@@ -237,10 +253,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
               ? _buildActiveExerciseStates(workoutState, workoutNotifier, day)
               : null;
 
-          final estimatedSeconds = estimateWorkoutMinutes(day) * 60;
-          final targetSeconds = estimatedSeconds > 0
-              ? estimatedSeconds
-              : _fallbackTargetSeconds;
+          final targetSeconds = _targetSeconds(day);
           final (setsDone, setsTotal) = _setProgress(workoutState, day);
 
           return Column(
@@ -278,12 +291,37 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                         style: Theme.of(context).textTheme.bodyMedium
                             ?.copyWith(color: context.colors.textSecondary),
                       ),
+                      if (week.focus != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          week.focus!,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: context.colors.textMuted),
+                        ),
+                      ],
                       const SizedBox(height: 16),
 
-                      if (!isActive) ...[
+                      if (!isActive && !day.isRestDay) ...[
                         _OverviewStrip(day: day),
                         const SizedBox(height: 12),
                       ],
+
+                      if (day.instructions != null) ...[
+                        Text(
+                          day.instructions!,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: context.colors.textSecondary),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+
+                      if (day.isRestDay)
+                        const EmptyState(
+                          icon: LucideIcons600.moon,
+                          message: 'Rest day',
+                          subtitle:
+                              'Nothing to log. Recovery is part of the plan.',
+                        ),
 
                       if (day.reviewNote != null) ...[
                         Container(
@@ -358,7 +396,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                   top: false,
                   child: SizedBox(
                     width: double.infinity,
-                    child: isActive
+                    child: day.isRestDay && !isActive
+                        ? const SizedBox.shrink()
+                        : isActive
                         ? ElevatedButton.icon(
                             icon: const Icon(LucideIcons600.flag, size: 18),
                             label: const Text('Finish workout'),

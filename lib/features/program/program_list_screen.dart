@@ -38,10 +38,12 @@ class ProgramListScreen extends ConsumerWidget {
           final textTheme = Theme.of(context).textTheme;
           final nextDayId = nextWorkoutFor(program, sessions)?.dayId;
           final active = ref.watch(activeWorkoutSessionProvider);
-          final doneCount = week.days
+          // Rest days are listed but never counted or started.
+          final trainingDays = week.trainingDays;
+          final doneCount = trainingDays
               .where((day) => completedDays.contains(day.id))
               .length;
-          final totalDays = week.days.length;
+          final totalDays = trainingDays.length;
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
             children: [
@@ -76,6 +78,15 @@ class ProgramListScreen extends ConsumerWidget {
                         color: colors.textSecondary,
                       ),
                     ),
+                    if (week.focus != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        week.focus!,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textMuted,
+                        ),
+                      ),
+                    ],
                     if (program.sourceNote != null) ...[
                       const SizedBox(height: 6),
                       Text(
@@ -157,7 +168,9 @@ class _DayCard extends StatelessWidget {
     final emphasised = isToday || isRunning;
 
     final Widget trailing;
-    if (isRunning) {
+    if (day.isRestDay) {
+      trailing = Icon(LucideIcons600.moon, size: 18, color: colors.textMuted);
+    } else if (isRunning) {
       trailing = _PillButton(label: 'Resume', onPressed: onStart);
     } else if (isToday) {
       trailing = _PillButton(label: 'Start', onPressed: onStart);
@@ -221,7 +234,9 @@ class _DayCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '$exercises exercises · ~$minutes min',
+                  day.isRestDay
+                      ? 'Rest day · nothing to log'
+                      : '$exercises exercises · ~$minutes min',
                   style: textTheme.bodySmall?.copyWith(
                     color: colors.textSecondary,
                   ),

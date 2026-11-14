@@ -94,20 +94,32 @@ class WeekModel {
   final int number;
   final String id;
   final String title;
+
+  /// What the week is for, shown under the week title.
+  final String? focus;
+  final String? instructions;
   final List<DayModel> days;
 
   WeekModel({
     required this.number,
     required this.id,
     required this.title,
+    this.focus,
+    this.instructions,
     required this.days,
   });
+
+  /// Days with work to do; rest days are never started or logged.
+  List<DayModel> get trainingDays =>
+      days.where((day) => !day.isRestDay).toList();
 
   factory WeekModel.fromJson(Map<String, dynamic> json) {
     return WeekModel(
       number: json['number'] as int,
       id: json['id'] as String,
       title: json['title'] as String,
+      focus: json['focus'] as String?,
+      instructions: json['instructions'] as String?,
       days:
           (json['days'] as List<dynamic>?)
               ?.map((d) => DayModel.fromJson(d as Map<String, dynamic>))
@@ -121,6 +133,8 @@ class WeekModel {
       'number': number,
       'id': id,
       'title': title,
+      'focus': focus,
+      'instructions': instructions,
       'days': days.map((d) => d.toJson()).toList(),
     };
   }
@@ -130,6 +144,13 @@ class DayModel {
   final String id;
   final String name;
   final int order;
+
+  /// Session category from the track file (strength, endurance, rest, ...).
+  final String? type;
+  final String? instructions;
+
+  /// Authored session length; preferred over the per-set estimate.
+  final int? estimatedDurationSeconds;
   final bool? needsReview;
   final String? reviewNote;
   final List<BlockModel> blocks;
@@ -138,16 +159,26 @@ class DayModel {
     required this.id,
     required this.name,
     required this.order,
+    this.type,
+    this.instructions,
+    this.estimatedDurationSeconds,
     this.needsReview,
     this.reviewNote,
     required this.blocks,
   });
+
+  /// A day marked `type: "rest"` in the track file. It has nothing to log
+  /// and never blocks week progression.
+  bool get isRestDay => type == 'rest';
 
   factory DayModel.fromJson(Map<String, dynamic> json) {
     return DayModel(
       id: json['id'] as String,
       name: json['name'] as String,
       order: json['order'] as int,
+      type: json['type'] as String?,
+      instructions: json['instructions'] as String?,
+      estimatedDurationSeconds: json['estimatedDurationSeconds'] as int?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
       blocks:
@@ -163,6 +194,9 @@ class DayModel {
       'id': id,
       'name': name,
       'order': order,
+      'type': type,
+      'instructions': instructions,
+      'estimatedDurationSeconds': estimatedDurationSeconds,
       'needsReview': needsReview,
       'reviewNote': reviewNote,
       'blocks': blocks.map((b) => b.toJson()).toList(),
@@ -177,9 +211,15 @@ class BlockModel {
   final int targetSets;
   final String? instructions;
   final int? dropsPerSet;
+
+  /// Rest after each set (or round) in this block; 0 means move straight on.
+  /// Null falls back to [defaultRestSeconds].
+  final int? restSeconds;
   final bool? needsReview;
   final String? reviewNote;
   final List<ExerciseModel> exercises;
+
+  static const defaultRestSeconds = 60;
 
   BlockModel({
     required this.id,
@@ -188,6 +228,7 @@ class BlockModel {
     required this.targetSets,
     this.instructions,
     this.dropsPerSet,
+    this.restSeconds,
     this.needsReview,
     this.reviewNote,
     required this.exercises,
@@ -201,6 +242,7 @@ class BlockModel {
       targetSets: json['targetSets'] as int? ?? 1,
       instructions: json['instructions'] as String?,
       dropsPerSet: json['dropsPerSet'] as int?,
+      restSeconds: json['restSeconds'] as int?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
       exercises:
@@ -219,6 +261,7 @@ class BlockModel {
       'targetSets': targetSets,
       'instructions': instructions,
       'dropsPerSet': dropsPerSet,
+      'restSeconds': restSeconds,
       'needsReview': needsReview,
       'reviewNote': reviewNote,
       'exercises': exercises.map((e) => e.toJson()).toList(),
@@ -236,7 +279,17 @@ class ExerciseModel {
   final List<int?>? repScheme;
   final int? repTarget;
   final String? repUnit;
-  final String logMode; // weightReps, repsOnly, time, cumulative, failure
+  // weightReps, repsOnly, time, distance, cumulative, failure
+  final String logMode;
+
+  /// Target distance per set for `distance` exercises (runs, intervals).
+  final double? distanceMeters;
+
+  /// How to perform the movement, shown under the prescription.
+  final String? instructions;
+
+  /// `each` when the prescription applies per side.
+  final String? side;
   final String? videoUrl;
   final bool? needsReview;
   final String? reviewNote;
@@ -252,6 +305,9 @@ class ExerciseModel {
     this.repTarget,
     this.repUnit,
     required this.logMode,
+    this.distanceMeters,
+    this.instructions,
+    this.side,
     this.videoUrl,
     this.needsReview,
     this.reviewNote,
@@ -271,6 +327,7 @@ class ExerciseModel {
 
   /// Accepts the simpler track format too: `logMode: "reps"`, a single
   /// `reps`/`targetReps` per set, and `durationSeconds` for timed holds.
+  /// `distance` exercises take their target from `distanceMeters`.
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
     final targetSets = json['targetSets'] as int? ?? 1;
     var repScheme = json['repScheme'] is int
@@ -298,6 +355,9 @@ class ExerciseModel {
       repTarget: json['repTarget'] as int?,
       repUnit: repUnit,
       logMode: logMode == 'reps' ? 'repsOnly' : logMode,
+      distanceMeters: (json['distanceMeters'] as num?)?.toDouble(),
+      instructions: json['instructions'] as String?,
+      side: json['side'] as String?,
       videoUrl: json['videoUrl'] as String?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
@@ -316,6 +376,9 @@ class ExerciseModel {
       'repTarget': repTarget,
       'repUnit': repUnit,
       'logMode': logMode,
+      'distanceMeters': distanceMeters,
+      'instructions': instructions,
+      'side': side,
       'videoUrl': videoUrl,
       'needsReview': needsReview,
       'reviewNote': reviewNote,

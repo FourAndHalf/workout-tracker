@@ -14,6 +14,7 @@ class ExerciseLogs extends Table {
   IntColumn get targetReps => integer().nullable()();
   BoolColumn get hitFailure => boolean().withDefault(const Constant(false))();
   IntColumn get durationSeconds => integer().nullable()();
+  RealColumn get distanceMeters => real().nullable()();
   TextColumn get notes => text().nullable()();
   DateTimeColumn get loggedAt => dateTime().withDefault(currentDateAndTime)();
 }

@@ -1012,6 +1012,17 @@ class $ExerciseLogsTable extends ExerciseLogs
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _distanceMetersMeta = const VerificationMeta(
+    'distanceMeters',
+  );
+  @override
+  late final GeneratedColumn<double> distanceMeters = GeneratedColumn<double>(
+    'distance_meters',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
@@ -1048,6 +1059,7 @@ class $ExerciseLogsTable extends ExerciseLogs
     targetReps,
     hitFailure,
     durationSeconds,
+    distanceMeters,
     notes,
     loggedAt,
   ];
@@ -1158,6 +1170,15 @@ class $ExerciseLogsTable extends ExerciseLogs
         ),
       );
     }
+    if (data.containsKey('distance_meters')) {
+      context.handle(
+        _distanceMetersMeta,
+        distanceMeters.isAcceptableOrUnknown(
+          data['distance_meters']!,
+          _distanceMetersMeta,
+        ),
+      );
+    }
     if (data.containsKey('notes')) {
       context.handle(
         _notesMeta,
@@ -1231,6 +1252,10 @@ class $ExerciseLogsTable extends ExerciseLogs
         DriftSqlType.int,
         data['${effectivePrefix}duration_seconds'],
       ),
+      distanceMeters: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}distance_meters'],
+      ),
       notes: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}notes'],
@@ -1262,6 +1287,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
   final int? targetReps;
   final bool hitFailure;
   final int? durationSeconds;
+  final double? distanceMeters;
   final String? notes;
   final DateTime loggedAt;
   const ExerciseLog({
@@ -1278,6 +1304,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
     this.targetReps,
     required this.hitFailure,
     this.durationSeconds,
+    this.distanceMeters,
     this.notes,
     required this.loggedAt,
   });
@@ -1304,6 +1331,9 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
     map['hit_failure'] = Variable<bool>(hitFailure);
     if (!nullToAbsent || durationSeconds != null) {
       map['duration_seconds'] = Variable<int>(durationSeconds);
+    }
+    if (!nullToAbsent || distanceMeters != null) {
+      map['distance_meters'] = Variable<double>(distanceMeters);
     }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
@@ -1333,6 +1363,9 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
       durationSeconds: durationSeconds == null && nullToAbsent
           ? const Value.absent()
           : Value(durationSeconds),
+      distanceMeters: distanceMeters == null && nullToAbsent
+          ? const Value.absent()
+          : Value(distanceMeters),
       notes: notes == null && nullToAbsent
           ? const Value.absent()
           : Value(notes),
@@ -1359,6 +1392,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
       targetReps: serializer.fromJson<int?>(json['targetReps']),
       hitFailure: serializer.fromJson<bool>(json['hitFailure']),
       durationSeconds: serializer.fromJson<int?>(json['durationSeconds']),
+      distanceMeters: serializer.fromJson<double?>(json['distanceMeters']),
       notes: serializer.fromJson<String?>(json['notes']),
       loggedAt: serializer.fromJson<DateTime>(json['loggedAt']),
     );
@@ -1380,6 +1414,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
       'targetReps': serializer.toJson<int?>(targetReps),
       'hitFailure': serializer.toJson<bool>(hitFailure),
       'durationSeconds': serializer.toJson<int?>(durationSeconds),
+      'distanceMeters': serializer.toJson<double?>(distanceMeters),
       'notes': serializer.toJson<String?>(notes),
       'loggedAt': serializer.toJson<DateTime>(loggedAt),
     };
@@ -1399,6 +1434,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
     Value<int?> targetReps = const Value.absent(),
     bool? hitFailure,
     Value<int?> durationSeconds = const Value.absent(),
+    Value<double?> distanceMeters = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     DateTime? loggedAt,
   }) => ExerciseLog(
@@ -1417,6 +1453,9 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
     durationSeconds: durationSeconds.present
         ? durationSeconds.value
         : this.durationSeconds,
+    distanceMeters: distanceMeters.present
+        ? distanceMeters.value
+        : this.distanceMeters,
     notes: notes.present ? notes.value : this.notes,
     loggedAt: loggedAt ?? this.loggedAt,
   );
@@ -1445,6 +1484,9 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
       durationSeconds: data.durationSeconds.present
           ? data.durationSeconds.value
           : this.durationSeconds,
+      distanceMeters: data.distanceMeters.present
+          ? data.distanceMeters.value
+          : this.distanceMeters,
       notes: data.notes.present ? data.notes.value : this.notes,
       loggedAt: data.loggedAt.present ? data.loggedAt.value : this.loggedAt,
     );
@@ -1466,6 +1508,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
           ..write('targetReps: $targetReps, ')
           ..write('hitFailure: $hitFailure, ')
           ..write('durationSeconds: $durationSeconds, ')
+          ..write('distanceMeters: $distanceMeters, ')
           ..write('notes: $notes, ')
           ..write('loggedAt: $loggedAt')
           ..write(')'))
@@ -1487,6 +1530,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
     targetReps,
     hitFailure,
     durationSeconds,
+    distanceMeters,
     notes,
     loggedAt,
   );
@@ -1507,6 +1551,7 @@ class ExerciseLog extends DataClass implements Insertable<ExerciseLog> {
           other.targetReps == this.targetReps &&
           other.hitFailure == this.hitFailure &&
           other.durationSeconds == this.durationSeconds &&
+          other.distanceMeters == this.distanceMeters &&
           other.notes == this.notes &&
           other.loggedAt == this.loggedAt);
 }
@@ -1525,6 +1570,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
   final Value<int?> targetReps;
   final Value<bool> hitFailure;
   final Value<int?> durationSeconds;
+  final Value<double?> distanceMeters;
   final Value<String?> notes;
   final Value<DateTime> loggedAt;
   const ExerciseLogsCompanion({
@@ -1541,6 +1587,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
     this.targetReps = const Value.absent(),
     this.hitFailure = const Value.absent(),
     this.durationSeconds = const Value.absent(),
+    this.distanceMeters = const Value.absent(),
     this.notes = const Value.absent(),
     this.loggedAt = const Value.absent(),
   });
@@ -1558,6 +1605,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
     this.targetReps = const Value.absent(),
     this.hitFailure = const Value.absent(),
     this.durationSeconds = const Value.absent(),
+    this.distanceMeters = const Value.absent(),
     this.notes = const Value.absent(),
     this.loggedAt = const Value.absent(),
   }) : sessionId = Value(sessionId),
@@ -1581,6 +1629,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
     Expression<int>? targetReps,
     Expression<bool>? hitFailure,
     Expression<int>? durationSeconds,
+    Expression<double>? distanceMeters,
     Expression<String>? notes,
     Expression<DateTime>? loggedAt,
   }) {
@@ -1598,6 +1647,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
       if (targetReps != null) 'target_reps': targetReps,
       if (hitFailure != null) 'hit_failure': hitFailure,
       if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (distanceMeters != null) 'distance_meters': distanceMeters,
       if (notes != null) 'notes': notes,
       if (loggedAt != null) 'logged_at': loggedAt,
     });
@@ -1617,6 +1667,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
     Value<int?>? targetReps,
     Value<bool>? hitFailure,
     Value<int?>? durationSeconds,
+    Value<double?>? distanceMeters,
     Value<String?>? notes,
     Value<DateTime>? loggedAt,
   }) {
@@ -1634,6 +1685,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
       targetReps: targetReps ?? this.targetReps,
       hitFailure: hitFailure ?? this.hitFailure,
       durationSeconds: durationSeconds ?? this.durationSeconds,
+      distanceMeters: distanceMeters ?? this.distanceMeters,
       notes: notes ?? this.notes,
       loggedAt: loggedAt ?? this.loggedAt,
     );
@@ -1681,6 +1733,9 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
     if (durationSeconds.present) {
       map['duration_seconds'] = Variable<int>(durationSeconds.value);
     }
+    if (distanceMeters.present) {
+      map['distance_meters'] = Variable<double>(distanceMeters.value);
+    }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
@@ -1706,6 +1761,7 @@ class ExerciseLogsCompanion extends UpdateCompanion<ExerciseLog> {
           ..write('targetReps: $targetReps, ')
           ..write('hitFailure: $hitFailure, ')
           ..write('durationSeconds: $durationSeconds, ')
+          ..write('distanceMeters: $distanceMeters, ')
           ..write('notes: $notes, ')
           ..write('loggedAt: $loggedAt')
           ..write(')'))
@@ -4266,6 +4322,7 @@ typedef $$ExerciseLogsTableCreateCompanionBuilder =
       Value<int?> targetReps,
       Value<bool> hitFailure,
       Value<int?> durationSeconds,
+      Value<double?> distanceMeters,
       Value<String?> notes,
       Value<DateTime> loggedAt,
     });
@@ -4284,6 +4341,7 @@ typedef $$ExerciseLogsTableUpdateCompanionBuilder =
       Value<int?> targetReps,
       Value<bool> hitFailure,
       Value<int?> durationSeconds,
+      Value<double?> distanceMeters,
       Value<String?> notes,
       Value<DateTime> loggedAt,
     });
@@ -4359,6 +4417,11 @@ class $$ExerciseLogsTableFilterComposer
 
   ColumnFilters<int> get durationSeconds => $composableBuilder(
     column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4447,6 +4510,11 @@ class $$ExerciseLogsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get notes => $composableBuilder(
     column: $table.notes,
     builder: (column) => ColumnOrderings(column),
@@ -4516,6 +4584,11 @@ class $$ExerciseLogsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<double> get distanceMeters => $composableBuilder(
+    column: $table.distanceMeters,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
 
@@ -4567,6 +4640,7 @@ class $$ExerciseLogsTableTableManager
                 Value<int?> targetReps = const Value.absent(),
                 Value<bool> hitFailure = const Value.absent(),
                 Value<int?> durationSeconds = const Value.absent(),
+                Value<double?> distanceMeters = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<DateTime> loggedAt = const Value.absent(),
               }) => ExerciseLogsCompanion(
@@ -4583,6 +4657,7 @@ class $$ExerciseLogsTableTableManager
                 targetReps: targetReps,
                 hitFailure: hitFailure,
                 durationSeconds: durationSeconds,
+                distanceMeters: distanceMeters,
                 notes: notes,
                 loggedAt: loggedAt,
               ),
@@ -4601,6 +4676,7 @@ class $$ExerciseLogsTableTableManager
                 Value<int?> targetReps = const Value.absent(),
                 Value<bool> hitFailure = const Value.absent(),
                 Value<int?> durationSeconds = const Value.absent(),
+                Value<double?> distanceMeters = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<DateTime> loggedAt = const Value.absent(),
               }) => ExerciseLogsCompanion.insert(
@@ -4617,6 +4693,7 @@ class $$ExerciseLogsTableTableManager
                 targetReps: targetReps,
                 hitFailure: hitFailure,
                 durationSeconds: durationSeconds,
+                distanceMeters: distanceMeters,
                 notes: notes,
                 loggedAt: loggedAt,
               ),
