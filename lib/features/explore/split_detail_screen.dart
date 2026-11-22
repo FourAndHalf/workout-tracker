@@ -172,7 +172,9 @@ class _DayCard extends ConsumerWidget {
                     Text(
                       day.muscles
                           .map((m) => muscleLabel(library, m).toUpperCase())
-                          .join(' · '),
+                          // A no-break space keeps each dot with the word before it, so a
+                          // wrapped line never starts with one.
+                          .join('\u00a0· '),
                       style: AppText.labelUppercase.copyWith(
                         fontSize: 10,
                         letterSpacing: 1.6,

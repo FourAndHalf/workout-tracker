@@ -1,4 +1,7 @@
 import 'package:drift/drift.dart' show Value;
+
+import 'dart:io';
+
 import 'package:drift/native.dart';
 import 'package:fitness_tracker/app.dart';
 import 'package:fitness_tracker/core/theme/app_theme.dart';
@@ -338,5 +341,91 @@ void main() {
           ),
         );
     expect((await db.select(db.exerciseLogs).get()).last.distanceMeters, 5000);
+  });
+
+  test('an on-disk version 3 database upgrades without losing data', () async {
+    final dir = await Directory.systemTemp.createTemp('fitness_db_');
+    addTearDown(() => dir.delete(recursive: true));
+    final file = File('${dir.path}/fitness_tracker.sqlite');
+
+    // A real database file with every table and some history.
+    final v4 = AppDatabase(NativeDatabase(file));
+    final sessionId = await v4
+        .into(v4.workoutSessions)
+        .insert(
+          WorkoutSessionsCompanion.insert(
+            programId: 'ffts-4week',
+            weekId: 'w1',
+            dayId: 'w1-arms',
+            dayName: 'Arms',
+            finishedAt: Value(DateTime(2026, 11, 1, 8)),
+          ),
+        );
+    await v4
+        .into(v4.exerciseLogs)
+        .insert(
+          ExerciseLogsCompanion.insert(
+            sessionId: sessionId,
+            blockId: 'b',
+            exerciseId: 'curl',
+            exerciseName: 'Curl',
+            blockType: 'straight',
+            logMode: 'weightReps',
+            setNumber: 1,
+            weight: const Value(20),
+            reps: const Value(10),
+          ),
+        );
+    await v4.close();
+
+    // Roll the file back to exactly what version 3 stored: no distance
+    // column, user_version 3. Then open it with the current app.
+    var rolledBack = false;
+    final upgraded = AppDatabase(
+      NativeDatabase(
+        file,
+        setup: (raw) {
+          if (rolledBack) return;
+          rolledBack = true;
+          raw.execute('ALTER TABLE exercise_logs DROP COLUMN distance_meters');
+          raw.execute('PRAGMA user_version = 3');
+        },
+      ),
+    );
+    addTearDown(upgraded.close);
+
+    final old = await upgraded.select(upgraded.exerciseLogs).getSingle();
+    expect(old.weight, 20);
+    expect(old.reps, 10);
+    expect(old.distanceMeters, isNull);
+    expect(
+      (await upgraded.select(upgraded.workoutSessions).getSingle()).dayName,
+      'Arms',
+    );
+
+    final version = await upgraded
+        .customSelect('PRAGMA user_version')
+        .getSingle();
+    expect(version.data.values.single, 4);
+
+    await upgraded
+        .into(upgraded.exerciseLogs)
+        .insert(
+          ExerciseLogsCompanion.insert(
+            sessionId: sessionId,
+            blockId: 'b',
+            exerciseId: 'run',
+            exerciseName: 'Easy Run',
+            blockType: 'endurance',
+            logMode: 'distance',
+            setNumber: 1,
+            distanceMeters: const Value(5000),
+            durationSeconds: const Value(1650),
+          ),
+        );
+    final run = await (upgraded.select(
+      upgraded.exerciseLogs,
+    )..where((l) => l.exerciseId.equals('run'))).getSingle();
+    expect(run.distanceMeters, 5000);
   });
 }

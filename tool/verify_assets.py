@@ -95,7 +95,7 @@ check("L8", "public domain" in lib["credits"]["photos"] and len(lib["references"
       f"photo credit + {len(lib['references'])} https references")
 img_mb = sum(os.path.getsize(os.path.join(ROOT, "assets/library/img", f))
              for f in os.listdir(os.path.join(ROOT, "assets/library/img"))) / 1e6
-check("L9", img_mb < 12, f"photos total {img_mb:.1f} MB (budget 12 MB)")
+check("L9", img_mb < 7, f"photos total {img_mb:.1f} MB (budget 7 MB)")
 
 # ------------------------------------------------------------------ splits
 picks = {s: {p["exercise"] for m in lib["muscles"] for r in m["regions"] for p in r[s]}

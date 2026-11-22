@@ -6,7 +6,7 @@
 Reads  tool/library_muscles.py, library_cues.py, library_splits.py
        free-exercise-db exercises.json (public domain; downloaded if missing)
 Writes assets/library/library.json
-       assets/library/img/<id>_0.jpg / _1.jpg (downscaled photos)
+       assets/library/img/<id>_0.webp / _1.webp (downscaled photos)
        assets/programs/split_*.json (one per split)
 """
 import argparse, json, os, subprocess, sys, urllib.request
@@ -73,7 +73,7 @@ def fetch_images(ids, dataset, cache):
 
     def one(job):
         i, n, rel = job
-        dest = os.path.join(out_dir, f"{i}_{n}.jpg")
+        dest = os.path.join(out_dir, f"{i}_{n}.webp")
         if os.path.exists(dest):
             return dest
         src = os.path.join(cache, rel.replace("/", "__"))
@@ -82,12 +82,19 @@ def fetch_images(ids, dataset, cache):
             subprocess.run(["curl", "-sSf", "-m", "60", "-o", src, url], check=True)
         im = Image.open(src).convert("RGB")
         im.thumbnail((520, 520))
-        im.save(dest, "JPEG", quality=70, optimize=True, progressive=True)
+        # WebP at q76 is about a third smaller than the old JPEGs with no
+        # visible difference at phone size.
+        im.save(dest, "WEBP", quality=76, method=6)
         return dest
 
     os.makedirs(cache, exist_ok=True)
     with ThreadPoolExecutor(8) as pool:
-        list(pool.map(one, jobs))
+        wanted = set(pool.map(one, jobs))
+    # Drop photos that are no longer used (or are in an old format).
+    for name in os.listdir(out_dir):
+        path = os.path.join(out_dir, name)
+        if path not in wanted:
+            os.remove(path)
 
 
 def collect_ids():
@@ -146,7 +153,7 @@ def build_exercises(ids, dataset, roles):
             "secondary": sorted(role["secondary"]),
             "cue": LC.CUES[i],
             "steps": STEPS_OVERRIDE.get(i) or [s.strip() for s in d["instructions"] if s.strip()],
-            "images": [f"{i}_{n}.jpg" for n in range(min(2, len(d["images"])))],
+            "images": [f"{i}_{n}.webp" for n in range(min(2, len(d["images"])))],
             "timed": i in LC.TIMED,
         }
     return out

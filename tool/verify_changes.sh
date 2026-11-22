@@ -4,6 +4,10 @@
 #   tool/verify_changes.sh            # data checks, analyzer, tests
 #   tool/verify_changes.sh --regen    # also rebuild the Explore assets and
 #                                     # confirm the sources reproduce them
+#   tool/verify_changes.sh --screens  # also render the Explore screens in dark
+#                                     # and light to build/screens/
+#   tool/verify_changes.sh --apk      # also build a release APK and report size
+# Flags can be combined.
 #
 # Exits non-zero on the first failing stage. Needs flutter on PATH (or set
 # FLUTTER=/path/to/flutter) and python3; --regen also needs Pillow and either
@@ -17,8 +21,11 @@ step() { printf '\n== %s\n' "$1"; }
 step "1/5 Independent data checks (tool/verify_assets.py)"
 python3 tool/verify_assets.py
 
-if [[ "${1:-}" == "--regen" ]]; then
-  step "2/5 Regenerate Explore assets and compare with git"
+ARGS=" $* "
+want() { [[ "$ARGS" == *" $1 "* ]]; }
+
+if want --regen; then
+  step "2/5 Regenerate Explore assets and check the sources reproduce them"
   args=()
   [[ -n "${FEDB_DATASET:-}" ]] && args+=(--dataset "$FEDB_DATASET")
   [[ -n "${FEDB_CACHE:-}" ]] && args+=(--cache "$FEDB_CACHE")
@@ -55,5 +62,25 @@ step "4/5 Tests named in docs/CHANGES.md"
 
 step "5/5 Full test suite"
 "$FLUTTER" test
+
+if want --screens; then
+  step "Extra: render Explore screens (dark + light) to build/screens/"
+  "$FLUTTER" test tool/screens/render_screens_test.dart
+  ls build/screens
+fi
+
+if want --apk; then
+  step "Extra: release APK"
+  "$FLUTTER" build apk --release
+  apk=build/app/outputs/flutter-apk/app-release.apk
+  ls -l "$apk"
+  python3 - "$apk" <<'PY'
+import sys, zipfile
+z = zipfile.ZipFile(sys.argv[1])
+total = sum(i.compress_size for i in z.infolist())
+lib = sum(i.compress_size for i in z.infolist() if "assets/library/" in i.filename)
+print(f"APK {total/1e6:.1f} MB compressed; Explore library assets {lib/1e6:.1f} MB")
+PY
+fi
 
 printf '\nAll changes verified.\n'

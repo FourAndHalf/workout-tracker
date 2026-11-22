@@ -8,8 +8,11 @@ and update this file in the same commit.
 ## Verify everything
 
 ```bash
-tool/verify_changes.sh            # data checks, analyzer, named tests, full suite
-tool/verify_changes.sh --regen    # also rebuild the Explore assets and diff them against git
+tool/verify_changes.sh                    # data checks, analyzer, named tests, full suite
+tool/verify_changes.sh --regen            # + rebuild the Explore assets and diff them
+tool/verify_changes.sh --screens          # + render Explore in dark and light to build/screens/
+tool/verify_changes.sh --apk              # + build a release APK and report its size
+tool/verify_changes.sh --regen --screens --apk   # everything
 ```
 
 | Stage | What it proves | Run it alone |
@@ -19,16 +22,21 @@ tool/verify_changes.sh --regen    # also rebuild the Explore assets and diff the
 | 3. Analyzer | No errors or warnings. The 10 existing `info` lints are allowed | `flutter analyze` |
 | 4. Named tests | The Dart tests listed in this file | see the script |
 | 5. Full suite | Nothing else regressed | `flutter test` |
+| `--screens` | Explore renders in dark and light with real fonts, icons and photos, and with no overflow or exception | `flutter test tool/screens/render_screens_test.dart` |
+| `--apk` | The app builds for Android; prints the APK size and the library's share | `flutter build apk --release` |
 
 Requirements:
 - **Always:** Flutter 3.47.x and Python 3.
-- **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db.
+- **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db. Byte-identical output also assumes the same Pillow/libwebp version (12.3 was used); another version can encode the photos slightly differently.
+- **`--apk` only:** an Android SDK (`flutter config --android-sdk <path>`). The first build also downloads the NDK and CMake.
 
 Last verified: 2026-11-22. Results:
 - 59 data checks pass.
-- Regenerated assets are identical across four Python hash seeds.
+- Regenerated assets are identical across Python hash seeds.
 - Analyzer: 0 errors and 0 warnings.
-- 204 tests pass.
+- 206 tests pass.
+- 12 Explore screens render cleanly (6 dark, 6 light).
+- The Android release build succeeds (see §7).
 
 ---
 
@@ -65,6 +73,7 @@ Dart tests live in `test/features/endurance_track_test.dart`.
 | F6 | Time estimates prefer an authored duration and size distance, timed and bodyweight work separately | `flux_widget_service.dart` | tests in group *estimateWorkoutMinutes* |
 | F7 | Session detail shows DIST/TIME for runs and no longer labels weighted sets as timed | `session_detail_screen.dart` | test *runs show distance, time and pace; lifts keep KG and REPS* |
 | F8 | The Progress tab charts weekly distance and average pace | `progress_screen.dart`, `WorkoutRepository.getWeeklyEndurance` | tests *weekly endurance totals distance…*, *weekly distance card…* |
+| F9 | A real version-3 database **file** upgrades to version 4 and keeps its sessions and sets | `app_database.dart` | test *an on-disk version 3 database upgrades without losing data* |
 
 ## 3. Explore: muscle library
 *Commits `96cb9ae` and `2d529cd`, PR #4.*
@@ -89,7 +98,7 @@ Sources, written for this app:
 | L6 | Every exercise has a cue and steps | `verify_assets.py` |
 | L7 | Home picks avoid barbells, cables, machines and EZ-bars | `verify_assets.py`; test *home picks avoid…* |
 | L8 | Photos are credited as public domain, and at least 8 studies are cited over https | `verify_assets.py`; test *credits the photo source and cites studies* |
-| L9 | Photos stay under a 12 MB budget (currently about 9 MB) | `verify_assets.py` |
+| L9 | Photos are WebP (quality 76) and stay under a 7 MB budget (currently 5.7 MB, down from 8.4 MB as JPEG) | `verify_assets.py` |
 | L10 | Assets regenerate byte-identically, independent of the hash seed | `verify_changes.sh --regen` |
 | U1 | Picking a muscle and part updates the picks; the evidence note opens from the Latin name | tests *opens on Chest…*, *a part of the muscle shows its own picks…* |
 | U2 | Gym/Home swaps the picks | test *switching to Home swaps in equipment-free picks* |
@@ -112,6 +121,7 @@ Sources, written for this app:
 | S6 | Effective sets = direct + indirect × ½, or × ¼ for shoulders (only the front head is helped by pressing) | `verify_assets.py` |
 | S8 | The upper/lower and push/pull/legs splits give chest, back, quads, hamstrings, biceps and triceps 10–25 effective sets a week | test *push/pull/legs and upper/lower reach 10-20 sets…* |
 | S9 | "Use this split" makes the split the active program and opens it in Programs; the Programs switcher links back to the splits | tests *a split shows its week, volume and can be started*, *the Programs switcher links back to the splits* |
+| S10 | End to end: pick a split in Explore, start day A from Programs, log all 19 sets through the UI (straight sets, a superset and three timed planks), finish. Every set is stored against the split, Programs moves on to day B, and History lists the session | test *a split can be started and a full session logged* (`test/features/split_session_test.dart`) |
 
 ## 5. Visual design (Explore)
 *Commit `2d529cd`.*
@@ -124,8 +134,9 @@ These items are judged by eye. The behaviour behind them is pinned by the U* tes
 | V2 | Coral is the only extra accent, used only in Explore (see `design/DESIGN.md`) | No coral appears on other tabs |
 | V3 | Layout: the figure on the left; the title and FRONT/BACK-tagged part rows on the right; GYM/HOME beside "Recommended" | Compare against the reference screenshots at 390 px wide |
 | V4 | Cards show a thumbnail, a TOP PICK tag and a focus meter (3 bars = primary, 2 = assists) | Look at any muscle's picks |
-| V5 | No layout overflow at 390 px wide | The render harness reports no `RenderFlex overflowed` errors |
-| V6 | Light theme | The figure was rendered in light mode. Full screens in light mode are **not yet verified** on a device |
+| V5 | No layout overflow at 390 px wide | `--screens` fails on any overflow or exception |
+| V6 | Light and dark themes both look right | `--screens` writes `dark_*.png` and `light_*.png` to `build/screens/`; compare them side by side |
+| V7 | Wrapped muscle labels on a split day never start a line with "·" | `build/screens/*_5_split_detail.png` |
 
 ## 6. Research claims shown in the app
 
@@ -148,14 +159,27 @@ open its source.
 
 The app also lists these sources under *Explore → How these picks were chosen*.
 
-## 7. Not verified
+## 7. Android build and app size
 
-These need a person and a device:
-- An Android or iOS build, and installing it.
-- App size after adding about 13 MB of assets.
-- Light-theme screens end to end.
-- Starting a split and logging a full session from it.
-- Upgrading a real database from schema 3 to 4. This is covered by a unit test only.
+The release build was run with `flutter build apk --release` on Flutter 3.47.4, Android SDK platform 36 and NDK r28c.
+
+| Build | Size |
+|---|---|
+| Universal APK (all three CPU types) | 78.9 MB |
+| arm64-v8a, what most phones get from the Play Store | 33.5 MB |
+| armeabi-v7a | 31.5 MB |
+| x86_64 | 35.1 MB |
+
+About 68 MB of the universal APK is the Flutter engine and app code compiled once per CPU type, so publish an app bundle (`flutter build appbundle`) or split per ABI. The Explore library adds 5.7 MB of photos and 0.3 MB of JSON.
+
+For comparison, `main` without Explore builds to 27.5 MB for arm64, so Explore costs a typical install **6.0 MB**: 5.7 MB of photos plus JSON and code. Both builds print the same Gradle notice asking some plugins to migrate to Built-in Kotlin. That notice comes from the plugins, not this app, and it doesn't block the build.
+
+## 8. Not verified
+
+These still need a person or a Mac:
+- Installing and using the APK on a real phone (the build itself is verified above).
+- An iOS build. This needs macOS and Xcode.
+- Feel checks no test can make: whether the figure's tap targets are comfortable on a small screen, and whether the photos load quickly enough on a slow phone.
 
 ## Keeping this file honest
 
