@@ -14,7 +14,7 @@ import '../../core/widgets/empty_state.dart';
 import '../../core/widgets/ledger.dart';
 import '../../data/models/program_model.dart';
 import '../../services/daily_workout_alarm_service.dart';
-import '../../services/flux_widget_service.dart';
+import '../../core/utils/workout_estimate.dart';
 import '../../main.dart';
 import '../workout/providers/active_workout_provider.dart';
 import '../workout/widgets/rest_timer_widget.dart';

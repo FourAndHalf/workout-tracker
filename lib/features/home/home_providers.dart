@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/database/app_database.dart';
 import '../../main.dart';
+import 'library_mindset_quotes.dart';
 
 class MotivationQuote {
   final String quote;
@@ -10,7 +11,7 @@ class MotivationQuote {
   const MotivationQuote({required this.quote, required this.source});
 }
 
-const _motivationQuotes = [
+final _motivationQuotes = [
   MotivationQuote(
     quote: 'We are what we repeatedly do. Excellence is a habit.',
     source: 'Aristotle',
@@ -39,6 +40,69 @@ const _motivationQuotes = [
     quote: 'The difference between try and triumph is just a little umph!',
     source: 'Marvin Phillips',
   ),
+  MotivationQuote(
+    quote: 'The only way to do great work is to love what you do.',
+    source: 'Steve Jobs',
+  ),
+  MotivationQuote(
+    quote: 'It always seems impossible until it is done.',
+    source: 'Nelson Mandela',
+  ),
+  MotivationQuote(
+    quote: 'Whether you think you can, or you think you can\'t, you\'re right.',
+    source: 'Henry Ford',
+  ),
+  MotivationQuote(
+    quote: 'The man who moves a mountain begins by carrying away small stones.',
+    source: 'Confucius',
+  ),
+  MotivationQuote(
+    quote: 'You miss 100% of the shots you don\'t take.',
+    source: 'Wayne Gretzky',
+  ),
+  MotivationQuote(
+    quote: 'Do what you can, with what you have, where you are.',
+    source: 'Theodore Roosevelt',
+  ),
+  MotivationQuote(
+    quote: 'Well done is better than well said.',
+    source: 'Benjamin Franklin',
+  ),
+  MotivationQuote(
+    quote: 'A journey of a thousand miles begins with a single step.',
+    source: 'Lao Tzu',
+  ),
+  MotivationQuote(
+    quote: 'He who has a why to live can bear almost any how.',
+    source: 'Friedrich Nietzsche',
+  ),
+  MotivationQuote(
+    quote: 'Fall seven times, stand up eight.',
+    source: 'Japanese proverb',
+  ),
+  MotivationQuote(
+    quote: 'Discipline is the bridge between goals and accomplishment.',
+    source: 'Jim Rohn',
+  ),
+  MotivationQuote(
+    quote:
+        'Motivation is what gets you started. Habit is what keeps you going.',
+    source: 'Jim Ryun',
+  ),
+  MotivationQuote(
+    quote: 'Don\'t watch the clock; do what it does. Keep going.',
+    source: 'Sam Levenson',
+  ),
+  MotivationQuote(
+    quote: 'Energy and persistence conquer all things.',
+    source: 'Benjamin Franklin',
+  ),
+  MotivationQuote(
+    quote: 'The best time to plant a tree was 20 years ago. The second best time is now.',
+    source: 'Chinese proverb',
+  ),
+  for (final (quote, source) in libraryMindsetQuotes)
+    MotivationQuote(quote: quote, source: source),
 ];
 
 /// "Good morning" / "Good afternoon" / "Good evening" for the header.

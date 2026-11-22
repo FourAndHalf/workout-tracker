@@ -9,12 +9,10 @@ import '../../core/theme/app_theme.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
 import '../../core/widgets/ledger.dart';
-import '../../services/flux_widget_service.dart';
-import '../../services/streak_widget_service.dart';
+import '../../services/home_widget_service.dart';
 import '../program/program_providers.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
 import '../workout/start_workout.dart';
-import 'flux_widget_providers.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
 
@@ -27,12 +25,17 @@ class HomeScreen extends ConsumerWidget {
     ref.listen(dashboardAnalyticsProvider, (_, next) {
       final data = next.value;
       if (data != null) {
-        StreakWidgetService().updateStreak(data.currentStreak).ignore();
+        final now = DateTime.now();
+        HomeWidgetService()
+            .publish(
+              HomeWidgetData.compute(
+                now: now,
+                trainingDays: data.trainingDays,
+                quoteFor: dailyMotivationQuote,
+              ),
+            )
+            .ignore();
       }
-    });
-    ref.listen(fluxWidgetDataProvider, (_, next) {
-      final data = next.value;
-      if (data != null) FluxWidgetService().publish(data).ignore();
     });
     final nextWorkout = ref.watch(nextWorkoutDayProvider).value;
     final now = DateTime.now();
@@ -228,9 +231,7 @@ class _TodayCard extends ConsumerWidget {
               Expanded(
                 child: ElevatedButton.icon(
                   icon: Icon(
-                    resuming
-                        ? LucideIcons600.arrowRight
-                        : LucideIcons600.play,
+                    resuming ? LucideIcons600.arrowRight : LucideIcons600.play,
                   ),
                   label: Text(resuming ? 'Resume workout' : 'Start workout'),
                   onPressed: onStart,
@@ -269,11 +270,7 @@ class _QuoteCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            LucideIcons600.quote,
-            color: colors.textSecondary,
-            size: 20,
-          ),
+          Icon(LucideIcons600.quote, color: colors.textSecondary, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
