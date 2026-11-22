@@ -1,8 +1,52 @@
+/// Hard sets per week for one muscle group in a training split.
+class WeeklySets {
+  /// Sets where the muscle is the main driver.
+  final int direct;
+
+  /// Sets where it only assists (pressing for triceps, rows for biceps).
+  final int indirect;
+
+  /// Hard-set equivalent: direct plus a share of the indirect sets.
+  final double effective;
+
+  const WeeklySets({
+    required this.direct,
+    required this.indirect,
+    required this.effective,
+  });
+
+  factory WeeklySets.fromJson(Map<String, dynamic> json) => WeeklySets(
+    direct: json['direct'] as int? ?? 0,
+    indirect: json['indirect'] as int? ?? 0,
+    effective: (json['effective'] as num?)?.toDouble() ?? 0,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'direct': direct,
+    'indirect': indirect,
+    'effective': effective,
+  };
+}
+
 class ProgramModel {
   final int schemaVersion;
   final String programId;
   final String programName;
   final String? sourceNote;
+
+  /// `split` for the gym/home splits browsed from Explore; null for the
+  /// original tracks.
+  final String? category;
+
+  /// `gym` or `home` for splits.
+  final String? setting;
+  final String? level;
+  final int? daysPerWeek;
+  final String? schedule;
+  final String? description;
+
+  /// Weekly hard sets per muscle-group id, for splits.
+  final Map<String, WeeklySets> weeklySets;
   final Map<String, String>? logModes;
   final Map<String, String>? blockTypes;
   final List<WeekModel> weeks;
@@ -14,6 +58,13 @@ class ProgramModel {
     required this.programId,
     required this.programName,
     this.sourceNote,
+    this.category,
+    this.setting,
+    this.level,
+    this.daysPerWeek,
+    this.schedule,
+    this.description,
+    this.weeklySets = const {},
     this.logModes,
     this.blockTypes,
     required this.weeks,
@@ -21,12 +72,26 @@ class ProgramModel {
     this.openItems = const [],
   });
 
+  bool get isSplit => category == 'split';
+
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
     return ProgramModel(
       schemaVersion: json['schemaVersion'] as int? ?? 1,
       programId: json['programId'] as String,
       programName: json['programName'] as String,
       sourceNote: json['sourceNote'] as String?,
+      category: json['category'] as String?,
+      setting: json['setting'] as String?,
+      level: json['level'] as String?,
+      daysPerWeek: json['daysPerWeek'] as int?,
+      schedule: json['schedule'] as String?,
+      description: json['description'] as String?,
+      weeklySets:
+          (json['weeklySets'] as Map<String, dynamic>?)?.map(
+            (k, v) =>
+                MapEntry(k, WeeklySets.fromJson(v as Map<String, dynamic>)),
+          ) ??
+          const {},
       logModes: (json['logModes'] as Map<String, dynamic>?)?.map(
         (k, v) => MapEntry(k, v.toString()),
       ),
@@ -55,6 +120,13 @@ class ProgramModel {
       'programId': programId,
       'programName': programName,
       'sourceNote': sourceNote,
+      'category': category,
+      'setting': setting,
+      'level': level,
+      'daysPerWeek': daysPerWeek,
+      'schedule': schedule,
+      'description': description,
+      'weeklySets': weeklySets.map((k, v) => MapEntry(k, v.toJson())),
       'logModes': logModes,
       'blockTypes': blockTypes,
       'weeks': weeks.map((w) => w.toJson()).toList(),
@@ -151,6 +223,9 @@ class DayModel {
 
   /// Authored session length; preferred over the per-set estimate.
   final int? estimatedDurationSeconds;
+
+  /// Muscle-group ids the session mainly trains (splits only).
+  final List<String> muscles;
   final bool? needsReview;
   final String? reviewNote;
   final List<BlockModel> blocks;
@@ -162,6 +237,7 @@ class DayModel {
     this.type,
     this.instructions,
     this.estimatedDurationSeconds,
+    this.muscles = const [],
     this.needsReview,
     this.reviewNote,
     required this.blocks,
@@ -179,6 +255,11 @@ class DayModel {
       type: json['type'] as String?,
       instructions: json['instructions'] as String?,
       estimatedDurationSeconds: json['estimatedDurationSeconds'] as int?,
+      muscles:
+          (json['muscles'] as List<dynamic>?)
+              ?.map((m) => m.toString())
+              .toList() ??
+          const [],
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
       blocks:
@@ -197,6 +278,7 @@ class DayModel {
       'type': type,
       'instructions': instructions,
       'estimatedDurationSeconds': estimatedDurationSeconds,
+      'muscles': muscles,
       'needsReview': needsReview,
       'reviewNote': reviewNote,
       'blocks': blocks.map((b) => b.toJson()).toList(),
@@ -290,6 +372,9 @@ class ExerciseModel {
 
   /// `each` when the prescription applies per side.
   final String? side;
+
+  /// Id of the matching Explore library entry, which has photos and steps.
+  final String? libraryId;
   final String? videoUrl;
   final bool? needsReview;
   final String? reviewNote;
@@ -308,6 +393,7 @@ class ExerciseModel {
     this.distanceMeters,
     this.instructions,
     this.side,
+    this.libraryId,
     this.videoUrl,
     this.needsReview,
     this.reviewNote,
@@ -358,6 +444,7 @@ class ExerciseModel {
       distanceMeters: (json['distanceMeters'] as num?)?.toDouble(),
       instructions: json['instructions'] as String?,
       side: json['side'] as String?,
+      libraryId: json['libraryId'] as String?,
       videoUrl: json['videoUrl'] as String?,
       needsReview: json['needsReview'] as bool?,
       reviewNote: json['reviewNote'] as String?,
@@ -379,6 +466,7 @@ class ExerciseModel {
       'distanceMeters': distanceMeters,
       'instructions': instructions,
       'side': side,
+      'libraryId': libraryId,
       'videoUrl': videoUrl,
       'needsReview': needsReview,
       'reviewNote': reviewNote,

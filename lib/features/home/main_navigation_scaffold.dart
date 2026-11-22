@@ -59,6 +59,11 @@ class MainNavigationScaffold extends StatelessWidget {
             label: 'Programs',
           ),
           NavigationDestination(
+            icon: Icon(LucideIcons400.compass),
+            selectedIcon: Icon(LucideIcons600.compass),
+            label: 'Explore',
+          ),
+          NavigationDestination(
             icon: Icon(LucideIcons400.chartLine),
             selectedIcon: Icon(LucideIcons600.chartLine),
             label: 'Progress',

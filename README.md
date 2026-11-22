@@ -15,7 +15,7 @@ I use the app to turn my training plan into a repeatable daily routine:
 2. I open **Programs** and follow the current week and day. The bundled plans
    cover a 4-week strength program, a 12-week badminton strength/mobility
    program, an 8-week running endurance block, and a 10-minute daily mobility
-   routine.
+   routine. **Explore** adds a muscle library and gym and home splits.
 3. During a workout, I start the session and log each set as I go. Depending on
    the exercise, I can record weight and reps, reps only, time, distance, or
    cumulative/rest-pause reps. The workout view shows elapsed session time,
@@ -49,6 +49,13 @@ to decide what to do next.
 - **Structured workout programs** — browse weeks, days, blocks, prescriptions,
   exercise instructions, and optional exercise video links. Programs are loaded
   from bundled JSON and persisted locally.
+- **Explore** — a muscle library (tap a body figure or pick a muscle, then a
+  part of it, then gym or home) with the best exercises, sets and reps, photos,
+  form cues and the evidence behind each pick, plus eight gym and home training
+  splits you can start in one tap. Exercise photos and steps come from
+  [free-exercise-db](https://github.com/yuhonas/free-exercise-db) (public
+  domain); the picks, notes and splits are original. Regenerate the assets with
+  `python3 tool/build_library.py` (needs Pillow).
 - **Live workout logging** — track sets, reps, weight, duration, distance,
   failure, and rest-pause/cumulative work. Pause and resume an active workout,
   use elapsed, rest, and timed-exercise countdowns, and return to it from the

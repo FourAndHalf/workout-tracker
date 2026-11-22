@@ -1,0 +1,3353 @@
+{
+ "schemaVersion": 1,
+ "programId": "split-gym-ppl-6",
+ "programName": "Gym Push / Pull / Legs",
+ "category": "split",
+ "setting": "gym",
+ "level": "Advanced",
+ "daysPerWeek": 6,
+ "schedule": "Mon-Sat",
+ "description": "The classic six-day split. Push, pull, legs twice a week, with two different lists so you do not repeat the same sessions. Needs good recovery and sleep.",
+ "sourceNote": "Mon-Sat · Advanced · Gym",
+ "durationWeeks": 4,
+ "weeklySets": {
+  "chest": {
+   "direct": 17,
+   "indirect": 0,
+   "effective": 17.0
+  },
+  "shoulders": {
+   "direct": 13,
+   "indirect": 38,
+   "effective": 22.5
+  },
+  "back": {
+   "direct": 22,
+   "indirect": 3,
+   "effective": 23.5
+  },
+  "traps": {
+   "direct": 3,
+   "indirect": 3,
+   "effective": 4.5
+  },
+  "biceps": {
+   "direct": 12,
+   "indirect": 19,
+   "effective": 21.5
+  },
+  "triceps": {
+   "direct": 9,
+   "indirect": 23,
+   "effective": 20.5
+  },
+  "core": {
+   "direct": 6,
+   "indirect": 0,
+   "effective": 6.0
+  },
+  "glutes": {
+   "direct": 4,
+   "indirect": 17,
+   "effective": 12.5
+  },
+  "quads": {
+   "direct": 17,
+   "indirect": 0,
+   "effective": 17.0
+  },
+  "hamstrings": {
+   "direct": 9,
+   "indirect": 18,
+   "effective": 18.0
+  },
+  "calves": {
+   "direct": 8,
+   "indirect": 0,
+   "effective": 8.0
+  }
+ },
+ "logModes": {
+  "weightReps": "Weight field + reps field.",
+  "repsOnly": "Reps field only (bodyweight).",
+  "time": "Duration in seconds."
+ },
+ "blockTypes": {
+  "straight": "Exercises performed and rested independently.",
+  "superset": "Two exercises back to back, no rest between."
+ },
+ "weeks": [
+  {
+   "number": 1,
+   "id": "split-gym-ppl-6-w1",
+   "title": "Settle in",
+   "focus": "Stop each set about 3 reps before failure. Learn the lifts and find your starting weights.",
+   "days": [
+    {
+     "id": "split-gym-ppl-6-w1-d1",
+     "name": "Push A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 2700,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d1-b1",
+       "name": "Barbell Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-01",
+         "order": 1,
+         "name": "Barbell Bench Press - Medium Grip",
+         "targetSets": 4,
+         "libraryId": "Barbell_Bench_Press_-_Medium_Grip",
+         "instructions": "Shoulder blades pinched, feet planted. Lower to mid-chest and press back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "4 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d1-b2",
+       "name": "Incline Dumbbell Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-02",
+         "order": 1,
+         "name": "Incline Dumbbell Press",
+         "targetSets": 3,
+         "libraryId": "Incline_Dumbbell_Press",
+         "instructions": "Bench at 30°. Elbows about 45° from your ribs, press up and slightly in.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d1-b3",
+       "name": "Dumbbell Shoulder Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-03",
+         "order": 1,
+         "name": "Dumbbell Shoulder Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shoulder_Press",
+         "instructions": "Brace your abs, press the weights straight up until your arms are almost straight.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d1-b4",
+       "name": "Standing Low-Pulley Deltoid Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-04",
+         "order": 1,
+         "name": "Standing Low-Pulley Deltoid Raise",
+         "targetSets": 3,
+         "libraryId": "Standing_Low-Pulley_Deltoid_Raise",
+         "instructions": "Cable at your hip. Lift out to the side to shoulder height, lead with your elbow.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d1-b5",
+       "name": "Cable Rope Overhead Triceps Extension",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-05",
+         "order": 1,
+         "name": "Cable Rope Overhead Triceps Extension",
+         "targetSets": 3,
+         "libraryId": "Cable_Rope_Overhead_Triceps_Extension",
+         "instructions": "Face away from the cable, elbows by your ears. Extend your arms overhead, lower with a stretch.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d1-b6",
+       "name": "Triceps Pushdown - Rope Attachment",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d1-06",
+         "order": 1,
+         "name": "Triceps Pushdown - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown_-_Rope_Attachment",
+         "instructions": "Elbows pinned to your ribs. Push down and spread the rope, squeeze, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w1-d2",
+     "name": "Pull A",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d2-b1",
+       "name": "Wide-Grip Lat Pulldown",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d2-01",
+         "order": 1,
+         "name": "Wide-Grip Lat Pulldown",
+         "targetSets": 4,
+         "libraryId": "Wide-Grip_Lat_Pulldown",
+         "instructions": "Pull the bar to your upper chest, driving your elbows down. Lean back slightly, no swinging.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d2-b2",
+       "name": "Seated Cable Rows",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d2-02",
+         "order": 1,
+         "name": "Seated Cable Rows",
+         "targetSets": 4,
+         "libraryId": "Seated_Cable_Rows",
+         "instructions": "Sit tall. Row the handle to your belly, pinch your shoulder blades, then let them stretch forward.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d2-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d2-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d2-b4",
+       "name": "Face Pull",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d2-04",
+         "order": 1,
+         "name": "Face Pull",
+         "targetSets": 3,
+         "libraryId": "Face_Pull",
+         "instructions": "Pull the rope to your forehead, elbows high and wide, finish with your hands beside your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d2-b5",
+       "name": "Incline Dumbbell Curl + Hammer Curls",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d2-05",
+         "order": 1,
+         "name": "Incline Dumbbell Curl",
+         "targetSets": 3,
+         "libraryId": "Incline_Dumbbell_Curl",
+         "instructions": "Bench at 60°. Arms hang behind your body, curl up without moving your elbows forward.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w1-d2-06",
+         "order": 2,
+         "name": "Hammer Curls",
+         "targetSets": 3,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w1-d3",
+     "name": "Legs A",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "hamstrings",
+      "calves",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d3-b1",
+       "name": "Barbell Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-01",
+         "order": 1,
+         "name": "Barbell Squat",
+         "targetSets": 4,
+         "libraryId": "Barbell_Squat",
+         "instructions": "Bar on your upper back, brace, sit down between your hips. Drive up with your chest tall.",
+         "logMode": "weightReps",
+         "prescription": "4 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d3-b2",
+       "name": "Romanian Deadlift",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-02",
+         "order": 1,
+         "name": "Romanian Deadlift",
+         "targetSets": 3,
+         "libraryId": "Romanian_Deadlift",
+         "instructions": "Soft knees, push your hips back, bar close to your legs. Lower until your hamstrings stretch, then drive forward.",
+         "logMode": "weightReps",
+         "prescription": "3 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d3-b3",
+       "name": "Leg Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-03",
+         "order": 1,
+         "name": "Leg Press",
+         "targetSets": 3,
+         "libraryId": "Leg_Press",
+         "instructions": "Feet shoulder-width, lower until your knees reach 90° or more without your lower back rounding.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d3-b4",
+       "name": "Seated Leg Curl",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-04",
+         "order": 1,
+         "name": "Seated Leg Curl",
+         "targetSets": 3,
+         "libraryId": "Seated_Leg_Curl",
+         "instructions": "Pad on your lower calves. Curl heels under you, squeeze, then return under control.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d3-b5",
+       "name": "Standing Calf Raises",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-05",
+         "order": 1,
+         "name": "Standing Calf Raises",
+         "targetSets": 4,
+         "libraryId": "Standing_Calf_Raises",
+         "instructions": "Rise onto your toes as high as possible, pause, then drop to a full stretch at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d3-b6",
+       "name": "Hanging Leg Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d3-06",
+         "order": 1,
+         "name": "Hanging Leg Raise",
+         "targetSets": 3,
+         "libraryId": "Hanging_Leg_Raise",
+         "instructions": "Hang from a bar, curl your pelvis up as you raise your knees. Avoid swinging.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w1-d4",
+     "name": "Push B",
+     "order": 4,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d4-b1",
+       "name": "Barbell Incline Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-01",
+         "order": 1,
+         "name": "Barbell Incline Bench Press - Medium Grip",
+         "targetSets": 4,
+         "libraryId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+         "instructions": "Bench at 30°. Touch the upper chest, drive the bar back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b2",
+       "name": "Dumbbell Bench Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-02",
+         "order": 1,
+         "name": "Dumbbell Bench Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Bench_Press",
+         "instructions": "Lower to the sides of your chest for a deep stretch, press up and in without clanking.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b3",
+       "name": "Machine Shoulder (Military) Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-03",
+         "order": 1,
+         "name": "Machine Shoulder (Military) Press",
+         "targetSets": 3,
+         "libraryId": "Machine_Shoulder_Military_Press",
+         "instructions": "Seat so the handles start at shoulder height. Press up without arching your back.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 4,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "4 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b5",
+       "name": "Cable Crossover",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-05",
+         "order": 1,
+         "name": "Cable Crossover",
+         "targetSets": 3,
+         "libraryId": "Cable_Crossover",
+         "instructions": "Step forward, hands from shoulder height down and together. Keep elbows slightly bent throughout.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b6",
+       "name": "Lying Triceps Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-06",
+         "order": 1,
+         "name": "Lying Triceps Press",
+         "targetSets": 3,
+         "libraryId": "Lying_Triceps_Press",
+         "instructions": "Lie back, lower the EZ-bar to your forehead, elbows pointing at the ceiling, press up.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d4-b7",
+       "name": "Triceps Pushdown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d4-07",
+         "order": 1,
+         "name": "Triceps Pushdown",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown",
+         "instructions": "Elbows tight to your sides. Press the bar down, lock out, return until your forearms are parallel.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w1-d5",
+     "name": "Pull B",
+     "order": 5,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps",
+      "shoulders",
+      "traps"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d5-b1",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-01",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 4,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "4 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d5-b2",
+       "name": "Bent Over Barbell Row",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-02",
+         "order": 1,
+         "name": "Bent Over Barbell Row",
+         "targetSets": 4,
+         "libraryId": "Bent_Over_Barbell_Row",
+         "instructions": "Torso about 45° from the floor, flat back. Row the bar to your lower ribs, lower under control.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d5-b3",
+       "name": "Straight-Arm Pulldown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-03",
+         "order": 1,
+         "name": "Straight-Arm Pulldown",
+         "targetSets": 3,
+         "libraryId": "Straight-Arm_Pulldown",
+         "instructions": "Arms straight, hinge slightly. Sweep the bar from overhead to your thighs using your lats only.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d5-b4",
+       "name": "Reverse Machine Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-04",
+         "order": 1,
+         "name": "Reverse Machine Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Machine_Flyes",
+         "instructions": "Chest on the pad, arms level. Sweep back and out, squeeze the rear delts.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d5-b5",
+       "name": "Dumbbell Shrug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-05",
+         "order": 1,
+         "name": "Dumbbell Shrug",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shrug",
+         "instructions": "Arms at your sides. Shrug straight up and pause at the top. Controlled lowering.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d5-b6",
+       "name": "Preacher Curl + Cable Hammer Curls - Rope Attachment",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d5-06",
+         "order": 1,
+         "name": "Preacher Curl",
+         "targetSets": 3,
+         "libraryId": "Preacher_Curl",
+         "instructions": "Armpits snug on the pad. Lower fully, curl up without lifting your elbows off the pad.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w1-d5-07",
+         "order": 2,
+         "name": "Cable Hammer Curls - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Cable_Hammer_Curls_-_Rope_Attachment",
+         "instructions": "Curl the rope with palms facing each other, spread the ends at the top.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w1-d6",
+     "name": "Legs B",
+     "order": 6,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "glutes",
+      "calves",
+      "hamstrings",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w1-d6-b1",
+       "name": "Hack Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-01",
+         "order": 1,
+         "name": "Hack Squat",
+         "targetSets": 4,
+         "libraryId": "Hack_Squat",
+         "instructions": "Feet low and shoulder-width. Squat until your thighs are below parallel, drive up.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b2",
+       "name": "Barbell Hip Thrust",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-02",
+         "order": 1,
+         "name": "Barbell Hip Thrust",
+         "targetSets": 4,
+         "libraryId": "Barbell_Hip_Thrust",
+         "instructions": "Shoulders on a bench, bar across your hips. Drive up, tuck your chin and squeeze at the top.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b3",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-03",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b4",
+       "name": "Lying Leg Curls",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-04",
+         "order": 1,
+         "name": "Lying Leg Curls",
+         "targetSets": 3,
+         "libraryId": "Lying_Leg_Curls",
+         "instructions": "Hips pressed into the bench. Curl your heels to your glutes, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b5",
+       "name": "Leg Extensions",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-05",
+         "order": 1,
+         "name": "Leg Extensions",
+         "targetSets": 3,
+         "libraryId": "Leg_Extensions",
+         "instructions": "Squeeze your quads at the top, pause for a second, lower for three.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b6",
+       "name": "Seated Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-06",
+         "order": 1,
+         "name": "Seated Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Seated_Calf_Raise",
+         "instructions": "Knees bent 90°. Lower your heels as far as they go, rise up and pause.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w1-d6-b7",
+       "name": "Cable Crunch",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w1-d6-07",
+         "order": 1,
+         "name": "Cable Crunch",
+         "targetSets": 3,
+         "libraryId": "Cable_Crunch",
+         "instructions": "Kneel, round your spine and bring your elbows to your thighs. Exhale hard at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 2,
+   "id": "split-gym-ppl-6-w2",
+   "title": "Add reps",
+   "focus": "Beat last week's reps on your main lifts, stopping about 2 reps short of failure.",
+   "days": [
+    {
+     "id": "split-gym-ppl-6-w2-d1",
+     "name": "Push A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 2700,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d1-b1",
+       "name": "Barbell Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-01",
+         "order": 1,
+         "name": "Barbell Bench Press - Medium Grip",
+         "targetSets": 4,
+         "libraryId": "Barbell_Bench_Press_-_Medium_Grip",
+         "instructions": "Shoulder blades pinched, feet planted. Lower to mid-chest and press back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "4 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d1-b2",
+       "name": "Incline Dumbbell Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-02",
+         "order": 1,
+         "name": "Incline Dumbbell Press",
+         "targetSets": 3,
+         "libraryId": "Incline_Dumbbell_Press",
+         "instructions": "Bench at 30°. Elbows about 45° from your ribs, press up and slightly in.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d1-b3",
+       "name": "Dumbbell Shoulder Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-03",
+         "order": 1,
+         "name": "Dumbbell Shoulder Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shoulder_Press",
+         "instructions": "Brace your abs, press the weights straight up until your arms are almost straight.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d1-b4",
+       "name": "Standing Low-Pulley Deltoid Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-04",
+         "order": 1,
+         "name": "Standing Low-Pulley Deltoid Raise",
+         "targetSets": 3,
+         "libraryId": "Standing_Low-Pulley_Deltoid_Raise",
+         "instructions": "Cable at your hip. Lift out to the side to shoulder height, lead with your elbow.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d1-b5",
+       "name": "Cable Rope Overhead Triceps Extension",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-05",
+         "order": 1,
+         "name": "Cable Rope Overhead Triceps Extension",
+         "targetSets": 3,
+         "libraryId": "Cable_Rope_Overhead_Triceps_Extension",
+         "instructions": "Face away from the cable, elbows by your ears. Extend your arms overhead, lower with a stretch.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d1-b6",
+       "name": "Triceps Pushdown - Rope Attachment",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d1-06",
+         "order": 1,
+         "name": "Triceps Pushdown - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown_-_Rope_Attachment",
+         "instructions": "Elbows pinned to your ribs. Push down and spread the rope, squeeze, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w2-d2",
+     "name": "Pull A",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d2-b1",
+       "name": "Wide-Grip Lat Pulldown",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d2-01",
+         "order": 1,
+         "name": "Wide-Grip Lat Pulldown",
+         "targetSets": 4,
+         "libraryId": "Wide-Grip_Lat_Pulldown",
+         "instructions": "Pull the bar to your upper chest, driving your elbows down. Lean back slightly, no swinging.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d2-b2",
+       "name": "Seated Cable Rows",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d2-02",
+         "order": 1,
+         "name": "Seated Cable Rows",
+         "targetSets": 4,
+         "libraryId": "Seated_Cable_Rows",
+         "instructions": "Sit tall. Row the handle to your belly, pinch your shoulder blades, then let them stretch forward.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d2-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d2-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d2-b4",
+       "name": "Face Pull",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d2-04",
+         "order": 1,
+         "name": "Face Pull",
+         "targetSets": 3,
+         "libraryId": "Face_Pull",
+         "instructions": "Pull the rope to your forehead, elbows high and wide, finish with your hands beside your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d2-b5",
+       "name": "Incline Dumbbell Curl + Hammer Curls",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d2-05",
+         "order": 1,
+         "name": "Incline Dumbbell Curl",
+         "targetSets": 3,
+         "libraryId": "Incline_Dumbbell_Curl",
+         "instructions": "Bench at 60°. Arms hang behind your body, curl up without moving your elbows forward.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w2-d2-06",
+         "order": 2,
+         "name": "Hammer Curls",
+         "targetSets": 3,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w2-d3",
+     "name": "Legs A",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "hamstrings",
+      "calves",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d3-b1",
+       "name": "Barbell Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-01",
+         "order": 1,
+         "name": "Barbell Squat",
+         "targetSets": 4,
+         "libraryId": "Barbell_Squat",
+         "instructions": "Bar on your upper back, brace, sit down between your hips. Drive up with your chest tall.",
+         "logMode": "weightReps",
+         "prescription": "4 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d3-b2",
+       "name": "Romanian Deadlift",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-02",
+         "order": 1,
+         "name": "Romanian Deadlift",
+         "targetSets": 3,
+         "libraryId": "Romanian_Deadlift",
+         "instructions": "Soft knees, push your hips back, bar close to your legs. Lower until your hamstrings stretch, then drive forward.",
+         "logMode": "weightReps",
+         "prescription": "3 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d3-b3",
+       "name": "Leg Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-03",
+         "order": 1,
+         "name": "Leg Press",
+         "targetSets": 3,
+         "libraryId": "Leg_Press",
+         "instructions": "Feet shoulder-width, lower until your knees reach 90° or more without your lower back rounding.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d3-b4",
+       "name": "Seated Leg Curl",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-04",
+         "order": 1,
+         "name": "Seated Leg Curl",
+         "targetSets": 3,
+         "libraryId": "Seated_Leg_Curl",
+         "instructions": "Pad on your lower calves. Curl heels under you, squeeze, then return under control.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d3-b5",
+       "name": "Standing Calf Raises",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-05",
+         "order": 1,
+         "name": "Standing Calf Raises",
+         "targetSets": 4,
+         "libraryId": "Standing_Calf_Raises",
+         "instructions": "Rise onto your toes as high as possible, pause, then drop to a full stretch at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d3-b6",
+       "name": "Hanging Leg Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d3-06",
+         "order": 1,
+         "name": "Hanging Leg Raise",
+         "targetSets": 3,
+         "libraryId": "Hanging_Leg_Raise",
+         "instructions": "Hang from a bar, curl your pelvis up as you raise your knees. Avoid swinging.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w2-d4",
+     "name": "Push B",
+     "order": 4,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d4-b1",
+       "name": "Barbell Incline Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-01",
+         "order": 1,
+         "name": "Barbell Incline Bench Press - Medium Grip",
+         "targetSets": 4,
+         "libraryId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+         "instructions": "Bench at 30°. Touch the upper chest, drive the bar back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b2",
+       "name": "Dumbbell Bench Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-02",
+         "order": 1,
+         "name": "Dumbbell Bench Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Bench_Press",
+         "instructions": "Lower to the sides of your chest for a deep stretch, press up and in without clanking.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b3",
+       "name": "Machine Shoulder (Military) Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-03",
+         "order": 1,
+         "name": "Machine Shoulder (Military) Press",
+         "targetSets": 3,
+         "libraryId": "Machine_Shoulder_Military_Press",
+         "instructions": "Seat so the handles start at shoulder height. Press up without arching your back.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 4,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "4 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b5",
+       "name": "Cable Crossover",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-05",
+         "order": 1,
+         "name": "Cable Crossover",
+         "targetSets": 3,
+         "libraryId": "Cable_Crossover",
+         "instructions": "Step forward, hands from shoulder height down and together. Keep elbows slightly bent throughout.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b6",
+       "name": "Lying Triceps Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-06",
+         "order": 1,
+         "name": "Lying Triceps Press",
+         "targetSets": 3,
+         "libraryId": "Lying_Triceps_Press",
+         "instructions": "Lie back, lower the EZ-bar to your forehead, elbows pointing at the ceiling, press up.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d4-b7",
+       "name": "Triceps Pushdown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d4-07",
+         "order": 1,
+         "name": "Triceps Pushdown",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown",
+         "instructions": "Elbows tight to your sides. Press the bar down, lock out, return until your forearms are parallel.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w2-d5",
+     "name": "Pull B",
+     "order": 5,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps",
+      "shoulders",
+      "traps"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d5-b1",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-01",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 4,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "4 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d5-b2",
+       "name": "Bent Over Barbell Row",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-02",
+         "order": 1,
+         "name": "Bent Over Barbell Row",
+         "targetSets": 4,
+         "libraryId": "Bent_Over_Barbell_Row",
+         "instructions": "Torso about 45° from the floor, flat back. Row the bar to your lower ribs, lower under control.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d5-b3",
+       "name": "Straight-Arm Pulldown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-03",
+         "order": 1,
+         "name": "Straight-Arm Pulldown",
+         "targetSets": 3,
+         "libraryId": "Straight-Arm_Pulldown",
+         "instructions": "Arms straight, hinge slightly. Sweep the bar from overhead to your thighs using your lats only.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d5-b4",
+       "name": "Reverse Machine Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-04",
+         "order": 1,
+         "name": "Reverse Machine Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Machine_Flyes",
+         "instructions": "Chest on the pad, arms level. Sweep back and out, squeeze the rear delts.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d5-b5",
+       "name": "Dumbbell Shrug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-05",
+         "order": 1,
+         "name": "Dumbbell Shrug",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shrug",
+         "instructions": "Arms at your sides. Shrug straight up and pause at the top. Controlled lowering.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d5-b6",
+       "name": "Preacher Curl + Cable Hammer Curls - Rope Attachment",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d5-06",
+         "order": 1,
+         "name": "Preacher Curl",
+         "targetSets": 3,
+         "libraryId": "Preacher_Curl",
+         "instructions": "Armpits snug on the pad. Lower fully, curl up without lifting your elbows off the pad.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w2-d5-07",
+         "order": 2,
+         "name": "Cable Hammer Curls - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Cable_Hammer_Curls_-_Rope_Attachment",
+         "instructions": "Curl the rope with palms facing each other, spread the ends at the top.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w2-d6",
+     "name": "Legs B",
+     "order": 6,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "glutes",
+      "calves",
+      "hamstrings",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w2-d6-b1",
+       "name": "Hack Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-01",
+         "order": 1,
+         "name": "Hack Squat",
+         "targetSets": 4,
+         "libraryId": "Hack_Squat",
+         "instructions": "Feet low and shoulder-width. Squat until your thighs are below parallel, drive up.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b2",
+       "name": "Barbell Hip Thrust",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-02",
+         "order": 1,
+         "name": "Barbell Hip Thrust",
+         "targetSets": 4,
+         "libraryId": "Barbell_Hip_Thrust",
+         "instructions": "Shoulders on a bench, bar across your hips. Drive up, tuck your chin and squeeze at the top.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b3",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-03",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b4",
+       "name": "Lying Leg Curls",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-04",
+         "order": 1,
+         "name": "Lying Leg Curls",
+         "targetSets": 3,
+         "libraryId": "Lying_Leg_Curls",
+         "instructions": "Hips pressed into the bench. Curl your heels to your glutes, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b5",
+       "name": "Leg Extensions",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-05",
+         "order": 1,
+         "name": "Leg Extensions",
+         "targetSets": 3,
+         "libraryId": "Leg_Extensions",
+         "instructions": "Squeeze your quads at the top, pause for a second, lower for three.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b6",
+       "name": "Seated Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-06",
+         "order": 1,
+         "name": "Seated Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Seated_Calf_Raise",
+         "instructions": "Knees bent 90°. Lower your heels as far as they go, rise up and pause.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w2-d6-b7",
+       "name": "Cable Crunch",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w2-d6-07",
+         "order": 1,
+         "name": "Cable Crunch",
+         "targetSets": 3,
+         "libraryId": "Cable_Crunch",
+         "instructions": "Kneel, round your spine and bring your elbows to your thighs. Exhale hard at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 3,
+   "id": "split-gym-ppl-6-w3",
+   "title": "Push",
+   "focus": "The hardest week. The first two lifts each day get an extra set; stop about 1 rep short of failure.",
+   "days": [
+    {
+     "id": "split-gym-ppl-6-w3-d1",
+     "name": "Push A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d1-b1",
+       "name": "Barbell Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-01",
+         "order": 1,
+         "name": "Barbell Bench Press - Medium Grip",
+         "targetSets": 5,
+         "libraryId": "Barbell_Bench_Press_-_Medium_Grip",
+         "instructions": "Shoulder blades pinched, feet planted. Lower to mid-chest and press back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "5 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d1-b2",
+       "name": "Incline Dumbbell Press",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-02",
+         "order": 1,
+         "name": "Incline Dumbbell Press",
+         "targetSets": 4,
+         "libraryId": "Incline_Dumbbell_Press",
+         "instructions": "Bench at 30°. Elbows about 45° from your ribs, press up and slightly in.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d1-b3",
+       "name": "Dumbbell Shoulder Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-03",
+         "order": 1,
+         "name": "Dumbbell Shoulder Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shoulder_Press",
+         "instructions": "Brace your abs, press the weights straight up until your arms are almost straight.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d1-b4",
+       "name": "Standing Low-Pulley Deltoid Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-04",
+         "order": 1,
+         "name": "Standing Low-Pulley Deltoid Raise",
+         "targetSets": 3,
+         "libraryId": "Standing_Low-Pulley_Deltoid_Raise",
+         "instructions": "Cable at your hip. Lift out to the side to shoulder height, lead with your elbow.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d1-b5",
+       "name": "Cable Rope Overhead Triceps Extension",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-05",
+         "order": 1,
+         "name": "Cable Rope Overhead Triceps Extension",
+         "targetSets": 3,
+         "libraryId": "Cable_Rope_Overhead_Triceps_Extension",
+         "instructions": "Face away from the cable, elbows by your ears. Extend your arms overhead, lower with a stretch.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d1-b6",
+       "name": "Triceps Pushdown - Rope Attachment",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d1-06",
+         "order": 1,
+         "name": "Triceps Pushdown - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown_-_Rope_Attachment",
+         "instructions": "Elbows pinned to your ribs. Push down and spread the rope, squeeze, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w3-d2",
+     "name": "Pull A",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps"
+     ],
+     "estimatedDurationSeconds": 3600,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d2-b1",
+       "name": "Wide-Grip Lat Pulldown",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d2-01",
+         "order": 1,
+         "name": "Wide-Grip Lat Pulldown",
+         "targetSets": 5,
+         "libraryId": "Wide-Grip_Lat_Pulldown",
+         "instructions": "Pull the bar to your upper chest, driving your elbows down. Lean back slightly, no swinging.",
+         "logMode": "weightReps",
+         "prescription": "5 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d2-b2",
+       "name": "Seated Cable Rows",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d2-02",
+         "order": 1,
+         "name": "Seated Cable Rows",
+         "targetSets": 5,
+         "libraryId": "Seated_Cable_Rows",
+         "instructions": "Sit tall. Row the handle to your belly, pinch your shoulder blades, then let them stretch forward.",
+         "logMode": "weightReps",
+         "prescription": "5 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d2-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d2-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d2-b4",
+       "name": "Face Pull",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d2-04",
+         "order": 1,
+         "name": "Face Pull",
+         "targetSets": 3,
+         "libraryId": "Face_Pull",
+         "instructions": "Pull the rope to your forehead, elbows high and wide, finish with your hands beside your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d2-b5",
+       "name": "Incline Dumbbell Curl + Hammer Curls",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d2-05",
+         "order": 1,
+         "name": "Incline Dumbbell Curl",
+         "targetSets": 3,
+         "libraryId": "Incline_Dumbbell_Curl",
+         "instructions": "Bench at 60°. Arms hang behind your body, curl up without moving your elbows forward.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w3-d2-06",
+         "order": 2,
+         "name": "Hammer Curls",
+         "targetSets": 3,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w3-d3",
+     "name": "Legs A",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "hamstrings",
+      "calves",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d3-b1",
+       "name": "Barbell Squat",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-01",
+         "order": 1,
+         "name": "Barbell Squat",
+         "targetSets": 5,
+         "libraryId": "Barbell_Squat",
+         "instructions": "Bar on your upper back, brace, sit down between your hips. Drive up with your chest tall.",
+         "logMode": "weightReps",
+         "prescription": "5 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d3-b2",
+       "name": "Romanian Deadlift",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-02",
+         "order": 1,
+         "name": "Romanian Deadlift",
+         "targetSets": 4,
+         "libraryId": "Romanian_Deadlift",
+         "instructions": "Soft knees, push your hips back, bar close to your legs. Lower until your hamstrings stretch, then drive forward.",
+         "logMode": "weightReps",
+         "prescription": "4 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d3-b3",
+       "name": "Leg Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-03",
+         "order": 1,
+         "name": "Leg Press",
+         "targetSets": 3,
+         "libraryId": "Leg_Press",
+         "instructions": "Feet shoulder-width, lower until your knees reach 90° or more without your lower back rounding.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d3-b4",
+       "name": "Seated Leg Curl",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-04",
+         "order": 1,
+         "name": "Seated Leg Curl",
+         "targetSets": 3,
+         "libraryId": "Seated_Leg_Curl",
+         "instructions": "Pad on your lower calves. Curl heels under you, squeeze, then return under control.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d3-b5",
+       "name": "Standing Calf Raises",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-05",
+         "order": 1,
+         "name": "Standing Calf Raises",
+         "targetSets": 4,
+         "libraryId": "Standing_Calf_Raises",
+         "instructions": "Rise onto your toes as high as possible, pause, then drop to a full stretch at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d3-b6",
+       "name": "Hanging Leg Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d3-06",
+         "order": 1,
+         "name": "Hanging Leg Raise",
+         "targetSets": 3,
+         "libraryId": "Hanging_Leg_Raise",
+         "instructions": "Hang from a bar, curl your pelvis up as you raise your knees. Avoid swinging.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w3-d4",
+     "name": "Push B",
+     "order": 4,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 3600,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d4-b1",
+       "name": "Barbell Incline Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-01",
+         "order": 1,
+         "name": "Barbell Incline Bench Press - Medium Grip",
+         "targetSets": 5,
+         "libraryId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+         "instructions": "Bench at 30°. Touch the upper chest, drive the bar back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "5 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b2",
+       "name": "Dumbbell Bench Press",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-02",
+         "order": 1,
+         "name": "Dumbbell Bench Press",
+         "targetSets": 4,
+         "libraryId": "Dumbbell_Bench_Press",
+         "instructions": "Lower to the sides of your chest for a deep stretch, press up and in without clanking.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b3",
+       "name": "Machine Shoulder (Military) Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-03",
+         "order": 1,
+         "name": "Machine Shoulder (Military) Press",
+         "targetSets": 3,
+         "libraryId": "Machine_Shoulder_Military_Press",
+         "instructions": "Seat so the handles start at shoulder height. Press up without arching your back.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 4,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "4 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b5",
+       "name": "Cable Crossover",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-05",
+         "order": 1,
+         "name": "Cable Crossover",
+         "targetSets": 3,
+         "libraryId": "Cable_Crossover",
+         "instructions": "Step forward, hands from shoulder height down and together. Keep elbows slightly bent throughout.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b6",
+       "name": "Lying Triceps Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-06",
+         "order": 1,
+         "name": "Lying Triceps Press",
+         "targetSets": 3,
+         "libraryId": "Lying_Triceps_Press",
+         "instructions": "Lie back, lower the EZ-bar to your forehead, elbows pointing at the ceiling, press up.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d4-b7",
+       "name": "Triceps Pushdown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d4-07",
+         "order": 1,
+         "name": "Triceps Pushdown",
+         "targetSets": 3,
+         "libraryId": "Triceps_Pushdown",
+         "instructions": "Elbows tight to your sides. Press the bar down, lock out, return until your forearms are parallel.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w3-d5",
+     "name": "Pull B",
+     "order": 5,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps",
+      "shoulders",
+      "traps"
+     ],
+     "estimatedDurationSeconds": 3600,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d5-b1",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-01",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 5,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "5 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d5-b2",
+       "name": "Bent Over Barbell Row",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-02",
+         "order": 1,
+         "name": "Bent Over Barbell Row",
+         "targetSets": 5,
+         "libraryId": "Bent_Over_Barbell_Row",
+         "instructions": "Torso about 45° from the floor, flat back. Row the bar to your lower ribs, lower under control.",
+         "logMode": "weightReps",
+         "prescription": "5 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d5-b3",
+       "name": "Straight-Arm Pulldown",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-03",
+         "order": 1,
+         "name": "Straight-Arm Pulldown",
+         "targetSets": 3,
+         "libraryId": "Straight-Arm_Pulldown",
+         "instructions": "Arms straight, hinge slightly. Sweep the bar from overhead to your thighs using your lats only.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d5-b4",
+       "name": "Reverse Machine Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-04",
+         "order": 1,
+         "name": "Reverse Machine Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Machine_Flyes",
+         "instructions": "Chest on the pad, arms level. Sweep back and out, squeeze the rear delts.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d5-b5",
+       "name": "Dumbbell Shrug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-05",
+         "order": 1,
+         "name": "Dumbbell Shrug",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Shrug",
+         "instructions": "Arms at your sides. Shrug straight up and pause at the top. Controlled lowering.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d5-b6",
+       "name": "Preacher Curl + Cable Hammer Curls - Rope Attachment",
+       "type": "superset",
+       "targetSets": 3,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d5-06",
+         "order": 1,
+         "name": "Preacher Curl",
+         "targetSets": 3,
+         "libraryId": "Preacher_Curl",
+         "instructions": "Armpits snug on the pad. Lower fully, curl up without lifting your elbows off the pad.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w3-d5-07",
+         "order": 2,
+         "name": "Cable Hammer Curls - Rope Attachment",
+         "targetSets": 3,
+         "libraryId": "Cable_Hammer_Curls_-_Rope_Attachment",
+         "instructions": "Curl the rope with palms facing each other, spread the ends at the top.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w3-d6",
+     "name": "Legs B",
+     "order": 6,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "glutes",
+      "calves",
+      "hamstrings",
+      "core"
+     ],
+     "estimatedDurationSeconds": 3600,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w3-d6-b1",
+       "name": "Hack Squat",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-01",
+         "order": 1,
+         "name": "Hack Squat",
+         "targetSets": 5,
+         "libraryId": "Hack_Squat",
+         "instructions": "Feet low and shoulder-width. Squat until your thighs are below parallel, drive up.",
+         "logMode": "weightReps",
+         "prescription": "5 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b2",
+       "name": "Barbell Hip Thrust",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-02",
+         "order": 1,
+         "name": "Barbell Hip Thrust",
+         "targetSets": 5,
+         "libraryId": "Barbell_Hip_Thrust",
+         "instructions": "Shoulders on a bench, bar across your hips. Drive up, tuck your chin and squeeze at the top.",
+         "logMode": "weightReps",
+         "prescription": "5 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b3",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-03",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b4",
+       "name": "Lying Leg Curls",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-04",
+         "order": 1,
+         "name": "Lying Leg Curls",
+         "targetSets": 3,
+         "libraryId": "Lying_Leg_Curls",
+         "instructions": "Hips pressed into the bench. Curl your heels to your glutes, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b5",
+       "name": "Leg Extensions",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-05",
+         "order": 1,
+         "name": "Leg Extensions",
+         "targetSets": 3,
+         "libraryId": "Leg_Extensions",
+         "instructions": "Squeeze your quads at the top, pause for a second, lower for three.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b6",
+       "name": "Seated Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-06",
+         "order": 1,
+         "name": "Seated Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Seated_Calf_Raise",
+         "instructions": "Knees bent 90°. Lower your heels as far as they go, rise up and pause.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w3-d6-b7",
+       "name": "Cable Crunch",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w3-d6-07",
+         "order": 1,
+         "name": "Cable Crunch",
+         "targetSets": 3,
+         "libraryId": "Cable_Crunch",
+         "instructions": "Kneel, round your spine and bring your elbows to your thighs. Exhale hard at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 4,
+   "id": "split-gym-ppl-6-w4",
+   "title": "Deload",
+   "focus": "Cut sets by about 40% and stay about 4 reps short of failure. Recovering now makes the next block better.",
+   "days": [
+    {
+     "id": "split-gym-ppl-6-w4-d1",
+     "name": "Push A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d1-b1",
+       "name": "Barbell Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-01",
+         "order": 1,
+         "name": "Barbell Bench Press - Medium Grip",
+         "targetSets": 2,
+         "libraryId": "Barbell_Bench_Press_-_Medium_Grip",
+         "instructions": "Shoulder blades pinched, feet planted. Lower to mid-chest and press back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "2 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d1-b2",
+       "name": "Incline Dumbbell Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-02",
+         "order": 1,
+         "name": "Incline Dumbbell Press",
+         "targetSets": 2,
+         "libraryId": "Incline_Dumbbell_Press",
+         "instructions": "Bench at 30°. Elbows about 45° from your ribs, press up and slightly in.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d1-b3",
+       "name": "Dumbbell Shoulder Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-03",
+         "order": 1,
+         "name": "Dumbbell Shoulder Press",
+         "targetSets": 2,
+         "libraryId": "Dumbbell_Shoulder_Press",
+         "instructions": "Brace your abs, press the weights straight up until your arms are almost straight.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d1-b4",
+       "name": "Standing Low-Pulley Deltoid Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-04",
+         "order": 1,
+         "name": "Standing Low-Pulley Deltoid Raise",
+         "targetSets": 2,
+         "libraryId": "Standing_Low-Pulley_Deltoid_Raise",
+         "instructions": "Cable at your hip. Lift out to the side to shoulder height, lead with your elbow.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d1-b5",
+       "name": "Cable Rope Overhead Triceps Extension",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-05",
+         "order": 1,
+         "name": "Cable Rope Overhead Triceps Extension",
+         "targetSets": 2,
+         "libraryId": "Cable_Rope_Overhead_Triceps_Extension",
+         "instructions": "Face away from the cable, elbows by your ears. Extend your arms overhead, lower with a stretch.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d1-b6",
+       "name": "Triceps Pushdown - Rope Attachment",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d1-06",
+         "order": 1,
+         "name": "Triceps Pushdown - Rope Attachment",
+         "targetSets": 2,
+         "libraryId": "Triceps_Pushdown_-_Rope_Attachment",
+         "instructions": "Elbows pinned to your ribs. Push down and spread the rope, squeeze, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w4-d2",
+     "name": "Pull A",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d2-b1",
+       "name": "Wide-Grip Lat Pulldown",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d2-01",
+         "order": 1,
+         "name": "Wide-Grip Lat Pulldown",
+         "targetSets": 2,
+         "libraryId": "Wide-Grip_Lat_Pulldown",
+         "instructions": "Pull the bar to your upper chest, driving your elbows down. Lean back slightly, no swinging.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d2-b2",
+       "name": "Seated Cable Rows",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d2-02",
+         "order": 1,
+         "name": "Seated Cable Rows",
+         "targetSets": 2,
+         "libraryId": "Seated_Cable_Rows",
+         "instructions": "Sit tall. Row the handle to your belly, pinch your shoulder blades, then let them stretch forward.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d2-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d2-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 2,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d2-b4",
+       "name": "Face Pull",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d2-04",
+         "order": 1,
+         "name": "Face Pull",
+         "targetSets": 2,
+         "libraryId": "Face_Pull",
+         "instructions": "Pull the rope to your forehead, elbows high and wide, finish with your hands beside your ears.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d2-b5",
+       "name": "Incline Dumbbell Curl + Hammer Curls",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d2-05",
+         "order": 1,
+         "name": "Incline Dumbbell Curl",
+         "targetSets": 2,
+         "libraryId": "Incline_Dumbbell_Curl",
+         "instructions": "Bench at 60°. Arms hang behind your body, curl up without moving your elbows forward.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w4-d2-06",
+         "order": 2,
+         "name": "Hammer Curls",
+         "targetSets": 2,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w4-d3",
+     "name": "Legs A",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "hamstrings",
+      "calves",
+      "core"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d3-b1",
+       "name": "Barbell Squat",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-01",
+         "order": 1,
+         "name": "Barbell Squat",
+         "targetSets": 2,
+         "libraryId": "Barbell_Squat",
+         "instructions": "Bar on your upper back, brace, sit down between your hips. Drive up with your chest tall.",
+         "logMode": "weightReps",
+         "prescription": "2 × 5–8"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d3-b2",
+       "name": "Romanian Deadlift",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-02",
+         "order": 1,
+         "name": "Romanian Deadlift",
+         "targetSets": 2,
+         "libraryId": "Romanian_Deadlift",
+         "instructions": "Soft knees, push your hips back, bar close to your legs. Lower until your hamstrings stretch, then drive forward.",
+         "logMode": "weightReps",
+         "prescription": "2 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d3-b3",
+       "name": "Leg Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-03",
+         "order": 1,
+         "name": "Leg Press",
+         "targetSets": 2,
+         "libraryId": "Leg_Press",
+         "instructions": "Feet shoulder-width, lower until your knees reach 90° or more without your lower back rounding.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d3-b4",
+       "name": "Seated Leg Curl",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-04",
+         "order": 1,
+         "name": "Seated Leg Curl",
+         "targetSets": 2,
+         "libraryId": "Seated_Leg_Curl",
+         "instructions": "Pad on your lower calves. Curl heels under you, squeeze, then return under control.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d3-b5",
+       "name": "Standing Calf Raises",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-05",
+         "order": 1,
+         "name": "Standing Calf Raises",
+         "targetSets": 2,
+         "libraryId": "Standing_Calf_Raises",
+         "instructions": "Rise onto your toes as high as possible, pause, then drop to a full stretch at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d3-b6",
+       "name": "Hanging Leg Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d3-06",
+         "order": 1,
+         "name": "Hanging Leg Raise",
+         "targetSets": 2,
+         "libraryId": "Hanging_Leg_Raise",
+         "instructions": "Hang from a bar, curl your pelvis up as you raise your knees. Avoid swinging.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w4-d4",
+     "name": "Push B",
+     "order": 4,
+     "type": "strength",
+     "muscles": [
+      "chest",
+      "shoulders",
+      "triceps"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d4-b1",
+       "name": "Barbell Incline Bench Press - Medium Grip",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-01",
+         "order": 1,
+         "name": "Barbell Incline Bench Press - Medium Grip",
+         "targetSets": 2,
+         "libraryId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+         "instructions": "Bench at 30°. Touch the upper chest, drive the bar back over your shoulders.",
+         "logMode": "weightReps",
+         "prescription": "2 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b2",
+       "name": "Dumbbell Bench Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-02",
+         "order": 1,
+         "name": "Dumbbell Bench Press",
+         "targetSets": 2,
+         "libraryId": "Dumbbell_Bench_Press",
+         "instructions": "Lower to the sides of your chest for a deep stretch, press up and in without clanking.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b3",
+       "name": "Machine Shoulder (Military) Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-03",
+         "order": 1,
+         "name": "Machine Shoulder (Military) Press",
+         "targetSets": 2,
+         "libraryId": "Machine_Shoulder_Military_Press",
+         "instructions": "Seat so the handles start at shoulder height. Press up without arching your back.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 2,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b5",
+       "name": "Cable Crossover",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-05",
+         "order": 1,
+         "name": "Cable Crossover",
+         "targetSets": 2,
+         "libraryId": "Cable_Crossover",
+         "instructions": "Step forward, hands from shoulder height down and together. Keep elbows slightly bent throughout.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b6",
+       "name": "Lying Triceps Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-06",
+         "order": 1,
+         "name": "Lying Triceps Press",
+         "targetSets": 2,
+         "libraryId": "Lying_Triceps_Press",
+         "instructions": "Lie back, lower the EZ-bar to your forehead, elbows pointing at the ceiling, press up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d4-b7",
+       "name": "Triceps Pushdown",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d4-07",
+         "order": 1,
+         "name": "Triceps Pushdown",
+         "targetSets": 2,
+         "libraryId": "Triceps_Pushdown",
+         "instructions": "Elbows tight to your sides. Press the bar down, lock out, return until your forearms are parallel.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w4-d5",
+     "name": "Pull B",
+     "order": 5,
+     "type": "strength",
+     "muscles": [
+      "back",
+      "biceps",
+      "shoulders",
+      "traps"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d5-b1",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-01",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 2,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d5-b2",
+       "name": "Bent Over Barbell Row",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-02",
+         "order": 1,
+         "name": "Bent Over Barbell Row",
+         "targetSets": 2,
+         "libraryId": "Bent_Over_Barbell_Row",
+         "instructions": "Torso about 45° from the floor, flat back. Row the bar to your lower ribs, lower under control.",
+         "logMode": "weightReps",
+         "prescription": "2 × 6–10"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d5-b3",
+       "name": "Straight-Arm Pulldown",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-03",
+         "order": 1,
+         "name": "Straight-Arm Pulldown",
+         "targetSets": 2,
+         "libraryId": "Straight-Arm_Pulldown",
+         "instructions": "Arms straight, hinge slightly. Sweep the bar from overhead to your thighs using your lats only.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d5-b4",
+       "name": "Reverse Machine Flyes",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-04",
+         "order": 1,
+         "name": "Reverse Machine Flyes",
+         "targetSets": 2,
+         "libraryId": "Reverse_Machine_Flyes",
+         "instructions": "Chest on the pad, arms level. Sweep back and out, squeeze the rear delts.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d5-b5",
+       "name": "Dumbbell Shrug",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-05",
+         "order": 1,
+         "name": "Dumbbell Shrug",
+         "targetSets": 2,
+         "libraryId": "Dumbbell_Shrug",
+         "instructions": "Arms at your sides. Shrug straight up and pause at the top. Controlled lowering.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d5-b6",
+       "name": "Preacher Curl + Cable Hammer Curls - Rope Attachment",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d5-06",
+         "order": 1,
+         "name": "Preacher Curl",
+         "targetSets": 2,
+         "libraryId": "Preacher_Curl",
+         "instructions": "Armpits snug on the pad. Lower fully, curl up without lifting your elbows off the pad.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-gym-ppl-6-w4-d5-07",
+         "order": 2,
+         "name": "Cable Hammer Curls - Rope Attachment",
+         "targetSets": 2,
+         "libraryId": "Cable_Hammer_Curls_-_Rope_Attachment",
+         "instructions": "Curl the rope with palms facing each other, spread the ends at the top.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-gym-ppl-6-w4-d6",
+     "name": "Legs B",
+     "order": 6,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "glutes",
+      "calves",
+      "hamstrings",
+      "core"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-gym-ppl-6-w4-d6-b1",
+       "name": "Hack Squat",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-01",
+         "order": 1,
+         "name": "Hack Squat",
+         "targetSets": 2,
+         "libraryId": "Hack_Squat",
+         "instructions": "Feet low and shoulder-width. Squat until your thighs are below parallel, drive up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b2",
+       "name": "Barbell Hip Thrust",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-02",
+         "order": 1,
+         "name": "Barbell Hip Thrust",
+         "targetSets": 2,
+         "libraryId": "Barbell_Hip_Thrust",
+         "instructions": "Shoulders on a bench, bar across your hips. Drive up, tuck your chin and squeeze at the top.",
+         "logMode": "weightReps",
+         "prescription": "2 × 6–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b3",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-03",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 2,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b4",
+       "name": "Lying Leg Curls",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-04",
+         "order": 1,
+         "name": "Lying Leg Curls",
+         "targetSets": 2,
+         "libraryId": "Lying_Leg_Curls",
+         "instructions": "Hips pressed into the bench. Curl your heels to your glutes, lower slowly.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b5",
+       "name": "Leg Extensions",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-05",
+         "order": 1,
+         "name": "Leg Extensions",
+         "targetSets": 2,
+         "libraryId": "Leg_Extensions",
+         "instructions": "Squeeze your quads at the top, pause for a second, lower for three.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b6",
+       "name": "Seated Calf Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-06",
+         "order": 1,
+         "name": "Seated Calf Raise",
+         "targetSets": 2,
+         "libraryId": "Seated_Calf_Raise",
+         "instructions": "Knees bent 90°. Lower your heels as far as they go, rise up and pause.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-gym-ppl-6-w4-d6-b7",
+       "name": "Cable Crunch",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-gym-ppl-6-w4-d6-07",
+         "order": 1,
+         "name": "Cable Crunch",
+         "targetSets": 2,
+         "libraryId": "Cable_Crunch",
+         "instructions": "Kneel, round your spine and bring your elbows to your thighs. Exhale hard at the bottom.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

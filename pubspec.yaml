@@ -87,6 +87,16 @@ flutter:
     - assets/programs/mobility_10min.json
     - assets/programs/badminton_mobility_strength.json
     - assets/programs/endurance_run_8wk.json
+    - assets/programs/split_gym_full_3.json
+    - assets/programs/split_gym_ul_4.json
+    - assets/programs/split_gym_hybrid_5.json
+    - assets/programs/split_gym_ppl_6.json
+    - assets/programs/split_home_full_3.json
+    - assets/programs/split_home_ul_4.json
+    - assets/programs/split_home_ppl_6.json
+    - assets/programs/split_home_bodyweight_3.json
+    - assets/library/library.json
+    - assets/library/img/
     - assets/icon/splash_logo.png
 
   # Bundled (not downloaded) so the app renders offline; see design/DESIGN.md.

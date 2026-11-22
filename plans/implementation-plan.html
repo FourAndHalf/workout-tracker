@@ -31,6 +31,7 @@
       --phase-9: #2f81f7;
       --phase-10: #a371f7;
       --phase-11: #3fb950;
+      --phase-12: #f0883e;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1209,6 +1210,50 @@
         <div class="task-content">
           <div class="task-text">Weekly distance on the Progress tab <span class="tag tag-new">new</span></div>
           <div class="task-detail">WorkoutRepository.getWeeklyEndurance aggregates distance and average pace per week; EnduranceCard charts the last 8 weeks beside the weekly volume card; unit and widget tests</div>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <section class="phase" data-phase="12">
+    <div class="phase-header" onclick="togglePhase(this)">
+      <span class="phase-badge" style="background: var(--phase-12);">12</span>
+      <span class="phase-title">Explore: Muscle Library &amp; Gym / Home Splits</span>
+      <span class="phase-counter" data-counter></span>
+      <span class="phase-toggle">▼</span>
+    </div>
+    <ul class="task-list">
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Research-backed exercise library <span class="tag tag-new">new</span></div>
+          <div class="task-detail">tool/library_*.py: 14 muscle groups split into 31 parts (upper/mid/lower chest, side delts, biceps long head, hamstring hinge vs curl, ...), 181 exercises with gym and home picks, sets and reps, a one-line form cue and a note on why, grounded in cited EMG and hypertrophy studies; photos and steps from free-exercise-db (public domain), downscaled to assets/library/img; tool/build_library.py regenerates everything; data tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Explore tab: muscle library <span class="tag tag-new">new</span></div>
+          <div class="task-detail">New bottom-nav tab: pick a muscle from chips or by tapping a custom front/back body figure, narrow to a part, flip Gym / Home, read the evidence note, open a pick for photos, cue, steps and assisting muscles; search across all exercises; sources panel; widget tests</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Gym &amp; home training splits <span class="tag tag-new">new</span></div>
+          <div class="task-detail">Eight four-week split programs (gym: full body, upper/lower, 5-day hybrid, push/pull/legs; home: full body, upper/lower, push/pull/legs, no equipment) built from library exercises with supersets, per-block rest, a deload week and week-by-week progression; Explore &gt; Splits lists them with a days-per-week filter; each shows its days, exercises and weekly sets per muscle against the 10-20 set range, and "Use this split" starts it in Programs</div>
+        </div>
+      </li>
+
+      <li class="task-item done">
+        <input type="checkbox" class="task-checkbox" checked onchange="onCheck(this)">
+        <div class="task-content">
+          <div class="task-text">Exercise photos and steps inside workouts <span class="tag tag-modify">modify</span></div>
+          <div class="task-detail">Split exercises link to the library: an info button on each exercise opens a sheet with photos, cue and steps during a workout; the Programs switcher gets a Gym &amp; home splits shortcut and shows the active split; TagPill no longer stretches inside a Wrap</div>
         </div>
       </li>
 

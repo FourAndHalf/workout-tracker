@@ -7,6 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ledger.dart';
 import '../../../data/models/program_model.dart';
 import '../../../data/repositories/workout_repository.dart';
+import '../../explore/widgets/exercise_detail.dart';
 import '../../workout/widgets/exercise_countdown_timer.dart';
 
 /// The live logging state/callbacks for an exercise mid-workout. Passing
@@ -306,6 +307,15 @@ class _ExerciseTileState extends State<ExerciseTile> {
           ),
         ),
         if (trailing != null) ...[const SizedBox(width: 8), trailing],
+        if (exercise.libraryId != null)
+          IconButton(
+            key: const Key('exerciseInfo'),
+            tooltip: 'Photos and steps for ${exercise.name}',
+            icon: const Icon(LucideIcons600.info, size: 20),
+            color: colors.textSecondary,
+            onPressed: () =>
+                showExerciseDetailSheet(context, exercise.libraryId!),
+          ),
         IconButton(
           tooltip: 'Watch ${exercise.name} on YouTube Shorts',
           icon: const Icon(LucideIcons600.playCircle, size: 20),

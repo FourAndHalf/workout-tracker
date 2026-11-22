@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/explore/explore_screen.dart';
+import 'features/explore/split_detail_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/home/main_navigation_scaffold.dart';
 import 'features/program/program_list_screen.dart';
@@ -44,6 +46,24 @@ final appRouter = GoRouter(
                     final dayId = state.pathParameters['dayId']!;
                     return DayDetailScreen(programId: programId, dayId: dayId);
                   },
+                ),
+              ],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/explore',
+              builder: (context, state) => ExploreScreen(
+                startOnSplits: state.uri.queryParameters['tab'] == 'splits',
+              ),
+              routes: [
+                GoRoute(
+                  path: 'split/:programId',
+                  builder: (context, state) => SplitDetailScreen(
+                    programId: state.pathParameters['programId']!,
+                  ),
                 ),
               ],
             ),

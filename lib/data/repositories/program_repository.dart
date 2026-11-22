@@ -22,6 +22,20 @@ class ProgramRepository {
     'endurance-run-8wk': 'assets/programs/endurance_run_8wk.json',
   };
 
+  /// Gym and home training splits, browsed from the Explore tab. They are kept
+  /// apart from [bundledProgramAssets] so the Programs track switcher stays
+  /// short; a split shows there once you pick it.
+  static const bundledSplitAssets = {
+    'split-gym-full-3': 'assets/programs/split_gym_full_3.json',
+    'split-gym-ul-4': 'assets/programs/split_gym_ul_4.json',
+    'split-gym-hybrid-5': 'assets/programs/split_gym_hybrid_5.json',
+    'split-gym-ppl-6': 'assets/programs/split_gym_ppl_6.json',
+    'split-home-full-3': 'assets/programs/split_home_full_3.json',
+    'split-home-ul-4': 'assets/programs/split_home_ul_4.json',
+    'split-home-ppl-6': 'assets/programs/split_home_ppl_6.json',
+    'split-home-bodyweight-3': 'assets/programs/split_home_bodyweight_3.json',
+  };
+
   /// Load the complete bundled program and upgrade an older cached week-one copy.
   Future<ProgramModel> loadDefaultProgram() =>
       loadBundledProgram(defaultProgramId);
@@ -31,6 +45,7 @@ class ProgramRepository {
   Future<ProgramModel> loadBundledProgram(String programId) async {
     final assetPath =
         bundledProgramAssets[programId] ??
+        bundledSplitAssets[programId] ??
         bundledProgramAssets[defaultProgramId]!;
     final jsonString = await rootBundle.loadString(assetPath);
     final bundledJson = jsonDecode(jsonString) as Map<String, dynamic>;
@@ -42,6 +57,10 @@ class ProgramRepository {
   /// Every bundled track, in the order they are listed in the switcher.
   Future<List<ProgramModel>> loadBundledPrograms() =>
       Future.wait(bundledProgramAssets.keys.map(loadBundledProgram));
+
+  /// Every bundled gym and home split, in browsing order.
+  Future<List<ProgramModel>> loadBundledSplits() =>
+      Future.wait(bundledSplitAssets.keys.map(loadBundledProgram));
 
   /// Save or update a program in SQLite
   Future<void> saveProgram(ProgramModel program, String rawJson) async {

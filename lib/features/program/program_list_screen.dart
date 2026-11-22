@@ -278,9 +278,20 @@ class _TrackSwitcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final programs = ref.watch(availableProgramsProvider).value;
-    if (programs == null || programs.length < 2) return const SizedBox.shrink();
+    final tracks = ref.watch(availableProgramsProvider).value;
+    if (tracks == null) return const SizedBox.shrink();
     final selectedId = ref.watch(selectedProgramIdProvider);
+    // Gym and home splits are browsed in Explore; the one you picked shows
+    // here as its own chip so you can see it is active.
+    final selectedSplit = ref.watch(currentProgramProvider).value;
+    final programs = [
+      ...tracks,
+      if (selectedSplit != null &&
+          selectedSplit.isSplit &&
+          selectedSplit.programId == selectedId)
+        selectedSplit,
+    ];
+    if (programs.length < 2) return const SizedBox.shrink();
 
     void select(String programId) {
       if (programId == selectedId) return;
@@ -319,6 +330,16 @@ class _TrackSwitcher extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
             ],
+            ActionChip(
+              key: const ValueKey('track-splits'),
+              avatar: Icon(
+                LucideIcons600.compass,
+                size: 16,
+                color: context.colors.textPrimary,
+              ),
+              label: const Text('Gym & home splits'),
+              onPressed: () => context.go('/explore?tab=splits'),
+            ),
           ],
         ),
       ),

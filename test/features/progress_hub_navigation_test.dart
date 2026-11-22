@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('bottom nav has 4 tabs and History lives under Progress', (
+  testWidgets('bottom nav has 5 tabs and History lives under Progress', (
     tester,
   ) async {
     final db = AppDatabase(NativeDatabase.memory());
@@ -27,7 +27,7 @@ void main() {
     expect(bar, findsOneWidget);
     expect(
       find.descendant(of: bar, matching: find.byType(NavigationDestination)),
-      findsNWidgets(4),
+      findsNWidgets(5),
     );
     expect(
       find.descendant(of: bar, matching: find.text('History')),
@@ -36,7 +36,7 @@ void main() {
 
     // Every tab but Home shares the same day header; Home opens with its own
     // greeting instead.
-    for (final tab in ['Programs', 'Progress', 'Nutrition']) {
+    for (final tab in ['Programs', 'Explore', 'Progress', 'Nutrition']) {
       await tester.tap(find.descendant(of: bar, matching: find.text(tab)));
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byType(DayAppBar), findsOneWidget, reason: tab);

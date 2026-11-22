@@ -1,0 +1,1793 @@
+{
+ "schemaVersion": 1,
+ "programId": "split-home-full-3",
+ "programName": "Home Full Body",
+ "category": "split",
+ "setting": "home",
+ "level": "Beginner",
+ "daysPerWeek": 3,
+ "schedule": "Mon / Wed / Fri",
+ "description": "Dumbbells, a pull-up bar and your bodyweight. Three full-body sessions a week with push-ups, rows and single-leg work. Hard sets taken close to failure grow muscle at home, too.",
+ "sourceNote": "Mon / Wed / Fri · Beginner · Home",
+ "durationWeeks": 4,
+ "weeklySets": {
+  "chest": {
+   "direct": 10,
+   "indirect": 0,
+   "effective": 10.0
+  },
+  "shoulders": {
+   "direct": 9,
+   "indirect": 20,
+   "effective": 14.0
+  },
+  "back": {
+   "direct": 9,
+   "indirect": 0,
+   "effective": 9.0
+  },
+  "biceps": {
+   "direct": 2,
+   "indirect": 9,
+   "effective": 6.5
+  },
+  "triceps": {
+   "direct": 2,
+   "indirect": 10,
+   "effective": 7.0
+  },
+  "core": {
+   "direct": 9,
+   "indirect": 0,
+   "effective": 9.0
+  },
+  "lower-back": {
+   "direct": 0,
+   "indirect": 3,
+   "effective": 1.5
+  },
+  "glutes": {
+   "direct": 6,
+   "indirect": 10,
+   "effective": 11.0
+  },
+  "quads": {
+   "direct": 10,
+   "indirect": 0,
+   "effective": 10.0
+  },
+  "hamstrings": {
+   "direct": 3,
+   "indirect": 13,
+   "effective": 9.5
+  },
+  "calves": {
+   "direct": 4,
+   "indirect": 0,
+   "effective": 4.0
+  }
+ },
+ "logModes": {
+  "weightReps": "Weight field + reps field.",
+  "repsOnly": "Reps field only (bodyweight).",
+  "time": "Duration in seconds."
+ },
+ "blockTypes": {
+  "straight": "Exercises performed and rested independently.",
+  "superset": "Two exercises back to back, no rest between."
+ },
+ "weeks": [
+  {
+   "number": 1,
+   "id": "split-home-full-3-w1",
+   "title": "Settle in",
+   "focus": "Stop each set about 3 reps before failure. Learn the lifts and find your starting weights.",
+   "days": [
+    {
+     "id": "split-home-full-3-w1-d1",
+     "name": "Full Body A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "chest",
+      "back",
+      "shoulders",
+      "glutes"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w1-d1-b1",
+       "name": "Goblet Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-01",
+         "order": 1,
+         "name": "Goblet Squat",
+         "targetSets": 4,
+         "libraryId": "Goblet_Squat",
+         "instructions": "Hold a dumbbell at your chest. Sit deep, elbows between your knees, drive up.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d1-b2",
+       "name": "Pushups",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-02",
+         "order": 1,
+         "name": "Pushups",
+         "targetSets": 4,
+         "libraryId": "Pushups",
+         "instructions": "Hands under shoulders, body in one line. Chest to the floor, elbows about 45° from your ribs.",
+         "logMode": "repsOnly",
+         "prescription": "4 × 8–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d1-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d1-b4",
+       "name": "Standing Dumbbell Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-04",
+         "order": 1,
+         "name": "Standing Dumbbell Press",
+         "targetSets": 3,
+         "libraryId": "Standing_Dumbbell_Press",
+         "instructions": "Feet hip-width, ribs down. Press the dumbbells overhead and finish with biceps by your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d1-b5",
+       "name": "Single Leg Glute Bridge",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-05",
+         "order": 1,
+         "name": "Single Leg Glute Bridge",
+         "targetSets": 3,
+         "libraryId": "Single_Leg_Glute_Bridge",
+         "instructions": "One foot planted, other leg extended. Drive up through your heel and squeeze at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d1-b6",
+       "name": "Plank",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 45,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d1-06",
+         "order": 1,
+         "name": "Plank",
+         "targetSets": 3,
+         "libraryId": "Plank",
+         "instructions": "Forearms down, body in one straight line. Squeeze glutes and abs. Stop when your hips sag.",
+         "logMode": "time",
+         "durationSeconds": 45,
+         "prescription": "3 × 30–60 sec"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w1-d2",
+     "name": "Full Body B",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "hamstrings",
+      "chest",
+      "back",
+      "shoulders",
+      "quads"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w1-d2-b1",
+       "name": "Stiff-Legged Dumbbell Deadlift",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-01",
+         "order": 1,
+         "name": "Stiff-Legged Dumbbell Deadlift",
+         "targetSets": 3,
+         "libraryId": "Stiff-Legged_Dumbbell_Deadlift",
+         "instructions": "Soft knees, push your hips back until your hamstrings stretch, then stand tall.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d2-b2",
+       "name": "Push-Ups With Feet Elevated",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-02",
+         "order": 1,
+         "name": "Push-Ups With Feet Elevated",
+         "targetSets": 3,
+         "libraryId": "Push-Ups_With_Feet_Elevated",
+         "instructions": "Feet on a chair, body in one line. Lower your chest to the floor and press up.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d2-b3",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-03",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 3,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 5–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d2-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 3,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d2-b5",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-05",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d2-b6",
+       "name": "Hammer Curls + Standing Dumbbell Triceps Extension",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d2-06",
+         "order": 1,
+         "name": "Hammer Curls",
+         "targetSets": 2,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-home-full-3-w1-d2-07",
+         "order": 2,
+         "name": "Standing Dumbbell Triceps Extension",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Triceps_Extension",
+         "instructions": "Hold one dumbbell overhead with both hands. Lower behind your head and press up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w1-d3",
+     "name": "Full Body C",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "core",
+      "calves",
+      "glutes",
+      "quads",
+      "chest"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w1-d3-b1",
+       "name": "Dumbbell Lunges",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-01",
+         "order": 1,
+         "name": "Dumbbell Lunges",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Lunges",
+         "instructions": "Step forward until your front thigh is parallel, back knee near the floor. Push back to standing.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b2",
+       "name": "Dumbbell Floor Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-02",
+         "order": 1,
+         "name": "Dumbbell Floor Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Floor_Press",
+         "instructions": "Lie on the floor, lower until your upper arms touch down, pause, press. Easy on the shoulders.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b3",
+       "name": "Bent Over Two-Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-03",
+         "order": 1,
+         "name": "Bent Over Two-Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "Bent_Over_Two-Dumbbell_Row",
+         "instructions": "Hinge forward, flat back. Row both dumbbells to your hips, keeping elbows close.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b4",
+       "name": "Reverse Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-04",
+         "order": 1,
+         "name": "Reverse Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Flyes",
+         "instructions": "Hinge forward with a flat back. Raise your arms out wide with soft elbows. No swinging.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b5",
+       "name": "Standing Dumbbell Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-05",
+         "order": 1,
+         "name": "Standing Dumbbell Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Standing_Dumbbell_Calf_Raise",
+         "instructions": "Stand on a step edge with a dumbbell. Heels drop below the step, then rise as high as you can.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b6",
+       "name": "Dead Bug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-06",
+         "order": 1,
+         "name": "Dead Bug",
+         "targetSets": 3,
+         "libraryId": "Dead_Bug",
+         "instructions": "Lower back pressed into the floor. Extend opposite arm and leg slowly, then swap.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w1-d3-b7",
+       "name": "Crunches",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w1-d3-07",
+         "order": 1,
+         "name": "Crunches",
+         "targetSets": 3,
+         "libraryId": "Crunches",
+         "instructions": "Lower back on the floor. Curl your ribs toward your hips and exhale at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 15–25"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 2,
+   "id": "split-home-full-3-w2",
+   "title": "Add reps",
+   "focus": "Beat last week's reps on your main lifts, stopping about 2 reps short of failure.",
+   "days": [
+    {
+     "id": "split-home-full-3-w2-d1",
+     "name": "Full Body A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "chest",
+      "back",
+      "shoulders",
+      "glutes"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w2-d1-b1",
+       "name": "Goblet Squat",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-01",
+         "order": 1,
+         "name": "Goblet Squat",
+         "targetSets": 4,
+         "libraryId": "Goblet_Squat",
+         "instructions": "Hold a dumbbell at your chest. Sit deep, elbows between your knees, drive up.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d1-b2",
+       "name": "Pushups",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-02",
+         "order": 1,
+         "name": "Pushups",
+         "targetSets": 4,
+         "libraryId": "Pushups",
+         "instructions": "Hands under shoulders, body in one line. Chest to the floor, elbows about 45° from your ribs.",
+         "logMode": "repsOnly",
+         "prescription": "4 × 8–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d1-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d1-b4",
+       "name": "Standing Dumbbell Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-04",
+         "order": 1,
+         "name": "Standing Dumbbell Press",
+         "targetSets": 3,
+         "libraryId": "Standing_Dumbbell_Press",
+         "instructions": "Feet hip-width, ribs down. Press the dumbbells overhead and finish with biceps by your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d1-b5",
+       "name": "Single Leg Glute Bridge",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-05",
+         "order": 1,
+         "name": "Single Leg Glute Bridge",
+         "targetSets": 3,
+         "libraryId": "Single_Leg_Glute_Bridge",
+         "instructions": "One foot planted, other leg extended. Drive up through your heel and squeeze at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d1-b6",
+       "name": "Plank",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 45,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d1-06",
+         "order": 1,
+         "name": "Plank",
+         "targetSets": 3,
+         "libraryId": "Plank",
+         "instructions": "Forearms down, body in one straight line. Squeeze glutes and abs. Stop when your hips sag.",
+         "logMode": "time",
+         "durationSeconds": 45,
+         "prescription": "3 × 30–60 sec"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w2-d2",
+     "name": "Full Body B",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "hamstrings",
+      "chest",
+      "back",
+      "shoulders",
+      "quads"
+     ],
+     "estimatedDurationSeconds": 3000,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w2-d2-b1",
+       "name": "Stiff-Legged Dumbbell Deadlift",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-01",
+         "order": 1,
+         "name": "Stiff-Legged Dumbbell Deadlift",
+         "targetSets": 3,
+         "libraryId": "Stiff-Legged_Dumbbell_Deadlift",
+         "instructions": "Soft knees, push your hips back until your hamstrings stretch, then stand tall.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d2-b2",
+       "name": "Push-Ups With Feet Elevated",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-02",
+         "order": 1,
+         "name": "Push-Ups With Feet Elevated",
+         "targetSets": 3,
+         "libraryId": "Push-Ups_With_Feet_Elevated",
+         "instructions": "Feet on a chair, body in one line. Lower your chest to the floor and press up.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d2-b3",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-03",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 3,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 5–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d2-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 3,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d2-b5",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-05",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d2-b6",
+       "name": "Hammer Curls + Standing Dumbbell Triceps Extension",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d2-06",
+         "order": 1,
+         "name": "Hammer Curls",
+         "targetSets": 2,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-home-full-3-w2-d2-07",
+         "order": 2,
+         "name": "Standing Dumbbell Triceps Extension",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Triceps_Extension",
+         "instructions": "Hold one dumbbell overhead with both hands. Lower behind your head and press up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w2-d3",
+     "name": "Full Body C",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "core",
+      "calves",
+      "glutes",
+      "quads",
+      "chest"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w2-d3-b1",
+       "name": "Dumbbell Lunges",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-01",
+         "order": 1,
+         "name": "Dumbbell Lunges",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Lunges",
+         "instructions": "Step forward until your front thigh is parallel, back knee near the floor. Push back to standing.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b2",
+       "name": "Dumbbell Floor Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-02",
+         "order": 1,
+         "name": "Dumbbell Floor Press",
+         "targetSets": 3,
+         "libraryId": "Dumbbell_Floor_Press",
+         "instructions": "Lie on the floor, lower until your upper arms touch down, pause, press. Easy on the shoulders.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b3",
+       "name": "Bent Over Two-Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-03",
+         "order": 1,
+         "name": "Bent Over Two-Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "Bent_Over_Two-Dumbbell_Row",
+         "instructions": "Hinge forward, flat back. Row both dumbbells to your hips, keeping elbows close.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b4",
+       "name": "Reverse Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-04",
+         "order": 1,
+         "name": "Reverse Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Flyes",
+         "instructions": "Hinge forward with a flat back. Raise your arms out wide with soft elbows. No swinging.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b5",
+       "name": "Standing Dumbbell Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-05",
+         "order": 1,
+         "name": "Standing Dumbbell Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Standing_Dumbbell_Calf_Raise",
+         "instructions": "Stand on a step edge with a dumbbell. Heels drop below the step, then rise as high as you can.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b6",
+       "name": "Dead Bug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-06",
+         "order": 1,
+         "name": "Dead Bug",
+         "targetSets": 3,
+         "libraryId": "Dead_Bug",
+         "instructions": "Lower back pressed into the floor. Extend opposite arm and leg slowly, then swap.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w2-d3-b7",
+       "name": "Crunches",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w2-d3-07",
+         "order": 1,
+         "name": "Crunches",
+         "targetSets": 3,
+         "libraryId": "Crunches",
+         "instructions": "Lower back on the floor. Curl your ribs toward your hips and exhale at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 15–25"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 3,
+   "id": "split-home-full-3-w3",
+   "title": "Push",
+   "focus": "The hardest week. The first two lifts each day get an extra set; stop about 1 rep short of failure.",
+   "days": [
+    {
+     "id": "split-home-full-3-w3-d1",
+     "name": "Full Body A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "chest",
+      "back",
+      "shoulders",
+      "glutes"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w3-d1-b1",
+       "name": "Goblet Squat",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-01",
+         "order": 1,
+         "name": "Goblet Squat",
+         "targetSets": 5,
+         "libraryId": "Goblet_Squat",
+         "instructions": "Hold a dumbbell at your chest. Sit deep, elbows between your knees, drive up.",
+         "logMode": "weightReps",
+         "prescription": "5 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d1-b2",
+       "name": "Pushups",
+       "type": "straight",
+       "targetSets": 5,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-02",
+         "order": 1,
+         "name": "Pushups",
+         "targetSets": 5,
+         "libraryId": "Pushups",
+         "instructions": "Hands under shoulders, body in one line. Chest to the floor, elbows about 45° from your ribs.",
+         "logMode": "repsOnly",
+         "prescription": "5 × 8–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d1-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d1-b4",
+       "name": "Standing Dumbbell Press",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-04",
+         "order": 1,
+         "name": "Standing Dumbbell Press",
+         "targetSets": 3,
+         "libraryId": "Standing_Dumbbell_Press",
+         "instructions": "Feet hip-width, ribs down. Press the dumbbells overhead and finish with biceps by your ears.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d1-b5",
+       "name": "Single Leg Glute Bridge",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-05",
+         "order": 1,
+         "name": "Single Leg Glute Bridge",
+         "targetSets": 3,
+         "libraryId": "Single_Leg_Glute_Bridge",
+         "instructions": "One foot planted, other leg extended. Drive up through your heel and squeeze at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d1-b6",
+       "name": "Plank",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 45,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d1-06",
+         "order": 1,
+         "name": "Plank",
+         "targetSets": 3,
+         "libraryId": "Plank",
+         "instructions": "Forearms down, body in one straight line. Squeeze glutes and abs. Stop when your hips sag.",
+         "logMode": "time",
+         "durationSeconds": 45,
+         "prescription": "3 × 30–60 sec"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w3-d2",
+     "name": "Full Body B",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "hamstrings",
+      "chest",
+      "back",
+      "shoulders",
+      "quads"
+     ],
+     "estimatedDurationSeconds": 3300,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w3-d2-b1",
+       "name": "Stiff-Legged Dumbbell Deadlift",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-01",
+         "order": 1,
+         "name": "Stiff-Legged Dumbbell Deadlift",
+         "targetSets": 4,
+         "libraryId": "Stiff-Legged_Dumbbell_Deadlift",
+         "instructions": "Soft knees, push your hips back until your hamstrings stretch, then stand tall.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d2-b2",
+       "name": "Push-Ups With Feet Elevated",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-02",
+         "order": 1,
+         "name": "Push-Ups With Feet Elevated",
+         "targetSets": 4,
+         "libraryId": "Push-Ups_With_Feet_Elevated",
+         "instructions": "Feet on a chair, body in one line. Lower your chest to the floor and press up.",
+         "logMode": "repsOnly",
+         "prescription": "4 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d2-b3",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-03",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 3,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 5–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d2-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 3,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d2-b5",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-05",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 3,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d2-b6",
+       "name": "Hammer Curls + Standing Dumbbell Triceps Extension",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d2-06",
+         "order": 1,
+         "name": "Hammer Curls",
+         "targetSets": 2,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-home-full-3-w3-d2-07",
+         "order": 2,
+         "name": "Standing Dumbbell Triceps Extension",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Triceps_Extension",
+         "instructions": "Hold one dumbbell overhead with both hands. Lower behind your head and press up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w3-d3",
+     "name": "Full Body C",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "core",
+      "calves",
+      "glutes",
+      "quads",
+      "chest"
+     ],
+     "estimatedDurationSeconds": 3600,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w3-d3-b1",
+       "name": "Dumbbell Lunges",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-01",
+         "order": 1,
+         "name": "Dumbbell Lunges",
+         "targetSets": 4,
+         "libraryId": "Dumbbell_Lunges",
+         "instructions": "Step forward until your front thigh is parallel, back knee near the floor. Push back to standing.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b2",
+       "name": "Dumbbell Floor Press",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-02",
+         "order": 1,
+         "name": "Dumbbell Floor Press",
+         "targetSets": 4,
+         "libraryId": "Dumbbell_Floor_Press",
+         "instructions": "Lie on the floor, lower until your upper arms touch down, pause, press. Easy on the shoulders.",
+         "logMode": "weightReps",
+         "prescription": "4 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b3",
+       "name": "Bent Over Two-Dumbbell Row",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-03",
+         "order": 1,
+         "name": "Bent Over Two-Dumbbell Row",
+         "targetSets": 3,
+         "libraryId": "Bent_Over_Two-Dumbbell_Row",
+         "instructions": "Hinge forward, flat back. Row both dumbbells to your hips, keeping elbows close.",
+         "logMode": "weightReps",
+         "prescription": "3 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b4",
+       "name": "Reverse Flyes",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-04",
+         "order": 1,
+         "name": "Reverse Flyes",
+         "targetSets": 3,
+         "libraryId": "Reverse_Flyes",
+         "instructions": "Hinge forward with a flat back. Raise your arms out wide with soft elbows. No swinging.",
+         "logMode": "weightReps",
+         "prescription": "3 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b5",
+       "name": "Standing Dumbbell Calf Raise",
+       "type": "straight",
+       "targetSets": 4,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-05",
+         "order": 1,
+         "name": "Standing Dumbbell Calf Raise",
+         "targetSets": 4,
+         "libraryId": "Standing_Dumbbell_Calf_Raise",
+         "instructions": "Stand on a step edge with a dumbbell. Heels drop below the step, then rise as high as you can.",
+         "logMode": "weightReps",
+         "prescription": "4 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b6",
+       "name": "Dead Bug",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-06",
+         "order": 1,
+         "name": "Dead Bug",
+         "targetSets": 3,
+         "libraryId": "Dead_Bug",
+         "instructions": "Lower back pressed into the floor. Extend opposite arm and leg slowly, then swap.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w3-d3-b7",
+       "name": "Crunches",
+       "type": "straight",
+       "targetSets": 3,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w3-d3-07",
+         "order": 1,
+         "name": "Crunches",
+         "targetSets": 3,
+         "libraryId": "Crunches",
+         "instructions": "Lower back on the floor. Curl your ribs toward your hips and exhale at the top.",
+         "logMode": "repsOnly",
+         "prescription": "3 × 15–25"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "number": 4,
+   "id": "split-home-full-3-w4",
+   "title": "Deload",
+   "focus": "Cut sets by about 40% and stay about 4 reps short of failure. Recovering now makes the next block better.",
+   "days": [
+    {
+     "id": "split-home-full-3-w4-d1",
+     "name": "Full Body A",
+     "order": 1,
+     "type": "strength",
+     "muscles": [
+      "quads",
+      "chest",
+      "back",
+      "shoulders",
+      "glutes"
+     ],
+     "estimatedDurationSeconds": 1800,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w4-d1-b1",
+       "name": "Goblet Squat",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-01",
+         "order": 1,
+         "name": "Goblet Squat",
+         "targetSets": 2,
+         "libraryId": "Goblet_Squat",
+         "instructions": "Hold a dumbbell at your chest. Sit deep, elbows between your knees, drive up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d1-b2",
+       "name": "Pushups",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-02",
+         "order": 1,
+         "name": "Pushups",
+         "targetSets": 2,
+         "libraryId": "Pushups",
+         "instructions": "Hands under shoulders, body in one line. Chest to the floor, elbows about 45° from your ribs.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 8–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d1-b3",
+       "name": "One-Arm Dumbbell Row",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-03",
+         "order": 1,
+         "name": "One-Arm Dumbbell Row",
+         "targetSets": 2,
+         "libraryId": "One-Arm_Dumbbell_Row",
+         "instructions": "Hand on a bench. Row the dumbbell toward your hip, keeping your shoulders level.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d1-b4",
+       "name": "Standing Dumbbell Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-04",
+         "order": 1,
+         "name": "Standing Dumbbell Press",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Press",
+         "instructions": "Feet hip-width, ribs down. Press the dumbbells overhead and finish with biceps by your ears.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d1-b5",
+       "name": "Single Leg Glute Bridge",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-05",
+         "order": 1,
+         "name": "Single Leg Glute Bridge",
+         "targetSets": 2,
+         "libraryId": "Single_Leg_Glute_Bridge",
+         "instructions": "One foot planted, other leg extended. Drive up through your heel and squeeze at the top.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d1-b6",
+       "name": "Plank",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 45,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d1-06",
+         "order": 1,
+         "name": "Plank",
+         "targetSets": 2,
+         "libraryId": "Plank",
+         "instructions": "Forearms down, body in one straight line. Squeeze glutes and abs. Stop when your hips sag.",
+         "logMode": "time",
+         "durationSeconds": 45,
+         "prescription": "2 × 30–60 sec"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w4-d2",
+     "name": "Full Body B",
+     "order": 2,
+     "type": "strength",
+     "muscles": [
+      "hamstrings",
+      "chest",
+      "back",
+      "shoulders",
+      "quads"
+     ],
+     "estimatedDurationSeconds": 2100,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w4-d2-b1",
+       "name": "Stiff-Legged Dumbbell Deadlift",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-01",
+         "order": 1,
+         "name": "Stiff-Legged Dumbbell Deadlift",
+         "targetSets": 2,
+         "libraryId": "Stiff-Legged_Dumbbell_Deadlift",
+         "instructions": "Soft knees, push your hips back until your hamstrings stretch, then stand tall.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d2-b2",
+       "name": "Push-Ups With Feet Elevated",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-02",
+         "order": 1,
+         "name": "Push-Ups With Feet Elevated",
+         "targetSets": 2,
+         "libraryId": "Push-Ups_With_Feet_Elevated",
+         "instructions": "Feet on a chair, body in one line. Lower your chest to the floor and press up.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 8–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d2-b3",
+       "name": "Pullups",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-03",
+         "order": 1,
+         "name": "Pullups",
+         "targetSets": 2,
+         "libraryId": "Pullups",
+         "instructions": "Start from a dead hang. Pull your chest toward the bar by driving your elbows down. Lower fully.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 5–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d2-b4",
+       "name": "Side Lateral Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-04",
+         "order": 1,
+         "name": "Side Lateral Raise",
+         "targetSets": 2,
+         "libraryId": "Side_Lateral_Raise",
+         "instructions": "Slight lean forward. Lift your elbows out to shoulder height, pour the dumbbells like a jug.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d2-b5",
+       "name": "Split Squat with Dumbbells",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-05",
+         "order": 1,
+         "name": "Split Squat with Dumbbells",
+         "targetSets": 2,
+         "libraryId": "Split_Squat_with_Dumbbells",
+         "instructions": "Long stance, drop your back knee straight down. Keep your torso upright and front heel planted.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d2-b6",
+       "name": "Hammer Curls + Standing Dumbbell Triceps Extension",
+       "type": "superset",
+       "targetSets": 2,
+       "restSeconds": 90,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d2-06",
+         "order": 1,
+         "name": "Hammer Curls",
+         "targetSets": 2,
+         "libraryId": "Hammer_Curls",
+         "instructions": "Palms face each other. Curl up without twisting your wrists.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        },
+        {
+         "id": "split-home-full-3-w4-d2-07",
+         "order": 2,
+         "name": "Standing Dumbbell Triceps Extension",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Triceps_Extension",
+         "instructions": "Hold one dumbbell overhead with both hands. Lower behind your head and press up.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "split-home-full-3-w4-d3",
+     "name": "Full Body C",
+     "order": 3,
+     "type": "strength",
+     "muscles": [
+      "core",
+      "calves",
+      "glutes",
+      "quads",
+      "chest"
+     ],
+     "estimatedDurationSeconds": 2100,
+     "blocks": [
+      {
+       "id": "split-home-full-3-w4-d3-b1",
+       "name": "Dumbbell Lunges",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-01",
+         "order": 1,
+         "name": "Dumbbell Lunges",
+         "targetSets": 2,
+         "libraryId": "Dumbbell_Lunges",
+         "instructions": "Step forward until your front thigh is parallel, back knee near the floor. Push back to standing.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b2",
+       "name": "Dumbbell Floor Press",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-02",
+         "order": 1,
+         "name": "Dumbbell Floor Press",
+         "targetSets": 2,
+         "libraryId": "Dumbbell_Floor_Press",
+         "instructions": "Lie on the floor, lower until your upper arms touch down, pause, press. Easy on the shoulders.",
+         "logMode": "weightReps",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b3",
+       "name": "Bent Over Two-Dumbbell Row",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-03",
+         "order": 1,
+         "name": "Bent Over Two-Dumbbell Row",
+         "targetSets": 2,
+         "libraryId": "Bent_Over_Two-Dumbbell_Row",
+         "instructions": "Hinge forward, flat back. Row both dumbbells to your hips, keeping elbows close.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–15"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b4",
+       "name": "Reverse Flyes",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-04",
+         "order": 1,
+         "name": "Reverse Flyes",
+         "targetSets": 2,
+         "libraryId": "Reverse_Flyes",
+         "instructions": "Hinge forward with a flat back. Raise your arms out wide with soft elbows. No swinging.",
+         "logMode": "weightReps",
+         "prescription": "2 × 12–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b5",
+       "name": "Standing Dumbbell Calf Raise",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-05",
+         "order": 1,
+         "name": "Standing Dumbbell Calf Raise",
+         "targetSets": 2,
+         "libraryId": "Standing_Dumbbell_Calf_Raise",
+         "instructions": "Stand on a step edge with a dumbbell. Heels drop below the step, then rise as high as you can.",
+         "logMode": "weightReps",
+         "prescription": "2 × 10–20"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b6",
+       "name": "Dead Bug",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 120,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-06",
+         "order": 1,
+         "name": "Dead Bug",
+         "targetSets": 2,
+         "libraryId": "Dead_Bug",
+         "instructions": "Lower back pressed into the floor. Extend opposite arm and leg slowly, then swap.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 8–12"
+        }
+       ]
+      },
+      {
+       "id": "split-home-full-3-w4-d3-b7",
+       "name": "Crunches",
+       "type": "straight",
+       "targetSets": 2,
+       "restSeconds": 75,
+       "exercises": [
+        {
+         "id": "split-home-full-3-w4-d3-07",
+         "order": 1,
+         "name": "Crunches",
+         "targetSets": 2,
+         "libraryId": "Crunches",
+         "instructions": "Lower back on the floor. Curl your ribs toward your hips and exhale at the top.",
+         "logMode": "repsOnly",
+         "prescription": "2 × 15–25"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
