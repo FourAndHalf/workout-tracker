@@ -267,10 +267,14 @@ def build_split(sp, exercises, roles):
                     b["exercises"].append(entry)
                     seconds += block_sets * ((int(hi) if e["timed"] else 45) + rest)
                     # Muscle chips use week-1 sets so a deload week keeps them.
-                    for gm in roles[ex]["primary"]:
+                    for gm in sorted(roles[ex]["primary"]):
                         day_sets[gm] = day_sets.get(gm, 0) + base_sets
                 blocks.append(b)
-            muscles = [m for m, _ in sorted(day_sets.items(), key=lambda kv: -kv[1]) if day_sets[m] >= 3][:5]
+            # Ties break on the library's muscle order so output is stable
+            # across runs (set iteration order depends on the hash seed).
+            order = [m["id"] for m in LM.MUSCLES]
+            muscles = [m for m, _ in sorted(day_sets.items(), key=lambda kv: (-kv[1], order.index(kv[0])))
+                       if day_sets[m] >= 3][:5]
             days.append({"id": did, "name": dname, "order": d, "type": "strength", "muscles": muscles,
                          "estimatedDurationSeconds": int(round(seconds / 300.0)) * 300, "blocks": blocks})
         weeks.append({"number": w, "id": f"{sp['id']}-w{w}", "title": wtitle, "focus": wfocus, "days": days})

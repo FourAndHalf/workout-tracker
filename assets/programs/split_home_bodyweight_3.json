@@ -81,9 +81,9 @@
      "muscles": [
       "chest",
       "back",
-      "glutes",
       "triceps",
-      "core"
+      "core",
+      "glutes"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -212,8 +212,8 @@
      "muscles": [
       "chest",
       "back",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -340,10 +340,10 @@
      "type": "strength",
      "muscles": [
       "core",
-      "quads",
       "chest",
       "back",
-      "glutes"
+      "glutes",
+      "quads"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -499,9 +499,9 @@
      "muscles": [
       "chest",
       "back",
-      "glutes",
       "triceps",
-      "core"
+      "core",
+      "glutes"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -630,8 +630,8 @@
      "muscles": [
       "chest",
       "back",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -758,10 +758,10 @@
      "type": "strength",
      "muscles": [
       "core",
-      "quads",
       "chest",
       "back",
-      "glutes"
+      "glutes",
+      "quads"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -917,9 +917,9 @@
      "muscles": [
       "chest",
       "back",
-      "glutes",
       "triceps",
-      "core"
+      "core",
+      "glutes"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -1048,8 +1048,8 @@
      "muscles": [
       "chest",
       "back",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 3300,
      "blocks": [
@@ -1176,10 +1176,10 @@
      "type": "strength",
      "muscles": [
       "core",
-      "quads",
       "chest",
       "back",
-      "glutes"
+      "glutes",
+      "quads"
      ],
      "estimatedDurationSeconds": 3300,
      "blocks": [
@@ -1335,9 +1335,9 @@
      "muscles": [
       "chest",
       "back",
-      "glutes",
       "triceps",
-      "core"
+      "core",
+      "glutes"
      ],
      "estimatedDurationSeconds": 1800,
      "blocks": [
@@ -1466,8 +1466,8 @@
      "muscles": [
       "chest",
       "back",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 1800,
      "blocks": [
@@ -1594,10 +1594,10 @@
      "type": "strength",
      "muscles": [
       "core",
-      "quads",
       "chest",
       "back",
-      "glutes"
+      "glutes",
+      "quads"
      ],
      "estimatedDurationSeconds": 2100,
      "blocks": [

@@ -350,8 +350,8 @@
       "quads",
       "glutes",
       "calves",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -726,10 +726,10 @@
      "order": 6,
      "type": "strength",
      "muscles": [
-      "quads",
       "glutes",
+      "quads",
+      "core",
       "hamstrings",
-      "hips",
       "calves"
      ],
      "estimatedDurationSeconds": 2700,
@@ -1115,8 +1115,8 @@
       "quads",
       "glutes",
       "calves",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -1491,10 +1491,10 @@
      "order": 6,
      "type": "strength",
      "muscles": [
-      "quads",
       "glutes",
+      "quads",
+      "core",
       "hamstrings",
-      "hips",
       "calves"
      ],
      "estimatedDurationSeconds": 2700,
@@ -1880,8 +1880,8 @@
       "quads",
       "glutes",
       "calves",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -2256,10 +2256,10 @@
      "order": 6,
      "type": "strength",
      "muscles": [
-      "quads",
       "glutes",
+      "quads",
+      "core",
       "hamstrings",
-      "hips",
       "calves"
      ],
      "estimatedDurationSeconds": 3000,
@@ -2645,8 +2645,8 @@
       "quads",
       "glutes",
       "calves",
-      "hamstrings",
-      "core"
+      "core",
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 1800,
      "blocks": [
@@ -3021,10 +3021,10 @@
      "order": 6,
      "type": "strength",
      "muscles": [
-      "quads",
       "glutes",
+      "quads",
+      "core",
       "hamstrings",
-      "hips",
       "calves"
      ],
      "estimatedDurationSeconds": 1800,

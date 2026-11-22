@@ -56,6 +56,8 @@ to decide what to do next.
   [free-exercise-db](https://github.com/yuhonas/free-exercise-db) (public
   domain); the picks, notes and splits are original. Regenerate the assets with
   `python3 tool/build_library.py` (needs Pillow).
+- **Verifying changes** — `docs/CHANGES.md` records every change with an ID
+  and how to check it; `tool/verify_changes.sh` re-runs all of the checks.
 - **Live workout logging** — track sets, reps, weight, duration, distance,
   failure, and rest-pause/cumulative work. Pause and resume an active workout,
   use elapsed, rest, and timed-exercise countdowns, and return to it from the

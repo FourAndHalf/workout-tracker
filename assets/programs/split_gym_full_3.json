@@ -84,11 +84,11 @@
      "order": 1,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
-      "back",
       "shoulders",
-      "core"
+      "back",
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -225,11 +225,11 @@
      "order": 2,
      "type": "strength",
      "muscles": [
-      "hamstrings",
+      "chest",
       "shoulders",
       "back",
-      "quads",
-      "chest"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3300,
      "blocks": [
@@ -374,11 +374,11 @@
      "order": 3,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
+      "shoulders",
       "back",
-      "hamstrings",
-      "shoulders"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -541,11 +541,11 @@
      "order": 1,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
-      "back",
       "shoulders",
-      "core"
+      "back",
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -682,11 +682,11 @@
      "order": 2,
      "type": "strength",
      "muscles": [
-      "hamstrings",
+      "chest",
       "shoulders",
       "back",
-      "quads",
-      "chest"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3300,
      "blocks": [
@@ -831,11 +831,11 @@
      "order": 3,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
+      "shoulders",
       "back",
-      "hamstrings",
-      "shoulders"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -998,11 +998,11 @@
      "order": 1,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
-      "back",
       "shoulders",
-      "core"
+      "back",
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -1139,11 +1139,11 @@
      "order": 2,
      "type": "strength",
      "muscles": [
-      "hamstrings",
+      "chest",
       "shoulders",
       "back",
-      "quads",
-      "chest"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -1288,11 +1288,11 @@
      "order": 3,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
+      "shoulders",
       "back",
-      "hamstrings",
-      "shoulders"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 3300,
      "blocks": [
@@ -1455,11 +1455,11 @@
      "order": 1,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
-      "back",
       "shoulders",
-      "core"
+      "back",
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 2100,
      "blocks": [
@@ -1596,11 +1596,11 @@
      "order": 2,
      "type": "strength",
      "muscles": [
-      "hamstrings",
+      "chest",
       "shoulders",
       "back",
-      "quads",
-      "chest"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 2100,
      "blocks": [
@@ -1745,11 +1745,11 @@
      "order": 3,
      "type": "strength",
      "muscles": [
-      "quads",
       "chest",
+      "shoulders",
       "back",
-      "hamstrings",
-      "shoulders"
+      "core",
+      "quads"
      ],
      "estimatedDurationSeconds": 2400,
      "blocks": [

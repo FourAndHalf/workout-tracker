@@ -92,8 +92,8 @@
       "back",
       "shoulders",
       "chest",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -231,9 +231,9 @@
      "muscles": [
       "quads",
       "calves",
-      "hamstrings",
+      "core",
       "glutes",
-      "core"
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -363,8 +363,8 @@
       "chest",
       "back",
       "shoulders",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -502,9 +502,9 @@
      "muscles": [
       "quads",
       "hamstrings",
-      "glutes",
+      "core",
       "lower-back",
-      "calves"
+      "glutes"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -641,8 +641,8 @@
       "back",
       "shoulders",
       "chest",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -780,9 +780,9 @@
      "muscles": [
       "quads",
       "calves",
-      "hamstrings",
+      "core",
       "glutes",
-      "core"
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -912,8 +912,8 @@
       "chest",
       "back",
       "shoulders",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3600,
      "blocks": [
@@ -1051,9 +1051,9 @@
      "muscles": [
       "quads",
       "hamstrings",
-      "glutes",
+      "core",
       "lower-back",
-      "calves"
+      "glutes"
      ],
      "estimatedDurationSeconds": 2700,
      "blocks": [
@@ -1190,8 +1190,8 @@
       "back",
       "shoulders",
       "chest",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3900,
      "blocks": [
@@ -1329,9 +1329,9 @@
      "muscles": [
       "quads",
       "calves",
-      "hamstrings",
+      "core",
       "glutes",
-      "core"
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -1461,8 +1461,8 @@
       "chest",
       "back",
       "shoulders",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 3900,
      "blocks": [
@@ -1600,9 +1600,9 @@
      "muscles": [
       "quads",
       "hamstrings",
-      "glutes",
+      "core",
       "lower-back",
-      "calves"
+      "glutes"
      ],
      "estimatedDurationSeconds": 3000,
      "blocks": [
@@ -1739,8 +1739,8 @@
       "back",
       "shoulders",
       "chest",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 2100,
      "blocks": [
@@ -1878,9 +1878,9 @@
      "muscles": [
       "quads",
       "calves",
-      "hamstrings",
+      "core",
       "glutes",
-      "core"
+      "hamstrings"
      ],
      "estimatedDurationSeconds": 1800,
      "blocks": [
@@ -2010,8 +2010,8 @@
       "chest",
       "back",
       "shoulders",
-      "triceps",
-      "biceps"
+      "biceps",
+      "triceps"
      ],
      "estimatedDurationSeconds": 2100,
      "blocks": [
@@ -2149,9 +2149,9 @@
      "muscles": [
       "quads",
       "hamstrings",
-      "glutes",
+      "core",
       "lower-back",
-      "calves"
+      "glutes"
      ],
      "estimatedDurationSeconds": 1800,
      "blocks": [
