@@ -313,6 +313,19 @@ class _TrackSwitcher extends ConsumerWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
+            // First, so it is on screen on a phone without scrolling.
+            ActionChip(
+              key: const ValueKey('track-splits'),
+              avatar: Icon(
+                LucideIcons600.compass,
+                size: 16,
+                color: context.colors.textPrimary,
+              ),
+              label: const Text('Splits'),
+              tooltip: 'Browse gym and home splits',
+              onPressed: () => context.go('/explore?tab=splits'),
+            ),
+            const SizedBox(width: 8),
             for (final program in programs) ...[
               ChoiceChip(
                 key: ValueKey('track-${program.programId}'),
@@ -330,16 +343,6 @@ class _TrackSwitcher extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
             ],
-            ActionChip(
-              key: const ValueKey('track-splits'),
-              avatar: Icon(
-                LucideIcons600.compass,
-                size: 16,
-                color: context.colors.textPrimary,
-              ),
-              label: const Text('Gym & home splits'),
-              onPressed: () => context.go('/explore?tab=splits'),
-            ),
           ],
         ),
       ),

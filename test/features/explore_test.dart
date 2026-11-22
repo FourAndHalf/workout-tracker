@@ -66,7 +66,7 @@ Future<void> _settle(WidgetTester tester) async {
 
 Future<ProviderContainer> _openExplore(WidgetTester tester) async {
   SharedPreferences.setMockInitialValues({});
-  tester.view.physicalSize = const Size(2400, 2200);
+  tester.view.physicalSize = const Size(430, 3200);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   final db = AppDatabase(NativeDatabase.memory());
@@ -105,12 +105,14 @@ void main() {
 
     expect(find.byKey(const Key('muscleTitle')), findsOneWidget);
     expect(find.text('Chest'), findsWidgets);
-    final chest = _library.muscle('chest')!;
-    final overview = chest.overview(TrainSetting.gym);
-    expect(find.text(_name(overview.first.exerciseId)), findsOneWidget);
-    expect(find.text('START HERE'), findsOneWidget);
-    expect(find.text(overview.first.prescription), findsOneWidget);
-    expect(find.textContaining('${overview.length} picks'), findsOneWidget);
+    // The first part of the muscle is selected by default.
+    final upper = _library.muscle('chest')!.regions.first;
+    final first = upper.gym.first;
+    expect(find.text(_name(first.exerciseId)), findsOneWidget);
+    expect(find.text('TOP PICK'), findsOneWidget);
+    expect(find.text(first.prescription), findsWidgets);
+    expect(find.text('${upper.gym.length} PICKS · GYM'), findsOneWidget);
+    expect(find.text('PRIMARY'), findsWidgets);
     // Photos and steps stay folded away until a card is opened.
     expect(find.byKey(const Key('exerciseCue')), findsNothing);
   });
@@ -119,19 +121,28 @@ void main() {
     tester,
   ) async {
     await _openExplore(tester);
-    final upper = _library.muscle('chest')!.region('upper-chest')!;
+    final mid = _library.muscle('chest')!.region('mid-chest')!;
 
-    await tester.tap(find.byKey(const ValueKey('region-upper-chest')));
+    await tester.tap(find.byKey(const ValueKey('region-mid-chest')));
     await _settle(tester);
-
-    expect(find.byKey(const Key('regionNote')), findsOneWidget);
-    expect(find.textContaining('30°'), findsOneWidget);
-    for (final pick in upper.gym) {
+    for (final pick in mid.gym) {
       expect(find.text(_name(pick.exerciseId)), findsOneWidget);
     }
-    expect(find.text('Clavicular head'), findsOneWidget);
+    expect(find.textContaining('Sternal head'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('region-all')));
+    // The evidence note sits behind the latin name.
+    expect(find.byKey(const Key('regionNote')), findsNothing);
+    await tester.tap(find.byKey(const Key('aboutToggle')));
+    await _settle(tester);
+    expect(find.byKey(const Key('regionNote')), findsOneWidget);
+    expect(find.text(mid.note), findsOneWidget);
+
+    // The note follows the selected part.
+    await tester.tap(find.byKey(const ValueKey('region-upper-chest')));
+    await _settle(tester);
+    expect(find.textContaining('30°'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('aboutToggle')));
     await _settle(tester);
     expect(find.byKey(const Key('regionNote')), findsNothing);
   });
@@ -151,7 +162,7 @@ void main() {
         .where((id) => !side.home.any((h) => h.exerciseId == id));
     expect(gymOnly, isNotEmpty);
 
-    await tester.tap(find.text('Home').first);
+    await tester.tap(find.byKey(const ValueKey('toggle-home')));
     await _settle(tester);
 
     expect(container.read(exploreSettingProvider), TrainSetting.home);
@@ -166,7 +177,7 @@ void main() {
     tester,
   ) async {
     await _openExplore(tester);
-    final first = _library.muscle('chest')!.overview(TrainSetting.gym).first;
+    final first = _library.muscle('chest')!.regions.first.gym.first;
     final exercise = _library.exercises[first.exerciseId]!;
 
     await tester.tap(find.text(exercise.name));
@@ -176,7 +187,6 @@ void main() {
     expect(find.text(exercise.cue), findsOneWidget);
     expect(find.text('START'), findsOneWidget);
     expect(find.text('FINISH'), findsOneWidget);
-    expect(find.byType(Image), findsNWidgets(2));
     expect(find.text('1.'), findsOneWidget);
     expect(find.text(exercise.steps.first), findsOneWidget);
     expect(find.byKey(const Key('watchFormVideos')), findsOneWidget);
@@ -190,33 +200,25 @@ void main() {
     tester,
   ) async {
     final container = await _openExplore(tester);
+    String view() => tester.widget<BodyFigure>(find.byType(BodyFigure)).view;
 
     await _pickMuscle(tester, 'glutes');
     expect(container.read(exploreMuscleProvider), 'glutes');
-    expect(find.text('Gluteus maximus, medius'), findsOneWidget);
-    expect(
-      tester
-          .widget<ChoiceChip>(find.byKey(const ValueKey('view-back')))
-          .selected,
-      isTrue,
-    );
+    expect(find.text('Glutes'), findsWidgets);
+    expect(view(), 'back');
 
-    await tester.tap(find.byKey(const ValueKey('view-front')));
+    await tester.tap(find.byKey(const ValueKey('toggle-front')));
     await _settle(tester);
-    expect(
-      tester
-          .widget<ChoiceChip>(find.byKey(const ValueKey('view-front')))
-          .selected,
-      isTrue,
-    );
+    expect(view(), 'front');
+
+    // Rear delts only show from behind.
+    await _pickMuscle(tester, 'shoulders');
+    await tester.tap(find.byKey(const ValueKey('region-rear-delts')));
+    await _settle(tester);
+    expect(view(), 'back');
 
     await _pickMuscle(tester, 'chest');
-    expect(
-      tester
-          .widget<ChoiceChip>(find.byKey(const ValueKey('view-front')))
-          .selected,
-      isTrue,
-    );
+    expect(view(), 'front');
   });
 
   testWidgets('search finds exercises by name or equipment', (tester) async {
@@ -327,12 +329,12 @@ void main() {
     await _settle(tester);
 
     expect(find.text(_name('Romanian_Deadlift')), findsOneWidget);
-    expect(find.text('Barbell · Intermediate'), findsOneWidget);
+    expect(find.text('BARBELL · INTERMEDIATE'), findsOneWidget);
     expect(
       find.text(_library.exercises['Romanian_Deadlift']!.cue),
       findsOneWidget,
     );
-    expect(find.text('HAMSTRINGS'), findsOneWidget);
+    expect(find.text('Hamstrings'), findsOneWidget);
   });
 
   group('splits', () {
@@ -361,7 +363,7 @@ void main() {
         findsNothing,
       );
 
-      await tester.tap(find.text('Home').first);
+      await tester.tap(find.byKey(const ValueKey('toggle-home')));
       await _settle(tester);
       expect(
         find.byKey(const ValueKey('split-split-home-full-3')),

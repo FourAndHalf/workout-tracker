@@ -188,6 +188,10 @@ The palette is a neutral pearl-gray scale with one charcoal anchor and one restr
 - **Charcoal anchor (`#2A2A2D`):** The single strong tone: selected navigation tile, primary button, active chart bar, and dark callout pills (e.g. `+12%`). Use it sparingly, as it carries emphasis.
 - **Champagne accent (`#7A6A47` text / `#EDE6D6` container):** Premium moments only, such as goal milestones, the emergency-fund-complete state and the month-closed seal. No more than one champagne element per screen.
 
+### Explore anatomy accent (coral)
+
+The Explore tab adds one warm accent, coral (`#FF7A59` dark / `#E4572E` light, container `#2A1812` / `#FCE7DF`), and uses it only there. It marks the selected muscle on the body figure (with a soft glow and crosshair guides), the selected muscle chip and part row, the top pick, focus meters and the "Use this split" action. Everything else in Explore uses the neutral tokens. Tokens live in `lib/features/explore/widgets/explore_style.dart`.
+
 ### Semantic colors (meaning only)
 | Role | Text / icon | Container | Use |
 |---|---|---|---|

@@ -7,7 +7,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/app_card.dart';
 import '../../core/widgets/ledger.dart';
-import '../../core/widgets/tag_pill.dart';
 import '../../data/models/library_model.dart';
 import '../../data/models/program_model.dart';
 import '../../services/flux_widget_service.dart';
@@ -16,6 +15,7 @@ import '../workout/providers/active_workout_session_notifier.dart';
 import 'explore_providers.dart';
 import 'splits_view.dart';
 import 'widgets/exercise_detail.dart';
+import 'widgets/explore_style.dart';
 
 /// One training split: what each day trains, the exercises, how many hard
 /// sets each muscle gets in a week, and a button to start it.
@@ -75,26 +75,24 @@ class SplitDetailScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
       children: [
-        Text(program.programName, style: textTheme.headlineSmall),
+        MicroLabel(
+          '${program.setting} · ${program.daysPerWeek} days · ${program.schedule}',
+          size: 10,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          program.programName,
+          style: textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.5,
+            height: 1.15,
+          ),
+        ),
         const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 6,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            TagPill(
-              program.level ?? '',
-              color: levelColor(context, program.level),
-            ),
-            TagPill(program.setting ?? '', color: colors.textSecondary),
-            Text(
-              '${program.daysPerWeek} days a week · ${program.schedule}',
-              style: AppText.metricTable.copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
+        MicroLabel(
+          program.level ?? '',
+          size: 10,
+          color: levelColor(context, program.level),
         ),
         const SizedBox(height: 12),
         Text(
@@ -105,11 +103,9 @@ class SplitDetailScreen extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton.icon(
-          key: const Key('useSplit'),
-          icon: Icon(isCurrent ? LucideIcons600.check : LucideIcons600.play),
-          label: Text(isCurrent ? 'Current split' : 'Use this split'),
-          onPressed: isCurrent ? null : () => _use(context, ref, program),
+        _UseButton(
+          isCurrent: isCurrent,
+          onPressed: () => _use(context, ref, program),
         ),
         const SizedBox(height: 24),
         const ModuleHeader(
@@ -162,10 +158,8 @@ class _DayCard extends ConsumerWidget {
             title: Text(day.name, style: textTheme.titleMedium),
             subtitle: Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 4,
-                crossAxisAlignment: WrapCrossAlignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '${exercises.length} exercises · ~${estimateWorkoutMinutes(day)} min',
@@ -173,8 +167,19 @@ class _DayCard extends ConsumerWidget {
                       color: colors.textSecondary,
                     ),
                   ),
-                  for (final m in day.muscles)
-                    TagPill(muscleLabel(library, m), color: colors.primary),
+                  if (day.muscles.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      day.muscles
+                          .map((m) => muscleLabel(library, m).toUpperCase())
+                          .join(' · '),
+                      style: AppText.labelUppercase.copyWith(
+                        fontSize: 10,
+                        letterSpacing: 1.6,
+                        color: ExploreTokens.of(context).accent,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -294,9 +299,10 @@ class _WeeklySetsCard extends StatelessWidget {
                           direct: entry.value.direct.toDouble(),
                           effective: entry.value.effective,
                           track: colors.surface,
-                          band: colors.success.withValues(alpha: 0.16),
-                          direct_: colors.primary,
-                          helper: colors.primary.withValues(alpha: 0.35),
+                          band: colors.textMuted.withValues(alpha: 0.14),
+                          direct_: ExploreTokens.of(context).accent,
+                          helper: ExploreTokens.of(context).accent
+                              .withValues(alpha: 0.35),
                         ),
                       ),
                     ),
@@ -314,7 +320,7 @@ class _WeeklySetsCard extends StatelessWidget {
             ),
           const SizedBox(height: 8),
           Text(
-            'The green band is 10 to 20 sets. Light bars are assisting sets, counted at half.',
+            'The shaded band is 10 to 20 sets. Light bars are assisting sets, counted at half.',
             style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
           ),
           if (untrained.isNotEmpty) ...[
@@ -448,6 +454,63 @@ class _BlockCard extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// The main call to action: a coral gradient pill, or a quiet outline once
+/// the split is already the active one.
+class _UseButton extends StatelessWidget {
+  final bool isCurrent;
+  final VoidCallback onPressed;
+  const _UseButton({required this.isCurrent, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = ExploreTokens.of(context);
+    final colors = context.colors;
+    final fg = isCurrent ? colors.textSecondary : tokens.onAccent;
+    return Semantics(
+      button: true,
+      enabled: !isCurrent,
+      child: GestureDetector(
+        key: const Key('useSplit'),
+        onTap: isCurrent ? null : onPressed,
+        child: Container(
+          height: 52,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            gradient: isCurrent ? null : tokens.gradient,
+            borderRadius: BorderRadius.circular(999),
+            border: isCurrent ? Border.all(color: colors.border) : null,
+            boxShadow: isCurrent
+                ? null
+                : [
+                    BoxShadow(
+                      color: tokens.accent.withValues(alpha: 0.35),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isCurrent ? LucideIcons600.check : LucideIcons600.play,
+                size: 18,
+                color: fg,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                isCurrent ? 'Current split' : 'Use this split',
+                style: Theme.of(context).textTheme.titleSmall
+                    ?.copyWith(color: fg, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

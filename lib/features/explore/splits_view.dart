@@ -6,13 +6,12 @@ import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/app_card.dart';
-import '../../core/widgets/ledger.dart';
-import '../../core/widgets/tag_pill.dart';
 import '../../data/models/library_model.dart';
 import '../../data/models/program_model.dart';
 import '../program/program_providers.dart';
 import 'explore_providers.dart';
-import 'explore_screen.dart' show SettingToggle;
+import 'explore_screen.dart' show SettingToggle, homeEquipment;
+import 'widgets/explore_style.dart';
 
 /// Colour for a split's level pill.
 Color levelColor(BuildContext context, String? level) {
@@ -67,17 +66,37 @@ class _SplitsViewState extends ConsumerState<SplitsView> {
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
           children: [
-            const SettingToggle(),
-            const SizedBox(height: 16),
-            ModuleHeader(
-              'Training splits',
-              subtitle: 'Four-week blocks you can start in one tap. Each trains every muscle about twice a week.',
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Training splits',
+                        style: textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      MicroLabel('${shown.length} splits · ${setting.label}'),
+                    ],
+                  ),
+                ),
+                const SettingToggle(),
+              ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
+            Text(
+              setting == TrainSetting.home ? homeEquipment : 'Four-week blocks you can start in one tap. Each trains every muscle about twice a week.',
+              style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
+            ),
+            const SizedBox(height: 14),
             SizedBox(
-              height: 40,
+              height: 44,
               child: ListView(
                 scrollDirection: Axis.horizontal,
+                clipBehavior: Clip.none,
                 children: [
                   _dayChip(context, 'Any days', null),
                   for (final d in dayOptions) _dayChip(context, '$d days', d),
@@ -108,21 +127,16 @@ class _SplitsViewState extends ConsumerState<SplitsView> {
   }
 
   Widget _dayChip(BuildContext context, String label, int? days) {
-    final colors = context.colors;
-    final selected = _days == days;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
-      child: ChoiceChip(
-        key: ValueKey('days-${days ?? 'any'}'),
-        label: Text(
-          label,
-          style: TextStyle(
-            color: selected ? colors.onPrimary : colors.textPrimary,
-          ),
+      child: Center(
+        child: AccentChip(
+          key: ValueKey('days-${days ?? 'any'}'),
+          label: label,
+          dense: true,
+          selected: _days == days,
+          onTap: () => setState(() => _days = days),
         ),
-        selected: selected,
-        showCheckmark: false,
-        onSelected: (_) => setState(() => _days = days),
       ),
     );
   }
@@ -138,11 +152,12 @@ class _SplitCard extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
     final days = program.weeks.first.days;
+    final tokens = ExploreTokens.of(context);
     return AppCard(
       key: ValueKey('split-${program.programId}'),
       onTap: () => context.push('/explore/split/${program.programId}'),
-      padding: const EdgeInsets.all(16),
-      borderColor: isCurrent ? colors.primary : null,
+      padding: const EdgeInsets.all(18),
+      borderColor: isCurrent ? tokens.accent.withValues(alpha: 0.7) : null,
       borderWidth: isCurrent ? 1.5 : 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,14 +165,20 @@ class _SplitCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(program.programName, style: textTheme.titleMedium),
+                child: Text(
+                  program.programName,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               if (isCurrent)
-                StatusBadge(
-                  'Current',
-                  icon: LucideIcons600.check,
-                  foreground: colors.success,
-                  background: colors.successContainer,
+                const OutlinePill('Current')
+              else
+                Icon(
+                  LucideIcons600.chevronRight,
+                  size: 18,
+                  color: colors.textMuted,
                 ),
             ],
           ),
@@ -167,16 +188,14 @@ class _SplitCard extends StatelessWidget {
             runSpacing: 6,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              TagPill(
+              MicroLabel(
                 program.level ?? '',
+                size: 10,
                 color: levelColor(context, program.level),
               ),
-              Text(
-                '${program.daysPerWeek} days a week · ${program.schedule}',
-                style: AppText.metricTable.copyWith(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
+              MicroLabel(
+                '${program.daysPerWeek} days · ${program.schedule}',
+                size: 10,
               ),
             ],
           ),

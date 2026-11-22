@@ -5,13 +5,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/app_card.dart';
-import '../../../core/widgets/tag_pill.dart';
 import '../../../data/models/library_model.dart';
 import '../explore_providers.dart';
+import 'explore_style.dart';
 
-/// Photos, the one-line cue, numbered steps and the muscles an exercise
-/// trains: everything a lifter needs before the first rep.
+/// Photos, the form cue, numbered steps and the muscles an exercise trains:
+/// everything a lifter needs before the first rep.
 class ExerciseDetailBody extends ConsumerWidget {
   final LibraryExercise exercise;
   const ExerciseDetailBody({super.key, required this.exercise});
@@ -31,105 +30,51 @@ class ExerciseDetailBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
+    final tokens = ExploreTokens.of(context);
     final textTheme = Theme.of(context).textTheme;
     final library = ref.watch(libraryProvider).value;
     String label(String id) => library?.muscle(id)?.name ?? id;
-    final images = exercise.imageAssets;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (images.isNotEmpty)
-          Row(
-            children: [
-              for (var i = 0; i < images.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(AppRadius.md),
-                        child: AspectRatio(
-                          aspectRatio: 4 / 3,
-                          child: Image.asset(
-                            images[i],
-                            fit: BoxFit.cover,
-                            semanticLabel:
-                                '${exercise.name}, ${i == 0 ? 'start' : 'finish'} position',
-                            errorBuilder: (_, _, _) => ColoredBox(
-                              color: colors.surface,
-                              child: Icon(
-                                LucideIcons600.image,
-                                color: colors.textMuted,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        i == 0 ? 'START' : 'FINISH',
-                        style: AppText.labelUppercase.copyWith(
-                          color: colors.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-        if (exercise.cue.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: colors.infoContainer,
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(LucideIcons600.lightbulb, size: 16, color: colors.info),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    exercise.cue,
-                    key: const Key('exerciseCue'),
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                ),
-              ],
+        if (exercise.cue.isNotEmpty)
+          Text(
+            exercise.cue,
+            key: const Key('exerciseCue'),
+            style: textTheme.bodyMedium?.copyWith(
+              color: colors.textSecondary,
+              height: 1.45,
             ),
           ),
+        if (exercise.imageAssets.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          _PhotoViewer(exercise: exercise),
         ],
         if (exercise.steps.isNotEmpty) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           for (final entry in exercise.steps.asMap().entries)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 22,
+                    width: 26,
                     child: Text(
                       '${entry.key + 1}.',
                       style: AppText.metricTable.copyWith(
-                        fontSize: 12,
-                        color: colors.textMuted,
+                        fontSize: 13,
+                        color: tokens.accent,
                       ),
                     ),
                   ),
                   Expanded(
                     child: Text(
                       entry.value,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: colors.textSecondary,
-                        height: 1.4,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colors.textPrimary,
+                        height: 1.45,
                       ),
                     ),
                   ),
@@ -138,34 +83,153 @@ class ExerciseDetailBody extends ConsumerWidget {
             ),
         ],
         if (exercise.primary.isNotEmpty || exercise.secondary.isNotEmpty) ...[
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
+          const MicroLabel('Works', size: 10),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 6,
             runSpacing: 6,
             children: [
               for (final id in exercise.primary)
-                TagPill(label(id), color: colors.primary),
-              for (final id in exercise.secondary)
-                TagPill(label(id), color: colors.textMuted),
+                _MuscleTag(label(id), strong: true),
+              for (final id in exercise.secondary) _MuscleTag(label(id)),
             ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            'Dark: main muscles · grey: assisting',
-            style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
-          ),
         ],
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Align(
           alignment: Alignment.centerLeft,
-          child: TextButton.icon(
+          child: OutlinedButton.icon(
             key: const Key('watchFormVideos'),
-            icon: const Icon(LucideIcons600.playCircle, size: 18),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: colors.textPrimary,
+              backgroundColor: tokens.accentContainer,
+              side: BorderSide(color: tokens.accent.withValues(alpha: 0.6)),
+              shape: const StadiumBorder(),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            ),
+            icon: Icon(
+              LucideIcons600.squarePlay,
+              size: 18,
+              color: tokens.accent,
+            ),
             label: const Text('Watch form videos'),
             onPressed: () => _openVideos(context),
           ),
         ),
+        const SizedBox(height: 10),
+        Text(
+          'Photos and steps: free-exercise-db, public domain',
+          style: textTheme.bodySmall?.copyWith(
+            color: colors.textMuted,
+            fontSize: 11,
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class _MuscleTag extends StatelessWidget {
+  final String label;
+  final bool strong;
+  const _MuscleTag(this.label, {this.strong = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final tokens = ExploreTokens.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: strong ? tokens.accentContainer : colors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: strong ? colors.textPrimary : colors.textSecondary,
+        ),
+      ),
+    );
+  }
+}
+
+/// The start and finish photos; tap to flip between them.
+class _PhotoViewer extends StatefulWidget {
+  final LibraryExercise exercise;
+  const _PhotoViewer({required this.exercise});
+
+  @override
+  State<_PhotoViewer> createState() => _PhotoViewerState();
+}
+
+class _PhotoViewerState extends State<_PhotoViewer> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final images = widget.exercise.imageAssets;
+    final labels = const ['Start', 'Finish'];
+    return GestureDetector(
+      onTap: images.length < 2
+          ? null
+          : () => setState(() => _index = (_index + 1) % images.length),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: AspectRatio(
+          aspectRatio: 3 / 2,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: Image.asset(
+                  images[_index],
+                  key: ValueKey(images[_index]),
+                  fit: BoxFit.cover,
+                  semanticLabel:
+                      '${widget.exercise.name}, ${labels[_index].toLowerCase()} position',
+                  errorBuilder: (_, _, _) => ColoredBox(
+                    color: colors.surface,
+                    child: Icon(LucideIcons600.image, color: colors.textMuted),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 10,
+                bottom: 10,
+                child: Row(
+                  children: [
+                    for (var i = 0; i < images.length; i++)
+                      Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(
+                            alpha: i == _index ? 0.72 : 0.35,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
+                        ),
+                        child: MicroLabel(
+                          labels[i],
+                          size: 10,
+                          color: Colors.white.withValues(
+                            alpha: i == _index ? 1 : 0.6,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -191,16 +255,16 @@ Future<void> showExerciseDetailSheet(
       maxChildSize: 0.95,
       builder: (context, controller) => ListView(
         controller: controller,
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
         children: [
-          Text(exercise.name, style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 4),
+          MicroLabel('${exercise.equipment} · ${exercise.level}'),
+          const SizedBox(height: 6),
           Text(
-            '${exercise.equipment} · ${_titleCase(exercise.level)}',
-            style: Theme.of(context).textTheme.bodySmall
-                ?.copyWith(color: context.colors.textSecondary),
+            exercise.name,
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           ExerciseDetailBody(exercise: exercise),
         ],
       ),
@@ -208,11 +272,8 @@ Future<void> showExerciseDetailSheet(
   );
 }
 
-String _titleCase(String s) =>
-    s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
-
-/// One recommended exercise in the muscle library: the name, equipment and
-/// prescription up front, with the photos and steps behind a tap.
+/// One recommended exercise: a thumbnail, the name, equipment, prescription
+/// and how directly it trains the muscle, with photos and steps behind a tap.
 class RecommendationCard extends StatefulWidget {
   final LibraryExercise exercise;
 
@@ -239,14 +300,27 @@ class _RecommendationCardState extends State<RecommendationCard> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final tokens = ExploreTokens.of(context);
     final textTheme = Theme.of(context).textTheme;
     final pick = widget.pick;
     final exercise = widget.exercise;
+    final accentBorder = widget.starred || _open;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: AppCard(
-        padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        decoration: BoxDecoration(
+          color: _open
+              ? tokens.accentContainer.withValues(alpha: 0.5)
+              : colors.card,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(
+            color: accentBorder
+                ? tokens.accent.withValues(alpha: _open ? 0.55 : 0.4)
+                : colors.border,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -254,69 +328,104 @@ class _RecommendationCardState extends State<RecommendationCard> {
               borderRadius: BorderRadius.circular(AppRadius.lg),
               onTap: () => setState(() => _open = !_open),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+                padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (exercise.imageAssets.isNotEmpty) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppRadius.sm + 2),
+                        child: SizedBox(
+                          width: 84,
+                          height: 64,
+                          child: Image.asset(
+                            exercise.imageAssets.first,
+                            fit: BoxFit.cover,
+                            excludeFromSemantics: true,
+                            errorBuilder: (_, _, _) =>
+                                ColoredBox(color: colors.surface),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                    ],
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 4,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(exercise.name, style: textTheme.titleMedium),
-                              if (widget.starred)
-                                TagPill('Start here', color: colors.success),
-                            ],
+                          Text(
+                            exercise.name,
+                            style: textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              height: 1.25,
+                            ),
                           ),
-                          const SizedBox(height: 6),
+                          if (widget.starred) ...[
+                            const SizedBox(height: 6),
+                            const OutlinePill('Top pick'),
+                          ],
+                          const SizedBox(height: 8),
                           Wrap(
                             spacing: 10,
-                            runSpacing: 4,
+                            runSpacing: 6,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Text(
-                                exercise.equipment,
-                                style: textTheme.bodySmall?.copyWith(
-                                  color: colors.textSecondary,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 9,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: colors.surface,
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.sm,
+                                  ),
+                                ),
+                                child: Text(
+                                  exercise.equipment,
+                                  style: textTheme.bodySmall,
                                 ),
                               ),
                               if (pick != null)
                                 Text(
                                   pick.prescription,
                                   style: AppText.metricTable.copyWith(
-                                    fontSize: 12,
+                                    fontSize: 14,
                                   ),
-                                ),
-                              if (pick != null)
-                                TagPill(
-                                  pick.primary ? 'Primary' : 'Assists',
-                                  color: pick.primary
-                                      ? colors.primary
-                                      : colors.textMuted,
                                 ),
                             ],
                           ),
+                          if (pick != null) ...[
+                            const SizedBox(height: 10),
+                            FocusMeter(primary: pick.primary),
+                          ],
                         ],
                       ),
                     ),
-                    Icon(
-                      _open
-                          ? LucideIcons600.chevronUp
-                          : LucideIcons600.chevronDown,
-                      color: colors.textMuted,
+                    AnimatedRotation(
+                      turns: _open ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 220),
+                      child: Icon(
+                        LucideIcons600.chevronDown,
+                        size: 20,
+                        color: colors.textMuted,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            if (_open)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                child: ExerciseDetailBody(exercise: exercise),
-              ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 240),
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
+              child: _open
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: ExerciseDetailBody(exercise: exercise),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
           ],
         ),
       ),

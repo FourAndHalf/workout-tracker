@@ -6,15 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/app_card.dart';
 import '../../core/widgets/day_app_bar.dart';
-import '../../core/widgets/ledger.dart';
 import '../../core/widgets/sliding_segmented_control.dart';
 import '../../data/models/library_model.dart';
 import 'explore_providers.dart';
 import 'splits_view.dart';
 import 'widgets/body_figure.dart';
 import 'widgets/exercise_detail.dart';
+import 'widgets/explore_style.dart';
 
 enum _ExploreTab { muscles, splits }
 
@@ -62,9 +61,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             ),
           ),
           Expanded(
-            child: _tab == _ExploreTab.muscles
-                ? const MuscleLibraryView()
-                : const SplitsView(),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: _tab == _ExploreTab.muscles
+                  ? const MuscleLibraryView(key: ValueKey('muscles'))
+                  : const SplitsView(key: ValueKey('splits')),
+            ),
           ),
         ],
       ),
@@ -72,43 +74,28 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   }
 }
 
-/// The gym / home switch shared by the muscle library and the splits list.
+/// The GYM | HOME switch shared by the muscle library and the splits list.
 class SettingToggle extends ConsumerWidget {
   const SettingToggle({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final setting = ref.watch(exploreSettingProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TweenAnimationBuilder<double>(
-          tween: Tween(end: setting.index.toDouble()),
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          builder: (context, position, _) => SlidingSegmentedControl(
-            labels: [for (final s in TrainSetting.values) s.label],
-            position: position,
-            onSelected: (i) {
-              HapticFeedback.selectionClick();
-              ref.read(exploreSettingProvider.notifier).state =
-                  TrainSetting.values[i];
-            },
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          setting == TrainSetting.gym
-              ? 'Barbells, cables and machines, plus dumbbells.'
-              : 'Bodyweight, dumbbells, resistance bands and a pull-up bar. '
-                    'A bench or sturdy chair helps.',
-          style: Theme.of(context).textTheme.bodySmall
-              ?.copyWith(color: context.colors.textMuted),
-        ),
-      ],
+    return CompactToggle(
+      labels: [for (final s in TrainSetting.values) s.label],
+      index: setting.index,
+      onChanged: (i) {
+        HapticFeedback.selectionClick();
+        ref.read(exploreSettingProvider.notifier).state =
+            TrainSetting.values[i];
+      },
     );
   }
 }
+
+/// What "home" assumes you own.
+const homeEquipment =
+    'Home picks use bodyweight, dumbbells, resistance bands and a pull-up bar. A bench or sturdy chair helps.';
 
 class MuscleLibraryView extends ConsumerStatefulWidget {
   const MuscleLibraryView({super.key});
@@ -120,6 +107,7 @@ class MuscleLibraryView extends ConsumerStatefulWidget {
 class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
   final _search = TextEditingController();
   String? _forcedView;
+  bool _aboutOpen = false;
 
   @override
   void dispose() {
@@ -127,236 +115,244 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     super.dispose();
   }
 
-  void _selectMuscle(LibraryModel library, String id) {
+  /// One key per muscle chip so a selection made on the figure can scroll
+  /// its chip into view.
+  final _chipKeys = <String, GlobalKey>{};
+
+  void _selectMuscle(String id) {
     HapticFeedback.selectionClick();
     ref.read(exploreMuscleProvider.notifier).state = id;
     ref.read(exploreRegionProvider.notifier).state = null;
     setState(() => _forcedView = null);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final chip = _chipKeys[id]?.currentContext;
+      if (chip != null && chip.mounted) {
+        Scrollable.ensureVisible(
+          chip,
+          alignment: 0.5,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
   }
 
-  void _selectRegion(String muscleId, String? regionId) {
+  void _selectRegion(String regionId) {
     HapticFeedback.selectionClick();
     ref.read(exploreRegionProvider.notifier).state = regionId;
-    // Flip the figure to the side where this part is visible.
+    // Flip the figure to the side where this part shows.
     setState(() => _forcedView = null);
-  }
-
-  String _viewFor(MuscleGroup muscle, String? regionId) {
-    if (_forcedView != null) return _forcedView!;
-    final view = BodyFigure.viewFor(muscle.id, regionId);
-    if (view != null) return view;
-    return muscle.view == 'back' ? 'back' : 'front';
   }
 
   @override
   Widget build(BuildContext context) {
-    final libraryAsync = ref.watch(libraryProvider);
-    return libraryAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) =>
-          Center(child: Text('Could not load the library: $err')),
-      data: (library) => _body(context, library),
-    );
+    return ref
+        .watch(libraryProvider)
+        .when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, _) =>
+              Center(child: Text('Could not load the library: $err')),
+          data: (library) => _body(context, library),
+        );
   }
 
   Widget _body(BuildContext context, LibraryModel library) {
     final colors = context.colors;
+    final tokens = ExploreTokens.of(context);
     final textTheme = Theme.of(context).textTheme;
     final setting = ref.watch(exploreSettingProvider);
-    final muscleId = ref.watch(exploreMuscleProvider);
-    final regionId = ref.watch(exploreRegionProvider);
-    final muscle = library.muscle(muscleId) ?? library.muscles.first;
-    final region = muscle.region(regionId);
-    final view = _viewFor(muscle, regionId);
+    final muscle =
+        library.muscle(ref.watch(exploreMuscleProvider)) ??
+        library.muscles.first;
+    // A part is always selected; the first one by default.
+    final region =
+        muscle.region(ref.watch(exploreRegionProvider)) ?? muscle.regions.first;
+    final view =
+        _forcedView ??
+        BodyFigure.viewFor(muscle.id, region.id) ??
+        (muscle.view == 'back' ? 'back' : 'front');
     final query = _search.text.trim();
-
-    final picks = region?.picks(setting) ?? muscle.overview(setting);
-    final empty = picks.isEmpty;
+    final picks = region.picks(setting);
+    final index = library.muscles.indexOf(muscle) + 1;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
       children: [
-        TextField(
-          key: const Key('exerciseSearch'),
-          controller: _search,
-          onChanged: (_) => setState(() {}),
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            hintText: 'Search ${library.exercises.length} exercises',
-            prefixIcon: const Icon(LucideIcons600.search, size: 18),
-            suffixIcon: query.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: 'Clear search',
-                    icon: const Icon(LucideIcons600.x, size: 18),
-                    onPressed: () => setState(_search.clear),
-                  ),
+        SizedBox(
+          height: 46,
+          child: TextField(
+            key: const Key('exerciseSearch'),
+            controller: _search,
+            onChanged: (_) => setState(() {}),
+            textInputAction: TextInputAction.search,
+            style: textTheme.bodyMedium,
+            decoration: InputDecoration(
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+              hintText: 'Search ${library.exercises.length} exercises',
+              prefixIcon: const Icon(LucideIcons600.search, size: 18),
+              suffixIcon: query.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: 'Clear search',
+                      icon: const Icon(LucideIcons600.x, size: 18),
+                      onPressed: () => setState(_search.clear),
+                    ),
+            ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         if (query.isNotEmpty)
           ..._searchResults(library, query)
         else ...[
           SizedBox(
-            height: 40,
-            child: ListView.separated(
+            height: 44,
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              itemCount: library.muscles.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (context, i) {
-                final m = library.muscles[i];
-                final selected = m.id == muscle.id;
-                return ChoiceChip(
-                  key: ValueKey('muscle-${m.id}'),
-                  label: Text(
-                    m.name,
-                    style: TextStyle(
-                      color: selected ? colors.onPrimary : colors.textPrimary,
+              clipBehavior: Clip.none,
+              child: Row(
+                children: [
+                  for (final m in library.muscles)
+                    Padding(
+                      key: _chipKeys.putIfAbsent(m.id, GlobalKey.new),
+                      padding: const EdgeInsets.only(right: 8),
+                      child: AccentChip(
+                        key: ValueKey('muscle-${m.id}'),
+                        label: m.name,
+                        selected: m.id == muscle.id,
+                        onTap: () => _selectMuscle(m.id),
+                      ),
                     ),
-                  ),
-                  selected: selected,
-                  showCheckmark: false,
-                  onSelected: (_) => _selectMuscle(library, m.id),
-                );
-              },
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          const SizedBox(height: 18),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 44,
+                child: Column(
+                  children: [
+                    BodyFigure(
+                      muscleId: muscle.id,
+                      regionId: region.id,
+                      view: view,
+                      onSelectMuscle: _selectMuscle,
+                    ),
+                    const SizedBox(height: 10),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: CompactToggle(
+                        key: const Key('viewToggle'),
+                        labels: const ['Front', 'Back'],
+                        index: view == 'back' ? 1 : 0,
+                        onChanged: (i) => setState(
+                          () => _forcedView = i == 1 ? 'back' : 'front',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                flex: 56,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 128,
-                      child: BodyFigure(
-                        muscleId: muscle.id,
-                        regionId: regionId,
-                        view: view,
-                        onSelectMuscle: (id) => _selectMuscle(library, id),
+                    const SizedBox(height: 4),
+                    MicroLabel(
+                      '${index.toString().padLeft(2, '0')} / '
+                      '${library.muscles.length} · ${muscle.latin}',
+                      size: 10,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      muscle.name,
+                      key: const Key('muscleTitle'),
+                      style: textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.5,
+                        height: 1.1,
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${library.muscles.indexOf(muscle) + 1} / ${library.muscles.length}',
-                            style: AppText.metricTable.copyWith(
-                              fontSize: 12,
-                              color: colors.textMuted,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            muscle.name,
-                            key: const Key('muscleTitle'),
-                            style: textTheme.headlineSmall,
-                          ),
-                          Text(
-                            region?.latin.isNotEmpty == true
-                                ? region!.latin
-                                : muscle.latin,
-                            style: textTheme.bodySmall?.copyWith(
-                              color: colors.textSecondary,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            muscle.summary,
-                            style: textTheme.bodySmall?.copyWith(
-                              color: colors.textSecondary,
-                              height: 1.4,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              for (final side in const ['front', 'back'])
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: ChoiceChip(
-                                    key: ValueKey('view-$side'),
-                                    label: Text(
-                                      side == 'front' ? 'Front' : 'Back',
-                                      style: TextStyle(
-                                        color: view == side
-                                            ? colors.onPrimary
-                                            : colors.textPrimary,
-                                      ),
-                                    ),
-                                    visualDensity: VisualDensity.compact,
-                                    selected: view == side,
-                                    showCheckmark: false,
-                                    onSelected: (_) =>
-                                        setState(() => _forcedView = side),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    ChoiceChip(
-                      key: const ValueKey('region-all'),
-                      label: Text(
-                        'All',
-                        style: TextStyle(
-                          color: region == null
-                              ? colors.onPrimary
-                              : colors.textPrimary,
-                        ),
-                      ),
-                      selected: region == null,
-                      showCheckmark: false,
-                      onSelected: (_) => _selectRegion(muscle.id, null),
-                    ),
+                    const SizedBox(height: 14),
                     for (final r in muscle.regions)
-                      ChoiceChip(
+                      _RegionRow(
                         key: ValueKey('region-${r.id}'),
-                        label: Text(
-                          r.name,
-                          style: TextStyle(
-                            color: r.id == regionId
-                                ? colors.onPrimary
-                                : colors.textPrimary,
+                        label: r.name,
+                        side: BodyFigure.viewFor(muscle.id, r.id) ?? 'front',
+                        selected: r.id == region.id,
+                        onTap: () => _selectRegion(r.id),
+                      ),
+                    const SizedBox(height: 6),
+                    Divider(color: colors.border, height: 20),
+                    InkWell(
+                      key: const Key('aboutToggle'),
+                      onTap: () => setState(() => _aboutOpen = !_aboutOpen),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
+                          style: AppText.metricTable.copyWith(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: tokens.accent,
                           ),
                         ),
-                        selected: r.id == regionId,
-                        showCheckmark: false,
-                        onSelected: (_) => _selectRegion(muscle.id, r.id),
                       ),
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          const SettingToggle(),
-          const SizedBox(height: 16),
-          ModuleHeader(
-            'Recommended',
-            subtitle:
-                '${picks.length} ${picks.length == 1 ? 'pick' : 'picks'} · '
-                '${setting.label.toLowerCase()} · tap one for photos and steps',
+          AnimatedSize(
+            duration: const Duration(milliseconds: 240),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: _aboutOpen
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 14),
+                    child: _AboutPanel(muscle: muscle, region: region),
+                  )
+                : const SizedBox(width: double.infinity),
           ),
-          if (region != null && region.note.isNotEmpty) ...[
+          const SizedBox(height: 28),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Recommended',
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    MicroLabel(
+                      '${picks.length} ${picks.length == 1 ? 'pick' : 'picks'} · ${setting.label}',
+                    ),
+                  ],
+                ),
+              ),
+              const SettingToggle(),
+            ],
+          ),
+          if (setting == TrainSetting.home) ...[
             const SizedBox(height: 10),
-            _WhyNote(text: region.note),
+            Text(
+              homeEquipment,
+              style: textTheme.bodySmall?.copyWith(color: colors.textMuted),
+            ),
           ],
-          const SizedBox(height: 12),
-          if (empty)
+          const SizedBox(height: 16),
+          if (picks.isEmpty)
             Text(
               'No ${setting.label.toLowerCase()} picks for this part yet.',
               style: textTheme.bodyMedium?.copyWith(
@@ -368,7 +364,7 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
               if (library.exercises[entry.value.exerciseId] != null)
                 RecommendationCard(
                   key: ValueKey(
-                    '${muscle.id}-${regionId ?? 'all'}-${setting.name}-${entry.value.exerciseId}',
+                    '${muscle.id}-${region.id}-${setting.name}-${entry.value.exerciseId}',
                   ),
                   exercise: library.exercises[entry.value.exerciseId]!,
                   pick: entry.value,
@@ -385,11 +381,13 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     final results = library.search(query);
     final textTheme = Theme.of(context).textTheme;
     return [
-      ModuleHeader(
+      Text(
         '${results.length} ${results.length == 1 ? 'result' : 'results'}',
-        subtitle: 'for "$query"',
+        style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 4),
+      MicroLabel('for "$query"'),
+      const SizedBox(height: 16),
       if (results.isEmpty)
         Text(
           'Nothing matches. Try a movement, like "curl", or equipment, like "band".',
@@ -403,36 +401,106 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
   }
 }
 
-class _WhyNote extends StatelessWidget {
-  final String text;
-  const _WhyNote({required this.text});
+/// One part of the muscle: its name and which side of the body shows it.
+class _RegionRow extends StatelessWidget {
+  final String label;
+  final String side;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _RegionRow({
+    super.key,
+    required this.label,
+    required this.side,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            LucideIcons600.flaskConical,
-            size: 16,
-            color: colors.textSecondary,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              key: const Key('regionNote'),
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: colors.textSecondary, height: 1.4),
+    final tokens = ExploreTokens.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Semantics(
+        button: true,
+        selected: selected,
+        child: GestureDetector(
+          onTap: onTap,
+          behavior: HitTestBehavior.opaque,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+            decoration: BoxDecoration(
+              color: selected ? tokens.accentContainer : Colors.transparent,
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(
+                color: selected
+                    ? tokens.accent.withValues(alpha: 0.7)
+                    : Colors.transparent,
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: selected
+                          ? colors.textPrimary
+                          : colors.textSecondary,
+                      fontWeight: selected ? FontWeight.w500 : FontWeight.w400,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                MicroLabel(
+                  side,
+                  size: 9,
+                  color: selected ? tokens.accent : colors.textMuted,
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The muscle in a sentence and why the picks for this part were chosen.
+class _AboutPanel extends StatelessWidget {
+  final MuscleGroup muscle;
+  final MuscleRegion region;
+  const _AboutPanel({required this.muscle, required this.region});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
+    final body = textTheme.bodyMedium?.copyWith(
+      color: colors.textSecondary,
+      height: 1.45,
+    );
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colors.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: colors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MicroLabel(muscle.name, size: 10),
+          const SizedBox(height: 6),
+          Text(muscle.summary, style: body),
+          if (region.note.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            MicroLabel('Why these picks · ${region.name}', size: 10),
+            const SizedBox(height: 6),
+            Text(region.note, key: const Key('regionNote'), style: body),
+          ],
         ],
       ),
     );
@@ -446,18 +514,19 @@ class _SourcesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final tokens = ExploreTokens.of(context);
     final small = Theme.of(context).textTheme.bodySmall
-        ?.copyWith(color: colors.textMuted, height: 1.4);
+        ?.copyWith(color: colors.textMuted, height: 1.45);
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         key: const Key('sources'),
         tilePadding: EdgeInsets.zero,
         childrenPadding: EdgeInsets.zero,
-        title: Text(
-          'How these picks were chosen',
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        iconColor: colors.textMuted,
+        collapsedIconColor: colors.textMuted,
+        trailing: const Icon(LucideIcons600.chevronDown, size: 18),
+        title: const MicroLabel('How these picks were chosen'),
         children: [
           Align(
             alignment: Alignment.centerLeft,
@@ -475,12 +544,13 @@ class _SourcesCard extends StatelessWidget {
                       mode: LaunchMode.externalApplication,
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
                         r.title,
                         style: small?.copyWith(
-                          color: colors.primary,
+                          color: tokens.accent,
                           decoration: TextDecoration.underline,
+                          decorationColor: tokens.accent.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
