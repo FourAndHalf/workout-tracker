@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/legal/third_party_licenses.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/day_app_bar.dart';
@@ -540,6 +541,8 @@ class _SourcesCard extends StatelessWidget {
                   Text(library.picksCredit, style: small),
                   const SizedBox(height: 8),
                   Text(library.photoCredit, style: small),
+                  const SizedBox(height: 8),
+                  Text(anatomyCredit, style: small),
                   const SizedBox(height: 8),
                   for (final r in library.references)
                     InkWell(

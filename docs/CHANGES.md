@@ -130,7 +130,7 @@ These items are judged by eye. The behaviour behind them is pinned by the U* tes
 
 | ID | Claim | Manual check |
 |---|---|---|
-| V1 | The body figure is drawn from scratch: spline outlines, detail lines, a coral glow and crosshair guides that aim at one side of paired muscles | Open Explore and choose Shoulders → Side delts. The glow sits on the outer delts and the crosshair targets the left one |
+| V1 | ~~The body figure is drawn from scratch with spline outlines.~~ Superseded by §6b: anatomical SVG paths. Still true: a coral glow and crosshair guides that aim at one side of paired muscles | Open Explore and choose Shoulders → Side delts. The glow sits on the outer delts and the crosshair targets the left one |
 | V2 | ~~Coral is used only in Explore.~~ Superseded by §6: coral is now the app-wide accent, with adoption tracked in `design/DESIGN.md` §9 | See §6 |
 | V3 | Layout: the figure on the left; the title and FRONT/BACK-tagged part rows on the right; GYM/HOME beside "Recommended" | Compare against the reference screenshots at 390 px wide |
 | V4 | Cards show a thumbnail, a TOP PICK tag and a focus meter (3 bars = primary, 2 = assists) | Look at any muscle's picks |
@@ -158,6 +158,28 @@ app-wide accent, with rules for where it goes and where it never goes.
 | D8 | A disabled main action is a quiet outline, not coral | test *a disabled main action is a quiet outline, not coral* |
 | D10 | Removed `test/zz_fig_test.dart`, a temporary rendering harness committed by mistake with the Explore polish (`2d529cd`). It wrote to a session-only temp folder, so it would fail on other machines. Its job is done by `tool/screens/render_screens_test.dart` | `grep -rn "tmp/claude" test tool lib` finds nothing |
 | D9 | Fixed while rolling out: the workout's "Reached failure" switch hid its tap ripple (Flutter asserted, because a `ListTile` sat on a coloured panel). Explore's expandable rows had the same pattern. All now sit on their own transparent `Material` | The design-rules test, which runs a live workout with to-failure sets |
+
+## 6b. Explore body figure: anatomical SVG
+*Branch `claude/endurance-fitness-tracker-bkq1lo`.*
+
+The hand-drawn spline figure was replaced with the same kind of anatomical SVG
+the reference site uses. The paths come from react-native-body-highlighter
+3.2.0 (MIT, © 2022 ELABBASSI Hicham), extracted as text by
+`tool/build_anatomy.py` into `lib/features/explore/widgets/anatomy_paths.g.dart`
+and parsed at run time with `path_drawing`. No JavaScript from the package is
+run.
+
+| ID | Claim | Verified by |
+|---|---|---|
+| F1 | The generated file holds front and back outlines plus every muscle shape the figure maps | `verify_assets.py` A1 |
+| F2 | Every muscle and every part in the library is drawn on a view; the expected view is chosen (triceps, rear delts, glute med → back; upper chest → front) | test *every muscle and part can be found on the figure* |
+| F3 | Taps land on the muscle under the finger in view coordinates (chest, quads, core) and empty space does nothing | test *tapping the body figure selects the muscle under the finger* |
+| F4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page, and the credit shows under "How these picks were chosen" | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
+| F5 | Highlights for all 28 muscle parts sit on the right anatomy in both themes; the glow stays inside the figure | `--screens` (`*_1_shoulders.png`, `*_2_glutes_back.png`); by eye |
+
+To regenerate the paths: download `react-native-body-highlighter` from npm,
+unpack it into an empty folder, and run
+`python3 -I tool/build_anatomy.py <folder>/package/`.
 
 ## 7. Research claims shown in the app
 

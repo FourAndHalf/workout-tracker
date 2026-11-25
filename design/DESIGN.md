@@ -438,14 +438,21 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
 
 ### Explore
 - **Body figure:**
-  - **Drawing:** custom-painted front and back views. The silhouette is
-    `body`, muscle zones `muscle` with `line` outlines and anatomy detail
-    lines.
+  - **Drawing:** anatomical SVG paths (react-native-body-highlighter, MIT,
+    generated into `anatomy_paths.g.dart` by `tool/build_anatomy.py`),
+    painted with a `CustomPainter`. The silhouette is `body`, muscles are
+    `muscle` with `line` seams; head, hands, knees and feet are a quieter
+    blend and never tappable. Parts of a muscle (e.g. rectus femoris, upper
+    chest) are cut from the library shapes with rect or oval masks.
   - **Selected part:** an `accent` radial gradient with a blur glow and a
-    white hairline. The rest of that muscle gets a 16% `accent` tint.
-  - **Crosshair:** dashed guides with a white target ring, aimed at the
-    figure's left side for paired muscles.
-  - **Animation:** highlights fade in over 420 ms.
+    white hairline. The rest of that muscle gets an 18% `accent` tint.
+  - **Crosshair:** dashed guides, a white target ring that eases in, three
+    slowly rotating arcs and a centre dot, aimed at the figure's left side
+    for paired muscles.
+  - **Animation:** on each new selection a single scan band sweeps down the
+    silhouette and the highlight fades in, all within 900 ms. Nothing loops.
+  - **Credit:** shown in "How these picks were chosen" and on the licences
+    page.
 - **Muscle part row:** the name plus a FRONT/BACK micro-label. When selected,
   the row gets the `accentContainer` tint, a 70% `accent` border, and the
   tag in `accentText`.
@@ -501,7 +508,7 @@ filled with the charcoal anchor.
 ## 8. Motion
 - 200–250 ms standard easing for state changes: chips, rows, toggles, card
   expand (240 ms), rotating chevrons.
-- 420 ms ease-out-cubic for the figure highlight.
+- 900 ms for the figure: one scan sweep, then the highlight fades in.
 - Numbers change in place, with no count-up animations.
 - Selecting a muscle on the figure scrolls its chip into view.
 

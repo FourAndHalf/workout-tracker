@@ -261,19 +261,25 @@ void main() {
         ),
       ),
     );
+    // Taps are given in the anatomy's own view coordinates.
     final box = tester.getRect(find.byType(BodyFigure));
+    final vp = BodyFigure.viewport('front');
     Offset at(double x, double y) =>
-        box.topLeft + Offset(x / 100 * box.width, y / 220 * box.height);
+        box.topLeft +
+        Offset(
+          (x - vp.left) / vp.width * box.width,
+          (y - vp.top) / vp.height * box.height,
+        );
 
-    await tester.tapAt(at(40, 48));
+    await tester.tapAt(at(300, 380));
     expect(picked, 'chest');
-    await tester.tapAt(at(40, 135));
+    await tester.tapAt(at(280, 800));
     expect(picked, 'quads');
-    await tester.tapAt(at(50, 80));
+    await tester.tapAt(at(335, 600));
     expect(picked, 'core');
     // Empty space does nothing.
     picked = null;
-    await tester.tapAt(at(5, 5));
+    await tester.tapAt(at(40, 100));
     expect(picked, isNull);
   });
 
@@ -296,10 +302,11 @@ void main() {
     expect(BodyFigure.viewFor('shoulders', 'rear-delts'), 'back');
     expect(BodyFigure.viewFor('triceps', null), 'back');
     expect(BodyFigure.viewFor('glutes', 'glute-med'), 'back');
-    expect(BodyFigure.hitTest('back', const Offset(40, 118)), 'glutes');
-    expect(BodyFigure.hitTest('back', const Offset(38, 190)), 'calves');
-    expect(BodyFigure.hitTest('back', const Offset(60, 75)), 'back');
-    expect(BodyFigure.hitTest('front', const Offset(1, 1)), isNull);
+    expect(BodyFigure.hitTest('back', const Offset(1030, 720)), 'glutes');
+    expect(BodyFigure.hitTest('back', const Offset(1020, 1100)), 'calves');
+    expect(BodyFigure.hitTest('back', const Offset(1000, 480)), 'back');
+    expect(BodyFigure.hitTest('front', const Offset(300, 800)), 'quads');
+    expect(BodyFigure.hitTest('front', const Offset(40, 100)), isNull);
   });
 
   testWidgets('the exercise sheet opens from anywhere in the app', (

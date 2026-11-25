@@ -64,6 +64,7 @@ dependencies:
   _discoveryapis_commons: ^1.0.8
   home_widget: ^0.10.0
   lucide_icons_flutter: ^4.0.1
+  path_drawing: ^1.0.1
 
 dev_dependencies:
   flutter_test:

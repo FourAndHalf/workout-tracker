@@ -60,6 +60,7 @@ step "4/5 Tests named in docs/CHANGES.md"
   test/features/session_detail_test.dart \
   test/data/library_model_test.dart \
   test/features/explore_test.dart \
+  test/core/third_party_licenses_test.dart \
   test/features/progress_hub_navigation_test.dart
 
 step "5/5 Full test suite"

@@ -187,6 +187,23 @@ documented = all(f"`#{light[k][2:].upper()}`" in doc and f"`#{darkt[k][2:].upper
                  for k in ("accent", "accentText", "accentFill", "accentFillEnd", "onAccent", "accentContainer"))
 check("D3", documented, "every coral token value in code appears in design/DESIGN.md")
 
+# --- A*: the Explore body figure (anatomy paths + licence) ---------------------
+anat = open(os.path.join(ROOT, "lib/features/explore/widgets/anatomy_paths.g.dart"), encoding="utf-8").read()
+need = {"front": ["chest", "abs", "obliques", "deltoids", "biceps", "quadriceps", "adductors", "calves", "forearm"],
+        "back": ["upper-back", "lower-back", "trapezius", "triceps", "gluteal", "hamstring", "calves", "deltoids"]}
+present = {side: [slug for slug in slugs if f"'{slug}'" in anat] for side, slugs in need.items()}
+missing = {side: sorted(set(need[side]) - set(present[side])) for side in need}
+check("A1", "'front':" in anat and "'back':" in anat and not any(missing.values()),
+      "anatomy_paths.g.dart has front/back outlines and every muscle the figure maps " +
+      (str(missing) if any(missing.values()) else ""))
+lic_path = os.path.join(ROOT, "third_party/react-native-body-highlighter/LICENSE")
+lic = open(lic_path, encoding="utf-8").read() if os.path.exists(lic_path) else ""
+legal = open(os.path.join(ROOT, "lib/core/legal/third_party_licenses.dart"), encoding="utf-8").read()
+main_src = open(os.path.join(ROOT, "lib/main.dart"), encoding="utf-8").read()
+check("A2", "MIT License" in lic and lic.strip() in legal and "react-native-body-highlighter" in anat
+      and "registerThirdPartyLicenses();" in main_src,
+      "the MIT licence is bundled, matches third_party/, is credited in the generated file and registered at start-up")
+
 print()
 print(f"{len(FAILS)} failed" if FAILS else "All asset checks passed")
 sys.exit(len(FAILS))
