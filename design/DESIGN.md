@@ -513,7 +513,10 @@ filled with the charcoal anchor.
 - 480 ms ease-in-out glide between selections on the same view (another part
   or another muscle): the old highlight fades out, the new fades in, and the
   target slides across with one soft pulse. No scan replay.
-- 320 ms cross-fade when the figure flips FRONT/BACK.
+- 640 ms turn when the figure changes side: the old side rotates about the
+  spine to edge-on, the new side rotates in, with perspective and a slight
+  dip in size at the midpoint. The side always follows the selected muscle
+  or part; there is no manual FRONT/BACK switch.
 - 280 ms fade with a 1.5% rise (`SmoothSwap`) when the muscle title and parts
   or the recommendation list change; the height eases at the same time.
 - Exercise photos: one large photo at the top of an opened card or sheet
