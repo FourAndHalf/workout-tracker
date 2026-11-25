@@ -196,6 +196,83 @@ void main() {
     expect(find.byKey(const Key('exerciseCue')), findsNothing);
   });
 
+  testWidgets('an open card shows its photos once, at the top, alternating', (
+    tester,
+  ) async {
+    await _openExplore(tester);
+    final first = _library.muscle('chest')!.regions.first.gym.first;
+    final exercise = _library.exercises[first.exerciseId]!;
+    final images = exercise.imageAssets;
+    expect(images, hasLength(2));
+    final thumbs = find.byKey(const Key('cardThumbnail')).evaluate().length;
+
+    await tester.tap(find.text(exercise.name));
+    await _settle(tester);
+
+    // One large photo, above the name; the card's thumbnail tucks away.
+    expect(find.byType(ExercisePhotos), findsOneWidget);
+    expect(find.byKey(const Key('cardThumbnail')), findsNWidgets(thumbs - 1));
+    expect(
+      tester.getTopLeft(find.byType(ExercisePhotos)).dy,
+      lessThan(tester.getTopLeft(find.text(exercise.name)).dy),
+    );
+
+    // Start, then finish on its own, then back to start.
+    // Waits, at most one hold plus the fade, until only [path] shows.
+    Future<void> expectSwapTo(String path, {Duration? within}) async {
+      final limit = within ?? ExercisePhotos.hold + ExercisePhotos.fade;
+      var waited = Duration.zero;
+      bool only() =>
+          find.byKey(ValueKey(path)).evaluate().length == 1 &&
+          find.byType(Image).evaluate().where((e) {
+            final k = e.widget.key;
+            return k is ValueKey<String> &&
+                images.contains(k.value) &&
+                k.value != path;
+          }).isEmpty;
+      while (!only() && waited <= limit) {
+        const step = Duration(milliseconds: 50);
+        await tester.pump(step);
+        waited += step;
+      }
+      expect(only(), isTrue, reason: 'expected only $path after $waited');
+    }
+
+    expect(find.byKey(ValueKey(images[0])), findsOneWidget);
+    await expectSwapTo(images[1]);
+    await expectSwapTo(images[0]);
+
+    // A tap flips straight away.
+    await tester.tap(find.byKey(const Key('exercisePhotos')));
+    await expectSwapTo(
+      images[1],
+      within: ExercisePhotos.fade + const Duration(milliseconds: 150),
+    );
+
+    // Closing brings the thumbnail back.
+    await tester.tap(find.text(exercise.name));
+    await _settle(tester);
+    expect(find.byType(ExercisePhotos), findsNothing);
+    expect(find.byKey(const Key('cardThumbnail')), findsNWidgets(thumbs));
+  });
+
+  testWidgets('switching muscles cross-fades instead of jumping', (
+    tester,
+  ) async {
+    await _openExplore(tester);
+    await tester.tap(find.byKey(const ValueKey('muscle-shoulders')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    // Mid-transition the old and new titles are both on screen.
+    expect(find.byKey(const Key('muscleTitle')), findsNWidgets(2));
+    await _settle(tester);
+    expect(find.byKey(const Key('muscleTitle')), findsOneWidget);
+    expect(
+      tester.widget<Text>(find.byKey(const Key('muscleTitle'))).data,
+      'Shoulders',
+    );
+  });
+
   testWidgets('choosing a muscle that lives on the back flips the figure', (
     tester,
   ) async {
@@ -261,19 +338,25 @@ void main() {
         ),
       ),
     );
+    // Taps are given in the anatomy's own view coordinates.
     final box = tester.getRect(find.byType(BodyFigure));
+    final vp = BodyFigure.viewport('front');
     Offset at(double x, double y) =>
-        box.topLeft + Offset(x / 100 * box.width, y / 220 * box.height);
+        box.topLeft +
+        Offset(
+          (x - vp.left) / vp.width * box.width,
+          (y - vp.top) / vp.height * box.height,
+        );
 
-    await tester.tapAt(at(40, 48));
+    await tester.tapAt(at(300, 380));
     expect(picked, 'chest');
-    await tester.tapAt(at(40, 135));
+    await tester.tapAt(at(280, 800));
     expect(picked, 'quads');
-    await tester.tapAt(at(50, 80));
+    await tester.tapAt(at(335, 600));
     expect(picked, 'core');
     // Empty space does nothing.
     picked = null;
-    await tester.tapAt(at(5, 5));
+    await tester.tapAt(at(40, 100));
     expect(picked, isNull);
   });
 
@@ -296,10 +379,11 @@ void main() {
     expect(BodyFigure.viewFor('shoulders', 'rear-delts'), 'back');
     expect(BodyFigure.viewFor('triceps', null), 'back');
     expect(BodyFigure.viewFor('glutes', 'glute-med'), 'back');
-    expect(BodyFigure.hitTest('back', const Offset(40, 118)), 'glutes');
-    expect(BodyFigure.hitTest('back', const Offset(38, 190)), 'calves');
-    expect(BodyFigure.hitTest('back', const Offset(60, 75)), 'back');
-    expect(BodyFigure.hitTest('front', const Offset(1, 1)), isNull);
+    expect(BodyFigure.hitTest('back', const Offset(1030, 720)), 'glutes');
+    expect(BodyFigure.hitTest('back', const Offset(1020, 1100)), 'calves');
+    expect(BodyFigure.hitTest('back', const Offset(1000, 480)), 'back');
+    expect(BodyFigure.hitTest('front', const Offset(300, 800)), 'quads');
+    expect(BodyFigure.hitTest('front', const Offset(40, 100)), isNull);
   });
 
   testWidgets('the exercise sheet opens from anywhere in the app', (
@@ -335,6 +419,12 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Hamstrings'), findsOneWidget);
+    // The photos show once, at the top of the sheet.
+    expect(find.byType(ExercisePhotos), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byType(ExercisePhotos)).dy,
+      lessThan(tester.getTopLeft(find.text(_name('Romanian_Deadlift'))).dy),
+    );
   });
 
   group('splits', () {

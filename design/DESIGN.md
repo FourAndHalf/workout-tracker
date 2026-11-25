@@ -1,5 +1,5 @@
 ---
-name: Pearl Ledger
+name: Pearl Ledger · Coral
 colors:
   surface: '#F4F4F5'
   surface-dim: '#DCDCDF'
@@ -56,6 +56,12 @@ colors:
   warning-container: '#F6E7CC'
   info: '#3F5F80'
   info-container: '#DFE8F1'
+  accent: '#E4572E'
+  accent-text: '#B83A18'
+  accent-fill: '#CC4722'
+  accent-fill-end: '#B23514'
+  on-accent: '#FFFFFF'
+  accent-container: '#FCE7DF'
 typography:
   headline-xl:
     fontFamily: JetBrains Mono
@@ -167,186 +173,385 @@ spacing:
   space-xl: 2.5rem
 ---
 
-## Brand & Style
+# Fitness Tracker design system
 
-The identity is private banking: a calm, light interface in pearl and silver, closer to a well-made physical object than a trading terminal. It is built for someone who keeps rigorous books but wants the daily experience to feel composed, not clinical.
+This is the design system for the whole app. It covers Home, Programs, the
+live workout, Explore, Progress, Nutrition and the home-screen widgets. The
+tokens above are the light theme; §2 lists the dark theme. Every token is
+implemented in `lib/core/theme/app_colors.dart` (`context.colors`), and the
+text styles in `lib/core/theme/app_theme.dart` (`AppText`).
 
-Visual characteristics:
-- **Tone:** Assured, precise, discreet. Numbers are stated plainly and never dramatised.
-- **Aesthetic:** Quiet luxury: soft pearl surfaces, generous whitespace, rounded modules arranged in a bento grid, and monospaced numerals that read like a carefully kept ledger.
-- **Value delivery:** Hierarchy comes from tone, type scale and spacing rather than color. Color is reserved for meaning (gain, loss, warning) and always appears small: a delta, a badge, a dot. It is never used as a fill for large areas.
-- **Avoid:** Neon or saturated gradients, emoji, confetti and other gamification, heavy drop shadows, dense uppercase labels, and decorative illustrations inside data areas.
+**One-line summary:** calm pearl or graphite surfaces, numbers set like a
+well-kept training log, and one coral accent that always means *this is what
+you're doing now*.
 
-## Colors
+## 1. Brand & style
 
-The palette is a neutral pearl-gray scale with one charcoal anchor and one restrained champagne accent.
+- **Tone:** steady, precise, encouraging without hype. A training log you
+  trust, not a game. Numbers are stated plainly: `4 × 8–12`, `62.5 kg`,
+  `5:30 /km`.
+- **Aesthetic:** soft pearl (light) or graphite (dark) surfaces, rounded
+  modules in a bento layout, monospaced figures, generous whitespace.
+- **Hierarchy comes from tone, type and space.** Colour is spent sparingly:
+  - **coral** for focus and the one main action;
+  - **semantic colours** for meaning (done, missed, warning);
+  - **champagne** for rare milestones.
+- **Avoid:** neon or rainbow gradients, confetti and badges-for-everything
+  gamification, emoji in data, heavy drop shadows, decorative illustrations
+  inside data areas, and colour used as a large background fill.
 
-- **Canvas (`#E8E8EA`):** The soft gray page behind all content, optionally with a very subtle top-to-bottom wash to `#EFEFF1`.
-- **Module surfaces (`#F1F1F3` → `#ECECEE`):** Cards and panels, one step lighter or darker than the canvas, so modules read as gently raised tiles.
-- **Ink (`#1C1C1E`):** Headlines, balances and primary values.
-- **Muted ink (`#626267`):** Labels, captions, axis text and metadata. It meets 4.5:1 contrast on every module surface.
-- **Charcoal anchor (`#2A2A2D`):** The single strong tone: selected navigation tile, primary button, active chart bar, and dark callout pills (e.g. `+12%`). Use it sparingly, as it carries emphasis.
-- **Champagne accent (`#7A6A47` text / `#EDE6D6` container):** Premium moments only, such as goal milestones, the emergency-fund-complete state and the month-closed seal. No more than one champagne element per screen.
+## 2. Colors
 
-### Explore anatomy accent (coral)
-
-The Explore tab adds one warm accent, coral (`#FF7A59` dark / `#E4572E` light, container `#2A1812` / `#FCE7DF`), and uses it only there. It marks the selected muscle on the body figure (with a soft glow and crosshair guides), the selected muscle chip and part row, the top pick, focus meters and the "Use this split" action. Everything else in Explore uses the neutral tokens. Tokens live in `lib/features/explore/widgets/explore_style.dart`.
-
-### Semantic colors (meaning only)
-| Role | Text / icon | Container | Use |
+### Neutral foundation
+| Role | Light | Dark | Use |
 |---|---|---|---|
-| Positive | `#23784A` | `#DDF0E4` | Gains, inflows, ✅ verified price, on-track goals |
-| Negative | `#B33A35` | `#F9DEDC` | Losses, overspend, 🔴 failed download, destructive actions |
-| Warning | `#8A5A0F` | `#F6E7CC` | 🟡 stale price, budget pace risk, card due soon |
-| Info | `#3F5F80` | `#DFE8F1` | ✍️ manual price, neutral notices |
+| Canvas (`background`) | `#E8E8EA` | `#0F0F11` | Page behind everything |
+| Inner panel (`surface`) | `#ECECEE` | `#1C1C1F` | A module inside a module, input tracks |
+| Module (`card`) | `#F1F1F3` | `#161618` | Cards and panels |
+| Raised control (`raised`) | `#FFFFFF` | `#232326` | Icon buttons, segmented thumbs, search field |
+| Hairline (`border` / `divider`) | `#DADADD` / `#E0E0E3` | `#2C2C30` | Borders, dividers |
+| Ink (`textPrimary`) | `#1C1C1E` | `#ECECEE` | Titles, values |
+| Muted ink (`textSecondary`) | `#626267` | `#A0A0A6` | Labels, captions, axis text (≥4.5:1 on modules) |
+| Faint ink (`textMuted`) | `#6E6E73` | `#8E8E94` | Micro-labels, metadata |
+| Charcoal anchor (`primary`) | `#2A2A2D` | `#ECECEE` (inverts) | Structure: active nav pill, secondary-emphasis buttons, non-current chart bars |
+| Tracks (`track` / `barMuted`) | `#D4D4D8` / `#C9C9CD` | `#2C2C30` / `#3A3A3F` | Progress tracks, inactive bars |
 
-- Deltas always pair color with a glyph (`▲` / `▼`) so meaning never depends on color alone.
-- Inflow and outflow amounts in lists stay in ink. Direction is shown by the sign and glyph, not by tinting the whole number.
+### Coral accent: focus and the main action
 
-### Dark theme
-The same roles mapped to a deep graphite palette. Keep the same restraint; do not invert to pure black.
+Coral is the app's single accent. It always means **this is what you're
+doing now**: the selected item, the next or current workout, live progress,
+or the one main action on a screen.
 
-| Token | Dark value |
-|---|---|
-| background | `#0F0F11` |
-| surface-container-low / container / high | `#161618` / `#1C1C1F` / `#232326` |
-| on-surface / on-surface-variant | `#ECECEE` / `#A0A0A6` |
-| outline-variant | `#2C2C30` |
-| primary / on-primary | `#ECECEE` / `#161618` (the anchor inverts to light) |
-| positive / negative / warning | `#5BBF86` / `#E5726B` / `#D9A54A` |
-| tertiary (champagne) | `#CDBB92` |
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `accent` | `#E4572E` | `#FF7A59` | **Graphics only:** a selected highlight, the current bar, meters, borders, glows, the body-figure highlight |
+| `accentText` | `#B83A18` | `#FF7A59` | **Coral text and small icons** on any surface |
+| `accentFill` → `accentFillEnd` | `#CC4722` → `#B23514` | `#FF7A59` → `#F0533A` | Gradient for filled coral controls (top-left to bottom-right) |
+| `onAccent` | `#FFFFFF` | `#161618` | Text and icons on the filled gradient |
+| `accentContainer` | `#FCE7DF` | `#2A1812` | Soft tint behind a selected row or an opened card |
 
-## Typography
+**Measured contrast.** Never pair coral differently from this table without
+re-measuring.
 
-One family throughout: **JetBrains Mono**. Its fixed-width figures give the whole app the feel of a well-kept ledger, and the soft pearl surfaces keep it from feeling like a code editor.
+| Pairing | Light | Dark | Requirement |
+|---|---|---|---|
+| `accentText` on canvas / module / raised | 4.69 / 4.87 / 5.74 | 7.46 / 7.04 / 6.11 | Text needs 4.5:1 |
+| `onAccent` on `accentFill` / `accentFillEnd` | 4.68 / 6.15 | 7.04 / 5.17 | Text needs 4.5:1 |
+| Ink on `accentContainer` | 14.29 | 14.38 | 4.5:1 |
+| `accentText` on `accentContainer` | 4.82 | 6.61 | 4.5:1 |
+| `accent` graphic vs its module | 3.27 | 7.04 | Graphics need 3:1 |
 
-- **Hierarchy by size and weight only:** 500 for headlines and amounts, 600 for small titles and badges, 400 for body text. Avoid 700+; elegance comes from size, spacing and tight negative tracking on large figures (−0.03em to −0.045em), not boldness.
-- **Size down compared to proportional fonts:** monospace runs wide, so the scale is about 10–15% smaller than a sans equivalent. Large amounts must still fit a 360dp-wide phone (e.g. `₹1,23,45,678` in `metric-hero-mobile`).
-- **Ledger views (`ledger-mono`):** journal entries (Dr/Cr postings), audit logs and hashes use the same family at 12px. They differ only in being placed in an inner panel.
-- **Alignment is free:** every glyph is the same width, so numbers align in columns without extra settings. Keep `font-variant-numeric: tabular-nums` set anyway, for safety with fallback fonts.
-- **Android:** bundle JetBrains Mono (OFL licence) as a font resource with weights 400/500/600; don't rely on downloadable fonts for a finance app that must work offline.
-- **Indian number formatting:** `₹1,23,456.78`; compact forms `₹12.4L` and `₹1.2Cr`. Render the paise portion one tone lighter (`on-surface-variant`) in hero metrics, e.g. `₹5,465`**`.00`**.
-- **Casing:** Sentence case by default ("Monthly spending", "This month"). `label-uppercase` is reserved for table column headers and tiny status codes.
+Two traps:
+- Light `accent` (`#E4572E`) is too pale for small text, at 3.27:1. Use `accentText`.
+- In dark mode, white on coral fails at 2.57:1. That's why `onAccent` is dark ink there.
 
-## Layout & Spacing
+**Where coral goes:**
+- **The one main action** on a screen, as a filled gradient pill with a soft coral
+  shadow: *Start workout*, *Use this split*, the widget's *Start* button.
+  Only one per screen. Actions repeated down a list, such as *Log set*, use
+  the neutral primary button.
+- **Selection:**
+  - selected filter and picker chips (muscle chips, days-per-week, track switcher);
+  - the selected row in a list (an `accentContainer` tint plus a 70%-opacity `accent` border);
+  - the selected part on the body figure.
+- **Now and next:**
+  - the next workout's card border on Programs and Home;
+  - the running set's countdown ring;
+  - the live session progress bar;
+  - the current period's bar in a chart.
+- **Recommendation markers:** an outlined *TOP PICK* pill in `accentText` and
+  focus meters (3 bars in `accent`).
+- **Inline links** inside body copy, in `accentText`.
 
-- **Grid:** A 4px / 8px scale.
-- **Bento modules:** Content sits in rounded modules separated by gutters of 10–12px, so the canvas shows between them.
-- **Phone (primary target):**
-  - Single-column stack, 16px side margins, 16px card padding.
-  - The KPI strip becomes a horizontally swipeable row of metric tiles.
-  - Bottom navigation.
-- **Tablet / foldable:**
-  - Navigation rail on the left, styled as the 2-column tile grid in the reference: icon above label, selected tile in charcoal.
-  - Two- or three-column bento.
-  - 24px margins and 20px card padding.
-- **Rhythm:** List rows are 56px; compact rows 48px; touch targets at least 44 × 44px.
-- **Page header:** Greeting in `headline-xl-mobile` ("Good morning, Fourandhalf"), with the date beneath in `body-md` muted. Action pills and icon buttons are aligned right.
+**Where coral never goes:**
+- **Large backgrounds.** A screen or a whole module is never coral. The only
+  tinted areas allowed are an `accentContainer` row or an opened card.
+- **Meaning.** Coral never signals good or bad. Errors and losses use
+  `error` plus a glyph and words. Coral and dark `error` are only 1.18:1
+  apart, so never put them side by side and never rely on hue alone.
+- **Navigation chrome.** The bottom bar's active item stays charcoal: navigation
+  is structure, not focus.
+- **Two main actions.** At most one filled coral button per screen. A
+  selected chip in a filter row is the only other filled coral allowed.
+  Everything else stays small: text, borders, rings, meters.
 
-## Elevation & Depth
+### Champagne: milestones only
+`tertiary` `#7A6A47` (text) and `#EDE6D6` (container) in light, `#CDBB92` and
+`#2B2619` in dark. Use it for rare achievements: the streak milestone module
+and a completed program block. At most one champagne element per screen, and
+never touching coral.
 
-Depth is soft and physical: tiles feel gently raised, never floating.
+### Semantic colours (meaning only)
+| Role | Light text / container | Dark text / container | Use |
+|---|---|---|---|
+| Positive (`success`) | `#23784A` / `#DDF0E4` | `#5BBF86` / `#16291E` | Done badges, completed sets ✓, new personal records ▲ |
+| Negative (`error`) | `#B33A35` / `#F9DEDC` | `#E5726B` / `#331A18` | Failed saves, destructive actions (clear data), lower records ▼ |
+| Warning | `#8A5A0F` / `#F6E7CC` | `#D9A54A` / `#2E2414` | *Review* flags on program days, the *Advanced* split level, paused sessions |
+| Info | `#3F5F80` / `#DFE8F1` | `#8FB0D3` / `#1A2430` | Neutral notices, the *Intermediate* split level |
 
-- **Module (resting):** Surface `#F1F1F3`, 1px border `rgba(255,255,255,0.7)` on top and left as a subtle highlight, and a soft shadow: `0 1px 2px rgba(20,20,25,0.04), 0 8px 24px rgba(20,20,25,0.06)`.
-- **Inner panel** (a module inside a module): one tone darker (`#ECECEE`), with no shadow.
-- **Raised controls** (icon buttons, pills): white `#FFFFFF` fill, 1px `#DADADD` border, shadow `0 1px 2px rgba(20,20,25,0.06)`.
-- **Sheets & dialogs:** `surface-container-lowest` with shadow `0 24px 48px rgba(20,20,25,0.14)`. The scrim is `rgba(28,28,30,0.28)`.
-- **Frosted glass:** Allowed only on the navigation rail/bar and on sheets: 70–80% surface opacity with a 24px background blur. On Android below API 31 (no `RenderEffect`), fall back to a solid surface. Never put glass behind data.
-- **Motion:** 200–250ms standard easing for state changes. Numbers update in place without count-up animations.
+- Pair colour with a glyph or a word (`▲ 5 kg`, `Done ✓`). Meaning never
+  depends on colour alone.
 
-## Shapes
+### Block-type tones (workout plans)
+These are small badges on block cards, never fills. The superset, tri-set,
+giant-set and drop-set badges reuse the info, muted, champagne and warning
+tones on purpose, so a block type reads at a glance without adding new hues.
 
-Generous, consistent rounding:
+| Block | Token | Light | Dark |
+|---|---|---|---|
+| Straight | `straightBlock` | `#626267` | `#A0A0A6` |
+| Superset | `supersetBlock` | `#3F5F80` | `#8FB0D3` |
+| Tri-set | `triSetBlock` | `#5E5E63` | `#A0A0A6` |
+| Giant set | `giantSetBlock` | `#7A6A47` | `#CDBB92` |
+| Drop set | `dropSetBlock` | `#8A5A0F` | `#D9A54A` |
+| Rest-pause | `restPauseBlock` | `#23784A` | `#5BBF86` |
+
+## 3. Typography
+
+One family: **JetBrains Mono** (OFL), bundled at 400/500/600 so the app works
+offline. Fixed-width figures line up in set tables without extra work.
+
+| Style | Size / line | Weight | Use |
+|---|---|---|---|
+| `headline-xl-mobile` | 22 / 28 | 500 | Tab titles (`DayAppBar`) |
+| Screen hero title | 28–30 / 1.1 | 600, −0.5 tracking | Explore muscle name, split name |
+| `headline-md` / `titleMedium` | 14–16 | 600 | Card titles, exercise names |
+| `body-md` | 13 / 19 | 400 | Body copy, cues, steps |
+| `body-sm` | 11 / 15 | 400 | Captions, metadata |
+| `metric-hero` | 32 / 38 | 500, −0.045em | Elapsed time, big stats |
+| `metric-card` | 18 / 24 | 500 | KPI values, stepper values |
+| `metric-table` | 13 / 18 | 500, tabular | Set rows, `4 × 8–12`, pace |
+| `label-uppercase` | 10 / 12 | 600, +0.08em | Column headers, status pills |
+| **Micro-label** | 9–12 | 600, +0.22em, uppercase | Eyebrows and tags: `02 / 14 · DELTOID`, `FRONT`, `5 PICKS · GYM`, `INTERMEDIATE` |
+
+- Hierarchy comes from size and weight. Avoid 700 and heavier.
+- Sentence case by default. Uppercase only for micro-labels and status pills.
+- Formats:
+  - weights: `62.5 kg`
+  - sets × reps: `4 × 8–12` (true × and en dash)
+  - time: `27:30`
+  - pace: `5:30 /km`
+  - distance: `400 m` below 1 km, `7.5 km` above
+- Micro-labels use `MicroLabel` (`lib/core/widgets/accent.dart`). Don't
+  re-create the tracking by hand.
+
+## 4. Layout & spacing
+
+- **Grid:** 4 / 8 px scale.
+- **Phone (primary target):** 16 px side margins, 16 px card padding, 12 px
+  between modules, touch targets at least 44 × 44 px, list rows 56 px.
+- **Tab pages:** `DayAppBar` (title with today's date beneath) → optional
+  segmented control → scrolling content. Home opens with a greeting instead.
+- **Bottom navigation:** five tabs: Home · Programs · Explore · Progress ·
+  Nutrition. The active item sits on a charcoal pill.
+- **Figure-led layout** (Explore): the visual takes the left ~44%; the title,
+  part rows and the expandable Latin name take the right. Reuse this split
+  for any "pick on a picture" screen.
+- **Tablet / foldable:** a navigation rail and two-column bento, with 24 px margins.
+
+## 5. Elevation & depth
+
+- **Module:** `card` fill, a 1 px highlight border, and a soft shadow
+  (`0 1 2 rgba(20,20,25,.04), 0 8 24 rgba(20,20,25,.06)`). Dark modules use the border only.
+- **Inner panel:** one tone darker (`surface`), with no shadow.
+- **Raised control:** `raised` fill, 1 px `border`, and a hairline shadow.
+- **Coral glow:** only on filled coral controls (`accent` at 35%, 16–18 px blur,
+  y +4–6) and on the body-figure highlight. Never on cards.
+- **Sheets:** `xl` radius, a drag handle, and a 28% ink scrim.
+
+## 6. Shapes
 
 | Element | Radius |
 |---|---|
-| Large modules, hero card, sheets | `xl` (28px) |
-| Standard cards and nested panels | `lg` (20px) |
-| Inputs, list groups, chart tooltips | `md` (14px) |
-| Small chips and badges | `sm` (8px) |
-| Buttons, segmented controls, delta and callout pills, avatar, icon buttons | `full` |
+| Sheets, hero modules | `xl` 28 |
+| Cards, panels, exercise cards | `lg` 20 |
+| Inputs, part rows, photos, inner panels | `md` 14 |
+| Chips, badges, thumbnails | `sm` 8 (thumbnails 10) |
+| Buttons, segmented controls, filter chips, pills | `full` |
 
-- Nested elements use a smaller radius than their parent: outer radius minus padding, never larger.
+Nested elements use a smaller radius than their parent.
 
-## Components
+## 7. Components
+
+Shared widgets live in `lib/core/widgets/`. The coral pieces are in
+`accent.dart`.
 
 ### Buttons
-- **Primary:** Charcoal `#2A2A2D` pill, white weight-500 text, 48px height. Optionally with a circular leading icon disc, as in "+ Add card". Pressed state: `#3A3A3D`.
-- **Secondary:** White pill, 1px `#DADADD` border, ink text. Pressed state: `#F1F1F3`.
-- **Icon button:** 44px white circle, 1px `#DADADD` border, 20px outline icon in ink. Used for notifications, chat/insights and expand (`↗`).
-- **Destructive / irreversible** (e.g. *Close month*): White pill with a 1px `#B33A35` border and red text. The action requires a typed confirmation, and is never one tap.
+- **Main action (coral, `AccentButton`):** a 52 px `full` pill filled with the
+  `accentFill → accentFillEnd` gradient, `onAccent` label at weight 600, an
+  optional leading icon, and a coral glow. Only one per screen. When
+  unavailable (e.g. *Current split*), use an outline pill with muted text.
+  `compact: true` gives a 40 px pill for a list row (the Programs *Start*).
+- **Primary (neutral):** a charcoal pill (light) or light pill (dark), 48 px.
+  Use it for actions that repeat within a screen (*Log set 2*, *Add chunk*)
+  and for confirmations.
+- **Secondary:** a `raised` pill with a 1 px `border` and ink text.
+- **Outlined accent:** an `accentContainer` fill, a 60% `accent` border and
+  `accentText` icon, for secondary but encouraged actions (*Watch form videos*).
+- **Icon button:** a 44 px `raised` circle with a 20 px Lucide icon.
+- **Destructive:** an outline pill in `error`, always confirmed (*Clear data*).
 
-### KPI strip
-- A row of 3–4 metrics in one module, separated by 1px `#DADADD` vertical dividers.
-- Each metric shows:
-  - a label (`body-sm`, muted)
-  - the value (`metric-card`)
-  - a delta pill (`▲ 6.3%` in positive or negative, `metric-delta`)
-  - a 1.25px charcoal sparkline aligned right
-- In this app: **Safe to spend · Net worth · Runway (cash) · Spent this month.**
+### Chips, toggles and segmented controls
+- **Filter or selection chip (`AccentChip`):** unselected, a hairline outline
+  with `textSecondary`; selected, the coral gradient, an `onAccent` label at
+  600 and a coral glow. Use it for muscle chips, days-per-week and the
+  Programs track switcher.
+- **Compact toggle (`CompactToggle`):** a small two-way switch such as
+  GYM | HOME or FRONT | BACK. Labels are micro-labels; the selected segment
+  is a `raised` pill. It stays neutral because it switches a view, not a
+  selection.
+- **Segmented control (`SlidingSegmentedControl`):** for top-of-page view
+  switches (Muscles | Splits, Stats | History, Daily log | Meal plan).
+  Neutral.
 
-### Cards & modules
-- Title in `headline-md` with an optional muted subtitle ("This month").
-- Top-right holds either a secondary "View all" pill or a `↗` icon button.
-- Content follows below with `space-md` separation.
-- The hero module (the card carousel in the reference) becomes the **Leeway card** in this app: safe-to-spend as `metric-hero`, a daily-allowance line, days to payday, and a soft pearl gradient (`#F6F4EF → #E9E6DE`) as the one decorative surface on the screen.
+### Cards & modules (`AppCard`, `ModuleHeader`)
+- A title in `headline-md`, with an optional muted subtitle and a trailing action.
+- **Today card (Home):** the next workout with day name, week, exercises and
+  minutes, and the coral main action *Start*. Its gradient
+  (`heroStart → heroEnd`) is the screen's only decorative surface.
+- **KPI strip (Home):** Streak · Sessions · Volume · Sets, separated by
+  hairlines, using `metric-card` values and a `DeltaPill`.
+- **This week (Home):** day dots: trained days filled with the charcoal
+  anchor plus a ✓; today drawn as an `accent` ring.
+- **Program day card:** an order disc, the day name, `N exercises · ~M min`,
+  and a trailing action:
+  - next day: coral border plus the coral *Start*;
+  - running: *Resume*;
+  - done: a positive *Done ✓* badge;
+  - rest day: a moon icon and *Rest day · nothing to log*.
 
-### Account card stack (Samsung Wallet style)
-- A deck of physical-looking account cards (savings, credit card, cash, FD ladder, investments). The front card is full width at 200px tall with an `xl` radius.
-- **Cards behind it:** each sits 14px higher and 6% smaller, with only the top edge visible. At most two show; the rest are hidden.
-- **Swipe:** left brings the next card forward; right brings the previous one back. Tapping a peeking card brings it forward. Arrow keys work too.
-- **Drag feel:** the front card follows your finger with a slight rotation (`dx / 22` degrees). Past a 70px threshold it flies out and tucks to the back of the deck (450ms ease-out).
-- **Indicator:** a dots row (the active dot stretches into an 18px charcoal pill) and a `1 / 5` counter in the section header.
-- **Card finishes**, one per account type and never saturated:
-  - Pearl `#F8F7F3 → #E7E4DC`: savings
-  - Graphite `#36363A → #1E1E20` with white text: credit cards
-  - Silver `#EEEEF1 → #D6D6DB`: cash
-  - Champagne `#F1EBDD → #D9CCAE`: FDs and the emergency fund
-  - Smoke `#E2E2E6 → #C4C4CA`: investments
-- **Card content:** type and name at the top, the headline amount (`metric-card` at 22px) in the middle, and the masked number with one status fact at the bottom (e.g. "Due 28 Oct").
-- **Context panel:** directly below the stack. It switches with the front card and shows that account's key facts, a mini visual (utilisation gauge for cards, maturity list for FDs) and one action pill.
+### Live workout
+- **Session panel:** elapsed time in `metric-hero`, a target, and a pause
+  `RoundIconButton`. The progress bar is `accent` on `track`, with
+  `N of M sets`.
+- **Exercise tile:**
+  - **Header:** an icon chip, the name and the prescription.
+  - **Steppers:** 52 px fields with − and +, weight stepping by 2.5 kg.
+  - **Logged sets:** rows below with a positive ✓.
+  - **Distance sets:** distance and minutes:seconds, with a live pace line.
+- **Countdown (timed sets):** a gauge ring in `accent` while running and
+  muted while paused, with Start/Pause, Reset and *Log early*.
+- **Rest timer:** a neutral bar under the plan. The block's `restSeconds`
+  sets it; `0` hides it.
+- **Info button:** on exercises linked to the library, it opens the
+  exercise sheet.
 
-### Navigation list rows (settings, quick actions)
-- 56px row with a 36px circular icon chip (white fill, 1px border), a `body-md` label, and an optional trailing value or chevron.
-- Rows are separated by 1px `#E0E0E3` dividers inset from the left by the icon width.
+### Explore
+- **Body figure:**
+  - **Drawing:** anatomical SVG paths (react-native-body-highlighter, MIT,
+    generated into `anatomy_paths.g.dart` by `tool/build_anatomy.py`),
+    painted with a `CustomPainter`. The silhouette is `body`, muscles are
+    `muscle` with `line` seams; head, hands, knees and feet are a quieter
+    blend and never tappable. Parts of a muscle (e.g. rectus femoris, upper
+    chest) are cut from the library shapes with rect or oval masks.
+  - **Selected part:** an `accent` radial gradient with a blur glow and a
+    white hairline. The rest of that muscle gets an 18% `accent` tint.
+  - **Crosshair:** dashed guides, a white target ring that eases in, three
+    slowly rotating arcs and a centre dot, aimed at the figure's left side
+    for paired muscles.
+  - **Animation:** on each new selection a single scan band sweeps down the
+    silhouette and the highlight fades in, all within 900 ms. Nothing loops.
+  - **Credit:** shown in "How these picks were chosen" and on the licences
+    page.
+- **Muscle part row:** the name plus a FRONT/BACK micro-label. When selected,
+  the row gets the `accentContainer` tint, a 70% `accent` border, and the
+  tag in `accentText`.
+- **Recommendation card:**
+  - **Collapsed:** an 84 × 64 photo thumbnail, the name at 600, an equipment
+    chip, `metric-table` sets × reps, and a focus meter (3 bars = primary,
+    2 = assists).
+  - **Top pick:** an outlined *TOP PICK* pill and a 40% `accent` border.
+  - **Opened:** an `accentContainer` tint, the cue, a start/finish photo
+    viewer, numbered steps with `accentText` numerals, *Works* tags, and the
+    outlined-accent video button.
+- **Split card / split detail:**
+  - level as a micro-label in its semantic tone, days and schedule as
+    micro-labels;
+  - day muscles as an `accentText` micro-label line, with no-break spaces
+    so a wrapped line never starts with "·";
+  - the coral main action *Use this split*.
 
-### Transaction rows
-- **Height:** 56px.
-- **Left:** a 36px category chip, then the payee in weight-500 ink over the category · account · time in `body-sm` muted.
-- **Right:** the amount in `metric-table` tabular. Outflows are prefixed `−`, inflows `+` with a positive-colored `▲`.
-- **Status:** shown as a small badge (Draft, Reconciled 🔒, Prior-period) under the amount. Locked entries show a 12px lock glyph.
+### Badges & pills
+- **Status (`StatusBadge`, `TagPill`):** 22 px, container plus text from the
+  semantic table.
+- **Accent outline (`OutlinePill`):** for *TOP PICK* and *CURRENT*.
+- **Dark callout (`CalloutPill`):** a chart highlight value such as `+12%`.
 
-### Badges & status pills
-- Height 22px, `sm` or `full` radius, container color plus text color from the semantic table.
-- The price statuses (Verified, Manual, Mismatch, Stale, Failed, Suspicious) always use the same color and glyph across the app.
-- Dark callout pills (`#2A2A2D` fill, white `metric-delta` text) mark chart highlights such as `+12%` and `84%`.
+### Inputs
+- A 46–52 px field with a `raised` fill, `md` radius and 1 px `border`, and
+  the label above in `label-regular`.
+- Focus: a 1.5 px `primary` border, no glow.
+- The search field has a leading search icon and a clear button.
 
-### Segmented controls & period pickers
-- **Segmented:** a pill container (`#ECECEE`). The selected segment is a white pill with a soft shadow and ink text; unselected segments are muted text.
-- **Period dropdown:** a white pill reading "This month ▾".
+### Data visualisation
+- **Bars (`ThinBarChart`):** thin bars in `barMuted`. The current or selected
+  period is `accent`, with a dark callout pill above. No gridlines.
+- **Sets per muscle:** direct sets in `accent`, assisting sets in `accent` at
+  35%, and a neutral shaded band for the 10–20 target.
+- **Gauge (`GaugeArc`):** a 270° arc with a `track` background. The fill is
+  `accent` while something is running (a timed hold's countdown), and
+  `primary` for ratios such as the weekly goal or rest-pause reps.
+- **Sparklines, line charts:** 1.25–1.5 px `primary` strokes. Projections
+  are dashed.
+- Semantic colours appear in charts only for deltas.
 
-### Form inputs
-- 52px height, white fill, 1px `#DADADD` border, `md` radius.
-- The label sits above the field in `label-regular` muted.
-- Focus: a 1.5px charcoal border, no glow.
-- Amount entry uses `metric-hero-mobile` and a calculator keypad sheet.
+### Empty states (`EmptyState`)
+An icon chip, one line of ink, a muted hint and at most one action. No
+illustrations.
 
-### Data visualization
-- **Bar charts:** dense, thin vertical bars (2–3px wide, 2px gaps) in `#C9C9CD`. The current or selected period is charcoal `#2A2A2D`. A dark callout pill floats above the highlighted bar. No gridlines; just a muted axis row of month labels with the active one in ink.
-- **Dot-matrix columns** (as in "Card usage"): stacked 3px dots for usage or progress-to-limit visuals. Filled dots are charcoal, empty ones `#D4D4D8`. Used for budget usage and the impact prompt's leeway-before/after.
-- **Category distribution:** one horizontal stacked bar using tone steps (hatched light gray → mid gray → charcoal), with category labels and amounts above. A pinned callout pill marks the largest share.
-- **Gauge:** a 270° arc, 10px stroke, track `#DADADD`, fill charcoal, with the value centered and a muted caption. Used for **budget used**, **leeway used** and **card utilisation**.
-- **Sparklines:** 1.25px charcoal stroke, no fill, no axes.
-- **Line charts** (net worth, goal projection): 1.5px charcoal line with an optional 8% charcoal area fill fading to transparent. Projections are dashed. The "markets fall 30%" scenario is a dashed muted line.
-- **Semantic color in charts** is limited to deltas, the over-budget part of a bar (negative), and the goal-reached marker (champagne).
+### Home-screen widgets (Android)
+The quote card and the quote + week widgets are drawn natively
+(`QuoteCardRenderer.kt`) with the same tokens as the Home tab, in light and
+dark. As on Home, today's week dot is an `accent` ring; trained days are
+filled with the charcoal anchor.
 
-### Navigation
-- **Phone:** a bottom bar on a frosted surface with a top hairline `#DADADD`. Five items: Home · Transactions · Accounts · Invest · More. The active item sits on a charcoal pill with a white icon and label; inactive items are muted. The Quick Add button is a 56px charcoal circle with a white `+`, floating bottom-right just above the bar.
-- **Tablet:** the tile-grid rail from the reference. Each tile is about 96px square with an `lg` radius and white fill; the selected tile is charcoal with white content. Secondary actions are listed below as navigation list rows.
+## 8. Motion
+- 200–250 ms standard easing for state changes: chips, rows, toggles, card
+  expand (240 ms), rotating chevrons.
+- 900 ms for the figure when a view first shows: one scan sweep, then the
+  highlight fades in.
+- 480 ms ease-in-out glide between selections on the same view (another part
+  or another muscle): the old highlight fades out, the new fades in, and the
+  target slides across with one soft pulse. No scan replay.
+- 320 ms cross-fade when the figure flips FRONT/BACK.
+- 280 ms fade with a 1.5% rise (`SmoothSwap`) when the muscle title and parts
+  or the recommendation list change; the height eases at the same time.
+- Exercise photos: one large photo at the top of an opened card or sheet
+  (the card's thumbnail tucks away). It alternates START/FINISH every 1.8 s
+  with a 450 ms cross-fade; a tap flips at once. It stays still when the
+  system asks for reduced motion.
+- Numbers change in place, with no count-up animations.
+- Selecting a muscle on the figure scrolls its chip into view.
 
-## Application notes (Money Matters)
+## 9. Adoption across the app
 
-- **Accountant mode:** journal views use `ledger-mono` in an inner panel. Debit and credit columns are right-aligned and tabular, with a positive "✓ Balanced" badge in the footer.
-- **Closed months:** shown with a champagne seal badge ("Closed · Sep 2026") and a lock glyph. Editing affordances are hidden, not merely disabled.
-- **Impact prompt:** a bottom sheet (`xl` radius) with dot-matrix columns for leeway before and after, a large daily-allowance figure, and three stacked full-width buttons: Confirm with reason (primary), Save as draft (secondary), Cancel (text).
-- **Price status bar:** a full-width inner panel at the top of the Prices screen with one row per source (NSE, AMFI). Each row shows a semantic badge, the last success time and the failure reason in plain words, with Retry and Change URL as secondary pills.
+Every screen follows the coral rules. `test/core/design_rules_test.dart`
+walks Home → Programs → day preview → live workout → Explore → split
+detail → Progress → Nutrition. It fails if any screen shows more than one
+coral main action, or if coral is missing from the places below.
+
+| Area | Coral today |
+|---|---|
+| Home | *Start workout* / *Resume workout* main action; today's week dot ring |
+| Programs | Selected track chip (`AccentChip`); next or running day: `accent` border and a compact coral *Start* / *Resume* |
+| Day preview / live workout | *Start ‹day› Workout*, then *Finish workout*; session progress bar; a running countdown ring |
+| Explore | Selected muscle and part; *Use this split*; top picks, meters, set bars |
+| Progress (and Home charts) | The current period's bar in every `ThinBarChart` |
+| Nutrition | *Snap Meal* (camera) tile |
+| Android widgets | Today's week dot ring |
+
+When a new screen is added, add it to this table and to the design-rules test.
+
+## 10. Checking a screen against this document
+
+1. **Count filled coral controls.** At most one per screen.
+2. **Check coral text.** It always uses `accentText`, never `accent`.
+3. **Check text on coral fills.** It always uses `onAccent`, never hard-coded white.
+4. **Check meaning.** No coral where it could be read as good or bad.
+5. **Test and render it.**
+   - `flutter test test/core/design_rules_test.dart` enforces rules 1 and the
+     §9 placements.
+   - `flutter test tool/screens/render_screens_test.dart` writes dark and
+     light screenshots of every main screen to `build/screens/`, and fails on
+     any overflow.
+   - Extend both when a screen is added.

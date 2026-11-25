@@ -21,6 +21,7 @@ import '../workout/widgets/rest_timer_widget.dart';
 import 'program_providers.dart';
 import 'widgets/block_card.dart';
 import 'widgets/exercise_tile.dart';
+import '../../core/widgets/accent.dart';
 
 class DayDetailScreen extends ConsumerStatefulWidget {
   final String programId;
@@ -399,9 +400,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                     child: day.isRestDay && !isActive
                         ? const SizedBox.shrink()
                         : isActive
-                        ? ElevatedButton.icon(
-                            icon: const Icon(LucideIcons600.flag, size: 18),
-                            label: const Text('Finish workout'),
+                        ? AccentButton(
+                            icon: LucideIcons600.flag,
+                            label: 'Finish workout',
                             onPressed: () async {
                               await _alarmService.stopWorkoutTimer();
                               await workoutNotifier.finishWorkout();
@@ -415,9 +416,9 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen>
                               }
                             },
                           )
-                        : ElevatedButton.icon(
-                            icon: const Icon(LucideIcons600.play),
-                            label: Text('Start ${day.name} Workout'),
+                        : AccentButton(
+                            icon: LucideIcons600.play,
+                            label: 'Start ${day.name} Workout',
                             onPressed: () {
                               workoutNotifier.initDay(
                                 day,
@@ -541,7 +542,13 @@ class _SessionPanel extends StatelessWidget {
               tween: Tween(end: setsTotal == 0 ? 0 : setsDone / setsTotal),
               duration: const Duration(milliseconds: 250),
               builder: (context, value, _) =>
-                  LinearProgressIndicator(value: value, minHeight: 6),
+                  // Live progress is "now": coral on the neutral track.
+                  LinearProgressIndicator(
+                    value: value,
+                    minHeight: 6,
+                    color: colors.accent,
+                    backgroundColor: colors.track,
+                  ),
             ),
           ),
           const SizedBox(height: 8),

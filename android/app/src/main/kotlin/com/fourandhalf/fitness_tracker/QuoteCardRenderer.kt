@@ -27,17 +27,21 @@ private class Palette(
     val onPrimary: Int,
     val text: Int,
     val secondary: Int,
+    /** Coral accent (design/DESIGN.md): today's ring, as on the Home tab. */
+    val accent: Int,
 )
 
 private val LIGHT = Palette(
     card = 0xFFF1F1F3.toInt(), surface = 0xFFECECEE.toInt(), border = 0xFFDADADD.toInt(),
     edge = 0xB3FFFFFF.toInt(), primary = 0xFF2A2A2D.toInt(), onPrimary = 0xFFFFFFFF.toInt(),
     text = 0xFF1C1C1E.toInt(), secondary = 0xFF626267.toInt(),
+    accent = 0xFFE4572E.toInt(),
 )
 private val DARK = Palette(
     card = 0xFF161618.toInt(), surface = 0xFF1C1C1F.toInt(), border = 0xFF2C2C30.toInt(),
     edge = 0xFF2C2C30.toInt(), primary = 0xFFECECEE.toInt(), onPrimary = 0xFF161618.toInt(),
     text = 0xFFECECEE.toInt(), secondary = 0xFFA0A0A6.toInt(),
+    accent = 0xFFFF7A59.toInt(),
 )
 
 // Lucide "quote" and "check", drawn on a 24-unit grid.
@@ -204,7 +208,7 @@ internal object QuoteCardRenderer {
                     }
                     "today" -> {
                         canvas.drawCircle(cx, cy, r - 0.75f, fill(colors.surface))
-                        canvas.drawCircle(cx, cy, r - 0.75f, stroke(colors.primary, 1.5f))
+                        canvas.drawCircle(cx, cy, r - 0.75f, stroke(colors.accent, 1.5f))
                     }
                     "missed" -> {
                         canvas.drawCircle(cx, cy, r - 0.5f, fill(colors.surface))

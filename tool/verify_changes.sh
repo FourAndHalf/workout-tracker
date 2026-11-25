@@ -53,18 +53,21 @@ fi
 
 step "4/5 Tests named in docs/CHANGES.md"
 "$FLUTTER" test \
+  test/features/split_session_test.dart \
+  test/core/design_rules_test.dart \
   test/features/endurance_track_test.dart \
   test/features/distance_logging_test.dart \
   test/features/session_detail_test.dart \
   test/data/library_model_test.dart \
   test/features/explore_test.dart \
+  test/core/third_party_licenses_test.dart \
   test/features/progress_hub_navigation_test.dart
 
 step "5/5 Full test suite"
 "$FLUTTER" test
 
 if want --screens; then
-  step "Extra: render Explore screens (dark + light) to build/screens/"
+  step "Extra: render the main screens (dark + light) to build/screens/"
   "$FLUTTER" test tool/screens/render_screens_test.dart
   ls build/screens
 fi

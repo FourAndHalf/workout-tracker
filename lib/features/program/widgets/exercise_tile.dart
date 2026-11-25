@@ -445,15 +445,20 @@ class _ExerciseTileState extends State<ExerciseTile> {
 
           if (exercise.logMode == 'failure') ...[
             const SizedBox(height: 4),
-            SwitchListTile(
-              value: _hitFailure,
-              onChanged: (val) => setState(() => _hitFailure = val),
-              title: Text(
-                'Reached failure',
-                style: Theme.of(context).textTheme.bodyMedium,
+            // Its own Material: the tile sits on a coloured panel, which
+            // would otherwise hide the switch row's ripple.
+            Material(
+              type: MaterialType.transparency,
+              child: SwitchListTile(
+                value: _hitFailure,
+                onChanged: (val) => setState(() => _hitFailure = val),
+                title: Text(
+                  'Reached failure',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                contentPadding: EdgeInsets.zero,
+                dense: true,
               ),
-              contentPadding: EdgeInsets.zero,
-              dense: true,
             ),
           ],
 

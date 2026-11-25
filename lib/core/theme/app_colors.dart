@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 /// "Pearl Ledger" color tokens (see design/DESIGN.md), resolved by brightness
 /// through [ThemeExtension]. Read them with `context.colors`.
 ///
-/// Hierarchy comes from tone, not hue: [primary] is the single charcoal
-/// anchor, and the semantic colors ([success], [error], [warning], [info])
-/// only ever appear small (a delta, a badge, a dot).
+/// Hierarchy comes from tone, not hue: [primary] is the charcoal anchor,
+/// [accent] (coral) marks focus and the one main action on a screen, and the
+/// semantic colors ([success], [error], [warning], [info]) only ever appear
+/// small (a delta, a badge, a dot).
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
@@ -43,6 +44,12 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.giantSetBlock,
     required this.dropSetBlock,
     required this.restPauseBlock,
+    required this.accent,
+    required this.accentText,
+    required this.accentFill,
+    required this.accentFillEnd,
+    required this.onAccent,
+    required this.accentContainer,
   });
 
   // Surfaces: canvas, inner panel, module, raised control, hairlines
@@ -95,6 +102,24 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color dropSetBlock;
   final Color restPauseBlock;
 
+  // Coral accent (design/DESIGN.md › Colors › Coral accent). Every pairing
+  // below meets WCAG AA; see the contrast table there.
+  /// Graphics only: highlights, the current bar, meters, borders, glows.
+  final Color accent;
+
+  /// Coral text and small icons on any surface (4.5:1 or better).
+  final Color accentText;
+
+  /// Gradient for filled coral controls (main action, selected chip).
+  final Color accentFill;
+  final Color accentFillEnd;
+
+  /// Text and icons on [accentFill].
+  final Color onAccent;
+
+  /// Soft tint behind a selected row or an opened card.
+  final Color accentContainer;
+
   static const light = AppColors(
     background: Color(0xFFE8E8EA),
     surface: Color(0xFFECECEE),
@@ -130,6 +155,12 @@ class AppColors extends ThemeExtension<AppColors> {
     giantSetBlock: Color(0xFF7A6A47),
     dropSetBlock: Color(0xFF8A5A0F),
     restPauseBlock: Color(0xFF23784A),
+    accent: Color(0xFFE4572E),
+    accentText: Color(0xFFB83A18),
+    accentFill: Color(0xFFCC4722),
+    accentFillEnd: Color(0xFFB23514),
+    onAccent: Color(0xFFFFFFFF),
+    accentContainer: Color(0xFFFCE7DF),
   );
 
   static const dark = AppColors(
@@ -167,6 +198,12 @@ class AppColors extends ThemeExtension<AppColors> {
     giantSetBlock: Color(0xFFCDBB92),
     dropSetBlock: Color(0xFFD9A54A),
     restPauseBlock: Color(0xFF5BBF86),
+    accent: Color(0xFFFF7A59),
+    accentText: Color(0xFFFF7A59),
+    accentFill: Color(0xFFFF7A59),
+    accentFillEnd: Color(0xFFF0533A),
+    onAccent: Color(0xFF161618),
+    accentContainer: Color(0xFF2A1812),
   );
 
   @override
@@ -205,6 +242,12 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? giantSetBlock,
     Color? dropSetBlock,
     Color? restPauseBlock,
+    Color? accent,
+    Color? accentText,
+    Color? accentFill,
+    Color? accentFillEnd,
+    Color? onAccent,
+    Color? accentContainer,
   }) {
     return AppColors(
       background: background ?? this.background,
@@ -241,6 +284,12 @@ class AppColors extends ThemeExtension<AppColors> {
       giantSetBlock: giantSetBlock ?? this.giantSetBlock,
       dropSetBlock: dropSetBlock ?? this.dropSetBlock,
       restPauseBlock: restPauseBlock ?? this.restPauseBlock,
+      accent: accent ?? this.accent,
+      accentText: accentText ?? this.accentText,
+      accentFill: accentFill ?? this.accentFill,
+      accentFillEnd: accentFillEnd ?? this.accentFillEnd,
+      onAccent: onAccent ?? this.onAccent,
+      accentContainer: accentContainer ?? this.accentContainer,
     );
   }
 
@@ -283,6 +332,12 @@ class AppColors extends ThemeExtension<AppColors> {
       giantSetBlock: l(giantSetBlock, other.giantSetBlock),
       dropSetBlock: l(dropSetBlock, other.dropSetBlock),
       restPauseBlock: l(restPauseBlock, other.restPauseBlock),
+      accent: l(accent, other.accent),
+      accentText: l(accentText, other.accentText),
+      accentFill: l(accentFill, other.accentFill),
+      accentFillEnd: l(accentFillEnd, other.accentFillEnd),
+      onAccent: l(onAccent, other.onAccent),
+      accentContainer: l(accentContainer, other.accentContainer),
     );
   }
 }

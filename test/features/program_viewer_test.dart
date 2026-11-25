@@ -10,6 +10,7 @@ import 'package:fitness_tracker/data/database/app_database.dart';
 import 'package:fitness_tracker/data/models/program_model.dart';
 import 'package:fitness_tracker/features/program/program_list_screen.dart';
 import 'package:fitness_tracker/features/program/program_providers.dart';
+import 'package:fitness_tracker/core/widgets/accent.dart';
 
 void main() {
   setUp(() => appRouter.go('/'));
@@ -190,8 +191,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     // Arms is the next day due, so only its card offers Start.
-    expect(find.widgetWithText(ElevatedButton, 'Start'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Start'));
+    expect(find.widgetWithText(AccentButton, 'Start'), findsOneWidget);
+    await tester.tap(find.widgetWithText(AccentButton, 'Start'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 

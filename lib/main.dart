@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/legal/third_party_licenses.dart';
 import 'data/database/app_database.dart';
 import 'data/repositories/backup_repository.dart';
 import 'data/repositories/program_repository.dart';
@@ -81,6 +82,7 @@ final backupRepositoryProvider = FutureProvider<BackupRepository>((ref) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  registerThirdPartyLicenses();
   // Fire-and-forget: a stuck or failing plugin call here must never block
   // the first frame, which is what dismisses the native splash screen.
   unawaited(DailyWorkoutAlarmService().initialize());

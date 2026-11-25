@@ -92,6 +92,8 @@ class _ExerciseCountdownTimerState extends State<ExerciseCountdownTimer> {
           value: progress,
           size: 76,
           stroke: 6,
+          // Coral only while the hold is actually running.
+          color: _running && !widget.paused ? colors.accent : null,
           child: Text(
             _clock(remaining),
             key: const Key('countdownReadout'),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fitness_tracker/core/widgets/accent.dart';
 
 ProgramModel _program(String id, String name) => ProgramModel(
   schemaVersion: 1,
@@ -56,8 +57,8 @@ void main() {
 
     expect(container.read(selectedProgramIdProvider), 'a');
 
-    expect(find.widgetWithText(ChoiceChip, 'Track A'), findsOneWidget);
-    expect(find.widgetWithText(ChoiceChip, 'Track B'), findsOneWidget);
+    expect(find.widgetWithText(AccentChip, 'Track A'), findsOneWidget);
+    expect(find.widgetWithText(AccentChip, 'Track B'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('track-b')));
     await tester.pumpAndSettle();
 

@@ -2,16 +2,19 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:path_drawing/path_drawing.dart';
 
+import 'anatomy_paths.g.dart';
 import 'explore_style.dart';
 
-/// A front/back anatomy figure with tappable muscle zones, drawn from
-/// scratch for this app.
+/// A front/back anatomy figure with tappable muscle groups.
 ///
-/// Everything lives in a 100 x 220 unit box. Each shape is described for the
-/// figure's left half as a handful of points and mirrored; a Catmull-Rom
-/// spline through the points gives the smooth outlines. Masks carve each
-/// muscle into its parts (the upper chest, the long head, ...).
+/// The body outline and muscle shapes come from react-native-body-highlighter
+/// (MIT, © 2022 ELABBASSI Hicham; see `anatomy_paths.g.dart`). This widget
+/// maps those shapes onto the app's muscle groups and their parts, and draws
+/// the selection: a coral highlight with a soft glow, dashed crosshair guides,
+/// a target ring, a scan sweep when a view first shows, and a glide
+/// between selections (see [_FigureCanvas]).
 class BodyFigure extends StatelessWidget {
   final String muscleId;
   final String? regionId;
@@ -20,7 +23,7 @@ class BodyFigure extends StatelessWidget {
   final String view;
   final ValueChanged<String> onSelectMuscle;
 
-  /// Draws the dashed crosshair through the highlighted part.
+  /// Draws the crosshair, ring and scan sweep.
   final bool guides;
 
   const BodyFigure({
@@ -32,59 +35,73 @@ class BodyFigure extends StatelessWidget {
     this.guides = true,
   });
 
-  /// The side of the body a muscle (or one of its parts) is drawn on.
+  /// The side of the body a muscle (or one of its parts) is drawn on. A
+  /// muscle that shows on both sides prefers the side it's mostly seen from.
   static String? viewFor(String muscleId, String? regionId) {
-    for (final side in const ['front', 'back']) {
+    final preferred = _preferBack.contains(muscleId)
+        ? const ['back', 'front']
+        : const ['front', 'back'];
+    for (final side in preferred) {
       for (final zone in _zones(side)) {
         if (zone.muscle != muscleId) continue;
-        if (regionId == null || zone.masks.containsKey(regionId)) return side;
+        if (regionId == null || zone.regions.containsKey(regionId)) {
+          return side;
+        }
       }
     }
     return null;
   }
 
-  /// The muscle group at [unit] (figure coordinates), if any.
+  /// The muscle group at [point], in the view's own coordinates
+  /// (see [viewport]).
   @visibleForTesting
-  static String? hitTest(String view, Offset unit) {
+  static String? hitTest(String view, Offset point) {
     for (final zone in _zones(view).reversed) {
-      if (zone.path.contains(unit)) return zone.muscle;
+      if (zone.path.contains(point)) return zone.muscle;
     }
     return null;
   }
 
+  /// The part of the view's coordinate space the figure shows.
+  static Rect viewport(String view) => view == 'back' ? _backBox : _frontBox;
+
   @override
   Widget build(BuildContext context) {
     final tokens = ExploreTokens.of(context);
+    final box = viewport(view);
     return AspectRatio(
-      aspectRatio: _w / _h,
+      aspectRatio: box.width / box.height,
       child: LayoutBuilder(
-        builder: (context, box) => GestureDetector(
+        builder: (context, constraints) => GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTapUp: (details) {
-            final unit = Offset(
-              details.localPosition.dx / box.maxWidth * _w,
-              details.localPosition.dy / box.maxHeight * _h,
+            final point = Offset(
+              box.left +
+                  details.localPosition.dx / constraints.maxWidth * box.width,
+              box.top +
+                  details.localPosition.dy / constraints.maxHeight * box.height,
             );
-            final hit = hitTest(view, unit);
+            final hit = hitTest(view, point);
             if (hit != null) onSelectMuscle(hit);
           },
           child: Semantics(
             label:
                 '${view == 'front' ? 'Front' : 'Back'} view, $muscleId highlighted',
-            child: TweenAnimationBuilder<double>(
-              key: ValueKey('$view/$muscleId/$regionId'),
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 420),
-              curve: Curves.easeOutCubic,
-              builder: (context, t, _) => CustomPaint(
-                painter: _FigurePainter(
-                  view: view,
-                  muscleId: muscleId,
-                  regionId: regionId,
-                  tokens: tokens,
-                  guides: guides,
-                  reveal: t,
-                ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 320),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              layoutBuilder: (current, previous) => Stack(
+                fit: StackFit.expand,
+                children: [...previous, ?current],
+              ),
+              child: _FigureCanvas(
+                key: ValueKey(view),
+                view: view,
+                muscleId: muscleId,
+                regionId: regionId,
+                tokens: tokens,
+                guides: guides,
               ),
             ),
           ),
@@ -94,615 +111,421 @@ class BodyFigure extends StatelessWidget {
   }
 }
 
-const double _w = 100;
-const double _h = 220;
+/// Paints one view and animates between selections on it: the first
+/// selection lands with a scan sweep; later ones glide, the old highlight
+/// fading out while the target slides to the new part.
+class _FigureCanvas extends StatefulWidget {
+  final String view;
+  final String muscleId;
+  final String? regionId;
+  final ExploreTokens tokens;
+  final bool guides;
+
+  const _FigureCanvas({
+    super.key,
+    required this.view,
+    required this.muscleId,
+    required this.regionId,
+    required this.tokens,
+    required this.guides,
+  });
+
+  @override
+  State<_FigureCanvas> createState() => _FigureCanvasState();
+}
+
+class _FigureCanvasState extends State<_FigureCanvas>
+    with SingleTickerProviderStateMixin {
+  static const _enter = Duration(milliseconds: 900);
+  static const _glide = Duration(milliseconds: 480);
+
+  late final _ctrl = AnimationController(vsync: this, duration: _enter)
+    ..forward();
+  bool _entering = true;
+  String? _fromMuscle;
+  String? _fromRegion;
+  Offset? _fromAim;
+
+  @override
+  void didUpdateWidget(_FigureCanvas old) {
+    super.didUpdateWidget(old);
+    if (old.muscleId == widget.muscleId && old.regionId == widget.regionId) {
+      return;
+    }
+    // Start the glide from wherever the target is right now, so a change
+    // made mid-animation never jumps.
+    final e = _eased;
+    final aimFrom = _entering ? null : _fromAim;
+    final aimTo = _aimFor(widget.view, old.muscleId, old.regionId);
+    _fromAim = aimFrom != null && aimTo != null
+        ? Offset.lerp(aimFrom, aimTo, e)
+        : aimTo;
+    _fromMuscle = old.muscleId;
+    _fromRegion = old.regionId;
+    _entering = false;
+    _ctrl
+      ..duration = _glide
+      ..forward(from: 0);
+  }
+
+  double get _eased =>
+      _entering ? _ctrl.value : Curves.easeInOutCubic.transform(_ctrl.value);
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _ctrl,
+    builder: (context, _) => CustomPaint(
+      painter: _FigurePainter(
+        view: widget.view,
+        muscleId: widget.muscleId,
+        regionId: widget.regionId,
+        fromMuscle: _entering ? null : _fromMuscle,
+        fromRegion: _fromRegion,
+        fromAim: _entering ? null : _fromAim,
+        entering: _entering,
+        tokens: widget.tokens,
+        guides: widget.guides,
+        t: _eased,
+      ),
+    ),
+  );
+}
+
+/// Where the target sits for a selection: the selected part, or the
+/// figure's left-hand one when the part is a pair.
+Offset? _aimFor(String view, String muscleId, String? regionId) {
+  final focus = _focusFor(view, muscleId, regionId);
+  if (focus == null) return null;
+  return _aimCache.putIfAbsent('$view/$muscleId/$regionId', () {
+    final box = BodyFigure.viewport(view);
+    final bounds = focus.getBounds();
+    final left = Path.combine(
+      PathOperation.intersect,
+      focus,
+      Path()..addRect(
+        Rect.fromLTRB(box.left, box.top, box.center.dx + 4, box.bottom),
+      ),
+    ).getBounds();
+    return (left.isEmpty || left.right >= box.center.dx - 4)
+        ? bounds.center
+        : left.center;
+  });
+}
+
+final _aimCache = <String, Offset>{};
+
+/// The zone of [muscleId] on [view] and the path of the selected part.
+({Path zone, Path focus})? _selection(
+  String view,
+  String muscleId,
+  String? regionId,
+) {
+  final zone = _zones(view).where((z) => z.muscle == muscleId).firstOrNull;
+  if (zone == null) return null;
+  return (
+    zone: zone.path,
+    focus: (regionId == null ? null : zone.regions[regionId]) ?? zone.path,
+  );
+}
+
+Path? _focusFor(String view, String muscleId, String? regionId) =>
+    _selection(view, muscleId, regionId)?.focus;
 
 // ------------------------------------------------------------------ geometry
 
-/// A closed Catmull-Rom spline through [xy] (x, y pairs).
-Path _smooth(List<double> xy) {
-  final pts = [for (var i = 0; i < xy.length; i += 2) Offset(xy[i], xy[i + 1])];
-  final n = pts.length;
-  final path = Path()..moveTo(pts[0].dx, pts[0].dy);
-  for (var i = 0; i < n; i++) {
-    final p0 = pts[(i - 1 + n) % n];
-    final p1 = pts[i];
-    final p2 = pts[(i + 1) % n];
-    final p3 = pts[(i + 2) % n];
-    final c1 = p1 + (p2 - p0) / 6;
-    final c2 = p2 - (p3 - p1) / 6;
-    path.cubicTo(c1.dx, c1.dy, c2.dx, c2.dy, p2.dx, p2.dy);
-  }
-  return path..close();
-}
+/// What the figure shows of each 724 x 1448 view, with a little margin.
+const _frontBox = Rect.fromLTRB(20, 84, 704, 1372);
+const _backBox = Rect.fromLTRB(744, 84, 1428, 1372);
 
-Path _mirror(Path p) => p.transform(
-  (Matrix4.identity()
-        ..translateByDouble(_w, 0, 0, 1)
-        ..scaleByDouble(-1, 1, 1, 1))
-      .storage,
+/// Muscles drawn on both sides that are mostly seen from behind.
+const _preferBack = {
+  'triceps',
+  'calves',
+  'hamstrings',
+  'glutes',
+  'back',
+  'traps',
+  'lower-back',
+};
+
+/// Shapes that are body, not trainable muscle: drawn, never tappable.
+const _bodyOnly = {
+  'neck',
+  'knees',
+  'hands',
+  'ankles',
+  'feet',
+  'head',
+  'hair',
+  'tibialis',
+};
+
+final _shapeCache = <String, Map<String, Path>>{};
+
+/// Parsed SVG paths for every slug of a view.
+Map<String, Path> _shapes(String view) => _shapeCache.putIfAbsent(view, () {
+  final out = <String, Path>{};
+  anatomyMuscles[view]!.forEach((slug, paths) {
+    final path = Path();
+    for (final d in paths) {
+      path.addPath(parseSvgPathData(d), Offset.zero);
+    }
+    out[slug] = path;
+  });
+  return out;
+});
+
+final _outlineCache = <String, Path>{};
+Path _outline(String view) => _outlineCache.putIfAbsent(
+  view,
+  () => parseSvgPathData(anatomyOutline[view]!),
 );
 
-/// [left] plus its mirror image.
-Path _pair(Path left) => Path.combine(PathOperation.union, left, _mirror(left));
+Path _rects(List<Rect> rects, {bool oval = false}) {
+  final p = Path();
+  for (final r in rects) {
+    oval ? p.addOval(r) : p.addRect(r);
+  }
+  return p;
+}
 
-Path _sp(List<double> xy) => _pair(_smooth(xy));
+Path _union(Iterable<Path> paths) {
+  Path? out;
+  for (final p in paths) {
+    out = out == null ? p : Path.combine(PathOperation.union, out, p);
+  }
+  return out ?? Path();
+}
 
-Path _rect(double l, double t, double r, double b) =>
-    Path()..addRect(Rect.fromLTRB(l, t, r, b));
+/// One part of a muscle: some of its shapes, optionally cut to some areas.
+class _Part {
+  /// Shapes the part covers; empty means all of the zone's shapes.
+  final Set<String> slugs;
+  final List<Rect>? within;
 
-Path _maskPair(Path left) => _pair(left);
+  /// Treat [within] as ovals, for a soft-edged cut down a muscle.
+  final bool oval;
+  const _Part({this.slugs = const {}, this.within, this.oval = false});
+}
 
-Path _union(List<Path> paths) =>
-    paths.reduce((a, b) => Path.combine(PathOperation.union, a, b));
+/// A muscle group on one view: the shapes it owns and where its parts are.
+class _ZoneSpec {
+  final String muscle;
+  final List<String> slugs;
+
+  /// Keep only these areas of the shapes (the outer hip of the gluteal).
+  final List<Rect>? within;
+  final Map<String, _Part> regions;
+  const _ZoneSpec(this.muscle, this.slugs, this.regions, {this.within});
+}
 
 class _Zone {
   final String muscle;
   final Path path;
-
-  /// Muscle part id -> where it sits. Parts without an entry are not drawn on
-  /// this side of the body.
-  final Map<String, Path> masks;
-  const _Zone(this.muscle, this.path, this.masks);
+  final Map<String, Path> regions;
+  const _Zone(this.muscle, this.path, this.regions);
 }
 
-Path? _silhouetteCache;
+const _all = _Part();
+const double _w = 724;
 
-/// The body outline, shared by both views.
-Path _silhouette() => _silhouetteCache ??= _union([
-  Path()..addOval(
-    Rect.fromCenter(center: const Offset(50, 14), width: 16, height: 21),
-  ),
-  // neck
-  _sp([45, 20, 51, 20, 51, 33, 44, 33, 43.5, 27]),
-  // torso, with the trapezius slope into the shoulder
-  _sp([
-    51,
-    28,
-    45,
-    30,
-    35,
-    33.5,
-    26,
-    36.5,
-    21.5,
-    42,
-    21,
-    50,
-    24.5,
-    57,
-    27.5,
-    66,
-    29,
-    80,
-    29.5,
-    94,
-    30.5,
-    106,
-    30,
-    116,
-    33,
-    125,
-    42,
-    129,
-    51,
-    130,
-  ]),
-  // upper arm
-  _sp([
-    22,
-    40,
-    17.5,
-    46,
-    14.5,
-    58,
-    13,
-    72,
-    13.5,
-    86,
-    16.5,
-    92,
-    21,
-    90,
-    23.5,
-    78,
-    25.5,
-    64,
-    27,
-    50,
-  ]),
-  // forearm
-  _sp([
-    14,
-    86,
-    11,
-    98,
-    8.5,
-    112,
-    8,
-    124,
-    10.5,
-    129,
-    13.5,
-    127,
-    16,
-    116,
-    19,
-    102,
-    21,
-    90,
-  ]),
-  // hand
-  _sp([
-    8.5,
-    124,
-    6,
-    131,
-    5.5,
-    140,
-    7.5,
-    147,
-    11,
-    148.5,
-    13.5,
-    143,
-    14,
-    134,
-    13.5,
-    127,
-  ]),
-  // thigh
-  _sp([
-    31,
-    106,
-    28.5,
-    120,
-    28.5,
-    138,
-    31,
-    154,
-    34.5,
-    166,
-    41,
-    169,
-    46,
-    164,
-    48.5,
-    150,
-    49.5,
-    134,
-    50.2,
-    124,
-    46,
-    119,
-    39,
-    114,
-  ]),
-  // lower leg
-  _sp([
-    34.5,
-    162,
-    32.5,
-    174,
-    33,
-    188,
-    36.5,
-    203,
-    41.5,
-    206,
-    44.5,
-    196,
-    46,
-    182,
-    45.5,
-    168,
-    43,
-    162,
-  ]),
-  // foot
-  _sp([37, 201, 35, 209, 37.5, 215, 44, 215.5, 47, 211, 45.5, 204, 42, 201]),
-]);
-
-List<_Zone>? _front;
-List<_Zone>? _back;
-
-List<_Zone> _zones(String view) =>
-    view == 'back' ? (_back ??= _buildBack()) : (_front ??= _buildFront());
-
-final _deltoid = <double>[
-  33,
-  34.5,
-  26.5,
-  36.5,
-  21.5,
-  42,
-  20.5,
-  50,
-  22.5,
-  57,
-  26,
-  55,
-  28.5,
-  47,
-  31.5,
-  39.5,
-];
-final _upperArm = <double>[
-  23.5,
-  57,
-  19,
-  63,
-  17,
-  73,
-  17,
-  83,
-  19.5,
-  88.5,
-  23,
-  84,
-  25.5,
-  73,
-  26.5,
-  62,
-];
-final _forearm = <double>[
-  19,
-  90,
-  14.5,
-  98,
-  11.5,
-  109,
-  10.5,
-  121,
-  13,
-  125,
-  15.5,
-  115,
-  18.5,
-  103,
-  20.5,
-  93,
-];
-
-List<_Zone> _buildFront() => [
-  _Zone('traps', _sp([45.5, 30, 39, 32.5, 33.5, 35, 40, 36.5, 46, 34]), {
-    'upper-traps': _rect(0, 0, 100, 100),
-  }),
-  _Zone('shoulders', _sp(_deltoid), {
-    'front-delts': _maskPair(_rect(24, 28, 40, 60)),
-    'side-delts': _maskPair(_rect(10, 28, 24, 60)),
-  }),
-  _Zone(
-    'chest',
-    _sp([
-      49.5,
-      40,
-      42,
-      37.5,
-      33.5,
-      39.5,
-      29,
-      46,
-      29.5,
-      54,
-      34.5,
-      60.5,
-      42.5,
-      62,
-      49.5,
-      59.5,
-    ]),
+// Rects are in each view's own coordinates. Front: x 0-724. Back: x 724-1448.
+const _frontSpecs = [
+  _ZoneSpec('traps', ['trapezius'], {'upper-traps': _all}),
+  _ZoneSpec(
+    'shoulders',
+    ['deltoids'],
     {
-      'upper-chest': _maskPair(_rect(26, 34, 50, 46.5)),
-      'mid-chest': _maskPair(_rect(26, 46.5, 50, 54)),
-      'lower-chest': _maskPair(_rect(26, 54, 50, 64)),
-    },
-  ),
-  _Zone('biceps', _sp(_upperArm), {
-    'long-head': _maskPair(_rect(14, 55, 21.8, 92)),
-    'short-head': _maskPair(_rect(21.8, 55, 30, 92)),
-    'brachialis': _maskPair(_rect(14, 77, 30, 92)),
-  }),
-  _Zone('forearms', _sp(_forearm), {
-    'flexors': _maskPair(_rect(6, 86, 24, 130)),
-  }),
-  _Zone(
-    'core',
-    _union([
-      _sp([50.4, 63, 42, 64, 40.5, 76, 41.2, 90, 43, 102, 50.4, 109]),
-      _sp([
-        40,
-        64.5,
-        33.5,
-        62.5,
-        30.5,
-        72,
-        31,
-        88,
-        33.5,
-        101,
-        40.5,
-        104,
-        41.5,
-        90,
-        40,
-        77,
-      ]),
-    ]),
-    {
-      'abs': _rect(40.8, 58, 59.2, 112),
-      'obliques': _maskPair(_rect(28, 58, 40.8, 108)),
-      'deep-core': _rect(38, 74, 62, 102),
-    },
-  ),
-  _Zone(
-    'hips',
-    _union([
-      _sp([50.2, 124, 45, 123, 41.5, 131, 43, 145, 47.5, 151, 49.8, 140]),
-      _sp([33.5, 107, 30.2, 113, 29.8, 125, 32.5, 124, 35, 114]),
-    ]),
-    {
-      'adductors': _maskPair(_rect(40, 118, 50, 154)),
-      'abductors': _maskPair(_rect(26, 104, 37, 128)),
-    },
-  ),
-  _Zone(
-    'quads',
-    _sp([
-      36,
-      117,
-      31.5,
-      129,
-      31,
-      145,
-      34,
-      159,
-      39,
-      165.5,
-      44,
-      163.5,
-      45,
-      152,
-      43,
-      138,
-      41,
-      128,
-      40.5,
-      120,
-    ]),
-    {
-      'vasti': _maskPair(_rect(28, 112, 50, 170)),
-      'rectus-femoris': _maskPair(
-        Path()..addOval(Rect.fromLTRB(34.5, 113, 43, 160)),
+      'front-delts': _Part(within: [Rect.fromLTRB(222, 280, 514, 410)]),
+      'side-delts': _Part(
+        within: [
+          Rect.fromLTRB(0, 280, 222, 410),
+          Rect.fromLTRB(514, 280, _w, 410),
+        ],
       ),
     },
   ),
-];
-
-List<_Zone> _buildBack() => [
-  _Zone(
-    'back',
-    _union([
-      _sp([
-        31,
-        50,
-        28.5,
-        58,
-        30,
-        72,
-        34,
-        84,
-        42,
-        92,
-        49.6,
-        93,
-        49.6,
-        83,
-        44.5,
-        69,
-        40,
-        58,
-        35.5,
-        51.5,
-      ]),
-      _sp([49.6, 39, 41, 40, 34, 44, 33.5, 51.5, 40, 56, 49.6, 58.5]),
-    ]),
+  _ZoneSpec(
+    'chest',
+    ['chest'],
     {
-      'lats': _maskPair(_rect(26, 57, 50, 96)),
-      'mid-back': _maskPair(_rect(31, 38, 50, 59)),
+      'upper-chest': _Part(within: [Rect.fromLTRB(0, 300, _w, 360)]),
+      'mid-chest': _Part(within: [Rect.fromLTRB(0, 360, _w, 400)]),
+      'lower-chest': _Part(within: [Rect.fromLTRB(0, 400, _w, 450)]),
     },
   ),
-  _Zone(
-    'traps',
-    _sp([
-      50.5,
-      25.5,
-      45,
-      29.5,
-      36.5,
-      33.5,
-      31,
-      36.5,
-      38,
-      39.5,
-      44,
-      49,
-      47.5,
-      60,
-      50.5,
-      65,
-    ]),
+  _ZoneSpec(
+    'biceps',
+    ['biceps'],
     {
-      'upper-traps': _rect(26, 20, 74, 41),
-      'mid-lower-traps': _rect(26, 41, 74, 68),
+      'long-head': _Part(
+        within: [
+          Rect.fromLTRB(0, 380, 202, 520),
+          Rect.fromLTRB(526, 380, _w, 520),
+        ],
+      ),
+      'short-head': _Part(within: [Rect.fromLTRB(202, 380, 526, 520)]),
+      'brachialis': _Part(within: [Rect.fromLTRB(0, 462, _w, 520)]),
     },
   ),
-  _Zone('shoulders', _sp(_deltoid), {
-    'rear-delts': _maskPair(_rect(18, 28, 40, 60)),
-    'side-delts': _maskPair(_rect(10, 28, 22, 60)),
-  }),
-  _Zone(
-    'triceps',
-    _sp([
-      23.5,
-      56,
-      18.5,
-      62,
-      16.5,
-      74,
-      17.5,
-      85.5,
-      21.5,
-      89,
-      24.5,
-      81,
-      26.5,
-      69,
-      26.5,
-      60,
-    ]),
+  _ZoneSpec('triceps', ['triceps'], {'lateral-medial': _all}),
+  _ZoneSpec('forearms', ['forearm'], {'flexors': _all}),
+  _ZoneSpec(
+    'core',
+    ['abs', 'obliques'],
     {
-      'long-head': _maskPair(_rect(20.8, 54, 30, 92)),
-      'lateral-medial': _maskPair(_rect(12, 54, 20.8, 92)),
+      'abs': _Part(slugs: {'abs'}),
+      'obliques': _Part(slugs: {'obliques'}),
+      'deep-core': _Part(
+        slugs: {'abs'},
+        within: [Rect.fromLTRB(0, 520, _w, 720)],
+      ),
     },
   ),
-  _Zone('forearms', _sp(_forearm), {
-    'extensors': _maskPair(_rect(6, 86, 24, 130)),
-  }),
-  _Zone(
-    'lower-back',
-    _sp([50.3, 88, 44.5, 90, 42.5, 100, 43.5, 110, 50.3, 112.5]),
-    {'erectors': _rect(38, 84, 62, 116)},
-  ),
-  _Zone(
-    'glutes',
-    _union([
-      _sp([
-        50.2,
-        110,
-        42,
-        108.5,
-        35,
-        112,
-        32,
-        120,
-        34,
-        130,
-        41,
-        134.5,
-        48.5,
-        132.5,
-        50.2,
-        125,
-      ]),
-      _sp([
-        36,
-        104.5,
-        31,
-        106.5,
-        29.5,
-        112.5,
-        32.5,
-        116.5,
-        37.5,
-        111,
-        41.5,
-        108,
-      ]),
-    ]),
+  _ZoneSpec('hips', ['adductors'], {'adductors': _all}),
+  _ZoneSpec(
+    'quads',
+    ['quadriceps'],
     {
-      'glute-max': _maskPair(_rect(31, 107.5, 50, 137)),
-      'glute-med': _maskPair(_rect(27, 100, 42, 117)),
+      'vasti': _all,
+      'rectus-femoris': _Part(
+        oval: true,
+        within: [
+          Rect.fromLTRB(262, 680, 308, 950),
+          Rect.fromLTRB(420, 680, 466, 950),
+        ],
+      ),
     },
   ),
-  _Zone(
-    'hips',
-    _sp([31.2, 116.5, 29.2, 121, 29.8, 128, 32.6, 126, 32.6, 119]),
-    {'abductors': _maskPair(_rect(26, 114, 34, 130))},
-  ),
-  _Zone(
-    'hamstrings',
-    _sp([
-      33.5,
-      136,
-      31.5,
-      148,
-      33.5,
-      159,
-      38.5,
-      165.5,
-      45,
-      163.5,
-      47.5,
-      152,
-      47.5,
-      140,
-      44,
-      134.5,
-      38.5,
-      134.5,
-    ]),
-    {
-      'hinge': _maskPair(_rect(28, 130, 50, 168)),
-      'curl': _maskPair(_rect(28, 130, 50, 168)),
-    },
-  ),
-  _Zone(
+  _ZoneSpec(
     'calves',
-    _sp([
-      35,
-      167.5,
-      33,
-      177,
-      34.5,
-      189,
-      39,
-      196,
-      43.5,
-      192,
-      45.5,
-      180,
-      44.5,
-      170,
-      40,
-      165.5,
-    ]),
+    ['calves'],
     {
-      'gastrocnemius': _maskPair(_rect(30, 162, 48, 186)),
-      'soleus': _maskPair(_rect(30, 182, 48, 200)),
+      'gastrocnemius': _Part(within: [Rect.fromLTRB(0, 1000, _w, 1125)]),
+      'soleus': _Part(within: [Rect.fromLTRB(0, 1110, _w, 1240)]),
     },
   ),
 ];
 
-/// Thin definition lines that read as anatomy without being interactive.
-Path _details(String view) {
-  final p = Path();
-  void line(List<double> xy, {bool mirror = true}) {
-    final s = Path()..moveTo(xy[0], xy[1]);
-    for (var i = 2; i < xy.length; i += 4) {
-      s.quadraticBezierTo(xy[i], xy[i + 1], xy[i + 2], xy[i + 3]);
-    }
-    p.addPath(s, Offset.zero);
-    if (mirror) p.addPath(_mirror(s), Offset.zero);
-  }
+const _backSpecs = [
+  // The outer hip (glute medius / TFL) is the top-outer corner of the
+  // gluteal shape. Listed before glutes so a tap there still picks glutes.
+  _ZoneSpec(
+    'hips',
+    ['gluteal', 'adductors'],
+    {
+      'abductors': _Part(slugs: {'gluteal'}),
+      'adductors': _Part(slugs: {'adductors'}),
+    },
+    within: [
+      Rect.fromLTRB(960, 600, 1012, 720),
+      Rect.fromLTRB(1162, 600, 1210, 720),
+      Rect.fromLTRB(1030, 775, 1140, 870),
+    ],
+  ),
+  _ZoneSpec(
+    'glutes',
+    ['gluteal'],
+    {
+      'glute-max': _Part(within: [Rect.fromLTRB(724, 662, 1448, 790)]),
+      'glute-med': _Part(within: [Rect.fromLTRB(724, 600, 1448, 676)]),
+    },
+  ),
+  _ZoneSpec(
+    'back',
+    ['upper-back'],
+    {
+      'lats': _Part(within: [Rect.fromLTRB(724, 430, 1448, 600)]),
+      'mid-back': _Part(within: [Rect.fromLTRB(724, 315, 1448, 446)]),
+    },
+  ),
+  _ZoneSpec(
+    'traps',
+    ['trapezius'],
+    {
+      'upper-traps': _Part(within: [Rect.fromLTRB(724, 280, 1448, 362)]),
+      'mid-lower-traps': _Part(within: [Rect.fromLTRB(724, 362, 1448, 480)]),
+    },
+  ),
+  _ZoneSpec(
+    'shoulders',
+    ['deltoids'],
+    {
+      'rear-delts': _all,
+      'side-delts': _Part(
+        within: [
+          Rect.fromLTRB(724, 300, 934, 410),
+          Rect.fromLTRB(1233, 300, 1448, 410),
+        ],
+      ),
+    },
+  ),
+  _ZoneSpec(
+    'triceps',
+    ['triceps'],
+    {
+      'long-head': _Part(within: [Rect.fromLTRB(930, 370, 1237, 545)]),
+      'lateral-medial': _Part(
+        within: [
+          Rect.fromLTRB(724, 370, 930, 545),
+          Rect.fromLTRB(1237, 370, 1448, 545),
+        ],
+      ),
+    },
+  ),
+  _ZoneSpec('forearms', ['forearm'], {'extensors': _all}),
+  _ZoneSpec('lower-back', ['lower-back'], {'erectors': _all}),
+  _ZoneSpec('hamstrings', ['hamstring'], {'hinge': _all, 'curl': _all}),
+  _ZoneSpec(
+    'calves',
+    ['calves'],
+    {
+      'gastrocnemius': _Part(within: [Rect.fromLTRB(724, 960, 1448, 1125)]),
+      'soleus': _Part(within: [Rect.fromLTRB(724, 1110, 1448, 1300)]),
+    },
+  ),
+];
 
-  if (view == 'front') {
-    line([50, 62, 50, 85, 50, 108], mirror: false); // linea alba
-    for (final y in [74.0, 85.0, 96.0]) {
-      line([41.5, y, 46, y + 1.2, 50, y]);
-    }
-    line([30, 52, 38, 58, 47, 56]); // under-pec curve
-    line([22, 49, 24.5, 51, 27, 48]); // delt split
-    line([39, 136, 40, 148, 41, 160]); // quad separation
-    line([37, 170, 36, 184, 38.5, 198]); // shin
-  } else {
-    line([50, 64, 50, 88, 50, 110], mirror: false); // spine
-    line([36, 44, 40, 50, 46, 53]); // scapula
-    line([41, 141, 41.5, 152, 42, 162]); // hamstring split
-    line([39.5, 172, 39.5, 182, 39.5, 192]); // calf split
-  }
-  return p;
-}
+final _zoneCache = <String, List<_Zone>>{};
+
+List<_Zone> _zones(String view) => _zoneCache.putIfAbsent(view, () {
+  final shapes = _shapes(view);
+  final specs = view == 'back' ? _backSpecs : _frontSpecs;
+  return [
+    for (final spec in specs)
+      () {
+        Path shapeOf(Iterable<String> slugs) {
+          final p = _union(slugs.map((s) => shapes[s]!));
+          return spec.within == null
+              ? p
+              : Path.combine(PathOperation.intersect, p, _rects(spec.within!));
+        }
+
+        final whole = shapeOf(spec.slugs);
+        return _Zone(spec.muscle, whole, {
+          for (final entry in spec.regions.entries)
+            entry.key: () {
+              final part = entry.value;
+              var p = part.slugs.isEmpty ? whole : shapeOf(part.slugs);
+              if (part.within != null) {
+                p = Path.combine(
+                  PathOperation.intersect,
+                  p,
+                  _rects(part.within!, oval: part.oval),
+                );
+              }
+              return p;
+            }(),
+        });
+      }(),
+  ];
+});
 
 // ------------------------------------------------------------------ painting
 
@@ -710,159 +533,257 @@ class _FigurePainter extends CustomPainter {
   final String view;
   final String muscleId;
   final String? regionId;
+
+  /// The previous selection while gliding to this one; null on entry.
+  final String? fromMuscle;
+  final String? fromRegion;
+  final Offset? fromAim;
+
+  /// True for the first selection on this view (scan sweep and ring settle).
+  final bool entering;
   final ExploreTokens tokens;
   final bool guides;
-  final double reveal;
+
+  /// 0 → 1: the reveal on entry, or the eased glide between selections.
+  final double t;
 
   _FigurePainter({
     required this.view,
     required this.muscleId,
     required this.regionId,
+    required this.fromMuscle,
+    required this.fromRegion,
+    required this.fromAim,
+    required this.entering,
     required this.tokens,
     required this.guides,
-    required this.reveal,
+    required this.t,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final scale = size.width / _w;
+    final box = BodyFigure.viewport(view);
+    final scale = size.width / box.width;
     canvas.save();
-    canvas.scale(scale, size.height / _h);
+    // Nothing (glow, guides, scan) may spill outside the figure's box.
+    canvas.clipRect(Offset.zero & size);
+    canvas.scale(scale, size.height / box.height);
+    canvas.translate(-box.left, -box.top);
 
-    final hair = 0.9 / scale; // ~0.9 logical px whatever the size
-    final outline = Paint()
+    final px = 1 / scale; // one logical pixel in view units
+    final shapes = _shapes(view);
+    final outline = _outline(view);
+
+    // Body and muscles: dark slate shapes whose gaps read as anatomy lines.
+    canvas.drawPath(outline, Paint()..color = tokens.body);
+    final musclePaint = Paint()..color = tokens.muscle;
+    final seam = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = hair * 1.1
-      ..color = tokens.line;
-    final thin = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = hair * 0.8
-      ..color = tokens.line.withValues(alpha: 0.55);
+      ..strokeWidth = 0.7 * px
+      ..color = tokens.line.withValues(alpha: 0.45);
+    shapes.forEach((slug, path) {
+      canvas.drawPath(
+        path,
+        _bodyOnly.contains(slug)
+            ? (Paint()..color = Color.lerp(tokens.body, tokens.muscle, 0.5)!)
+            : musclePaint,
+      );
+      canvas.drawPath(path, seam);
+    });
+    canvas.drawPath(
+      outline,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.1 * px
+        ..color = tokens.line,
+    );
 
-    final body = _silhouette();
-    canvas.drawPath(body, Paint()..color = tokens.body);
-
-    Path? focus;
-    for (final z in _zones(view)) {
-      final selected = z.muscle == muscleId;
-      canvas.drawPath(z.path, Paint()..color = tokens.muscle);
-      if (selected) {
-        final mask = regionId == null ? null : z.masks[regionId];
-        final part = mask == null
-            ? z.path
-            : Path.combine(PathOperation.intersect, z.path, mask);
-        // The rest of the muscle in a quiet tint.
-        if (mask != null) {
-          canvas.drawPath(
-            z.path,
-            Paint()..color = tokens.accent.withValues(alpha: 0.16),
-          );
-        }
-        focus = focus == null
-            ? part
-            : Path.combine(PathOperation.union, focus, part);
-      }
-      canvas.drawPath(z.path, thin);
+    // The selection: on entry it fades in; between selections the old
+    // highlight fades out as the new one fades in.
+    final to = _selection(view, muscleId, regionId);
+    final from = fromMuscle == null
+        ? null
+        : _selection(view, fromMuscle!, fromRegion);
+    final fade = entering
+        ? Curves.easeOutCubic.transform((t * 2.2).clamp(0.0, 1.0))
+        : t;
+    if (from != null) {
+      // A shared muscle tint stays put while only the part changes.
+      final sameZone = identical(from.zone, to?.zone);
+      _highlight(canvas, from, px, 1 - fade, tint: sameZone ? 0 : 1 - fade);
     }
-    canvas.drawPath(_details(view), thin);
-    canvas.drawPath(body, outline);
+    if (to != null) {
+      final sameZone = from != null && identical(from.zone, to.zone);
+      _highlight(canvas, to, px, fade, tint: sameZone ? 1 : fade);
+    }
 
-    if (focus != null) {
-      final bounds = focus.getBounds();
-      final a = reveal;
-      // Soft glow, then a lit gradient fill.
-      canvas.drawPath(
-        focus,
-        Paint()
-          ..color = tokens.accent.withValues(alpha: 0.55 * a)
-          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 / scale),
-      );
-      canvas.drawPath(
-        focus,
-        Paint()
-          ..shader = ui.Gradient.radial(
-            bounds.center,
-            math.max(bounds.width, bounds.height) * 0.75,
-            [
-              Color.lerp(
-                tokens.accent,
-                Colors.white,
-                0.25,
-              )!.withValues(alpha: a),
-              tokens.accentDeep.withValues(alpha: a),
-            ],
-          ),
-      );
-      canvas.drawPath(
-        focus,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = hair
-          ..color = Colors.white.withValues(alpha: 0.35 * a),
-      );
-      canvas.restore();
-      // Aim at the figure's left-hand part when the highlight is a pair.
-      final left = Path.combine(
-        PathOperation.intersect,
-        focus,
-        _rect(0, 0, 50.5, _h),
-      ).getBounds();
-      final aim = left.isEmpty || left.right >= 49.5 ? bounds : left;
-      if (guides) _crosshair(canvas, size, aim, scale, size.height / _h, a);
-      return;
+    if (guides && to != null) {
+      final target = _aimFor(view, muscleId, regionId)!;
+      final aim = fromAim == null ? target : Offset.lerp(fromAim, target, t)!;
+      _guides(canvas, box, aim, px);
+      if (entering) _scan(canvas, box, px);
     }
     canvas.restore();
   }
 
-  /// Dashed guides through the highlighted part and a small target ring.
-  void _crosshair(
+  void _highlight(
     Canvas canvas,
-    Size size,
-    Rect unitBounds,
-    double sx,
-    double sy,
-    double a,
-  ) {
-    final target = Offset(unitBounds.center.dx * sx, unitBounds.center.dy * sy);
+    ({Path zone, Path focus}) sel,
+    double px,
+    double alpha, {
+    required double tint,
+  }) {
+    final focus = sel.focus;
+    if (!identical(focus, sel.zone) && tint > 0) {
+      canvas.drawPath(
+        sel.zone,
+        Paint()..color = tokens.accent.withValues(alpha: 0.18 * tint),
+      );
+    }
+    if (alpha <= 0) return;
+    final bounds = focus.getBounds();
+    canvas.drawPath(
+      focus,
+      Paint()
+        ..color = tokens.accent.withValues(alpha: 0.6 * alpha)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 6 * px),
+    );
+    canvas.drawPath(
+      focus,
+      Paint()
+        ..shader = ui.Gradient.radial(
+          bounds.center,
+          math.max(bounds.width, bounds.height) * 0.7,
+          [
+            Color.lerp(
+              tokens.accent,
+              Colors.white,
+              0.28,
+            )!.withValues(alpha: alpha),
+            tokens.accentDeep.withValues(alpha: alpha),
+          ],
+        ),
+    );
+    canvas.drawPath(
+      focus,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.8 * px
+        ..color = Colors.white.withValues(alpha: 0.3 * alpha),
+    );
+  }
+
+  void _guides(Canvas canvas, Rect box, Offset aim, double px) {
+    final a = entering
+        ? Curves.easeOut.transform((t * 1.6).clamp(0.0, 1.0))
+        : 1.0;
+    // Soft hot spot behind the target.
+    const hot = 90.0; // view units, about a muscle's width
+    canvas.drawCircle(
+      aim,
+      hot,
+      Paint()
+        ..shader = ui.Gradient.radial(aim, hot, [
+          tokens.accent.withValues(alpha: 0.22 * a),
+          tokens.accent.withValues(alpha: 0),
+        ]),
+    );
+    // Dashed crosshair across the whole figure.
     final dash = Paint()
-      ..color = tokens.line.withValues(alpha: 0.8 * a)
-      ..strokeWidth = 1;
+      ..color = tokens.line.withValues(alpha: 0.85 * a)
+      ..strokeWidth = px;
     void dashed(Offset from, Offset to) {
       final d = to - from;
       final len = d.distance;
       final dir = d / len;
-      for (double s = 0; s < len; s += 7) {
+      for (double s = 0; s < len; s += 8 * px) {
         canvas.drawLine(
           from + dir * s,
-          from + dir * math.min(s + 3.5, len),
+          from + dir * math.min(s + 4 * px, len),
           dash,
         );
       }
     }
 
-    dashed(Offset(0, target.dy), Offset(size.width, target.dy));
-    dashed(Offset(target.dx, 0), Offset(target.dx, size.height));
+    dashed(Offset(box.left, aim.dy), Offset(box.right, aim.dy));
+    dashed(Offset(aim.dx, box.top), Offset(aim.dx, box.bottom));
+
+    // Target: an outer ring that settles in, a rotating dashed inner ring and
+    // a dot.
+    // While gliding the ring pulses once, tightening as it lands.
+    final settle = entering
+        ? Curves.easeOutBack.transform(a)
+        : 1 - 0.5 * math.sin(t * math.pi);
     canvas.drawCircle(
-      target,
-      6,
+      aim,
+      (12 - 4 * settle) * px * 1.6,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
+        ..strokeWidth = 1.2 * px
         ..color = Colors.white.withValues(alpha: 0.9 * a),
     );
+    final inner = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4 * px
+      ..strokeCap = StrokeCap.round
+      ..color = Colors.white.withValues(alpha: a);
+    final r = 7 * px * 1.6;
+    final spin = t * math.pi * 1.5;
+    for (var i = 0; i < 3; i++) {
+      canvas.drawArc(
+        Rect.fromCircle(center: aim, radius: r),
+        spin + i * (2 * math.pi / 3),
+        math.pi / 3,
+        false,
+        inner,
+      );
+    }
     canvas.drawCircle(
-      target,
-      2,
+      aim,
+      2.2 * px * 1.6,
       Paint()..color = Colors.white.withValues(alpha: a),
     );
+  }
+
+  /// One sweep from top to bottom as the selection lands.
+  void _scan(Canvas canvas, Rect box, double px) {
+    if (t <= 0 || t >= 1) return;
+    final y = box.top + box.height * Curves.easeInOutCubic.transform(t);
+    final alpha = math.sin(t * math.pi);
+    final band = 90 * px * 2;
+    canvas.save();
+    canvas.clipPath(_outline(view));
+    canvas.drawRect(
+      Rect.fromLTRB(box.left, y - band, box.right, y),
+      Paint()
+        ..shader = ui.Gradient.linear(Offset(0, y - band), Offset(0, y), [
+          tokens.accent.withValues(alpha: 0),
+          tokens.accent.withValues(alpha: 0.28 * alpha),
+        ]),
+    );
+    canvas.drawRect(
+      Rect.fromLTRB(box.left, y - 1.5 * px, box.right, y + 1.5 * px),
+      Paint()
+        ..color = Color.lerp(
+          tokens.accent,
+          Colors.white,
+          0.55,
+        )!.withValues(alpha: 0.9 * alpha),
+    );
+    canvas.restore();
   }
 
   @override
   bool shouldRepaint(_FigurePainter old) =>
       old.view != view ||
+      old.fromMuscle != fromMuscle ||
+      old.fromRegion != fromRegion ||
+      old.fromAim != fromAim ||
+      old.entering != entering ||
       old.muscleId != muscleId ||
       old.regionId != regionId ||
-      old.reveal != reveal ||
+      old.t != t ||
+      old.guides != guides ||
       old.tokens.accent != tokens.accent ||
       old.tokens.body != tokens.body;
 }

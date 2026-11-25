@@ -17,12 +17,12 @@ tool/verify_changes.sh --regen --screens --apk   # everything
 
 | Stage | What it proves | Run it alone |
 |---|---|---|
-| 1. Data checks | IDs `E*`, `L*`, `S*` below. Written in Python, separate from the Dart code, so one catches the other's mistakes | `python3 tool/verify_assets.py` |
+| 1. Data checks | IDs `E*`, `L*`, `S*`, `D*` below. Written in Python, separate from the Dart code, so one catches the other's mistakes | `python3 tool/verify_assets.py` |
 | 2. Regeneration (`--regen`) | Rebuilding from `tool/` with a random hash seed reproduces the current assets byte for byte | `python3 tool/build_library.py`, then `git diff assets/` |
 | 3. Analyzer | No errors or warnings. The 10 existing `info` lints are allowed | `flutter analyze` |
 | 4. Named tests | The Dart tests listed in this file | see the script |
 | 5. Full suite | Nothing else regressed | `flutter test` |
-| `--screens` | Explore renders in dark and light with real fonts, icons and photos, and with no overflow or exception | `flutter test tool/screens/render_screens_test.dart` |
+| `--screens` | Every main screen renders in dark and light with real fonts, icons and photos, and with no overflow or exception | `flutter test tool/screens/render_screens_test.dart` |
 | `--apk` | The app builds for Android; prints the APK size and the library's share | `flutter build apk --release` |
 
 Requirements:
@@ -30,13 +30,13 @@ Requirements:
 - **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db. Byte-identical output also assumes the same Pillow/libwebp version (12.3 was used); another version can encode the photos slightly differently.
 - **`--apk` only:** an Android SDK (`flutter config --android-sdk <path>`). The first build also downloads the NDK and CMake.
 
-Last verified: 2026-11-22. Results:
-- 59 data checks pass.
+Last verified: 2026-11-25 (coral rollout). Results:
+- 64 data checks pass (59 data, 5 design-token).
 - Regenerated assets are identical across Python hash seeds.
 - Analyzer: 0 errors and 0 warnings.
 - 206 tests pass.
-- 12 Explore screens render cleanly (6 dark, 6 light).
-- The Android release build succeeds (see §7).
+- 22 screens render cleanly (11 dark, 11 light), including Home, Programs, the live workout, Progress and Nutrition.
+- The Android release build succeeds (see §8).
 
 ---
 
@@ -130,15 +130,62 @@ These items are judged by eye. The behaviour behind them is pinned by the U* tes
 
 | ID | Claim | Manual check |
 |---|---|---|
-| V1 | The body figure is drawn from scratch: spline outlines, detail lines, a coral glow and crosshair guides that aim at one side of paired muscles | Open Explore and choose Shoulders → Side delts. The glow sits on the outer delts and the crosshair targets the left one |
-| V2 | Coral is the only extra accent, used only in Explore (see `design/DESIGN.md`) | No coral appears on other tabs |
+| V1 | ~~The body figure is drawn from scratch with spline outlines.~~ Superseded by §6b: anatomical SVG paths. Still true: a coral glow and crosshair guides that aim at one side of paired muscles | Open Explore and choose Shoulders → Side delts. The glow sits on the outer delts and the crosshair targets the left one |
+| V2 | ~~Coral is used only in Explore.~~ Superseded by §6: coral is now the app-wide accent, with adoption tracked in `design/DESIGN.md` §9 | See §6 |
 | V3 | Layout: the figure on the left; the title and FRONT/BACK-tagged part rows on the right; GYM/HOME beside "Recommended" | Compare against the reference screenshots at 390 px wide |
 | V4 | Cards show a thumbnail, a TOP PICK tag and a focus meter (3 bars = primary, 2 = assists) | Look at any muscle's picks |
 | V5 | No layout overflow at 390 px wide | `--screens` fails on any overflow or exception |
 | V6 | Light and dark themes both look right | `--screens` writes `dark_*.png` and `light_*.png` to `build/screens/`; compare them side by side |
 | V7 | Wrapped muscle labels on a split day never start a line with "·" | `build/screens/*_5_split_detail.png` |
 
-## 6. Research claims shown in the app
+## 6. App-wide design system and coral accent
+*Branch `claude/endurance-fitness-tracker-bkq1lo`, after PR #4.*
+
+`design/DESIGN.md` was rewritten. It had been a finance-app ("Money Matters")
+design document; it is now this app's design system. It keeps the
+Pearl Ledger foundations the code already used and makes coral the single
+app-wide accent, with rules for where it goes and where it never goes.
+
+| ID | Claim | Verified by |
+|---|---|---|
+| D1 | All six coral tokens (`accent`, `accentText`, `accentFill`, `accentFillEnd`, `onAccent`, `accentContainer`) exist in both themes in `lib/core/theme/app_colors.dart` | `verify_assets.py` (reads the Dart source) |
+| D2 | Every coral pairing the design doc promises meets WCAG AA: 4.5:1 for text, 3:1 for graphics. This fixed two failures shipped in PR #4: light coral text was 3.27:1, and white on dark-mode coral was 2.57:1 | `verify_assets.py` recomputes the contrast; the check fails if the old light value is put back |
+| D3 | Every coral value in the code appears in `design/DESIGN.md`, so the doc and the theme can't drift apart | `verify_assets.py` |
+| D4 | The shared coral widgets (`MicroLabel`, `AccentChip`, `CompactToggle`, `OutlinePill`, `accentGradient`) live in `lib/core/widgets/accent.dart`, so any screen can use them | analyzer, full suite |
+| D5 | Explore uses `accentText` for coral text and `onAccent` on coral fills; `accent` is kept for graphics | `--screens` images; `grep -rn "tokens.accent\b" lib/features/explore` shows graphics only |
+| D6 | ~~Screens outside Explore aren't restyled yet.~~ Done in D7 | n/a |
+| D7 | Coral is rolled out to every screen: the Home *Start* and today ring, the Programs chip / next day / *Start*, day *Start* and *Finish*, session progress, the running countdown ring, current chart bars, the Nutrition camera tile, and the Android widget's today ring. `AccentButton` is the shared main action | test *every screen has at most one coral main action, in place* (`test/core/design_rules_test.dart`); `--screens` renders all 11 screens in both themes |
+| D8 | A disabled main action is a quiet outline, not coral | test *a disabled main action is a quiet outline, not coral* |
+| D10 | Removed `test/zz_fig_test.dart`, a temporary rendering harness committed by mistake with the Explore polish (`2d529cd`). It wrote to a session-only temp folder, so it would fail on other machines. Its job is done by `tool/screens/render_screens_test.dart` | `grep -rn "tmp/claude" test tool lib` finds nothing |
+| D9 | Fixed while rolling out: the workout's "Reached failure" switch hid its tap ripple (Flutter asserted, because a `ListTile` sat on a coloured panel). Explore's expandable rows had the same pattern. All now sit on their own transparent `Material` | The design-rules test, which runs a live workout with to-failure sets |
+
+## 6b. Explore body figure: anatomical SVG
+*Branch `claude/endurance-fitness-tracker-bkq1lo`.*
+
+The hand-drawn spline figure was replaced with the same kind of anatomical SVG
+the reference site uses. The paths come from react-native-body-highlighter
+3.2.0 (MIT, © 2022 ELABBASSI Hicham), extracted as text by
+`tool/build_anatomy.py` into `lib/features/explore/widgets/anatomy_paths.g.dart`
+and parsed at run time with `path_drawing`. No JavaScript from the package is
+run.
+
+| ID | Claim | Verified by |
+|---|---|---|
+| B1 | The generated file holds front and back outlines plus every muscle shape the figure maps | `verify_assets.py` A1 |
+| B2 | Every muscle and every part in the library is drawn on a view; the expected view is chosen (triceps, rear delts, glute med → back; upper chest → front) | test *every muscle and part can be found on the figure* |
+| B3 | Taps land on the muscle under the finger in view coordinates (chest, quads, core) and empty space does nothing | test *tapping the body figure selects the muscle under the finger* |
+| B4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page, and the credit shows under "How these picks were chosen" | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
+| B5 | Highlights for all 28 muscle parts sit on the right anatomy in both themes; the glow stays inside the figure | `--screens` (`*_1_shoulders.png`, `*_2_glutes_back.png`); by eye |
+
+| B6 | Changing the part or the muscle on the same view glides: the highlights cross-fade and the target slides (480 ms) instead of restarting; flipping FRONT/BACK cross-fades | `build/fig` frame strip by eye; tests *tapping the body figure…*, *choosing a muscle that lives on the back flips the figure* |
+| B7 | The muscle title, parts and recommendations cross-fade (`SmoothSwap`, 280 ms) when the muscle, part or GYM/HOME changes | test *switching muscles cross-fades instead of jumping* |
+| B8 | An opened card or sheet shows the exercise photos once, at the top, alternating START/FINISH on their own (1.8 s hold, 450 ms fade); a tap flips at once; the card thumbnail hides while open | test *an open card shows its photos once, at the top, alternating*; the sheet test checks one photo above the title |
+
+To regenerate the paths: download `react-native-body-highlighter` from npm,
+unpack it into an empty folder, and run
+`python3 -I tool/build_anatomy.py <folder>/package/`.
+
+## 7. Research claims shown in the app
 
 Each note in the app paraphrases one of these sources. To verify a note,
 open its source.
@@ -159,9 +206,9 @@ open its source.
 
 The app also lists these sources under *Explore → How these picks were chosen*.
 
-## 7. Android build and app size
+## 8. Android build and app size
 
-The release build was run with `flutter build apk --release` on Flutter 3.47.4, Android SDK platform 36 and NDK r28c.
+The release build was run on 2026-11-22 with `flutter build apk --release` on Flutter 3.47.4, Android SDK platform 36 and NDK r28c.
 
 | Build | Size |
 |---|---|
@@ -174,7 +221,7 @@ About 68 MB of the universal APK is the Flutter engine and app code compiled onc
 
 For comparison, `main` without Explore builds to 27.5 MB for arm64, so Explore costs a typical install **6.0 MB**: 5.7 MB of photos plus JSON and code. Both builds print the same Gradle notice asking some plugins to migrate to Built-in Kotlin. That notice comes from the plugins, not this app, and it doesn't block the build.
 
-## 8. Not verified
+## 9. Not verified
 
 These still need a person or a Mac:
 - Installing and using the APK on a real phone (the build itself is verified above).

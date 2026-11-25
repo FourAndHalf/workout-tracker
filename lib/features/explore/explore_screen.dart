@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons_600.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/legal/third_party_licenses.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/day_app_bar.dart';
@@ -259,52 +260,55 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
               const SizedBox(width: 16),
               Expanded(
                 flex: 56,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    MicroLabel(
-                      '${index.toString().padLeft(2, '0')} / '
-                      '${library.muscles.length} · ${muscle.latin}',
-                      size: 10,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      muscle.name,
-                      key: const Key('muscleTitle'),
-                      style: textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.5,
-                        height: 1.1,
+                child: SmoothSwap(
+                  swapKey: muscle.id,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      MicroLabel(
+                        '${index.toString().padLeft(2, '0')} / '
+                        '${library.muscles.length} · ${muscle.latin}',
+                        size: 10,
                       ),
-                    ),
-                    const SizedBox(height: 14),
-                    for (final r in muscle.regions)
-                      _RegionRow(
-                        key: ValueKey('region-${r.id}'),
-                        label: r.name,
-                        side: BodyFigure.viewFor(muscle.id, r.id) ?? 'front',
-                        selected: r.id == region.id,
-                        onTap: () => _selectRegion(r.id),
+                      const SizedBox(height: 6),
+                      Text(
+                        muscle.name,
+                        key: const Key('muscleTitle'),
+                        style: textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.5,
+                          height: 1.1,
+                        ),
                       ),
-                    const SizedBox(height: 6),
-                    Divider(color: colors.border, height: 20),
-                    InkWell(
-                      key: const Key('aboutToggle'),
-                      onTap: () => setState(() => _aboutOpen = !_aboutOpen),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
-                          style: AppText.metricTable.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: tokens.accent,
+                      const SizedBox(height: 14),
+                      for (final r in muscle.regions)
+                        _RegionRow(
+                          key: ValueKey('region-${r.id}'),
+                          label: r.name,
+                          side: BodyFigure.viewFor(muscle.id, r.id) ?? 'front',
+                          selected: r.id == region.id,
+                          onTap: () => _selectRegion(r.id),
+                        ),
+                      const SizedBox(height: 6),
+                      Divider(color: colors.border, height: 20),
+                      InkWell(
+                        key: const Key('aboutToggle'),
+                        onTap: () => setState(() => _aboutOpen = !_aboutOpen),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(
+                            '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
+                            style: AppText.metricTable.copyWith(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: tokens.accentText,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -352,24 +356,32 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
             ),
           ],
           const SizedBox(height: 16),
-          if (picks.isEmpty)
-            Text(
-              'No ${setting.label.toLowerCase()} picks for this part yet.',
-              style: textTheme.bodyMedium?.copyWith(
-                color: colors.textSecondary,
-              ),
-            )
-          else
-            for (final entry in picks.asMap().entries)
-              if (library.exercises[entry.value.exerciseId] != null)
-                RecommendationCard(
-                  key: ValueKey(
-                    '${muscle.id}-${region.id}-${setting.name}-${entry.value.exerciseId}',
-                  ),
-                  exercise: library.exercises[entry.value.exerciseId]!,
-                  pick: entry.value,
-                  starred: entry.key == 0,
-                ),
+          SmoothSwap(
+            swapKey: '${muscle.id}/${region.id}/${setting.name}',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (picks.isEmpty)
+                  Text(
+                    'No ${setting.label.toLowerCase()} picks for this part yet.',
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  )
+                else
+                  for (final entry in picks.asMap().entries)
+                    if (library.exercises[entry.value.exerciseId] != null)
+                      RecommendationCard(
+                        key: ValueKey(
+                          '${muscle.id}-${region.id}-${setting.name}-${entry.value.exerciseId}',
+                        ),
+                        exercise: library.exercises[entry.value.exerciseId]!,
+                        pick: entry.value,
+                        starred: entry.key == 0,
+                      ),
+              ],
+            ),
+          ),
           const SizedBox(height: 8),
           _SourcesCard(library: library),
         ],
@@ -457,7 +469,7 @@ class _RegionRow extends StatelessWidget {
                 MicroLabel(
                   side,
                   size: 9,
-                  color: selected ? tokens.accent : colors.textMuted,
+                  color: selected ? tokens.accentText : colors.textMuted,
                 ),
               ],
             ),
@@ -517,48 +529,57 @@ class _SourcesCard extends StatelessWidget {
     final tokens = ExploreTokens.of(context);
     final small = Theme.of(context).textTheme.bodySmall
         ?.copyWith(color: colors.textMuted, height: 1.45);
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        key: const Key('sources'),
-        tilePadding: EdgeInsets.zero,
-        childrenPadding: EdgeInsets.zero,
-        iconColor: colors.textMuted,
-        collapsedIconColor: colors.textMuted,
-        trailing: const Icon(LucideIcons600.chevronDown, size: 18),
-        title: const MicroLabel('How these picks were chosen'),
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(library.picksCredit, style: small),
-                const SizedBox(height: 8),
-                Text(library.photoCredit, style: small),
-                const SizedBox(height: 8),
-                for (final r in library.references)
-                  InkWell(
-                    onTap: () => launchUrl(
-                      Uri.parse(r.url),
-                      mode: LaunchMode.externalApplication,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        r.title,
-                        style: small?.copyWith(
-                          color: tokens.accent,
-                          decoration: TextDecoration.underline,
-                          decorationColor: tokens.accent.withValues(alpha: 0.5),
+    // Its own Material so the tile's ripple isn't hidden by a coloured
+    // ancestor (Flutter asserts on this).
+    return Material(
+      type: MaterialType.transparency,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          key: const Key('sources'),
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          iconColor: colors.textMuted,
+          collapsedIconColor: colors.textMuted,
+          trailing: const Icon(LucideIcons600.chevronDown, size: 18),
+          title: const MicroLabel('How these picks were chosen'),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(library.picksCredit, style: small),
+                  const SizedBox(height: 8),
+                  Text(library.photoCredit, style: small),
+                  const SizedBox(height: 8),
+                  Text(anatomyCredit, style: small),
+                  const SizedBox(height: 8),
+                  for (final r in library.references)
+                    InkWell(
+                      onTap: () => launchUrl(
+                        Uri.parse(r.url),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Text(
+                          r.title,
+                          style: small?.copyWith(
+                            color: tokens.accentText,
+                            decoration: TextDecoration.underline,
+                            decorationColor: tokens.accentText.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

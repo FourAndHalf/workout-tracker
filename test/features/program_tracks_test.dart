@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fitness_tracker/core/widgets/accent.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -95,7 +96,7 @@ void main() {
       for (var i = 0; i < 20; i++) {
         await Future<void>.delayed(const Duration(milliseconds: 100));
         await tester.pump();
-        if (find.byType(ChoiceChip).evaluate().isNotEmpty) break;
+        if (find.byType(AccentChip).evaluate().isNotEmpty) break;
       }
     });
 

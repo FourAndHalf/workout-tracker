@@ -20,6 +20,7 @@ import '../../core/widgets/ledger.dart';
 import '../../core/widgets/sliding_segmented_control.dart';
 import '../../data/database/app_database.dart';
 import '../../main.dart';
+import '../../core/widgets/accent.dart';
 
 final todayFoodPhotosProvider = FutureProvider.autoDispose<List<FoodPhoto>>((
   ref,
@@ -708,7 +709,11 @@ class _ShoppingRow extends StatelessWidget {
                 ),
               ),
               child: checked
-                  ? Icon(LucideIcons600.check, size: 14, color: colors.onPrimary)
+                  ? Icon(
+                      LucideIcons600.check,
+                      size: 14,
+                      color: colors.onPrimary,
+                    )
                   : null,
             ),
             const SizedBox(width: 12),
@@ -1484,11 +1489,12 @@ class _PhotoActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final ink = primary ? colors.onPrimary : colors.textPrimary;
+    // The camera tile is the screen's main action, so it takes the coral fill.
+    final ink = primary ? colors.onAccent : colors.textPrimary;
     return AppCard(
       onTap: onTap,
-      color: primary ? colors.primary : null,
-      borderColor: primary ? colors.primary : null,
+      gradient: primary ? accentGradient(colors) : null,
+      borderColor: primary ? Colors.transparent : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1498,7 +1504,7 @@ class _PhotoActionTile extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: primary
-                  ? colors.onPrimary.withValues(alpha: 0.14)
+                  ? colors.onAccent.withValues(alpha: 0.14)
                   : colors.raised,
               border: primary ? null : Border.all(color: colors.border),
             ),
@@ -1515,7 +1521,7 @@ class _PhotoActionTile extends StatelessWidget {
             caption,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: primary
-                  ? colors.onPrimary.withValues(alpha: 0.7)
+                  ? colors.onAccent.withValues(alpha: 0.8)
                   : colors.textSecondary,
             ),
           ),
