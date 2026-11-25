@@ -508,7 +508,18 @@ filled with the charcoal anchor.
 ## 8. Motion
 - 200–250 ms standard easing for state changes: chips, rows, toggles, card
   expand (240 ms), rotating chevrons.
-- 900 ms for the figure: one scan sweep, then the highlight fades in.
+- 900 ms for the figure when a view first shows: one scan sweep, then the
+  highlight fades in.
+- 480 ms ease-in-out glide between selections on the same view (another part
+  or another muscle): the old highlight fades out, the new fades in, and the
+  target slides across with one soft pulse. No scan replay.
+- 320 ms cross-fade when the figure flips FRONT/BACK.
+- 280 ms fade with a 1.5% rise (`SmoothSwap`) when the muscle title and parts
+  or the recommendation list change; the height eases at the same time.
+- Exercise photos: one large photo at the top of an opened card or sheet
+  (the card's thumbnail tucks away). It alternates START/FINISH every 1.8 s
+  with a 450 ms cross-fade; a tap flips at once. It stays still when the
+  system asks for reduced motion.
 - Numbers change in place, with no count-up animations.
 - Selecting a muscle on the figure scrolls its chip into view.
 

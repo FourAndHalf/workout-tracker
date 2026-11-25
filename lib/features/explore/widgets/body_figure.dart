@@ -13,7 +13,8 @@ import 'explore_style.dart';
 /// (MIT, © 2022 ELABBASSI Hicham; see `anatomy_paths.g.dart`). This widget
 /// maps those shapes onto the app's muscle groups and their parts, and draws
 /// the selection: a coral highlight with a soft glow, dashed crosshair guides,
-/// a target ring and a one-off scan sweep when the selection changes.
+/// a target ring, a scan sweep when a view first shows, and a glide
+/// between selections (see [_FigureCanvas]).
 class BodyFigure extends StatelessWidget {
   final String muscleId;
   final String? regionId;
@@ -86,19 +87,21 @@ class BodyFigure extends StatelessWidget {
           child: Semantics(
             label:
                 '${view == 'front' ? 'Front' : 'Back'} view, $muscleId highlighted',
-            child: TweenAnimationBuilder<double>(
-              key: ValueKey('$view/$muscleId/$regionId'),
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 900),
-              builder: (context, t, _) => CustomPaint(
-                painter: _FigurePainter(
-                  view: view,
-                  muscleId: muscleId,
-                  regionId: regionId,
-                  tokens: tokens,
-                  guides: guides,
-                  t: t,
-                ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 320),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              layoutBuilder: (current, previous) => Stack(
+                fit: StackFit.expand,
+                children: [...previous, ?current],
+              ),
+              child: _FigureCanvas(
+                key: ValueKey(view),
+                view: view,
+                muscleId: muscleId,
+                regionId: regionId,
+                tokens: tokens,
+                guides: guides,
               ),
             ),
           ),
@@ -107,6 +110,132 @@ class BodyFigure extends StatelessWidget {
     );
   }
 }
+
+/// Paints one view and animates between selections on it: the first
+/// selection lands with a scan sweep; later ones glide, the old highlight
+/// fading out while the target slides to the new part.
+class _FigureCanvas extends StatefulWidget {
+  final String view;
+  final String muscleId;
+  final String? regionId;
+  final ExploreTokens tokens;
+  final bool guides;
+
+  const _FigureCanvas({
+    super.key,
+    required this.view,
+    required this.muscleId,
+    required this.regionId,
+    required this.tokens,
+    required this.guides,
+  });
+
+  @override
+  State<_FigureCanvas> createState() => _FigureCanvasState();
+}
+
+class _FigureCanvasState extends State<_FigureCanvas>
+    with SingleTickerProviderStateMixin {
+  static const _enter = Duration(milliseconds: 900);
+  static const _glide = Duration(milliseconds: 480);
+
+  late final _ctrl = AnimationController(vsync: this, duration: _enter)
+    ..forward();
+  bool _entering = true;
+  String? _fromMuscle;
+  String? _fromRegion;
+  Offset? _fromAim;
+
+  @override
+  void didUpdateWidget(_FigureCanvas old) {
+    super.didUpdateWidget(old);
+    if (old.muscleId == widget.muscleId && old.regionId == widget.regionId) {
+      return;
+    }
+    // Start the glide from wherever the target is right now, so a change
+    // made mid-animation never jumps.
+    final e = _eased;
+    final aimFrom = _entering ? null : _fromAim;
+    final aimTo = _aimFor(widget.view, old.muscleId, old.regionId);
+    _fromAim = aimFrom != null && aimTo != null
+        ? Offset.lerp(aimFrom, aimTo, e)
+        : aimTo;
+    _fromMuscle = old.muscleId;
+    _fromRegion = old.regionId;
+    _entering = false;
+    _ctrl
+      ..duration = _glide
+      ..forward(from: 0);
+  }
+
+  double get _eased =>
+      _entering ? _ctrl.value : Curves.easeInOutCubic.transform(_ctrl.value);
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _ctrl,
+    builder: (context, _) => CustomPaint(
+      painter: _FigurePainter(
+        view: widget.view,
+        muscleId: widget.muscleId,
+        regionId: widget.regionId,
+        fromMuscle: _entering ? null : _fromMuscle,
+        fromRegion: _fromRegion,
+        fromAim: _entering ? null : _fromAim,
+        entering: _entering,
+        tokens: widget.tokens,
+        guides: widget.guides,
+        t: _eased,
+      ),
+    ),
+  );
+}
+
+/// Where the target sits for a selection: the selected part, or the
+/// figure's left-hand one when the part is a pair.
+Offset? _aimFor(String view, String muscleId, String? regionId) {
+  final focus = _focusFor(view, muscleId, regionId);
+  if (focus == null) return null;
+  return _aimCache.putIfAbsent('$view/$muscleId/$regionId', () {
+    final box = BodyFigure.viewport(view);
+    final bounds = focus.getBounds();
+    final left = Path.combine(
+      PathOperation.intersect,
+      focus,
+      Path()..addRect(
+        Rect.fromLTRB(box.left, box.top, box.center.dx + 4, box.bottom),
+      ),
+    ).getBounds();
+    return (left.isEmpty || left.right >= box.center.dx - 4)
+        ? bounds.center
+        : left.center;
+  });
+}
+
+final _aimCache = <String, Offset>{};
+
+/// The zone of [muscleId] on [view] and the path of the selected part.
+({Path zone, Path focus})? _selection(
+  String view,
+  String muscleId,
+  String? regionId,
+) {
+  final zone = _zones(view).where((z) => z.muscle == muscleId).firstOrNull;
+  if (zone == null) return null;
+  return (
+    zone: zone.path,
+    focus: (regionId == null ? null : zone.regions[regionId]) ?? zone.path,
+  );
+}
+
+Path? _focusFor(String view, String muscleId, String? regionId) =>
+    _selection(view, muscleId, regionId)?.focus;
 
 // ------------------------------------------------------------------ geometry
 
@@ -404,16 +533,28 @@ class _FigurePainter extends CustomPainter {
   final String view;
   final String muscleId;
   final String? regionId;
+
+  /// The previous selection while gliding to this one; null on entry.
+  final String? fromMuscle;
+  final String? fromRegion;
+  final Offset? fromAim;
+
+  /// True for the first selection on this view (scan sweep and ring settle).
+  final bool entering;
   final ExploreTokens tokens;
   final bool guides;
 
-  /// 0 → 1 over the reveal: highlight fade-in, ring, scan sweep.
+  /// 0 → 1: the reveal on entry, or the eased glide between selections.
   final double t;
 
   _FigurePainter({
     required this.view,
     required this.muscleId,
     required this.regionId,
+    required this.fromMuscle,
+    required this.fromRegion,
+    required this.fromAim,
+    required this.entering,
     required this.tokens,
     required this.guides,
     required this.t,
@@ -457,26 +598,54 @@ class _FigurePainter extends CustomPainter {
         ..color = tokens.line,
     );
 
-    // The selection.
-    final zone = _zones(view).where((z) => z.muscle == muscleId).firstOrNull;
-    if (zone == null) {
-      canvas.restore();
-      return;
+    // The selection: on entry it fades in; between selections the old
+    // highlight fades out as the new one fades in.
+    final to = _selection(view, muscleId, regionId);
+    final from = fromMuscle == null
+        ? null
+        : _selection(view, fromMuscle!, fromRegion);
+    final fade = entering
+        ? Curves.easeOutCubic.transform((t * 2.2).clamp(0.0, 1.0))
+        : t;
+    if (from != null) {
+      // A shared muscle tint stays put while only the part changes.
+      final sameZone = identical(from.zone, to?.zone);
+      _highlight(canvas, from, px, 1 - fade, tint: sameZone ? 0 : 1 - fade);
     }
-    final focus =
-        (regionId == null ? null : zone.regions[regionId]) ?? zone.path;
-    final fade = Curves.easeOutCubic.transform((t * 2.2).clamp(0.0, 1.0));
-    if (!identical(focus, zone.path)) {
+    if (to != null) {
+      final sameZone = from != null && identical(from.zone, to.zone);
+      _highlight(canvas, to, px, fade, tint: sameZone ? 1 : fade);
+    }
+
+    if (guides && to != null) {
+      final target = _aimFor(view, muscleId, regionId)!;
+      final aim = fromAim == null ? target : Offset.lerp(fromAim, target, t)!;
+      _guides(canvas, box, aim, px);
+      if (entering) _scan(canvas, box, px);
+    }
+    canvas.restore();
+  }
+
+  void _highlight(
+    Canvas canvas,
+    ({Path zone, Path focus}) sel,
+    double px,
+    double alpha, {
+    required double tint,
+  }) {
+    final focus = sel.focus;
+    if (!identical(focus, sel.zone) && tint > 0) {
       canvas.drawPath(
-        zone.path,
-        Paint()..color = tokens.accent.withValues(alpha: 0.18 * fade),
+        sel.zone,
+        Paint()..color = tokens.accent.withValues(alpha: 0.18 * tint),
       );
     }
+    if (alpha <= 0) return;
     final bounds = focus.getBounds();
     canvas.drawPath(
       focus,
       Paint()
-        ..color = tokens.accent.withValues(alpha: 0.6 * fade)
+        ..color = tokens.accent.withValues(alpha: 0.6 * alpha)
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, 6 * px),
     );
     canvas.drawPath(
@@ -490,8 +659,8 @@ class _FigurePainter extends CustomPainter {
               tokens.accent,
               Colors.white,
               0.28,
-            )!.withValues(alpha: fade),
-            tokens.accentDeep.withValues(alpha: fade),
+            )!.withValues(alpha: alpha),
+            tokens.accentDeep.withValues(alpha: alpha),
           ],
         ),
     );
@@ -500,29 +669,14 @@ class _FigurePainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.8 * px
-        ..color = Colors.white.withValues(alpha: 0.3 * fade),
+        ..color = Colors.white.withValues(alpha: 0.3 * alpha),
     );
-
-    if (guides) {
-      // Aim at the figure's left-hand part when the highlight is a pair.
-      final left = Path.combine(
-        PathOperation.intersect,
-        focus,
-        Path()..addRect(
-          Rect.fromLTRB(box.left, box.top, box.center.dx + 4, box.bottom),
-        ),
-      ).getBounds();
-      final aim = (left.isEmpty || left.right >= box.center.dx - 4)
-          ? bounds.center
-          : left.center;
-      _guides(canvas, box, aim, px);
-      _scan(canvas, box, px);
-    }
-    canvas.restore();
   }
 
   void _guides(Canvas canvas, Rect box, Offset aim, double px) {
-    final a = Curves.easeOut.transform((t * 1.6).clamp(0.0, 1.0));
+    final a = entering
+        ? Curves.easeOut.transform((t * 1.6).clamp(0.0, 1.0))
+        : 1.0;
     // Soft hot spot behind the target.
     const hot = 90.0; // view units, about a muscle's width
     canvas.drawCircle(
@@ -556,7 +710,10 @@ class _FigurePainter extends CustomPainter {
 
     // Target: an outer ring that settles in, a rotating dashed inner ring and
     // a dot.
-    final settle = Curves.easeOutBack.transform(a);
+    // While gliding the ring pulses once, tightening as it lands.
+    final settle = entering
+        ? Curves.easeOutBack.transform(a)
+        : 1 - 0.5 * math.sin(t * math.pi);
     canvas.drawCircle(
       aim,
       (12 - 4 * settle) * px * 1.6,
@@ -619,6 +776,10 @@ class _FigurePainter extends CustomPainter {
   @override
   bool shouldRepaint(_FigurePainter old) =>
       old.view != view ||
+      old.fromMuscle != fromMuscle ||
+      old.fromRegion != fromRegion ||
+      old.fromAim != fromAim ||
+      old.entering != entering ||
       old.muscleId != muscleId ||
       old.regionId != regionId ||
       old.t != t ||

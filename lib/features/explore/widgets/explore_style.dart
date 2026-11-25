@@ -89,3 +89,54 @@ class FocusMeter extends StatelessWidget {
     );
   }
 }
+
+/// Cross-fades [child] with a short rise whenever [swapKey] changes, and
+/// eases the height between the old and new content, so switching muscles,
+/// parts or GYM/HOME never jumps.
+class SmoothSwap extends StatelessWidget {
+  final Object swapKey;
+  final Widget child;
+  const SmoothSwap({super.key, required this.swapKey, required this.child});
+
+  static const duration = Duration(milliseconds: 280);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: AnimatedSwitcher(
+        duration: duration,
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        layoutBuilder: (current, previous) => Stack(
+          alignment: Alignment.topLeft,
+          children: [
+            // The outgoing content fades in place without taking space or
+            // taps.
+            for (final p in previous)
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(child: p),
+              ),
+            ?current,
+          ],
+        ),
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 0.015),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        ),
+        child: KeyedSubtree(key: ValueKey(swapKey), child: child),
+      ),
+    );
+  }
+}

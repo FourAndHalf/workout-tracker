@@ -260,52 +260,55 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
               const SizedBox(width: 16),
               Expanded(
                 flex: 56,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    MicroLabel(
-                      '${index.toString().padLeft(2, '0')} / '
-                      '${library.muscles.length} · ${muscle.latin}',
-                      size: 10,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      muscle.name,
-                      key: const Key('muscleTitle'),
-                      style: textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.5,
-                        height: 1.1,
+                child: SmoothSwap(
+                  swapKey: muscle.id,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      MicroLabel(
+                        '${index.toString().padLeft(2, '0')} / '
+                        '${library.muscles.length} · ${muscle.latin}',
+                        size: 10,
                       ),
-                    ),
-                    const SizedBox(height: 14),
-                    for (final r in muscle.regions)
-                      _RegionRow(
-                        key: ValueKey('region-${r.id}'),
-                        label: r.name,
-                        side: BodyFigure.viewFor(muscle.id, r.id) ?? 'front',
-                        selected: r.id == region.id,
-                        onTap: () => _selectRegion(r.id),
+                      const SizedBox(height: 6),
+                      Text(
+                        muscle.name,
+                        key: const Key('muscleTitle'),
+                        style: textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.5,
+                          height: 1.1,
+                        ),
                       ),
-                    const SizedBox(height: 6),
-                    Divider(color: colors.border, height: 20),
-                    InkWell(
-                      key: const Key('aboutToggle'),
-                      onTap: () => setState(() => _aboutOpen = !_aboutOpen),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
-                          style: AppText.metricTable.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: tokens.accentText,
+                      const SizedBox(height: 14),
+                      for (final r in muscle.regions)
+                        _RegionRow(
+                          key: ValueKey('region-${r.id}'),
+                          label: r.name,
+                          side: BodyFigure.viewFor(muscle.id, r.id) ?? 'front',
+                          selected: r.id == region.id,
+                          onTap: () => _selectRegion(r.id),
+                        ),
+                      const SizedBox(height: 6),
+                      Divider(color: colors.border, height: 20),
+                      InkWell(
+                        key: const Key('aboutToggle'),
+                        onTap: () => setState(() => _aboutOpen = !_aboutOpen),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(
+                            '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
+                            style: AppText.metricTable.copyWith(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: tokens.accentText,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -353,24 +356,32 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
             ),
           ],
           const SizedBox(height: 16),
-          if (picks.isEmpty)
-            Text(
-              'No ${setting.label.toLowerCase()} picks for this part yet.',
-              style: textTheme.bodyMedium?.copyWith(
-                color: colors.textSecondary,
-              ),
-            )
-          else
-            for (final entry in picks.asMap().entries)
-              if (library.exercises[entry.value.exerciseId] != null)
-                RecommendationCard(
-                  key: ValueKey(
-                    '${muscle.id}-${region.id}-${setting.name}-${entry.value.exerciseId}',
-                  ),
-                  exercise: library.exercises[entry.value.exerciseId]!,
-                  pick: entry.value,
-                  starred: entry.key == 0,
-                ),
+          SmoothSwap(
+            swapKey: '${muscle.id}/${region.id}/${setting.name}',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (picks.isEmpty)
+                  Text(
+                    'No ${setting.label.toLowerCase()} picks for this part yet.',
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colors.textSecondary,
+                    ),
+                  )
+                else
+                  for (final entry in picks.asMap().entries)
+                    if (library.exercises[entry.value.exerciseId] != null)
+                      RecommendationCard(
+                        key: ValueKey(
+                          '${muscle.id}-${region.id}-${setting.name}-${entry.value.exerciseId}',
+                        ),
+                        exercise: library.exercises[entry.value.exerciseId]!,
+                        pick: entry.value,
+                        starred: entry.key == 0,
+                      ),
+              ],
+            ),
+          ),
           const SizedBox(height: 8),
           _SourcesCard(library: library),
         ],

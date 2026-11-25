@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons_600.dart';
@@ -13,7 +15,15 @@ import 'explore_style.dart';
 /// everything a lifter needs before the first rep.
 class ExerciseDetailBody extends ConsumerWidget {
   final LibraryExercise exercise;
-  const ExerciseDetailBody({super.key, required this.exercise});
+
+  /// False when the host already shows [ExercisePhotos] at its top, so the
+  /// photos appear only once.
+  final bool showPhotos;
+  const ExerciseDetailBody({
+    super.key,
+    required this.exercise,
+    this.showPhotos = true,
+  });
 
   Future<void> _openVideos(BuildContext context) async {
     final opened = await launchUrl(
@@ -47,9 +57,9 @@ class ExerciseDetailBody extends ConsumerWidget {
               height: 1.45,
             ),
           ),
-        if (exercise.imageAssets.isNotEmpty) ...[
+        if (showPhotos && exercise.imageAssets.isNotEmpty) ...[
           const SizedBox(height: 14),
-          _PhotoViewer(exercise: exercise),
+          ExercisePhotos(exercise: exercise),
         ],
         if (exercise.steps.isNotEmpty) ...[
           const SizedBox(height: 14),
@@ -155,27 +165,67 @@ class _MuscleTag extends StatelessWidget {
   }
 }
 
-/// The start and finish photos; tap to flip between them.
-class _PhotoViewer extends StatefulWidget {
+/// The start and finish photos, alternating on their own with a soft
+/// cross-fade; a tap flips straight to the other one.
+class ExercisePhotos extends StatefulWidget {
   final LibraryExercise exercise;
-  const _PhotoViewer({required this.exercise});
+  const ExercisePhotos({super.key, required this.exercise});
+
+  /// How long each photo stays before the next one fades in.
+  static const hold = Duration(milliseconds: 1800);
+  static const fade = Duration(milliseconds: 450);
 
   @override
-  State<_PhotoViewer> createState() => _PhotoViewerState();
+  State<ExercisePhotos> createState() => _ExercisePhotosState();
 }
 
-class _PhotoViewerState extends State<_PhotoViewer> {
+class _ExercisePhotosState extends State<ExercisePhotos> {
   int _index = 0;
+  Timer? _timer;
+
+  List<String> get _images => widget.exercise.imageAssets;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Decode every photo up front so the first swap doesn't flash.
+    for (final path in _images) {
+      precacheImage(AssetImage(path), context, onError: (_, _) {});
+    }
+    _restart();
+  }
+
+  void _restart() {
+    _timer?.cancel();
+    final still = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    if (_images.length < 2 || still) return;
+    _timer = Timer.periodic(ExercisePhotos.hold, (_) => _next());
+  }
+
+  void _next() {
+    if (!mounted) return;
+    setState(() => _index = (_index + 1) % _images.length);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final images = widget.exercise.imageAssets;
+    final images = _images;
     final labels = const ['Start', 'Finish'];
     return GestureDetector(
+      key: const Key('exercisePhotos'),
       onTap: images.length < 2
           ? null
-          : () => setState(() => _index = (_index + 1) % images.length),
+          : () {
+              _next();
+              _restart();
+            },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadius.md),
         child: AspectRatio(
@@ -183,49 +233,59 @@ class _PhotoViewerState extends State<_PhotoViewer> {
           child: Stack(
             fit: StackFit.expand,
             children: [
+              ColoredBox(color: colors.surface),
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
+                duration: ExercisePhotos.fade,
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                layoutBuilder: (current, previous) => Stack(
+                  fit: StackFit.expand,
+                  children: [...previous, ?current],
+                ),
                 child: Image.asset(
                   images[_index],
                   key: ValueKey(images[_index]),
                   fit: BoxFit.cover,
+                  gaplessPlayback: true,
                   semanticLabel:
-                      '${widget.exercise.name}, ${labels[_index].toLowerCase()} position',
+                      '${widget.exercise.name}, ${labels[_index % 2].toLowerCase()} position',
                   errorBuilder: (_, _, _) => ColoredBox(
                     color: colors.surface,
                     child: Icon(LucideIcons600.image, color: colors.textMuted),
                   ),
                 ),
               ),
-              Positioned(
-                left: 10,
-                bottom: 10,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < images.length; i++)
-                      Container(
-                        margin: const EdgeInsets.only(right: 6),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(
-                            alpha: i == _index ? 0.72 : 0.35,
+              if (images.length > 1)
+                Positioned(
+                  left: 10,
+                  bottom: 10,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < images.length && i < 2; i++)
+                        AnimatedContainer(
+                          duration: ExercisePhotos.fade,
+                          margin: const EdgeInsets.only(right: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
                           ),
-                          borderRadius: BorderRadius.circular(AppRadius.sm),
-                        ),
-                        child: MicroLabel(
-                          labels[i],
-                          size: 10,
-                          color: Colors.white.withValues(
-                            alpha: i == _index ? 1 : 0.6,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(
+                              alpha: i == _index ? 0.72 : 0.35,
+                            ),
+                            borderRadius: BorderRadius.circular(AppRadius.sm),
+                          ),
+                          child: MicroLabel(
+                            labels[i],
+                            size: 10,
+                            color: Colors.white.withValues(
+                              alpha: i == _index ? 1 : 0.6,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -257,6 +317,10 @@ Future<void> showExerciseDetailSheet(
         controller: controller,
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
         children: [
+          if (exercise.imageAssets.isNotEmpty) ...[
+            ExercisePhotos(exercise: exercise),
+            const SizedBox(height: 16),
+          ],
           MicroLabel('${exercise.equipment} · ${exercise.level}'),
           const SizedBox(height: 6),
           Text(
@@ -265,7 +329,7 @@ Future<void> showExerciseDetailSheet(
                 ?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 14),
-          ExerciseDetailBody(exercise: exercise),
+          ExerciseDetailBody(exercise: exercise, showPhotos: false),
         ],
       ),
     ),
@@ -324,6 +388,18 @@ class _RecommendationCardState extends State<RecommendationCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Opened: one large photo at the top, alternating start/finish.
+            AnimatedSize(
+              duration: const Duration(milliseconds: 240),
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
+              child: _open && exercise.imageAssets.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: ExercisePhotos(exercise: exercise),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
             InkWell(
               borderRadius: BorderRadius.circular(AppRadius.lg),
               onTap: () => setState(() => _open = !_open),
@@ -332,23 +408,39 @@ class _RecommendationCardState extends State<RecommendationCard> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (exercise.imageAssets.isNotEmpty) ...[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(AppRadius.sm + 2),
-                        child: SizedBox(
-                          width: 84,
-                          height: 64,
-                          child: Image.asset(
-                            exercise.imageAssets.first,
-                            fit: BoxFit.cover,
-                            excludeFromSemantics: true,
-                            errorBuilder: (_, _, _) =>
-                                ColoredBox(color: colors.surface),
-                          ),
+                    // The thumbnail tucks away while the large photo shows.
+                    if (exercise.imageAssets.isNotEmpty)
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 240),
+                        curve: Curves.easeOutCubic,
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 180),
+                          opacity: _open ? 0 : 1,
+                          child: _open
+                              ? const SizedBox(height: 64)
+                              : Padding(
+                                  key: const Key('cardThumbnail'),
+                                  padding: const EdgeInsets.only(right: 14),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      AppRadius.sm + 2,
+                                    ),
+                                    child: SizedBox(
+                                      width: 84,
+                                      height: 64,
+                                      child: Image.asset(
+                                        exercise.imageAssets.first,
+                                        fit: BoxFit.cover,
+                                        excludeFromSemantics: true,
+                                        errorBuilder: (_, _, _) =>
+                                            ColoredBox(color: colors.surface),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
-                      const SizedBox(width: 14),
-                    ],
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,7 +514,10 @@ class _RecommendationCardState extends State<RecommendationCard> {
               child: _open
                   ? Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      child: ExerciseDetailBody(exercise: exercise),
+                      child: ExerciseDetailBody(
+                        exercise: exercise,
+                        showPhotos: false,
+                      ),
                     )
                   : const SizedBox(width: double.infinity),
             ),
