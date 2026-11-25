@@ -65,7 +65,7 @@ class ExerciseDetailBody extends ConsumerWidget {
                       '${entry.key + 1}.',
                       style: AppText.metricTable.copyWith(
                         fontSize: 13,
-                        color: tokens.accent,
+                        color: tokens.accentText,
                       ),
                     ),
                   ),
@@ -111,7 +111,7 @@ class ExerciseDetailBody extends ConsumerWidget {
             icon: Icon(
               LucideIcons600.squarePlay,
               size: 18,
-              color: tokens.accent,
+              color: tokens.accentText,
             ),
             label: const Text('Watch form videos'),
             onPressed: () => _openVideos(context),

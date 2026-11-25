@@ -17,7 +17,7 @@ tool/verify_changes.sh --regen --screens --apk   # everything
 
 | Stage | What it proves | Run it alone |
 |---|---|---|
-| 1. Data checks | IDs `E*`, `L*`, `S*` below. Written in Python, separate from the Dart code, so one catches the other's mistakes | `python3 tool/verify_assets.py` |
+| 1. Data checks | IDs `E*`, `L*`, `S*`, `D*` below. Written in Python, separate from the Dart code, so one catches the other's mistakes | `python3 tool/verify_assets.py` |
 | 2. Regeneration (`--regen`) | Rebuilding from `tool/` with a random hash seed reproduces the current assets byte for byte | `python3 tool/build_library.py`, then `git diff assets/` |
 | 3. Analyzer | No errors or warnings. The 10 existing `info` lints are allowed | `flutter analyze` |
 | 4. Named tests | The Dart tests listed in this file | see the script |
@@ -30,13 +30,13 @@ Requirements:
 - **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db. Byte-identical output also assumes the same Pillow/libwebp version (12.3 was used); another version can encode the photos slightly differently.
 - **`--apk` only:** an Android SDK (`flutter config --android-sdk <path>`). The first build also downloads the NDK and CMake.
 
-Last verified: 2026-11-22. Results:
-- 59 data checks pass.
+Last verified: 2026-11-25. Results:
+- 64 data checks pass (59 data, 5 design-token).
 - Regenerated assets are identical across Python hash seeds.
 - Analyzer: 0 errors and 0 warnings.
 - 206 tests pass.
 - 12 Explore screens render cleanly (6 dark, 6 light).
-- The Android release build succeeds (see §7).
+- The Android release build succeeds (see §8).
 
 ---
 
@@ -131,14 +131,31 @@ These items are judged by eye. The behaviour behind them is pinned by the U* tes
 | ID | Claim | Manual check |
 |---|---|---|
 | V1 | The body figure is drawn from scratch: spline outlines, detail lines, a coral glow and crosshair guides that aim at one side of paired muscles | Open Explore and choose Shoulders → Side delts. The glow sits on the outer delts and the crosshair targets the left one |
-| V2 | Coral is the only extra accent, used only in Explore (see `design/DESIGN.md`) | No coral appears on other tabs |
+| V2 | ~~Coral is used only in Explore.~~ Superseded by §6: coral is now the app-wide accent, with adoption tracked in `design/DESIGN.md` §9 | See §6 |
 | V3 | Layout: the figure on the left; the title and FRONT/BACK-tagged part rows on the right; GYM/HOME beside "Recommended" | Compare against the reference screenshots at 390 px wide |
 | V4 | Cards show a thumbnail, a TOP PICK tag and a focus meter (3 bars = primary, 2 = assists) | Look at any muscle's picks |
 | V5 | No layout overflow at 390 px wide | `--screens` fails on any overflow or exception |
 | V6 | Light and dark themes both look right | `--screens` writes `dark_*.png` and `light_*.png` to `build/screens/`; compare them side by side |
 | V7 | Wrapped muscle labels on a split day never start a line with "·" | `build/screens/*_5_split_detail.png` |
 
-## 6. Research claims shown in the app
+## 6. App-wide design system and coral accent
+*Branch `claude/endurance-fitness-tracker-bkq1lo`, after PR #4.*
+
+`design/DESIGN.md` was rewritten. It had been a finance-app ("Money Matters")
+design document; it is now this app's design system. It keeps the
+Pearl Ledger foundations the code already used and makes coral the single
+app-wide accent, with rules for where it goes and where it never goes.
+
+| ID | Claim | Verified by |
+|---|---|---|
+| D1 | All six coral tokens (`accent`, `accentText`, `accentFill`, `accentFillEnd`, `onAccent`, `accentContainer`) exist in both themes in `lib/core/theme/app_colors.dart` | `verify_assets.py` (reads the Dart source) |
+| D2 | Every coral pairing the design doc promises meets WCAG AA: 4.5:1 for text, 3:1 for graphics. This fixed two failures shipped in PR #4: light coral text was 3.27:1, and white on dark-mode coral was 2.57:1 | `verify_assets.py` recomputes the contrast; the check fails if the old light value is put back |
+| D3 | Every coral value in the code appears in `design/DESIGN.md`, so the doc and the theme can't drift apart | `verify_assets.py` |
+| D4 | The shared coral widgets (`MicroLabel`, `AccentChip`, `CompactToggle`, `OutlinePill`, `accentGradient`) live in `lib/core/widgets/accent.dart`, so any screen can use them | analyzer, full suite |
+| D5 | Explore uses `accentText` for coral text and `onAccent` on coral fills; `accent` is kept for graphics | `--screens` images; `grep -rn "tokens.accent\b" lib/features/explore` shows graphics only |
+| D6 | Screens outside Explore aren't restyled yet. `design/DESIGN.md` §9 lists what each still needs | Manual. Update §9 as screens adopt the accent |
+
+## 7. Research claims shown in the app
 
 Each note in the app paraphrases one of these sources. To verify a note,
 open its source.
@@ -159,9 +176,9 @@ open its source.
 
 The app also lists these sources under *Explore → How these picks were chosen*.
 
-## 7. Android build and app size
+## 8. Android build and app size
 
-The release build was run with `flutter build apk --release` on Flutter 3.47.4, Android SDK platform 36 and NDK r28c.
+The release build was run on 2026-11-22 with `flutter build apk --release` on Flutter 3.47.4, Android SDK platform 36 and NDK r28c.
 
 | Build | Size |
 |---|---|
@@ -174,7 +191,7 @@ About 68 MB of the universal APK is the Flutter engine and app code compiled onc
 
 For comparison, `main` without Explore builds to 27.5 MB for arm64, so Explore costs a typical install **6.0 MB**: 5.7 MB of photos plus JSON and code. Both builds print the same Gradle notice asking some plugins to migrate to Built-in Kotlin. That notice comes from the plugins, not this app, and it doesn't block the build.
 
-## 8. Not verified
+## 9. Not verified
 
 These still need a person or a Mac:
 - Installing and using the APK on a real phone (the build itself is verified above).

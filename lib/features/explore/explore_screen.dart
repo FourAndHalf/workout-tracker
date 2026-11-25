@@ -299,7 +299,7 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
                           style: AppText.metricTable.copyWith(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            color: tokens.accent,
+                            color: tokens.accentText,
                           ),
                         ),
                       ),
@@ -457,7 +457,7 @@ class _RegionRow extends StatelessWidget {
                 MicroLabel(
                   side,
                   size: 9,
-                  color: selected ? tokens.accent : colors.textMuted,
+                  color: selected ? tokens.accentText : colors.textMuted,
                 ),
               ],
             ),
@@ -548,9 +548,11 @@ class _SourcesCard extends StatelessWidget {
                       child: Text(
                         r.title,
                         style: small?.copyWith(
-                          color: tokens.accent,
+                          color: tokens.accentText,
                           decoration: TextDecoration.underline,
-                          decorationColor: tokens.accent.withValues(alpha: 0.5),
+                          decorationColor: tokens.accentText.withValues(
+                            alpha: 0.5,
+                          ),
                         ),
                       ),
                     ),

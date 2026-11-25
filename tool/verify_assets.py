@@ -137,6 +137,56 @@ for f in split_files:
     check(f"S6[{sid}]", eff_ok, "effective = direct + indirect x 1/2 (shoulders 1/4)")
 check("S7", sorted(settings) == ["gym"] * 4 + ["home"] * 4, "four gym and four home splits")
 
+# ------------------------------------------------------------- design tokens
+# Read the colours straight from the theme source and re-measure every
+# coral pairing that design/DESIGN.md promises (WCAG 2.x contrast).
+src = open(os.path.join(ROOT, "lib/core/theme/app_colors.dart"), encoding="utf-8").read()
+
+
+def theme(name):
+    body = src[src.index(f"static const {name} = AppColors("):]
+    body = body[: body.index(");")]
+    return {k: v[2:] for k, v in re.findall(r"(\w+): Color\((0x[0-9A-Fa-f]{8})\)", body)}
+
+
+def lum(argb):
+    r, g, b = (int(argb[i:i + 2], 16) / 255 for i in (2, 4, 6))
+    f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+
+def ratio(a, b):
+    hi, lo = sorted((lum(a), lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+PAIRS = [  # (foreground, background, minimum, what)
+    ("accentText", "background", 4.5, "coral text on canvas"),
+    ("accentText", "card", 4.5, "coral text on module"),
+    ("accentText", "raised", 4.5, "coral text on raised control"),
+    ("accentText", "accentContainer", 4.5, "coral text on tint"),
+    ("textPrimary", "accentContainer", 4.5, "ink on tint"),
+    ("onAccent", "accentFill", 4.5, "label on fill start"),
+    ("onAccent", "accentFillEnd", 4.5, "label on fill end"),
+    ("accent", "card", 3.0, "coral graphic on module"),
+]
+for mode in ("light", "dark"):
+    t = theme(mode)
+    missing = [k for k in ("accent", "accentText", "accentFill", "accentFillEnd", "onAccent", "accentContainer")
+               if k not in t]
+    check(f"D1[{mode}]", not missing, f"coral tokens defined {missing}")
+    if missing:
+        continue
+    worst = [(ratio(t[fg], t[bg]), fg, bg, need, what) for fg, bg, need, what in PAIRS]
+    bad = [f"{w} {r:.2f}<{n}" for r, fg, bg, n, w in worst if r < n]
+    check(f"D2[{mode}]", not bad, "coral pairings meet WCAG AA " + (str(bad) if bad else
+          f"(lowest {min(r / n for r, _, _, n, _ in worst) * 100:.0f}% of the requirement met)"))
+doc = open(os.path.join(ROOT, "design/DESIGN.md"), encoding="utf-8").read()
+light, darkt = theme("light"), theme("dark")
+documented = all(f"`#{light[k][2:].upper()}`" in doc and f"`#{darkt[k][2:].upper()}`" in doc
+                 for k in ("accent", "accentText", "accentFill", "accentFillEnd", "onAccent", "accentContainer"))
+check("D3", documented, "every coral token value in code appears in design/DESIGN.md")
+
 print()
 print(f"{len(FAILS)} failed" if FAILS else "All asset checks passed")
 sys.exit(len(FAILS))

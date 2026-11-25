@@ -178,7 +178,7 @@ class _DayCard extends ConsumerWidget {
                       style: AppText.labelUppercase.copyWith(
                         fontSize: 10,
                         letterSpacing: 1.6,
-                        color: ExploreTokens.of(context).accent,
+                        color: ExploreTokens.of(context).accentText,
                       ),
                     ),
                   ],
