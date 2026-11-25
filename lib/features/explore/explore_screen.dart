@@ -107,7 +107,6 @@ class MuscleLibraryView extends ConsumerStatefulWidget {
 
 class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
   final _search = TextEditingController();
-  String? _forcedView;
   bool _aboutOpen = false;
 
   @override
@@ -124,7 +123,7 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     HapticFeedback.selectionClick();
     ref.read(exploreMuscleProvider.notifier).state = id;
     ref.read(exploreRegionProvider.notifier).state = null;
-    setState(() => _forcedView = null);
+    setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chip = _chipKeys[id]?.currentContext;
       if (chip != null && chip.mounted) {
@@ -142,7 +141,7 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     HapticFeedback.selectionClick();
     ref.read(exploreRegionProvider.notifier).state = regionId;
     // Flip the figure to the side where this part shows.
-    setState(() => _forcedView = null);
+    setState(() {});
   }
 
   @override
@@ -169,7 +168,6 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     final region =
         muscle.region(ref.watch(exploreRegionProvider)) ?? muscle.regions.first;
     final view =
-        _forcedView ??
         BodyFigure.viewFor(muscle.id, region.id) ??
         (muscle.view == 'back' ? 'back' : 'front');
     final query = _search.text.trim();
@@ -241,18 +239,6 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
                       regionId: region.id,
                       view: view,
                       onSelectMuscle: _selectMuscle,
-                    ),
-                    const SizedBox(height: 10),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: CompactToggle(
-                        key: const Key('viewToggle'),
-                        labels: const ['Front', 'Back'],
-                        index: view == 'back' ? 1 : 0,
-                        onChanged: (i) => setState(
-                          () => _forcedView = i == 1 ? 'back' : 'front',
-                        ),
-                      ),
                     ),
                   ],
                 ),

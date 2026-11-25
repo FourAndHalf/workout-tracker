@@ -185,8 +185,9 @@ void main() {
 
     expect(find.byKey(const Key('exerciseCue')), findsOneWidget);
     expect(find.text(exercise.cue), findsOneWidget);
-    expect(find.text('START'), findsOneWidget);
-    expect(find.text('FINISH'), findsOneWidget);
+    // The photos carry no START/FINISH labels.
+    expect(find.text('START'), findsNothing);
+    expect(find.text('FINISH'), findsNothing);
     expect(find.text('1.'), findsOneWidget);
     expect(find.text(exercise.steps.first), findsOneWidget);
     expect(find.byKey(const Key('watchFormVideos')), findsOneWidget);
@@ -284,9 +285,8 @@ void main() {
     expect(find.text('Glutes'), findsWidgets);
     expect(view(), 'back');
 
-    await tester.tap(find.byKey(const ValueKey('toggle-front')));
-    await _settle(tester);
-    expect(view(), 'front');
+    // The side follows the muscle; there is no manual FRONT/BACK switch.
+    expect(find.byKey(const Key('viewToggle')), findsNothing);
 
     // Rear delts only show from behind.
     await _pickMuscle(tester, 'shoulders');
@@ -296,6 +296,35 @@ void main() {
 
     await _pickMuscle(tester, 'chest');
     expect(view(), 'front');
+  });
+
+  testWidgets('the figure turns smoothly between front and back', (
+    tester,
+  ) async {
+    await _openExplore(tester);
+    final canvas = find.descendant(
+      of: find.byType(BodyFigure),
+      matching: find.byType(CustomPaint),
+    );
+    final chip = find.byKey(const ValueKey('muscle-glutes'));
+    await tester.ensureVisible(chip);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(chip);
+    await tester.pump();
+    // A quarter in: the front is still turning away.
+    await tester.pump(BodyFigure.turnDuration * 0.25);
+    expect(canvas, findsOneWidget);
+    final early = tester.widget<Transform>(
+      find.ancestor(of: canvas, matching: find.byType(Transform)).first,
+    );
+    expect(early.transform.storage[0], lessThan(0.99)); // rotated
+    // Three quarters in: the back is turning in.
+    await tester.pump(BodyFigure.turnDuration * 0.5);
+    expect(canvas, findsOneWidget);
+    await tester.pump(BodyFigure.turnDuration);
+    await tester.pump();
+    expect(canvas, findsOneWidget);
+    expect(tester.widget<BodyFigure>(find.byType(BodyFigure)).view, 'back');
   });
 
   testWidgets('search finds exercises by name or equipment', (tester) async {
