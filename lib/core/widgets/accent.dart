@@ -169,3 +169,96 @@ class OutlinePill extends StatelessWidget {
     );
   }
 }
+
+/// The one main action on a screen (design/DESIGN.md › Buttons › Main
+/// action): a coral gradient pill with a soft glow and an [AppColors.onAccent]
+/// label. With [onPressed] null it becomes a quiet outline pill, e.g.
+/// "Current split".
+///
+/// Use at most one per screen. Actions that repeat down a list (Log set)
+/// keep the neutral primary button.
+class AccentButton extends StatelessWidget {
+  final String label;
+  final IconData? icon;
+  final VoidCallback? onPressed;
+
+  /// 52 px main action, or a 40 px pill for a list row (`compact`).
+  final bool compact;
+
+  /// Fill the available width.
+  final bool expand;
+
+  const AccentButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.icon,
+    this.compact = false,
+    this.expand = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final enabled = onPressed != null;
+    final fg = enabled ? colors.onAccent : colors.textSecondary;
+    final radius = BorderRadius.circular(999);
+    final content = Row(
+      mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (icon != null) ...[
+          Icon(icon, size: 18, color: fg),
+          const SizedBox(width: 8),
+        ],
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(color: fg, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: label,
+      excludeSemantics: true,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: compact ? 40 : 52,
+        decoration: BoxDecoration(
+          gradient: enabled ? accentGradient(colors) : null,
+          borderRadius: radius,
+          border: enabled ? null : Border.all(color: colors.border),
+          boxShadow: enabled
+              ? [
+                  BoxShadow(
+                    color: colors.accent.withValues(alpha: 0.35),
+                    blurRadius: compact ? 12 : 18,
+                    offset: Offset(0, compact ? 4 : 6),
+                  ),
+                ]
+              : null,
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onPressed,
+            borderRadius: radius,
+            splashColor: colors.onAccent.withValues(alpha: 0.14),
+            highlightColor: colors.onAccent.withValues(alpha: 0.06),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: compact ? 14 : 20),
+              child: content,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

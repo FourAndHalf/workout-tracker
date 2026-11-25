@@ -337,10 +337,11 @@ class _DayDot extends StatelessWidget {
                 ? Colors.transparent
                 : colors.surface,
             border: Border.all(
+              // Today is "now", so its ring is the coral accent.
               color: trained
                   ? colors.primary
                   : isToday
-                  ? colors.primary
+                  ? colors.accent
                   : colors.border,
               width: isToday && !trained ? 1.5 : 1,
             ),

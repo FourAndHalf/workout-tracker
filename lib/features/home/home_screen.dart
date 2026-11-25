@@ -15,6 +15,7 @@ import '../workout/providers/active_workout_session_notifier.dart';
 import '../workout/start_workout.dart';
 import 'home_providers.dart';
 import 'widgets/dashboard_stats.dart';
+import '../../core/widgets/accent.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -229,11 +230,11 @@ class _TodayCard extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton.icon(
-                  icon: Icon(
-                    resuming ? LucideIcons600.arrowRight : LucideIcons600.play,
-                  ),
-                  label: Text(resuming ? 'Resume workout' : 'Start workout'),
+                child: AccentButton(
+                  icon: resuming
+                      ? LucideIcons600.arrowRight
+                      : LucideIcons600.play,
+                  label: resuming ? 'Resume workout' : 'Start workout',
                   onPressed: onStart,
                 ),
               ),

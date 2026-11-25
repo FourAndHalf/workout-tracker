@@ -271,8 +271,9 @@ Two traps:
   apart, so never put them side by side and never rely on hue alone.
 - **Navigation chrome.** The bottom bar's active item stays charcoal: navigation
   is structure, not focus.
-- **More than one filled coral control at a time.** Other coral on the screen
-  stays small: text, borders, meters.
+- **Two main actions.** At most one filled coral button per screen. A
+  selected chip in a filter row is the only other filled coral allowed.
+  Everything else stays small: text, borders, rings, meters.
 
 ### Champagne: milestones only
 `tertiary` `#7A6A47` (text) and `#EDE6D6` (container) in light, `#CDBB92` and
@@ -376,10 +377,11 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
 `accent.dart`.
 
 ### Buttons
-- **Main action (coral):** a 52 px `full` pill filled with the
+- **Main action (coral, `AccentButton`):** a 52 px `full` pill filled with the
   `accentFill → accentFillEnd` gradient, `onAccent` label at weight 600, an
   optional leading icon, and a coral glow. Only one per screen. When
   unavailable (e.g. *Current split*), use an outline pill with muted text.
+  `compact: true` gives a 40 px pill for a list row (the Programs *Start*).
 - **Primary (neutral):** a charcoal pill (light) or light pill (dark), 48 px.
   Use it for actions that repeat within a screen (*Log set 2*, *Add chunk*)
   and for confirmations.
@@ -409,6 +411,8 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
   (`heroStart → heroEnd`) is the screen's only decorative surface.
 - **KPI strip (Home):** Streak · Sessions · Volume · Sets, separated by
   hairlines, using `metric-card` values and a `DeltaPill`.
+- **This week (Home):** day dots: trained days filled with the charcoal
+  anchor plus a ✓; today drawn as an `accent` ring.
 - **Program day card:** an order disc, the day name, `N exercises · ~M min`,
   and a trailing action:
   - next day: coral border plus the coral *Start*;
@@ -478,8 +482,8 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
 - **Sets per muscle:** direct sets in `accent`, assisting sets in `accent` at
   35%, and a neutral shaded band for the 10–20 target.
 - **Gauge (`GaugeArc`):** a 270° arc with a `track` background. The fill is
-  `accent` when it shows live progress toward today's goal, and `primary`
-  for static ratios.
+  `accent` while something is running (a timed hold's countdown), and
+  `primary` for ratios such as the weekly goal or rest-pause reps.
 - **Sparklines, line charts:** 1.25–1.5 px `primary` strokes. Projections
   are dashed.
 - Semantic colours appear in charts only for deltas.
@@ -489,8 +493,10 @@ An icon chip, one line of ink, a muted hint and at most one action. No
 illustrations.
 
 ### Home-screen widgets (Android)
-Dark only: graphite surfaces and micro-labels. The *Start* button is the
-coral main action, and the streak flame uses `accent`.
+The quote card and the quote + week widgets are drawn natively
+(`QuoteCardRenderer.kt`) with the same tokens as the Home tab, in light and
+dark. As on Home, today's week dot is an `accent` ring; trained days are
+filled with the charcoal anchor.
 
 ## 8. Motion
 - 200–250 ms standard easing for state changes: chips, rows, toggles, card
@@ -501,18 +507,22 @@ coral main action, and the streak flame uses `accent`.
 
 ## 9. Adoption across the app
 
-The tokens and shared widgets are global. This table shows which screens
-follow the coral rules today. Update it as screens change.
+Every screen follows the coral rules. `test/core/design_rules_test.dart`
+walks Home → Programs → day preview → live workout → Explore → split
+detail → Progress → Nutrition. It fails if any screen shows more than one
+coral main action, or if coral is missing from the places below.
 
-| Area | Status | To do to comply |
-|---|---|---|
-| Explore: muscles, cards, splits, split detail | ✅ Complies, including the contrast-safe text and on-accent colours | n/a |
-| Home: Today card *Start*, KPI strip, week dots | ⏳ Uses the charcoal primary | Make *Start* the coral main action; draw today's dot as an `accent` ring |
-| Programs: track switcher, next-day card | ⏳ Uses `ChoiceChip` and a `primary` border | Switch to `AccentChip`; give the next-day card an `accent` border and the coral *Start* |
-| Live workout: session progress, countdown ring | ⏳ Uses `primary` | Use `accent` for the progress bar and the running countdown ring. *Finish workout* becomes the main action |
-| Progress: bar charts, distance card | ⏳ Uses `primary` for the current bar | Use `accent` for the current bar |
-| Nutrition | ⏳ Neutral | Make *Use the camera* the main action |
-| Home-screen widgets | ⏳ Neutral *Start* | Coral *Start* button (Android drawable) |
+| Area | Coral today |
+|---|---|
+| Home | *Start workout* / *Resume workout* main action; today's week dot ring |
+| Programs | Selected track chip (`AccentChip`); next or running day: `accent` border and a compact coral *Start* / *Resume* |
+| Day preview / live workout | *Start ‹day› Workout*, then *Finish workout*; session progress bar; a running countdown ring |
+| Explore | Selected muscle and part; *Use this split*; top picks, meters, set bars |
+| Progress (and Home charts) | The current period's bar in every `ThinBarChart` |
+| Nutrition | *Snap Meal* (camera) tile |
+| Android widgets | Today's week dot ring |
+
+When a new screen is added, add it to this table and to the design-rules test.
 
 ## 10. Checking a screen against this document
 
@@ -520,6 +530,10 @@ follow the coral rules today. Update it as screens change.
 2. **Check coral text.** It always uses `accentText`, never `accent`.
 3. **Check text on coral fills.** It always uses `onAccent`, never hard-coded white.
 4. **Check meaning.** No coral where it could be read as good or bad.
-5. **Render it.** `flutter test tool/screens/render_screens_test.dart` writes
-   dark and light screenshots to `build/screens/`, and fails on any overflow.
-   Extend it when a new screen adopts the accent.
+5. **Test and render it.**
+   - `flutter test test/core/design_rules_test.dart` enforces rules 1 and the
+     §9 placements.
+   - `flutter test tool/screens/render_screens_test.dart` writes dark and
+     light screenshots of every main screen to `build/screens/`, and fails on
+     any overflow.
+   - Extend both when a screen is added.

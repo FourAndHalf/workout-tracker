@@ -15,6 +15,7 @@ import '../../core/utils/workout_estimate.dart';
 import '../workout/providers/active_workout_session_notifier.dart';
 import '../workout/start_workout.dart';
 import 'program_providers.dart';
+import '../../core/widgets/accent.dart';
 
 class ProgramListScreen extends ConsumerWidget {
   const ProgramListScreen({super.key});
@@ -188,7 +189,7 @@ class _DayCard extends StatelessWidget {
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-      borderColor: emphasised ? colors.primary : null,
+      borderColor: emphasised ? colors.accent : null,
       borderWidth: emphasised ? 1.5 : 1,
       child: Row(
         children: [
@@ -259,13 +260,11 @@ class _PillButton extends StatelessWidget {
   const _PillButton({required this.label, required this.onPressed});
 
   @override
-  Widget build(BuildContext context) => ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-      minimumSize: const Size(0, 40),
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-    ),
-    icon: const Icon(LucideIcons600.play, size: 18),
-    label: Text(label),
+  Widget build(BuildContext context) => AccentButton(
+    icon: LucideIcons600.play,
+    label: label,
+    compact: true,
+    expand: false,
     onPressed: onPressed,
   );
 }
@@ -327,19 +326,12 @@ class _TrackSwitcher extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             for (final program in programs) ...[
-              ChoiceChip(
+              AccentChip(
                 key: ValueKey('track-${program.programId}'),
-                label: Text(
-                  program.programName,
-                  style: TextStyle(
-                    color: program.programId == selectedId
-                        ? context.colors.onPrimary
-                        : context.colors.textPrimary,
-                  ),
-                ),
+                label: program.programName,
+                dense: true,
                 selected: program.programId == selectedId,
-                showCheckmark: false,
-                onSelected: (_) => select(program.programId),
+                onTap: () => select(program.programId),
               ),
               const SizedBox(width: 8),
             ],

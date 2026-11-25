@@ -103,9 +103,11 @@ class SplitDetailScreen extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        _UseButton(
-          isCurrent: isCurrent,
-          onPressed: () => _use(context, ref, program),
+        AccentButton(
+          key: const Key('useSplit'),
+          icon: isCurrent ? LucideIcons600.check : LucideIcons600.play,
+          label: isCurrent ? 'Current split' : 'Use this split',
+          onPressed: isCurrent ? null : () => _use(context, ref, program),
         ),
         const SizedBox(height: 24),
         const ModuleHeader(
@@ -137,101 +139,106 @@ class _DayCard extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: AppCard(
         padding: EdgeInsets.zero,
-        child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            key: ValueKey('day-${day.id}'),
-            tilePadding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            shape: const Border(),
-            collapsedShape: const Border(),
-            leading: Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colors.surface,
+        // Its own Material so the tile's ripple shows on the coloured card.
+        child: Material(
+          type: MaterialType.transparency,
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              key: ValueKey('day-${day.id}'),
+              tilePadding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
+              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              shape: const Border(),
+              collapsedShape: const Border(),
+              leading: Container(
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colors.surface,
+                ),
+                child: Text('${day.order}', style: AppText.metricTable),
               ),
-              child: Text('${day.order}', style: AppText.metricTable),
-            ),
-            title: Text(day.name, style: textTheme.titleMedium),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${exercises.length} exercises · ~${estimateWorkoutMinutes(day)} min',
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colors.textSecondary,
-                    ),
-                  ),
-                  if (day.muscles.isNotEmpty) ...[
-                    const SizedBox(height: 6),
+              title: Text(day.name, style: textTheme.titleMedium),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      day.muscles
-                          .map((m) => muscleLabel(library, m).toUpperCase())
-                          // A no-break space keeps each dot with the word before it, so a
-                          // wrapped line never starts with one.
-                          .join('\u00a0· '),
-                      style: AppText.labelUppercase.copyWith(
-                        fontSize: 10,
-                        letterSpacing: 1.6,
-                        color: ExploreTokens.of(context).accentText,
+                      '${exercises.length} exercises · ~${estimateWorkoutMinutes(day)} min',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colors.textSecondary,
                       ),
                     ),
+                    if (day.muscles.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        day.muscles
+                            .map((m) => muscleLabel(library, m).toUpperCase())
+                            // A no-break space keeps each dot with the word before it, so a
+                            // wrapped line never starts with one.
+                            .join('\u00a0· '),
+                        style: AppText.labelUppercase.copyWith(
+                          fontSize: 10,
+                          letterSpacing: 1.6,
+                          color: ExploreTokens.of(context).accentText,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-            children: [
-              for (final block in day.blocks) ...[
-                if (block.type == 'superset')
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6, bottom: 2),
-                    child: Text(
-                      'SUPERSET',
-                      style: AppText.labelUppercase.copyWith(
-                        color: colors.textMuted,
+              children: [
+                for (final block in day.blocks) ...[
+                  if (block.type == 'superset')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6, bottom: 2),
+                      child: Text(
+                        'SUPERSET',
+                        style: AppText.labelUppercase.copyWith(
+                          color: colors.textMuted,
+                        ),
                       ),
                     ),
-                  ),
-                for (final e in block.exercises)
-                  InkWell(
-                    key: ValueKey('ex-${e.id}'),
-                    onTap: e.libraryId == null
-                        ? null
-                        : () => showExerciseDetailSheet(context, e.libraryId!),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(e.name, style: textTheme.bodyMedium),
-                          ),
-                          Text(
-                            e.prescription ?? '',
-                            style: AppText.metricTable.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
+                  for (final e in block.exercises)
+                    InkWell(
+                      key: ValueKey('ex-${e.id}'),
+                      onTap: e.libraryId == null
+                          ? null
+                          : () =>
+                                showExerciseDetailSheet(context, e.libraryId!),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(e.name, style: textTheme.bodyMedium),
                             ),
-                          ),
-                          if (e.libraryId != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Icon(
-                                LucideIcons600.info,
-                                size: 16,
-                                color: colors.textMuted,
+                            Text(
+                              e.prescription ?? '',
+                              style: AppText.metricTable.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
-                        ],
+                            if (e.libraryId != null)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: Icon(
+                                  LucideIcons600.info,
+                                  size: 16,
+                                  color: colors.textMuted,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -456,63 +463,6 @@ class _BlockCard extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// The main call to action: a coral gradient pill, or a quiet outline once
-/// the split is already the active one.
-class _UseButton extends StatelessWidget {
-  final bool isCurrent;
-  final VoidCallback onPressed;
-  const _UseButton({required this.isCurrent, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = ExploreTokens.of(context);
-    final colors = context.colors;
-    final fg = isCurrent ? colors.textSecondary : tokens.onAccent;
-    return Semantics(
-      button: true,
-      enabled: !isCurrent,
-      child: GestureDetector(
-        key: const Key('useSplit'),
-        onTap: isCurrent ? null : onPressed,
-        child: Container(
-          height: 52,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            gradient: isCurrent ? null : tokens.gradient,
-            borderRadius: BorderRadius.circular(999),
-            border: isCurrent ? Border.all(color: colors.border) : null,
-            boxShadow: isCurrent
-                ? null
-                : [
-                    BoxShadow(
-                      color: tokens.accent.withValues(alpha: 0.35),
-                      blurRadius: 18,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isCurrent ? LucideIcons600.check : LucideIcons600.play,
-                size: 18,
-                color: fg,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                isCurrent ? 'Current split' : 'Use this split',
-                style: Theme.of(context).textTheme.titleSmall
-                    ?.copyWith(color: fg, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

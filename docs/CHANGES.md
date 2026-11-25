@@ -22,7 +22,7 @@ tool/verify_changes.sh --regen --screens --apk   # everything
 | 3. Analyzer | No errors or warnings. The 10 existing `info` lints are allowed | `flutter analyze` |
 | 4. Named tests | The Dart tests listed in this file | see the script |
 | 5. Full suite | Nothing else regressed | `flutter test` |
-| `--screens` | Explore renders in dark and light with real fonts, icons and photos, and with no overflow or exception | `flutter test tool/screens/render_screens_test.dart` |
+| `--screens` | Every main screen renders in dark and light with real fonts, icons and photos, and with no overflow or exception | `flutter test tool/screens/render_screens_test.dart` |
 | `--apk` | The app builds for Android; prints the APK size and the library's share | `flutter build apk --release` |
 
 Requirements:
@@ -30,12 +30,12 @@ Requirements:
 - **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db. Byte-identical output also assumes the same Pillow/libwebp version (12.3 was used); another version can encode the photos slightly differently.
 - **`--apk` only:** an Android SDK (`flutter config --android-sdk <path>`). The first build also downloads the NDK and CMake.
 
-Last verified: 2026-11-25. Results:
+Last verified: 2026-11-25 (coral rollout). Results:
 - 64 data checks pass (59 data, 5 design-token).
 - Regenerated assets are identical across Python hash seeds.
 - Analyzer: 0 errors and 0 warnings.
 - 206 tests pass.
-- 12 Explore screens render cleanly (6 dark, 6 light).
+- 22 screens render cleanly (11 dark, 11 light), including Home, Programs, the live workout, Progress and Nutrition.
 - The Android release build succeeds (see §8).
 
 ---
@@ -153,7 +153,11 @@ app-wide accent, with rules for where it goes and where it never goes.
 | D3 | Every coral value in the code appears in `design/DESIGN.md`, so the doc and the theme can't drift apart | `verify_assets.py` |
 | D4 | The shared coral widgets (`MicroLabel`, `AccentChip`, `CompactToggle`, `OutlinePill`, `accentGradient`) live in `lib/core/widgets/accent.dart`, so any screen can use them | analyzer, full suite |
 | D5 | Explore uses `accentText` for coral text and `onAccent` on coral fills; `accent` is kept for graphics | `--screens` images; `grep -rn "tokens.accent\b" lib/features/explore` shows graphics only |
-| D6 | Screens outside Explore aren't restyled yet. `design/DESIGN.md` §9 lists what each still needs | Manual. Update §9 as screens adopt the accent |
+| D6 | ~~Screens outside Explore aren't restyled yet.~~ Done in D7 | n/a |
+| D7 | Coral is rolled out to every screen: the Home *Start* and today ring, the Programs chip / next day / *Start*, day *Start* and *Finish*, session progress, the running countdown ring, current chart bars, the Nutrition camera tile, and the Android widget's today ring. `AccentButton` is the shared main action | test *every screen has at most one coral main action, in place* (`test/core/design_rules_test.dart`); `--screens` renders all 11 screens in both themes |
+| D8 | A disabled main action is a quiet outline, not coral | test *a disabled main action is a quiet outline, not coral* |
+| D10 | Removed `test/zz_fig_test.dart`, a temporary rendering harness committed by mistake with the Explore polish (`2d529cd`). It wrote to a session-only temp folder, so it would fail on other machines. Its job is done by `tool/screens/render_screens_test.dart` | `grep -rn "tmp/claude" test tool lib` finds nothing |
+| D9 | Fixed while rolling out: the workout's "Reached failure" switch hid its tap ripple (Flutter asserted, because a `ListTile` sat on a coloured panel). Explore's expandable rows had the same pattern. All now sit on their own transparent `Material` | The design-rules test, which runs a live workout with to-failure sets |
 
 ## 7. Research claims shown in the app
 

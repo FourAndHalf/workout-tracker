@@ -517,50 +517,55 @@ class _SourcesCard extends StatelessWidget {
     final tokens = ExploreTokens.of(context);
     final small = Theme.of(context).textTheme.bodySmall
         ?.copyWith(color: colors.textMuted, height: 1.45);
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        key: const Key('sources'),
-        tilePadding: EdgeInsets.zero,
-        childrenPadding: EdgeInsets.zero,
-        iconColor: colors.textMuted,
-        collapsedIconColor: colors.textMuted,
-        trailing: const Icon(LucideIcons600.chevronDown, size: 18),
-        title: const MicroLabel('How these picks were chosen'),
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(library.picksCredit, style: small),
-                const SizedBox(height: 8),
-                Text(library.photoCredit, style: small),
-                const SizedBox(height: 8),
-                for (final r in library.references)
-                  InkWell(
-                    onTap: () => launchUrl(
-                      Uri.parse(r.url),
-                      mode: LaunchMode.externalApplication,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Text(
-                        r.title,
-                        style: small?.copyWith(
-                          color: tokens.accentText,
-                          decoration: TextDecoration.underline,
-                          decorationColor: tokens.accentText.withValues(
-                            alpha: 0.5,
+    // Its own Material so the tile's ripple isn't hidden by a coloured
+    // ancestor (Flutter asserts on this).
+    return Material(
+      type: MaterialType.transparency,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          key: const Key('sources'),
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          iconColor: colors.textMuted,
+          collapsedIconColor: colors.textMuted,
+          trailing: const Icon(LucideIcons600.chevronDown, size: 18),
+          title: const MicroLabel('How these picks were chosen'),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(library.picksCredit, style: small),
+                  const SizedBox(height: 8),
+                  Text(library.photoCredit, style: small),
+                  const SizedBox(height: 8),
+                  for (final r in library.references)
+                    InkWell(
+                      onTap: () => launchUrl(
+                        Uri.parse(r.url),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Text(
+                          r.title,
+                          style: small?.copyWith(
+                            color: tokens.accentText,
+                            decoration: TextDecoration.underline,
+                            decorationColor: tokens.accentText.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

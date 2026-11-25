@@ -1,4 +1,5 @@
-// Renders the Explore screens to PNGs for visual review, in dark and light.
+// Renders the main screens (Home, Programs, live workout, Progress, Nutrition
+// and Explore) to PNGs for visual review, in dark and light.
 //
 //   flutter test tool/screens/render_screens_test.dart
 //
@@ -97,13 +98,19 @@ void main() {
   setUp(() => appRouter.go('/'));
 
   for (final mode in [ThemeMode.dark, ThemeMode.light]) {
-    testWidgets('Explore screens render cleanly in ${mode.name} mode', (
+    testWidgets('main screens render cleanly in ${mode.name} mode', (
       tester,
     ) async {
       // This file is a test that lives in tool/ so it stays out of the suite.
       // ignore: invalid_use_of_visible_for_testing_member
       SharedPreferences.setMockInitialValues({});
       await tester.runAsync(_loadFonts);
+      // The live workout keeps the screen awake through a phone-only
+      // plugin; answer its channel so the render runs off-device.
+      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
+        'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+        (_) async => const StandardMessageCodec().encodeMessage(<Object?>[]),
+      );
       Directory(_out).createSync(recursive: true);
       tester.view.physicalSize = const Size(390, 1500);
       tester.view.devicePixelRatio = 1.0;
@@ -171,13 +178,28 @@ void main() {
         await settle();
       }
 
-      await settle();
-      await tap(
+      Future<void> tab(String label) => tap(
         find.descendant(
           of: find.byType(NavigationBar),
-          matching: find.text('Explore'),
+          matching: find.text(label),
         ),
       );
+
+      // The rest of the app first: Home, Programs, a live workout,
+      // Progress and Nutrition.
+      await settle();
+      await shot('0a_home');
+      await tab('Programs');
+      await shot('0b_programs');
+      await tap(find.text('Start'));
+      await shot('0c_live_workout');
+      await tap(find.text('Finish workout'));
+      await tab('Progress');
+      await shot('0d_progress');
+      await tab('Nutrition');
+      await shot('0e_nutrition');
+
+      await tab('Explore');
       await tap(find.byKey(const ValueKey('muscle-shoulders')));
       await tap(find.byKey(const ValueKey('region-side-delts')));
       await shot('1_shoulders');
@@ -200,7 +222,7 @@ void main() {
       await tester.drag(find.byType(Scrollable).first, const Offset(0, -700));
       await shot('6_split_volume');
 
-      expect(Directory(_out).listSync().length, greaterThanOrEqualTo(6));
+      expect(Directory(_out).listSync().length, greaterThanOrEqualTo(11));
     });
   }
 }

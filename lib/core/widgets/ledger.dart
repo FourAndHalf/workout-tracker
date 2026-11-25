@@ -444,8 +444,9 @@ class ThinBarChart extends StatelessWidget {
                           child: Container(
                             width: barWidth,
                             decoration: BoxDecoration(
+                              // The current period is "now": coral.
                               color: i == highlightIndex
-                                  ? colors.primary
+                                  ? colors.accent
                                   : colors.barMuted,
                               borderRadius: BorderRadius.circular(999),
                             ),
