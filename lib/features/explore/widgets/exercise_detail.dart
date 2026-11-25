@@ -217,7 +217,6 @@ class _ExercisePhotosState extends State<ExercisePhotos> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final images = _images;
-    final labels = const ['Start', 'Finish'];
     return GestureDetector(
       key: const Key('exercisePhotos'),
       onTap: images.length < 2
@@ -248,7 +247,7 @@ class _ExercisePhotosState extends State<ExercisePhotos> {
                   fit: BoxFit.cover,
                   gaplessPlayback: true,
                   semanticLabel:
-                      '${widget.exercise.name}, ${labels[_index % 2].toLowerCase()} position',
+                      '${widget.exercise.name}, ${_index == 0 ? 'start' : 'finish'} position',
                   errorBuilder: (_, _, _) => ColoredBox(
                     color: colors.surface,
                     child: Icon(LucideIcons600.image, color: colors.textMuted),

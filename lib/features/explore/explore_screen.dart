@@ -123,7 +123,6 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
     HapticFeedback.selectionClick();
     ref.read(exploreMuscleProvider.notifier).state = id;
     ref.read(exploreRegionProvider.notifier).state = null;
-    setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chip = _chipKeys[id]?.currentContext;
       if (chip != null && chip.mounted) {
@@ -140,8 +139,6 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
   void _selectRegion(String regionId) {
     HapticFeedback.selectionClick();
     ref.read(exploreRegionProvider.notifier).state = regionId;
-    // Flip the figure to the side where this part shows.
-    setState(() {});
   }
 
   @override
@@ -232,15 +229,11 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
             children: [
               Expanded(
                 flex: 44,
-                child: Column(
-                  children: [
-                    BodyFigure(
-                      muscleId: muscle.id,
-                      regionId: region.id,
-                      view: view,
-                      onSelectMuscle: _selectMuscle,
-                    ),
-                  ],
+                child: BodyFigure(
+                  muscleId: muscle.id,
+                  regionId: region.id,
+                  view: view,
+                  onSelectMuscle: _selectMuscle,
                 ),
               ),
               const SizedBox(width: 16),

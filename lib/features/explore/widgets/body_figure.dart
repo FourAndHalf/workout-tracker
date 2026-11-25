@@ -96,11 +96,8 @@ class BodyFigure extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [...previous, ?current],
               ),
-              transitionBuilder: (child, animation) => _Turn(
-                animation: animation,
-                incoming: child.key == ValueKey(view),
-                child: child,
-              ),
+              transitionBuilder: (child, animation) =>
+                  _Turn(animation: animation, child: child),
               child: _FigureCanvas(
                 key: ValueKey(view),
                 view: view,
@@ -122,25 +119,25 @@ class BodyFigure extends StatelessWidget {
 /// with perspective and a slight dip in size at the midpoint.
 class _Turn extends StatelessWidget {
   final Animation<double> animation;
-  final bool incoming;
   final Widget child;
 
-  const _Turn({
-    required this.animation,
-    required this.incoming,
-    required this.child,
-  });
+  const _Turn({required this.animation, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      child: child,
+      // The figure's picture is recorded once and only re-composited while it
+      // turns, instead of repainting every muscle path each frame.
+      child: RepaintBoundary(child: child),
       builder: (context, child) {
-        // 0 → 1 as the side comes in; 1 → 0 as it leaves. Each side is only
-        // seen for its half of the turn.
+        // 0 → 1 as the side comes in; AnimatedSwitcher runs the leaving side
+        // in reverse, 1 → 0. Each side is only seen for its half of the turn.
         final t = animation.value;
         if (t <= 0.5) return const SizedBox.shrink();
+        final incoming =
+            animation.status != AnimationStatus.reverse &&
+            animation.status != AnimationStatus.dismissed;
         final half = (t - 0.5) * 2;
         final face = incoming
             ? Curves.easeOutCubic.transform(half)
@@ -148,8 +145,9 @@ class _Turn extends StatelessWidget {
         final angle = (1 - face) * math.pi / 2 * (incoming ? -1 : 1);
         final scale = 0.92 + 0.08 * face;
         return Opacity(
-          opacity: (0.35 + 0.65 * face).clamp(0.0, 1.0),
+          opacity: 0.35 + 0.65 * face,
           child: Transform(
+            key: const Key('figureTurn'),
             alignment: Alignment.center,
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.0014)

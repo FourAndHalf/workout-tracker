@@ -314,10 +314,10 @@ void main() {
     // A quarter in: the front is still turning away.
     await tester.pump(BodyFigure.turnDuration * 0.25);
     expect(canvas, findsOneWidget);
-    final early = tester.widget<Transform>(
-      find.ancestor(of: canvas, matching: find.byType(Transform)).first,
-    );
-    expect(early.transform.storage[0], lessThan(0.99)); // rotated
+    // The rotation-about-Y term is non-zero: the figure is turned, not
+    // just scaled.
+    final early = tester.widget<Transform>(find.byKey(const Key('figureTurn')));
+    expect(early.transform.storage[8].abs(), greaterThan(0.1));
     // Three quarters in: the back is turning in.
     await tester.pump(BodyFigure.turnDuration * 0.5);
     expect(canvas, findsOneWidget);
