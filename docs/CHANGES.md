@@ -171,11 +171,11 @@ run.
 
 | ID | Claim | Verified by |
 |---|---|---|
-| F1 | The generated file holds front and back outlines plus every muscle shape the figure maps | `verify_assets.py` A1 |
-| F2 | Every muscle and every part in the library is drawn on a view; the expected view is chosen (triceps, rear delts, glute med → back; upper chest → front) | test *every muscle and part can be found on the figure* |
-| F3 | Taps land on the muscle under the finger in view coordinates (chest, quads, core) and empty space does nothing | test *tapping the body figure selects the muscle under the finger* |
-| F4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page, and the credit shows under "How these picks were chosen" | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
-| F5 | Highlights for all 28 muscle parts sit on the right anatomy in both themes; the glow stays inside the figure | `--screens` (`*_1_shoulders.png`, `*_2_glutes_back.png`); by eye |
+| B1 | The generated file holds front and back outlines plus every muscle shape the figure maps | `verify_assets.py` A1 |
+| B2 | Every muscle and every part in the library is drawn on a view; the expected view is chosen (triceps, rear delts, glute med → back; upper chest → front) | test *every muscle and part can be found on the figure* |
+| B3 | Taps land on the muscle under the finger in view coordinates (chest, quads, core) and empty space does nothing | test *tapping the body figure selects the muscle under the finger* |
+| B4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page, and the credit shows under "How these picks were chosen" | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
+| B5 | Highlights for all 28 muscle parts sit on the right anatomy in both themes; the glow stays inside the figure | `--screens` (`*_1_shoulders.png`, `*_2_glutes_back.png`); by eye |
 
 To regenerate the paths: download `react-native-body-highlighter` from npm,
 unpack it into an empty folder, and run
