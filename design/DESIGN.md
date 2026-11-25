@@ -517,9 +517,10 @@ filled with the charcoal anchor.
 - 280 ms fade with a 1.5% rise (`SmoothSwap`) when the muscle title and parts
   or the recommendation list change; the height eases at the same time.
 - Exercise photos: one large photo at the top of an opened card or sheet
-  (the card's thumbnail tucks away). It alternates START/FINISH every 1.8 s
-  with a 450 ms cross-fade; a tap flips at once. It stays still when the
-  system asks for reduced motion.
+  (the card's thumbnail tucks away). It alternates between the start and
+  finish photo every 1.8 s with a 450 ms cross-fade, with no labels over the
+  photo; a tap flips at once. It stays still when the system asks for
+  reduced motion.
 - Numbers change in place, with no count-up animations.
 - Selecting a muscle on the figure scrolls its chip into view.
 

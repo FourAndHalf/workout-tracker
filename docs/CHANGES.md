@@ -179,7 +179,7 @@ run.
 
 | B6 | Changing the part or the muscle on the same view glides: the highlights cross-fade and the target slides (480 ms) instead of restarting; flipping FRONT/BACK cross-fades | `build/fig` frame strip by eye; tests *tapping the body figure…*, *choosing a muscle that lives on the back flips the figure* |
 | B7 | The muscle title, parts and recommendations cross-fade (`SmoothSwap`, 280 ms) when the muscle, part or GYM/HOME changes | test *switching muscles cross-fades instead of jumping* |
-| B8 | An opened card or sheet shows the exercise photos once, at the top, alternating START/FINISH on their own (1.8 s hold, 450 ms fade); a tap flips at once; the card thumbnail hides while open | test *an open card shows its photos once, at the top, alternating*; the sheet test checks one photo above the title |
+| B8 | An opened card or sheet shows the exercise photos once, at the top, alternating start and finish photos on their own (1.8 s hold, 450 ms fade), with no START/FINISH labels over them; a tap flips at once; the card thumbnail hides while open | test *an open card shows its photos once, at the top, alternating*; the sheet test checks one photo above the title |
 
 To regenerate the paths: download `react-native-body-highlighter` from npm,
 unpack it into an empty folder, and run

@@ -255,37 +255,6 @@ class _ExercisePhotosState extends State<ExercisePhotos> {
                   ),
                 ),
               ),
-              if (images.length > 1)
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Row(
-                    children: [
-                      for (var i = 0; i < images.length && i < 2; i++)
-                        AnimatedContainer(
-                          duration: ExercisePhotos.fade,
-                          margin: const EdgeInsets.only(right: 6),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(
-                              alpha: i == _index ? 0.72 : 0.35,
-                            ),
-                            borderRadius: BorderRadius.circular(AppRadius.sm),
-                          ),
-                          child: MicroLabel(
-                            labels[i],
-                            size: 10,
-                            color: Colors.white.withValues(
-                              alpha: i == _index ? 1 : 0.6,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
             ],
           ),
         ),

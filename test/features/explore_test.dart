@@ -185,8 +185,9 @@ void main() {
 
     expect(find.byKey(const Key('exerciseCue')), findsOneWidget);
     expect(find.text(exercise.cue), findsOneWidget);
-    expect(find.text('START'), findsOneWidget);
-    expect(find.text('FINISH'), findsOneWidget);
+    // The photos carry no START/FINISH labels.
+    expect(find.text('START'), findsNothing);
+    expect(find.text('FINISH'), findsNothing);
     expect(find.text('1.'), findsOneWidget);
     expect(find.text(exercise.steps.first), findsOneWidget);
     expect(find.byKey(const Key('watchFormVideos')), findsOneWidget);
