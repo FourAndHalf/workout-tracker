@@ -117,6 +117,16 @@ void main() {
     expect(find.byKey(const Key('exerciseCue')), findsNothing);
   });
 
+  testWidgets('the picks list ends without a sources section', (tester) async {
+    await _openExplore(tester);
+
+    expect(find.byKey(const Key('sources'), skipOffstage: false), findsNothing);
+    expect(
+      find.text('HOW THESE PICKS WERE CHOSEN', skipOffstage: false),
+      findsNothing,
+    );
+  });
+
   testWidgets('a part of the muscle shows its own picks and the reason why', (
     tester,
   ) async {

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons_600.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../core/legal/third_party_licenses.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/day_app_bar.dart';
@@ -369,8 +367,6 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          _SourcesCard(library: library),
         ],
       ],
     );
@@ -501,72 +497,6 @@ class _AboutPanel extends StatelessWidget {
             Text(region.note, key: const Key('regionNote'), style: body),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _SourcesCard extends StatelessWidget {
-  final LibraryModel library;
-  const _SourcesCard({required this.library});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final tokens = ExploreTokens.of(context);
-    final small = Theme.of(context).textTheme.bodySmall
-        ?.copyWith(color: colors.textMuted, height: 1.45);
-    // Its own Material so the tile's ripple isn't hidden by a coloured
-    // ancestor (Flutter asserts on this).
-    return Material(
-      type: MaterialType.transparency,
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          key: const Key('sources'),
-          tilePadding: EdgeInsets.zero,
-          childrenPadding: EdgeInsets.zero,
-          iconColor: colors.textMuted,
-          collapsedIconColor: colors.textMuted,
-          trailing: const Icon(LucideIcons600.chevronDown, size: 18),
-          title: const MicroLabel('How these picks were chosen'),
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(library.picksCredit, style: small),
-                  const SizedBox(height: 8),
-                  Text(library.photoCredit, style: small),
-                  const SizedBox(height: 8),
-                  Text(anatomyCredit, style: small),
-                  const SizedBox(height: 8),
-                  for (final r in library.references)
-                    InkWell(
-                      onTap: () => launchUrl(
-                        Uri.parse(r.url),
-                        mode: LaunchMode.externalApplication,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          r.title,
-                          style: small?.copyWith(
-                            color: tokens.accentText,
-                            decoration: TextDecoration.underline,
-                            decorationColor: tokens.accentText.withValues(
-                              alpha: 0.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

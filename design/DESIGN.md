@@ -475,8 +475,7 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
     for paired muscles.
   - **Animation:** on each new selection a single scan band sweeps down the
     silhouette and the highlight fades in, all within 900 ms. Nothing loops.
-  - **Credit:** shown in "How these picks were chosen" and on the licences
-    page.
+  - **Credit:** on the licences page.
 - **Muscle part row:** the name plus a FRONT/BACK micro-label. When selected,
   the row gets the `accentContainer` tint, a 70% `accent` border, and the
   tag in `accentText`.
