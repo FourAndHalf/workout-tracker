@@ -28,14 +28,15 @@ class MicroLabel extends StatelessWidget {
     overflow: TextOverflow.ellipsis,
     style: AppText.labelUppercase.copyWith(
       fontSize: size,
-      letterSpacing: size * 0.22,
+      letterSpacing: size * 0.1,
       color: color ?? context.colors.textMuted,
     ),
   );
 }
 
-/// A pill chip: coral gradient with a soft glow when selected, a hairline
-/// outline otherwise.
+/// A pill chip: a solid ink fill when selected, a hairline outline otherwise.
+/// Selection is structure, so it stays neutral; coral is kept for the one
+/// main action and for what is live right now.
 class AccentChip extends StatelessWidget {
   final String label;
   final bool selected;
@@ -66,27 +67,18 @@ class AccentChip extends StatelessWidget {
             vertical: dense ? 7 : 9,
           ),
           decoration: BoxDecoration(
-            gradient: selected ? accentGradient(colors) : null,
+            color: selected ? colors.primary : colors.raised,
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: selected ? Colors.transparent : colors.border,
+              color: selected ? colors.primary : colors.border,
             ),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: colors.accent.withValues(alpha: 0.35),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
           ),
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: dense ? 13 : 14,
-              color: selected ? colors.onAccent : colors.textSecondary,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              color: selected ? colors.onPrimary : colors.textSecondary,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
         ),
@@ -114,8 +106,8 @@ class CompactToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
+        color: colors.surface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: colors.border),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -135,11 +127,14 @@ class CompactToggle extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: i == index ? colors.raised : Colors.transparent,
+                    boxShadow: i == index
+                        ? AppShadows.raised(Theme.of(context).brightness)
+                        : null,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: MicroLabel(
                     labels[i],
-                    size: 12,
+                    size: 11,
                     color: i == index ? colors.textPrimary : colors.textMuted,
                   ),
                 ),
@@ -171,8 +166,7 @@ class OutlinePill extends StatelessWidget {
 }
 
 /// The one main action on a screen (design/DESIGN.md › Buttons › Main
-/// action): a coral gradient pill with a soft glow and an [AppColors.onAccent]
-/// label. With [onPressed] null it becomes a quiet outline pill, e.g.
+/// action): a solid coral pill with an [AppColors.onAccent] label. With [onPressed] null it becomes a quiet outline pill, e.g.
 /// "Current split".
 ///
 /// Use at most one per screen. Actions that repeat down a list (Log set)
@@ -216,8 +210,11 @@ class AccentButton extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleSmall
-                ?.copyWith(color: fg, fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: fg,
+              fontSize: compact ? 14 : 15,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
@@ -230,20 +227,11 @@ class AccentButton extends StatelessWidget {
       excludeSemantics: true,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        height: compact ? 40 : 52,
+        height: compact ? 40 : 54,
         decoration: BoxDecoration(
           gradient: enabled ? accentGradient(colors) : null,
           borderRadius: radius,
           border: enabled ? null : Border.all(color: colors.border),
-          boxShadow: enabled
-              ? [
-                  BoxShadow(
-                    color: colors.accent.withValues(alpha: 0.35),
-                    blurRadius: compact ? 12 : 18,
-                    offset: Offset(0, compact ? 4 : 6),
-                  ),
-                ]
-              : null,
         ),
         child: Material(
           type: MaterialType.transparency,

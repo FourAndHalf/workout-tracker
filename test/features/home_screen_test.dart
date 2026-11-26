@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons_600.dart';
@@ -51,6 +52,29 @@ void main() {
       find.byIcon(LucideIcons600.quote, skipOffstage: false),
       findsOneWidget,
     );
+  });
+
+  testWidgets('every KPI sits whole on a phone-width screen', (tester) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(() => db.close());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: const FitnessTrackerApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    for (final label in ['Streak', 'Sessions', 'Volume', 'Sets']) {
+      final rect = tester.getRect(find.text(label));
+      expect(rect.left, greaterThanOrEqualTo(0), reason: label);
+      expect(rect.right, lessThanOrEqualTo(390), reason: label);
+    }
   });
 
   test('greetingFor follows the time of day', () {

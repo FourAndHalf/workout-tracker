@@ -102,6 +102,14 @@ flutter:
 
   # Bundled (not downloaded) so the app renders offline; see design/DESIGN.md.
   fonts:
+    - family: Geist
+      fonts:
+        - asset: assets/fonts/Geist-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Geist-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Geist-SemiBold.ttf
+          weight: 600
     - family: JetBrains Mono
       fonts:
         - asset: assets/fonts/JetBrainsMono-Regular.ttf

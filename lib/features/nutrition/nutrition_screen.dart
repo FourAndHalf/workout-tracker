@@ -1133,7 +1133,7 @@ class _MacroPill extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
-        Text(label, style: AppText.metricTable.copyWith(fontSize: 12)),
+        Text(label, style: Theme.of(context).textTheme.labelMedium),
       ],
     ),
   );

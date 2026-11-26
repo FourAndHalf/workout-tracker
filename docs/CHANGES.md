@@ -30,11 +30,11 @@ Requirements:
 - **`--regen` only:** Pillow, plus network access to `raw.githubusercontent.com`. Instead of network access, set `FEDB_DATASET` and `FEDB_CACHE` to a local copy of free-exercise-db. Byte-identical output also assumes the same Pillow/libwebp version (12.3 was used); another version can encode the photos slightly differently.
 - **`--apk` only:** an Android SDK (`flutter config --android-sdk <path>`). The first build also downloads the NDK and CMake.
 
-Last verified: 2026-11-25 (coral rollout). Results:
+Last verified: 2026-11-26 (premium restyle). Results:
 - 64 data checks pass (59 data, 5 design-token).
-- Regenerated assets are identical across Python hash seeds.
+- Regenerated assets were not re-run for the restyle (no asset sources changed).
 - Analyzer: 0 errors and 0 warnings.
-- 206 tests pass.
+- 213 tests pass.
 - 22 screens render cleanly (11 dark, 11 light), including Home, Programs, the live workout, Progress and Nutrition.
 - The Android release build succeeds (see §8).
 
@@ -158,6 +158,23 @@ app-wide accent, with rules for where it goes and where it never goes.
 | D8 | A disabled main action is a quiet outline, not coral | test *a disabled main action is a quiet outline, not coral* |
 | D10 | Removed `test/zz_fig_test.dart`, a temporary rendering harness committed by mistake with the Explore polish (`2d529cd`). It wrote to a session-only temp folder, so it would fail on other machines. Its job is done by `tool/screens/render_screens_test.dart` | `grep -rn "tmp/claude" test tool lib` finds nothing |
 | D9 | Fixed while rolling out: the workout's "Reached failure" switch hid its tap ripple (Flutter asserted, because a `ListTile` sat on a coloured panel). Explore's expandable rows had the same pattern. All now sit on their own transparent `Material` | The design-rules test, which runs a live workout with to-failure sets |
+
+## 6c. Premium restyle ("Paper & Ink")
+*Branch `feature/premium-restyle`.*
+
+The visual system was reworked for a more premium feel. Coral keeps its
+meaning; everything around it got quieter. `design/DESIGN.md` §1–§7 and §9
+describe the result.
+
+| ID | Claim | Verified by |
+|---|---|---|
+| P1 | Words are set in Geist (OFL, bundled at 400/500/600 with its licence in `assets/fonts/Geist-OFL.txt`); JetBrains Mono is kept for figures only (`AppText.metric*`) | test *sets Geist for text, mono for figures, and an ink primary* (`test/core/theme/app_theme_test.dart`) |
+| P2 | New warm paper / near-black neutrals; every text pairing in the DESIGN.md contrast table still meets 4.5:1 and coral graphics 3:1 | `verify_assets.py` D2/D3; contrast table in DESIGN.md §2 |
+| P3 | Coral controls and selected chips are flat: no glows. A selected filter chip is solid ink, never coral | test *a selected chip is solid ink, never coral, and has no glow* (`test/core/design_rules_test.dart`) |
+| P4 | Home KPIs are a 2 × 2 grid, so every figure stays whole on a 390 px phone (the old strip cut *Volume* and hid *Sets* off-screen) | test *every KPI sits whole on a phone-width screen* (`test/features/home_screen_test.dart`) |
+| P5 | The live workout is one box deep: exercises inside a block are hairline-separated, steppers are borderless wells | `--screens` image `*_0c_live_workout.png` |
+| P6 | The screen renderer now blurs shadows as a device does (`flutter_test` paints them as hard slabs by default, which looked like a coloured ledge under buttons and cards) | `tool/screens/render_screens_test.dart` sets `debugDisableShadows = false` |
+| P7 | ~~Android home-screen widget restyled~~ Not done: `QuoteCardRenderer.kt` still draws the old greys and JetBrains Mono | open |
 
 ## 6b. Explore body figure: anatomical SVG
 *Branch `claude/endurance-fitness-tracker-bkq1lo`.*

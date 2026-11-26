@@ -1,30 +1,30 @@
 ---
-name: Pearl Ledger · Coral
+name: Paper & Ink · Coral
 colors:
-  surface: '#F4F4F5'
-  surface-dim: '#DCDCDF'
-  surface-bright: '#FAFAFB'
+  surface: '#F2F1EE'
+  surface-dim: '#E5E4E0'
+  surface-bright: '#FFFFFF'
   surface-container-lowest: '#FFFFFF'
-  surface-container-low: '#F1F1F3'
-  surface-container: '#ECECEE'
-  surface-container-high: '#E6E6E9'
-  surface-container-highest: '#E0E0E3'
-  on-surface: '#1C1C1E'
-  on-surface-variant: '#626267'
-  inverse-surface: '#2A2A2D'
+  surface-container-low: '#FFFFFF'
+  surface-container: '#F2F1EE'
+  surface-container-high: '#ECEBE7'
+  surface-container-highest: '#E8E7E3'
+  on-surface: '#151515'
+  on-surface-variant: '#5C5C58'
+  inverse-surface: '#151515'
   inverse-on-surface: '#F2F2F3'
-  outline: '#A1A1A6'
-  outline-variant: '#DADADD'
-  surface-tint: '#2A2A2D'
-  primary: '#2A2A2D'
+  outline: '#6A6A66'
+  outline-variant: '#E5E4E0'
+  surface-tint: '#151515'
+  primary: '#151515'
   on-primary: '#FFFFFF'
-  primary-container: '#3A3A3D'
+  primary-container: '#2E2E2C'
   on-primary-container: '#F2F2F3'
   inverse-primary: '#C8C8CC'
-  secondary: '#5E5E63'
+  secondary: '#5C5C58'
   on-secondary: '#FFFFFF'
   secondary-container: '#E4E4E7'
-  on-secondary-container: '#2A2A2D'
+  on-secondary-container: '#151515'
   tertiary: '#7A6A47'
   on-tertiary: '#FFFFFF'
   tertiary-container: '#EDE6D6'
@@ -45,9 +45,9 @@ colors:
   tertiary-fixed-dim: '#D6CBB2'
   on-tertiary-fixed: '#2B2415'
   on-tertiary-fixed-variant: '#5A4E33'
-  background: '#E8E8EA'
-  on-background: '#1C1C1E'
-  surface-variant: '#E0E0E3'
+  background: '#F4F4F1'
+  on-background: '#151515'
+  surface-variant: '#E8E7E3'
   positive: '#23784A'
   positive-container: '#DDF0E4'
   negative: '#B33A35'
@@ -59,59 +59,65 @@ colors:
   accent: '#E4572E'
   accent-text: '#B83A18'
   accent-fill: '#CC4722'
-  accent-fill-end: '#B23514'
+  accent-fill-end: '#BF3F1C'
   on-accent: '#FFFFFF'
-  accent-container: '#FCE7DF'
+  accent-container: '#FCEBE4'
 typography:
+  display:
+    fontFamily: Geist
+    fontSize: 34px
+    fontWeight: '600'
+    lineHeight: 40px
+    letterSpacing: -0.035em
   headline-xl:
-    fontFamily: JetBrains Mono
+    fontFamily: Geist
     fontSize: 30px
-    fontWeight: '500'
-    lineHeight: 38px
-    letterSpacing: -0.03em
-  headline-xl-mobile:
-    fontFamily: JetBrains Mono
-    fontSize: 22px
-    fontWeight: '500'
-    lineHeight: 28px
+    fontWeight: '600'
+    lineHeight: 36px
     letterSpacing: -0.03em
   headline-lg:
-    fontFamily: JetBrains Mono
-    fontSize: 18px
-    fontWeight: '500'
+    fontFamily: Geist
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: 30px
+    letterSpacing: -0.025em
+  title-lg:
+    fontFamily: Geist
+    fontSize: 19px
+    fontWeight: '600'
     lineHeight: 24px
     letterSpacing: -0.02em
   headline-md:
-    fontFamily: JetBrains Mono
+    fontFamily: Geist
+    fontSize: 16px
+    fontWeight: '600'
+    lineHeight: 22px
+    letterSpacing: -0.0125em
+  title-sm:
+    fontFamily: Geist
     fontSize: 14px
     fontWeight: '600'
     lineHeight: 20px
-    letterSpacing: -0.01em
+    letterSpacing: -0.007em
   body-lg:
-    fontFamily: JetBrains Mono
-    fontSize: 15px
+    fontFamily: Geist
+    fontSize: 16px
     fontWeight: '400'
-    lineHeight: 22px
+    lineHeight: 24px
     letterSpacing: 0em
   body-md:
-    fontFamily: JetBrains Mono
-    fontSize: 13px
+    fontFamily: Geist
+    fontSize: 14px
     fontWeight: '400'
-    lineHeight: 19px
+    lineHeight: 20px
     letterSpacing: 0em
   body-sm:
-    fontFamily: JetBrains Mono
-    fontSize: 11px
+    fontFamily: Geist
+    fontSize: 12px
     fontWeight: '400'
-    lineHeight: 15px
+    lineHeight: 16px
     letterSpacing: 0em
   metric-hero:
-    fontFamily: JetBrains Mono
-    fontSize: 34px
-    fontWeight: '500'
-    lineHeight: 40px
-    letterSpacing: -0.045em
-  metric-hero-mobile:
     fontFamily: JetBrains Mono
     fontSize: 32px
     fontWeight: '500'
@@ -135,23 +141,17 @@ typography:
     fontWeight: '600'
     lineHeight: 12px
     letterSpacing: 0em
-  ledger-mono:
-    fontFamily: JetBrains Mono
-    fontSize: 12px
-    fontWeight: '400'
-    lineHeight: 18px
-    letterSpacing: 0em
   label-uppercase:
-    fontFamily: JetBrains Mono
+    fontFamily: Geist
     fontSize: 10px
     fontWeight: '600'
     lineHeight: 12px
-    letterSpacing: 0.08em
+    letterSpacing: 0.09em
   label-regular:
-    fontFamily: JetBrains Mono
-    fontSize: 11px
+    fontFamily: Geist
+    fontSize: 12px
     fontWeight: '500'
-    lineHeight: 14px
+    lineHeight: 16px
     letterSpacing: 0em
 rounded:
   sm: 8px
@@ -181,17 +181,19 @@ tokens above are the light theme; §2 lists the dark theme. Every token is
 implemented in `lib/core/theme/app_colors.dart` (`context.colors`), and the
 text styles in `lib/core/theme/app_theme.dart` (`AppText`).
 
-**One-line summary:** calm pearl or graphite surfaces, numbers set like a
-well-kept training log, and one coral accent that always means *this is what
-you're doing now*.
+**One-line summary:** warm paper or near-black surfaces, a clean grotesk for
+words, figures set like a well-kept training log, and one coral accent that
+always means *this is what you're doing now*.
 
 ## 1. Brand & style
 
 - **Tone:** steady, precise, encouraging without hype. A training log you
   trust, not a game. Numbers are stated plainly: `4 × 8–12`, `62.5 kg`,
   `5:30 /km`.
-- **Aesthetic:** soft pearl (light) or graphite (dark) surfaces, rounded
-  modules in a bento layout, monospaced figures, generous whitespace.
+- **Aesthetic:** warm paper (light) or near-black (dark) canvas, white or
+  graphite modules on a hairline, large tight-tracked titles, monospaced
+  figures only, generous whitespace. Restraint reads as premium: flat fills,
+  no glows, one level of boxes inside a module.
 - **Hierarchy comes from tone, type and space.** Colour is spent sparingly:
   - **coral** for focus and the one main action;
   - **semantic colours** for meaning (done, missed, warning);
@@ -205,16 +207,16 @@ you're doing now*.
 ### Neutral foundation
 | Role | Light | Dark | Use |
 |---|---|---|---|
-| Canvas (`background`) | `#E8E8EA` | `#0F0F11` | Page behind everything |
-| Inner panel (`surface`) | `#ECECEE` | `#1C1C1F` | A module inside a module, input tracks |
-| Module (`card`) | `#F1F1F3` | `#161618` | Cards and panels |
-| Raised control (`raised`) | `#FFFFFF` | `#232326` | Icon buttons, segmented thumbs, search field |
-| Hairline (`border` / `divider`) | `#DADADD` / `#E0E0E3` | `#2C2C30` | Borders, dividers |
-| Ink (`textPrimary`) | `#1C1C1E` | `#ECECEE` | Titles, values |
-| Muted ink (`textSecondary`) | `#626267` | `#A0A0A6` | Labels, captions, axis text (≥4.5:1 on modules) |
-| Faint ink (`textMuted`) | `#6E6E73` | `#8E8E94` | Micro-labels, metadata |
-| Charcoal anchor (`primary`) | `#2A2A2D` | `#ECECEE` (inverts) | Structure: active nav pill, secondary-emphasis buttons, non-current chart bars |
-| Tracks (`track` / `barMuted`) | `#D4D4D8` / `#C9C9CD` | `#2C2C30` / `#3A3A3F` | Progress tracks, inactive bars |
+| Canvas (`background`) | `#F4F4F1` | `#09090A` | Page behind everything, and the bottom bar |
+| Inner panel (`surface`) | `#F2F1EE` | `#1C1C1F` | Stepper wells, segmented tracks, badges, empty-state panels |
+| Module (`card`) | `#FFFFFF` | `#141416` | Cards and panels |
+| Raised control (`raised`) | `#FFFFFF` | `#202023` | Icon buttons, segmented thumbs, search field |
+| Hairline (`border` / `divider`) | `#E5E4E0` / `#ECEBE7` | `#26262A` / `#222226` | Borders, dividers, exercise separators |
+| Ink (`textPrimary`) | `#151515` | `#F2F2EF` | Titles, values |
+| Muted ink (`textSecondary`) | `#5C5C58` | `#A6A6A2` | Labels, captions, axis text (≥4.5:1 on every surface) |
+| Faint ink (`textMuted`) | `#6A6A66` | `#8E8E8A` | Micro-labels, dates above titles, metadata |
+| Ink anchor (`primary`) | `#151515` | `#F2F2EF` (inverts) | Structure: selected chips, neutral buttons, non-current chart bars |
+| Tracks (`track` / `barMuted`) | `#E8E7E3` / `#D5D4CF` | `#26262A` / `#36363B` | Progress tracks, the nav indicator, inactive bars |
 
 ### Coral accent: focus and the main action
 
@@ -224,34 +226,33 @@ or the one main action on a screen.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `accent` | `#E4572E` | `#FF7A59` | **Graphics only:** a selected highlight, the current bar, meters, borders, glows, the body-figure highlight |
+| `accent` | `#E4572E` | `#FF7A59` | **Graphics only:** a selected highlight, the current bar, meters, borders, the body-figure highlight and its glow |
 | `accentText` | `#B83A18` | `#FF7A59` | **Coral text and small icons** on any surface |
-| `accentFill` → `accentFillEnd` | `#CC4722` → `#B23514` | `#FF7A59` → `#F0533A` | Gradient for filled coral controls (top-left to bottom-right) |
+| `accentFill` → `accentFillEnd` | `#CC4722` → `#BF3F1C` | `#FF7A59` → `#F86A4A` | Fill for coral controls: a near-flat sheen, top-left to bottom-right |
 | `onAccent` | `#FFFFFF` | `#161618` | Text and icons on the filled gradient |
-| `accentContainer` | `#FCE7DF` | `#2A1812` | Soft tint behind a selected row or an opened card |
+| `accentContainer` | `#FCEBE4` | `#2A1711` | Soft tint behind a selected row or an opened card |
 
 **Measured contrast.** Never pair coral differently from this table without
 re-measuring.
 
 | Pairing | Light | Dark | Requirement |
 |---|---|---|---|
-| `accentText` on canvas / module / raised | 4.69 / 4.87 / 5.74 | 7.46 / 7.04 / 6.11 | Text needs 4.5:1 |
-| `onAccent` on `accentFill` / `accentFillEnd` | 4.68 / 6.15 | 7.04 / 5.17 | Text needs 4.5:1 |
-| Ink on `accentContainer` | 14.29 | 14.38 | 4.5:1 |
-| `accentText` on `accentContainer` | 4.82 | 6.61 | 4.5:1 |
-| `accent` graphic vs its module | 3.27 | 7.04 | Graphics need 3:1 |
+| `accentText` on canvas / module / raised | 5.21 / 5.74 / 5.74 | 7.75 / 7.17 / 6.33 | Text needs 4.5:1 |
+| `onAccent` on `accentFill` / `accentFillEnd` | 4.68 / 5.33 | 7.17 / 6.27 | Text needs 4.5:1 |
+| `accentText` on `accentContainer` | 4.96 | 6.66 | 4.5:1 |
+| `accent` graphic vs its module | 3.68 | 7.17 | Graphics need 3:1 |
+| `textMuted` on canvas / module / inner panel | 4.93 / 5.43 / 4.81 | 6.05 / 5.60 / 5.17 | Text needs 4.5:1 |
 
 Two traps:
-- Light `accent` (`#E4572E`) is too pale for small text, at 3.27:1. Use `accentText`.
+- Light `accent` (`#E4572E`) is too pale for small text, at 3.68:1. Use `accentText`.
 - In dark mode, white on coral fails at 2.57:1. That's why `onAccent` is dark ink there.
 
 **Where coral goes:**
-- **The one main action** on a screen, as a filled gradient pill with a soft coral
-  shadow: *Start workout*, *Use this split*, the widget's *Start* button.
+- **The one main action** on a screen, as a filled coral pill with no shadow:
+  *Start workout*, *Use this split*, the widget's *Start* button.
   Only one per screen. Actions repeated down a list, such as *Log set*, use
   the neutral primary button.
-- **Selection:**
-  - selected filter and picker chips (muscle chips, days-per-week, track switcher);
+- **Selection on a picture or in a list:**
   - the selected row in a list (an `accentContainer` tint plus a 70%-opacity `accent` border);
   - the selected part on the body figure.
 - **Now and next:**
@@ -269,11 +270,12 @@ Two traps:
 - **Meaning.** Coral never signals good or bad. Errors and losses use
   `error` plus a glyph and words. Coral and dark `error` are only 1.18:1
   apart, so never put them side by side and never rely on hue alone.
-- **Navigation chrome.** The bottom bar's active item stays charcoal: navigation
-  is structure, not focus.
-- **Two main actions.** At most one filled coral button per screen. A
-  selected chip in a filter row is the only other filled coral allowed.
+- **Navigation chrome and filter chips.** The bottom bar's active item and a
+  selected filter chip are ink: choosing a view is structure, not focus.
+- **Two main actions.** At most one filled coral button per screen.
   Everything else stays small: text, borders, rings, meters.
+- **Glows.** Coral never casts a shadow. The body-figure highlight is the
+  only coral blur.
 
 ### Champagne: milestones only
 `tertiary` `#7A6A47` (text) and `#EDE6D6` (container) in light, `#CDBB92` and
@@ -308,24 +310,35 @@ tones on purpose, so a block type reads at a glance without adding new hues.
 
 ## 3. Typography
 
-One family: **JetBrains Mono** (OFL), bundled at 400/500/600 so the app works
-offline. Fixed-width figures line up in set tables without extra work.
+Two families, both OFL and bundled so the app works offline:
+
+- **Geist** (400/500/600) for every word: titles, body, labels, buttons, nav.
+- **JetBrains Mono** (400/500/600) for figures only, through the `AppText.metric*`
+  styles: weights, reps, set tables, timers, paces, KPI values. Fixed-width
+  digits line up in set tables, and the contrast with Geist marks a number
+  as data.
 
 | Style | Size / line | Weight | Use |
 |---|---|---|---|
-| `headline-xl-mobile` | 22 / 28 | 500 | Tab titles (`DayAppBar`) |
-| Screen hero title | 28–30 / 1.1 | 600, −0.5 tracking | Explore muscle name, split name |
-| `headline-md` / `titleMedium` | 14–16 | 600 | Card titles, exercise names |
-| `body-md` | 13 / 19 | 400 | Body copy, cues, steps |
-| `body-sm` | 11 / 15 | 400 | Captions, metadata |
-| `metric-hero` | 32 / 38 | 500, −0.045em | Elapsed time, big stats |
-| `metric-card` | 18 / 24 | 500 | KPI values, stepper values |
-| `metric-table` | 13 / 18 | 500, tabular | Set rows, `4 × 8–12`, pace |
-| `label-uppercase` | 10 / 12 | 600, +0.08em | Column headers, status pills |
-| **Micro-label** | 9–12 | 600, +0.22em, uppercase | Eyebrows and tags: `02 / 14 · DELTOID`, `FRONT`, `5 PICKS · GYM`, `INTERMEDIATE` |
+| `displayMedium` | 34 / 40, −1.2 | 600 | The Home hero's day name |
+| `headlineMedium` | 30 / 36, −0.9 | 600 | Tab titles (`DayAppBar`), the Home greeting |
+| `headlineSmall` | 24 / 30, −0.6 | 600 | Screen sub-titles (day name in a workout) |
+| `titleMedium` | 16 / 22 | 600 | Card titles (`ModuleHeader`), block names |
+| `titleSmall` | 14 / 20 | 600 | Exercise names, button labels |
+| `bodyMedium` | 14 / 20 | 400 | Body copy, cues, steps |
+| `bodySmall` | 12 / 16 | 400 | Captions, metadata |
+| `labelMedium` | 12 / 16 | 500 | Field labels, the date line above a title |
+| `metricHero` (mono) | 32 / 38 | 500, −0.045em | Elapsed time, big stats |
+| `metricCard` (mono) | 18 / 24 | 500 | KPI values, stepper values |
+| `metricTable` (mono) | 13 / 18 | 500, tabular | Set rows, `4 × 8–12`, pace |
+| **Micro-label** (`MicroLabel`) | 10–12 | 600, +0.1em, uppercase | Eyebrows and tags: `TODAY'S SESSION`, `02 / 14 · DELTOID`, `TOP PICK` |
 
-- Hierarchy comes from size and weight. Avoid 700 and heavier.
-- Sentence case by default. Uppercase only for micro-labels and status pills.
+- Large titles are tight-tracked (negative letter-spacing grows with size).
+  Hierarchy comes from size and weight. Avoid 700 and heavier.
+- Tab pages put the date first, small and muted, then the title large.
+- Sentence case by default. Uppercase only for micro-labels and block badges.
+- Words never use a mono style, even beside a number (`Lateral deltoid`,
+  `Protein`, a badge like `1 workout`). Badges are Geist with tabular figures.
 - Formats:
   - weights: `62.5 kg`
   - sets × reps: `4 × 8–12` (true × and en dash)
@@ -340,10 +353,14 @@ offline. Fixed-width figures line up in set tables without extra work.
 - **Grid:** 4 / 8 px scale.
 - **Phone (primary target):** 16 px side margins, 16 px card padding, 12 px
   between modules, touch targets at least 44 × 44 px, list rows 56 px.
-- **Tab pages:** `DayAppBar` (title with today's date beneath) → optional
-  segmented control → scrolling content. Home opens with a greeting instead.
+- **Tab pages:** `DayAppBar` (today's date, then the title large) → optional
+  segmented control → scrolling content. Home opens with the same date line
+  and a greeting.
+- **Home KPIs** sit in a 2 × 2 grid, so every figure stays whole on a phone;
+  nothing scrolls sideways out of view.
 - **Bottom navigation:** five tabs: Home · Programs · Explore · Progress ·
-  Nutrition. The active item sits on a charcoal pill.
+  Nutrition, on the canvas colour. The active item is ink on a soft `track`
+  pill; the rest are `textMuted`.
 - **Figure-led layout** (Explore): the visual takes the left ~44%; the title,
   part rows and the expandable Latin name take the right. Reuse this split
   for any "pick on a picture" screen.
@@ -351,13 +368,16 @@ offline. Fixed-width figures line up in set tables without extra work.
 
 ## 5. Elevation & depth
 
-- **Module:** `card` fill, a 1 px highlight border, and a soft shadow
-  (`0 1 2 rgba(20,20,25,.04), 0 8 24 rgba(20,20,25,.06)`). Dark modules use the border only.
-- **Inner panel:** one tone darker (`surface`), with no shadow.
-- **Raised control:** `raised` fill, 1 px `border`, and a hairline shadow.
-- **Coral glow:** only on filled coral controls (`accent` at 35%, 16–18 px blur,
-  y +4–6) and on the body-figure highlight. Never on cards.
-- **Sheets:** `xl` radius, a drag handle, and a 28% ink scrim.
+- **Module:** `card` fill and a 1 px `border` hairline. In light mode, one
+  wide, faint shadow (`0 1 1 rgba(21,21,21,.03), 0 12 32 rgba(21,21,21,.04)`);
+  dark modules use the hairline only.
+- **One level of boxes inside a module.** Rows and exercises inside a module
+  are separated by hairlines, not boxed. Inputs (stepper wells) are the
+  `surface` tone with no border.
+- **Raised control:** `raised` fill, 1 px `border`, and a hairline shadow in light.
+- **No glows.** Coral controls and selected chips are flat. The body-figure
+  highlight is the only blurred colour.
+- **Sheets:** `xl` radius, a drag handle, and a 32% ink scrim.
 
 ## 6. Shapes
 
@@ -377,12 +397,12 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
 `accent.dart`.
 
 ### Buttons
-- **Main action (coral, `AccentButton`):** a 52 px `full` pill filled with the
-  `accentFill → accentFillEnd` gradient, `onAccent` label at weight 600, an
-  optional leading icon, and a coral glow. Only one per screen. When
+- **Main action (coral, `AccentButton`):** a 54 px `full` pill filled with the
+  near-flat `accentFill → accentFillEnd` fill, an `onAccent` label at 15/600,
+  an optional leading icon, and no shadow. Only one per screen. When
   unavailable (e.g. *Current split*), use an outline pill with muted text.
   `compact: true` gives a 40 px pill for a list row (the Programs *Start*).
-- **Primary (neutral):** a charcoal pill (light) or light pill (dark), 48 px.
+- **Primary (neutral):** an ink pill (light) or light pill (dark), 48 px.
   Use it for actions that repeat within a screen (*Log set 2*, *Add chunk*)
   and for confirmations.
 - **Secondary:** a `raised` pill with a 1 px `border` and ink text.
@@ -392,26 +412,26 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
 - **Destructive:** an outline pill in `error`, always confirmed (*Clear data*).
 
 ### Chips, toggles and segmented controls
-- **Filter or selection chip (`AccentChip`):** unselected, a hairline outline
-  with `textSecondary`; selected, the coral gradient, an `onAccent` label at
-  600 and a coral glow. Use it for muscle chips, days-per-week and the
-  Programs track switcher.
+- **Filter or selection chip (`AccentChip`):** unselected, a `raised` pill
+  with a hairline outline and `textSecondary`; selected, a solid ink
+  (`primary`) pill with an `onPrimary` label at 600. No glow. Use it for
+  muscle chips, days-per-week and the Programs track switcher.
 - **Compact toggle (`CompactToggle`):** a small two-way switch such as
-  GYM | HOME or FRONT | BACK. Labels are micro-labels; the selected segment
-  is a `raised` pill. It stays neutral because it switches a view, not a
-  selection.
+  GYM | HOME. A `surface` track; the selected segment is a `raised` pill with
+  a hairline shadow. Labels are micro-labels. It stays neutral because it
+  switches a view, not a selection.
 - **Segmented control (`SlidingSegmentedControl`):** for top-of-page view
   switches (Muscles | Splits, Stats | History, Daily log | Meal plan).
   Neutral.
 
 ### Cards & modules (`AppCard`, `ModuleHeader`)
 - A title in `headline-md`, with an optional muted subtitle and a trailing action.
-- **Today card (Home):** the next workout with day name, week, exercises and
-  minutes, and the coral main action *Start*. Its gradient
-  (`heroStart → heroEnd`) is the screen's only decorative surface.
-- **KPI strip (Home):** Streak · Sessions · Volume · Sets, separated by
-  hairlines, using `metric-card` values and a `DeltaPill`.
-- **This week (Home):** day dots: trained days filled with the charcoal
+- **Today card (Home):** a micro-label eyebrow (`TODAY'S SESSION`), the day
+  name in `displayMedium`, week · exercises · minutes, and the coral main
+  action *Start workout* beside a 54 px preview button.
+- **KPI grid (Home):** Streak · Sessions / Volume · Sets in a 2 × 2 grid with
+  hairline dividers, `metric-card` values and a `DeltaPill`.
+- **This week (Home):** day dots: trained days filled with the ink
   anchor plus a ✓; today drawn as an `accent` ring.
 - **Program day card:** an order disc, the day name, `N exercises · ~M min`,
   and a trailing action:
@@ -425,8 +445,12 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
   `RoundIconButton`. The progress bar is `accent` on `track`, with
   `N of M sets`.
 - **Exercise tile:**
-  - **Header:** an icon chip, the name and the prescription.
-  - **Steppers:** 52 px fields with − and +, weight stepping by 2.5 kg.
+  - **Separation:** a top hairline inside the block card, never a box of its own.
+  - **Header:** an icon chip, the name in `titleSmall` and the prescription.
+  - **Steppers:** 52 px `surface` wells with − and +, weight stepping by 2.5 kg.
+- **Block card:** an order disc, the block name, a pill badge for the block
+  type (a coloured dot on `surface`), and the block's note as an unboxed line
+  with an info icon.
   - **Logged sets:** rows below with a positive ✓.
   - **Distance sets:** distance and minutes:seconds, with a live pace line.
 - **Countdown (timed sets):** a gauge ring in `accent` while running and
@@ -472,8 +496,8 @@ Shared widgets live in `lib/core/widgets/`. The coral pieces are in
   - the coral main action *Use this split*.
 
 ### Badges & pills
-- **Status (`StatusBadge`, `TagPill`):** 22 px, container plus text from the
-  semantic table.
+- **Status (`StatusBadge`, `TagPill`):** 24 px, container plus text from the
+  semantic table, in Geist 12/600 with tabular figures.
 - **Accent outline (`OutlinePill`):** for *TOP PICK* and *CURRENT*.
 - **Dark callout (`CalloutPill`):** a chart highlight value such as `+12%`.
 
@@ -501,9 +525,9 @@ illustrations.
 
 ### Home-screen widgets (Android)
 The quote card and the quote + week widgets are drawn natively
-(`QuoteCardRenderer.kt`) with the same tokens as the Home tab, in light and
+(`QuoteCardRenderer.kt`), in light and
 dark. As on Home, today's week dot is an `accent` ring; trained days are
-filled with the charcoal anchor.
+filled with the ink anchor. *Not yet restyled:* the widget still draws the earlier Pearl Ledger greys and JetBrains Mono text; bring `QuoteCardRenderer.kt` onto the Paper & Ink tokens and Geist next.
 
 ## 8. Motion
 - 200–250 ms standard easing for state changes: chips, rows, toggles, card
@@ -537,9 +561,9 @@ coral main action, or if coral is missing from the places below.
 | Area | Coral today |
 |---|---|
 | Home | *Start workout* / *Resume workout* main action; today's week dot ring |
-| Programs | Selected track chip (`AccentChip`); next or running day: `accent` border and a compact coral *Start* / *Resume* |
+| Programs | Next or running day: `accent` border and a compact coral *Start* / *Resume* (the selected track chip is ink) |
 | Day preview / live workout | *Start ‹day› Workout*, then *Finish workout*; session progress bar; a running countdown ring |
-| Explore | Selected muscle and part; *Use this split*; top picks, meters, set bars |
+| Explore | Selected part on the figure and its row; *Use this split*; top picks, meters, set bars (the selected muscle chip is ink) |
 | Progress (and Home charts) | The current period's bar in every `ThinBarChart` |
 | Nutrition | *Snap Meal* (camera) tile |
 | Android widgets | Today's week dot ring |
@@ -556,6 +580,6 @@ When a new screen is added, add it to this table and to the design-rules test.
    - `flutter test test/core/design_rules_test.dart` enforces rules 1 and the
      §9 placements.
    - `flutter test tool/screens/render_screens_test.dart` writes dark and
-     light screenshots of every main screen to `build/screens/`, and fails on
-     any overflow.
+     light screenshots of every main screen to `build/screens/`, with shadows
+     blurred as on a device, and fails on any overflow.
    - Extend both when a screen is added.

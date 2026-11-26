@@ -34,8 +34,8 @@ String weekdayLabel(DateTime date) => _weekdays[date.weekday - 1];
 String shortDateLabel(DateTime date) =>
     '${date.day} ${_months[date.month - 1]}';
 
-/// The shared top bar of the main tabs: the page [title] in
-/// `headline-xl-mobile` with today's date beneath, actions on the right.
+/// The shared top bar of the main tabs: today's date as a small muted line
+/// above the large page [title], actions on the right.
 class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
@@ -51,7 +51,7 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(72);
+  Size get preferredSize => const Size.fromHeight(88);
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +64,14 @@ class DayAppBar extends StatelessWidget implements PreferredSizeWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(title, style: textTheme.headlineSmall),
-          const SizedBox(height: 2),
           Text(
             '${weekdayLabel(date)}, ${shortDateLabel(date)}',
-            style: textTheme.bodyMedium?.copyWith(
-              color: context.colors.textSecondary,
+            style: textTheme.labelMedium?.copyWith(
+              color: context.colors.textMuted,
             ),
           ),
+          const SizedBox(height: 2),
+          Text(title, style: textTheme.headlineMedium),
         ],
       ),
       actions: [

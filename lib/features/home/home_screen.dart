@@ -49,17 +49,17 @@ class HomeScreen extends ConsumerWidget {
           onRefresh: () => ref.refresh(dashboardAnalyticsProvider.future),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _Header(now: now),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 _TodayCard(
                   next: nextWorkout,
                   trainedToday: analytics.value?.trainedToday ?? false,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 analytics.when(
                   loading: () => const SizedBox(
                     height: 160,
@@ -69,7 +69,7 @@ class HomeScreen extends ConsumerWidget {
                       const _AnalyticsMessage('Analytics unavailable'),
                   data: (data) => DashboardStats(data: data, now: now),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 _QuoteCard(quote: quote),
               ],
             ),
@@ -80,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// Greeting in `headline-xl-mobile` with the date beneath, actions right.
+/// The date as a small muted line above the greeting, actions right.
 class _Header extends StatelessWidget {
   final DateTime now;
 
@@ -95,14 +95,14 @@ class _Header extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(greetingFor(now), style: textTheme.headlineSmall),
-              const SizedBox(height: 2),
               Text(
                 '${weekdayLabel(now)}, ${shortDateLabel(now)}',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: context.colors.textSecondary,
+                style: textTheme.labelMedium?.copyWith(
+                  color: context.colors.textMuted,
                 ),
               ),
+              const SizedBox(height: 2),
+              Text(greetingFor(now), style: textTheme.headlineMedium),
             ],
           ),
         ),
@@ -125,8 +125,8 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// The hero module: the session to do next (or the one in progress), on the
-/// screen's one decorative pearl gradient.
+/// The hero module: the session to do next (or the one in progress), with
+/// the day set large and the screen's one coral main action.
 class _TodayCard extends ConsumerWidget {
   final NextWorkoutInfo? next;
   final bool trainedToday;
@@ -180,7 +180,7 @@ class _TodayCard extends ConsumerWidget {
 
     return AppCard(
       radius: AppRadius.xl,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(22, 20, 22, 22),
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -191,14 +191,7 @@ class _TodayCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  eyebrow,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colors.textSecondary,
-                  ),
-                ),
-              ),
+              Expanded(child: MicroLabel(eyebrow, color: colors.textMuted)),
               if (resuming)
                 StatusBadge(
                   'Live',
@@ -215,10 +208,10 @@ class _TodayCard extends ConsumerWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(title, style: textTheme.headlineSmall),
+          const SizedBox(height: 10),
+          Text(title, style: textTheme.displayMedium),
           if (details != null) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
               details,
               style: textTheme.bodyMedium?.copyWith(
@@ -226,7 +219,7 @@ class _TodayCard extends ConsumerWidget {
               ),
             ),
           ],
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           Row(
             children: [
               Expanded(
@@ -239,11 +232,11 @@ class _TodayCard extends ConsumerWidget {
                 ),
               ),
               if (!resuming && next != null) ...[
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 RoundIconButton(
                   icon: LucideIcons600.listChecks,
                   tooltip: 'Preview ${next.dayName}',
-                  size: 48,
+                  size: 54,
                   onPressed: () =>
                       context.push('/programs/${next.programId}/${next.dayId}'),
                 ),

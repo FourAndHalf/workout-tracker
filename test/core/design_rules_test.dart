@@ -201,4 +201,27 @@ void main() {
     expect(decoration.boxShadow, isNull);
     expect(decoration.border, isNotNull);
   });
+
+  testWidgets('a selected chip is solid ink, never coral, and has no glow', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(extensions: const [AppColors.light]),
+        home: Scaffold(
+          body: AccentChip(label: 'Shoulders', selected: true, onTap: () {}),
+        ),
+      ),
+    );
+    final box = tester.widget<AnimatedContainer>(
+      find.descendant(
+        of: find.byType(AccentChip),
+        matching: find.byType(AnimatedContainer),
+      ),
+    );
+    final decoration = box.decoration! as BoxDecoration;
+    expect(decoration.color, AppColors.light.primary);
+    expect(decoration.gradient, isNull);
+    expect(decoration.boxShadow, isNull);
+  });
 }
