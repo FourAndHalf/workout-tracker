@@ -191,12 +191,13 @@ run.
 | B1 | The generated file holds front and back outlines plus every muscle shape the figure maps | `verify_assets.py` A1 |
 | B2 | Every muscle and every part in the library is drawn on a view; the expected view is chosen (triceps, rear delts, glute med → back; upper chest → front) | test *every muscle and part can be found on the figure* |
 | B3 | Taps land on the muscle under the finger in view coordinates (chest, quads, core) and empty space does nothing | test *tapping the body figure selects the muscle under the finger* |
-| B4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page, and the credit shows under "How these picks were chosen" | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
+| B4 | The MIT licence is bundled, matches `third_party/react-native-body-highlighter/LICENSE`, is registered once on the licences page. ~~The credit also shows under "How these picks were chosen".~~ That section was removed (B10) | `test/core/third_party_licenses_test.dart`; `verify_assets.py` A2 |
 | B5 | Highlights for all 28 muscle parts sit on the right anatomy in both themes; the glow stays inside the figure | `--screens` (`*_1_shoulders.png`, `*_2_glutes_back.png`); by eye |
 
 | B6 | Changing the part or the muscle on the same view glides: the highlights cross-fade and the target slides (480 ms) instead of restarting. ~~Flipping FRONT/BACK cross-fades.~~ Superseded by B9 | `build/fig` frame strip by eye; tests *tapping the body figure…*, *choosing a muscle that lives on the back flips the figure* |
 | B7 | The muscle title, parts and recommendations cross-fade (`SmoothSwap`, 280 ms) when the muscle, part or GYM/HOME changes | test *switching muscles cross-fades instead of jumping* |
 | B8 | An opened card or sheet shows the exercise photos once, at the top, alternating start and finish photos on their own (1.8 s hold, 450 ms fade), with no START/FINISH labels over them; a tap flips at once; the card thumbnail hides while open | test *an open card shows its photos once, at the top, alternating*; the sheet test checks one photo above the title |
+| B10 | The "How these picks were chosen" section at the end of Explore's picks is removed, at the user's request. It held the picks, photo and anatomy credits and the research links; the anatomy MIT licence stays on the licences page | test *the picks list ends without a sources section* (`test/features/explore_test.dart`) |
 | B9 | The FRONT/BACK switch under the figure is removed; the side follows the muscle or part. Changing side turns the figure about its spine (640 ms, perspective, no cut) | tests *choosing a muscle that lives on the back flips the figure* (also checks the switch is gone) and *the figure turns smoothly between front and back* |
 
 To regenerate the paths: download `react-native-body-highlighter` from npm,
@@ -222,7 +223,7 @@ open its source.
 | Back → Lats | Grip width barely changes lat activation in pulldowns | https://www.shred.app/thinking/pull-up-grip-width-muscle-activation |
 | Splits (10–20 sets, about twice a week) | Weekly volume and frequency recommendations | https://pmc.ncbi.nlm.nih.gov/articles/PMC8884877/, https://pubmed.ncbi.nlm.nih.gov/30558493/ |
 
-The app also lists these sources under *Explore → How these picks were chosen*.
+~~The app also lists these sources under *Explore → How these picks were chosen*.~~ That section was removed at the user's request (B10); the sources are now listed only here and in `assets/library/library.json`.
 
 ## 8. Android build and app size
 
