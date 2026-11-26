@@ -10,21 +10,22 @@ abstract final class AppRadius {
   static const xl = 28.0; // hero module, sheets
 }
 
-/// Soft, physical depth: tiles feel gently raised, never floating.
+/// Quiet depth: light modules sit on a hairline with one wide, faint shadow;
+/// dark modules use the hairline alone.
 abstract final class AppShadows {
   static List<BoxShadow> module(Brightness brightness) =>
       brightness == Brightness.dark
       ? const []
       : const [
           BoxShadow(
-            color: Color(0x0A141419),
-            blurRadius: 2,
+            color: Color(0x08151515),
+            blurRadius: 1,
             offset: Offset(0, 1),
           ),
           BoxShadow(
-            color: Color(0x0F141419),
-            blurRadius: 24,
-            offset: Offset(0, 8),
+            color: Color(0x0A151515),
+            blurRadius: 32,
+            offset: Offset(0, 12),
           ),
         ];
 
@@ -33,21 +34,24 @@ abstract final class AppShadows {
       ? const []
       : const [
           BoxShadow(
-            color: Color(0x0F141419),
-            blurRadius: 2,
+            color: Color(0x0D151515),
+            blurRadius: 3,
             offset: Offset(0, 1),
           ),
         ];
 }
 
-/// Pearl Ledger type roles that don't map onto a Material text style.
-/// Colors are left unset so they inherit from the surrounding theme.
+/// Type roles that don't map onto a Material text style. Text is set in
+/// Geist ([family]); figures (weights, reps, times, paces) in JetBrains Mono
+/// ([mono]) so columns of numbers line up. Colors are left unset so they
+/// inherit from the surrounding theme.
 abstract final class AppText {
-  static const family = 'JetBrains Mono';
+  static const family = 'Geist';
+  static const mono = 'JetBrains Mono';
   static const _tabular = [FontFeature.tabularFigures()];
 
   static const metricHero = TextStyle(
-    fontFamily: family,
+    fontFamily: mono,
     fontSize: 32,
     height: 38 / 32,
     fontWeight: FontWeight.w500,
@@ -55,7 +59,7 @@ abstract final class AppText {
     fontFeatures: _tabular,
   );
   static const metricCard = TextStyle(
-    fontFamily: family,
+    fontFamily: mono,
     fontSize: 18,
     height: 24 / 18,
     fontWeight: FontWeight.w500,
@@ -63,7 +67,7 @@ abstract final class AppText {
     fontFeatures: _tabular,
   );
   static const metricTable = TextStyle(
-    fontFamily: family,
+    fontFamily: mono,
     fontSize: 13,
     height: 18 / 13,
     fontWeight: FontWeight.w500,
@@ -71,7 +75,7 @@ abstract final class AppText {
     fontFeatures: _tabular,
   );
   static const metricDelta = TextStyle(
-    fontFamily: family,
+    fontFamily: mono,
     fontSize: 10,
     height: 12 / 10,
     fontWeight: FontWeight.w600,
@@ -82,7 +86,7 @@ abstract final class AppText {
     fontSize: 10,
     height: 12 / 10,
     fontWeight: FontWeight.w600,
-    letterSpacing: 0.8,
+    letterSpacing: 0.9,
   );
 }
 
@@ -100,66 +104,66 @@ class AppTheme {
     final textTheme = base.textTheme
         .copyWith(
           displayLarge: const TextStyle(
-            fontSize: 34,
-            height: 40 / 34,
-            fontWeight: FontWeight.w500,
-            letterSpacing: -1.53,
-            fontFeatures: [FontFeature.tabularFigures()],
+            fontSize: 40,
+            height: 44 / 40,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -1.6,
           ),
           displayMedium: const TextStyle(
-            fontSize: 32,
-            height: 38 / 32,
-            fontWeight: FontWeight.w500,
-            letterSpacing: -1.44,
-            fontFeatures: [FontFeature.tabularFigures()],
+            fontSize: 34,
+            height: 40 / 34,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -1.2,
           ),
           headlineMedium: const TextStyle(
             fontSize: 30,
-            height: 38 / 30,
-            fontWeight: FontWeight.w500,
+            height: 36 / 30,
+            fontWeight: FontWeight.w600,
             letterSpacing: -0.9,
           ),
           headlineSmall: const TextStyle(
-            fontSize: 22,
-            height: 28 / 22,
-            fontWeight: FontWeight.w500,
-            letterSpacing: -0.66,
+            fontSize: 24,
+            height: 30 / 24,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.6,
           ),
           titleLarge: const TextStyle(
-            fontSize: 18,
-            height: 24 / 18,
-            fontWeight: FontWeight.w500,
-            letterSpacing: -0.36,
+            fontSize: 19,
+            height: 24 / 19,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.4,
           ),
           titleMedium: const TextStyle(
+            fontSize: 16,
+            height: 22 / 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.2,
+          ),
+          titleSmall: const TextStyle(
             fontSize: 14,
             height: 20 / 14,
             fontWeight: FontWeight.w600,
-            letterSpacing: -0.14,
+            letterSpacing: -0.1,
           ),
-          titleSmall: const TextStyle(
-            fontSize: 13,
-            height: 19 / 13,
-            fontWeight: FontWeight.w600,
-          ),
-          bodyLarge: const TextStyle(fontSize: 15, height: 22 / 15),
-          bodyMedium: const TextStyle(fontSize: 13, height: 19 / 13),
-          bodySmall: const TextStyle(fontSize: 11, height: 15 / 11),
+          bodyLarge: const TextStyle(fontSize: 16, height: 24 / 16),
+          bodyMedium: const TextStyle(fontSize: 14, height: 20 / 14),
+          bodySmall: const TextStyle(fontSize: 12, height: 16 / 12),
           labelLarge: const TextStyle(
-            fontSize: 13,
-            height: 18 / 13,
+            fontSize: 15,
+            height: 20 / 15,
             fontWeight: FontWeight.w500,
+            letterSpacing: -0.1,
           ),
           labelMedium: const TextStyle(
-            fontSize: 11,
-            height: 14 / 11,
+            fontSize: 12,
+            height: 16 / 12,
             fontWeight: FontWeight.w500,
           ),
           labelSmall: const TextStyle(
-            fontSize: 10,
-            height: 12 / 10,
+            fontSize: 11,
+            height: 14 / 11,
             fontWeight: FontWeight.w600,
-            letterSpacing: 0.8,
+            letterSpacing: 0.6,
           ),
         )
         .apply(
@@ -218,25 +222,29 @@ class AppTheme {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: c.card,
+        backgroundColor: c.background,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        height: 68,
-        indicatorColor: c.primary,
+        height: 70,
+        indicatorColor: c.track,
         indicatorShape: pill,
         iconTheme: WidgetStateProperty.resolveWith(
           (s) => IconThemeData(
             size: 22,
             color: s.contains(WidgetState.selected)
-                ? c.onPrimary
-                : c.textSecondary,
+                ? c.textPrimary
+                : c.textMuted,
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (s) => textTheme.labelMedium?.copyWith(
+            fontSize: 11,
+            fontWeight: s.contains(WidgetState.selected)
+                ? FontWeight.w600
+                : FontWeight.w500,
             color: s.contains(WidgetState.selected)
                 ? c.textPrimary
-                : c.textSecondary,
+                : c.textMuted,
           ),
         ),
       ),
@@ -263,7 +271,7 @@ class AppTheme {
         backgroundColor: c.raised,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        modalBarrierColor: const Color(0x471C1C1E),
+        modalBarrierColor: const Color(0x52151515),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(AppRadius.xl),
@@ -320,7 +328,7 @@ class AppTheme {
         elevation: 0,
         shape: const CircleBorder(),
       ),
-      // Primary: charcoal pill, 48px.
+      // Primary: ink pill, 48px.
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: c.primary,

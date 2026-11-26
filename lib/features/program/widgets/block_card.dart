@@ -111,9 +111,9 @@ class BlockCard extends StatelessWidget {
         '${block.targetSets} ${block.targetSets == 1 ? 'set' : 'sets'}';
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 14),
       child: AppCard(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -173,14 +173,8 @@ class BlockCard extends StatelessWidget {
             ),
 
             if (block.instructions != null && block.instructions!.isNotEmpty)
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 12),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12, left: 44),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -202,7 +196,7 @@ class BlockCard extends StatelessWidget {
                 ),
               ),
 
-            SizedBox(height: isActive ? 12 : 4),
+            SizedBox(height: isActive ? 8 : 4),
             for (var i = 0; i < block.exercises.length; i++) ...[
               if (!isActive && i > 0)
                 Divider(indent: 48, color: colors.divider),
@@ -228,12 +222,11 @@ class _BlockBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 20,
+    height: 22,
     padding: const EdgeInsets.symmetric(horizontal: 8),
     decoration: BoxDecoration(
-      color: context.colors.raised,
-      borderRadius: BorderRadius.circular(AppRadius.sm),
-      border: Border.all(color: context.colors.border),
+      color: context.colors.surface,
+      borderRadius: BorderRadius.circular(999),
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min,

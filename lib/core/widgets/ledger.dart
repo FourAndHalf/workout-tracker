@@ -69,7 +69,7 @@ class DeltaPill extends StatelessWidget {
   }
 }
 
-/// A 22px semantic badge: container color plus text color.
+/// A 24px semantic badge: container color plus text color.
 class StatusBadge extends StatelessWidget {
   final String label;
   final Color foreground;
@@ -86,8 +86,8 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    height: 22,
-    padding: const EdgeInsets.symmetric(horizontal: 8),
+    height: 24,
+    padding: const EdgeInsets.symmetric(horizontal: 9),
     decoration: BoxDecoration(
       color: background,
       borderRadius: BorderRadius.circular(999),
@@ -99,7 +99,16 @@ class StatusBadge extends StatelessWidget {
           Icon(icon, size: 12, color: foreground),
           const SizedBox(width: 4),
         ],
-        Text(label, style: AppText.metricDelta.copyWith(color: foreground)),
+        Text(
+          label,
+          style: const TextStyle(
+            fontFamily: AppText.family,
+            fontSize: 12,
+            height: 16 / 12,
+            fontWeight: FontWeight.w600,
+            fontFeatures: [FontFeature.tabularFigures()],
+          ).copyWith(color: foreground),
+        ),
       ],
     ),
   );

@@ -233,12 +233,12 @@ class _ExerciseTileState extends State<ExerciseTile> {
     }
 
     final colors = context.colors;
+    // Exercises inside a block are separated by a hairline, not boxed, so a
+    // live block stays one level deep.
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.fromLTRB(0, 14, 0, 14),
       decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border(top: BorderSide(color: colors.divider)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,12 +275,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
             children: [
               GestureDetector(
                 onTap: () => _openExerciseVideo(context),
-                child: Text(
-                  exercise.name,
-                  style: textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Text(exercise.name, style: textTheme.titleSmall),
               ),
               const SizedBox(height: 2),
               Text(
@@ -650,9 +645,8 @@ class _StepperField extends StatelessWidget {
         Container(
           height: 52,
           decoration: BoxDecoration(
-            color: colors.raised,
+            color: colors.surface,
             borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: colors.border),
           ),
           child: Row(
             children: [

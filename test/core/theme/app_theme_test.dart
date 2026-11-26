@@ -12,25 +12,28 @@ void main() {
       expect(AppTheme.lightTheme.extension<AppColors>(), AppColors.light);
     });
 
-    test('uses Pearl Ledger canvas colors for the scaffold', () {
+    test('uses Paper & Ink canvas colors for the scaffold', () {
       expect(
         AppTheme.darkTheme.scaffoldBackgroundColor,
-        const Color(0xFF0F0F11),
+        const Color(0xFF09090A),
       );
       expect(
         AppTheme.lightTheme.scaffoldBackgroundColor,
-        const Color(0xFFE8E8EA),
+        const Color(0xFFF4F4F1),
       );
     });
 
-    test('sets JetBrains Mono everywhere and a charcoal primary', () {
+    test('sets Geist for text, mono for figures, and an ink primary', () {
       final theme = AppTheme.lightTheme;
+      expect(AppText.family, 'Geist');
       expect(theme.textTheme.bodyMedium?.fontFamily, AppText.family);
       expect(theme.textTheme.displayLarge?.fontFamily, AppText.family);
-      expect(theme.colorScheme.primary, const Color(0xFF2A2A2D));
+      expect(AppText.metricCard.fontFamily, AppText.mono);
+      expect(AppText.metricTable.fontFamily, AppText.mono);
+      expect(theme.colorScheme.primary, const Color(0xFF151515));
       expect(theme.colorScheme.onPrimary, Colors.white);
       // The anchor inverts to light on the graphite theme.
-      expect(AppTheme.darkTheme.colorScheme.primary, const Color(0xFFECECEE));
+      expect(AppTheme.darkTheme.colorScheme.primary, const Color(0xFFF2F2EF));
     });
   });
 

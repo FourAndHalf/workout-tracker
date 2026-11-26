@@ -285,11 +285,12 @@ class _MuscleLibraryViewState extends ConsumerState<MuscleLibraryView> {
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Text(
                             '${region.latin.isEmpty ? muscle.latin : region.latin}  ${_aboutOpen ? '−' : '+'}',
-                            style: AppText.metricTable.copyWith(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: tokens.accentText,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: tokens.accentText,
+                                ),
                           ),
                         ),
                       ),

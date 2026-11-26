@@ -79,6 +79,11 @@ Future<void> _loadFonts() async {
   await _font('MaterialIcons', [
     '$artifacts/material_fonts/MaterialIcons-Regular.otf',
   ]);
+  await _font('Geist', [
+    'assets/fonts/Geist-Regular.ttf',
+    'assets/fonts/Geist-Medium.ttf',
+    'assets/fonts/Geist-SemiBold.ttf',
+  ]);
   await _font('JetBrains Mono', [
     'assets/fonts/JetBrainsMono-Regular.ttf',
     'assets/fonts/JetBrainsMono-Medium.ttf',
@@ -105,6 +110,9 @@ void main() {
       // ignore: invalid_use_of_visible_for_testing_member
       SharedPreferences.setMockInitialValues({});
       await tester.runAsync(_loadFonts);
+      // flutter_test paints shadows as hard, unblurred slabs by default;
+      // render them as the device does. Restored before the test ends.
+      debugDisableShadows = false;
       // The live workout keeps the screen awake through a phone-only
       // plugin; answer its channel so the render runs off-device.
       tester.binding.defaultBinaryMessenger.setMockMessageHandler(
@@ -223,6 +231,7 @@ void main() {
       await shot('6_split_volume');
 
       expect(Directory(_out).listSync().length, greaterThanOrEqualTo(11));
+      debugDisableShadows = true;
     });
   }
 }

@@ -36,7 +36,7 @@ class DashboardStats extends StatelessWidget {
   );
 }
 
-const _gutter = 12.0;
+const _gutter = 14.0;
 
 /// `12,345` style digit grouping.
 String groupThousands(num value) {
@@ -121,26 +121,26 @@ class _KpiStrip extends StatelessWidget {
         caption: '${data.minutesThisWeek} min trained',
       ),
     ];
+    final divider = context.colors.divider;
+    Widget row(Widget a, Widget b) => IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(child: a),
+          VerticalDivider(width: 33, thickness: 1, color: divider),
+          Expanded(child: b),
+        ],
+      ),
+    );
+    // A 2 × 2 grid: every figure stays whole on a phone, nothing scrolls
+    // sideways out of view.
     return AppCard(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: IntrinsicHeight(
-          child: Row(
-            children: [
-              for (var i = 0; i < tiles.length; i++) ...[
-                if (i > 0)
-                  VerticalDivider(
-                    width: 33,
-                    thickness: 1,
-                    color: context.colors.border,
-                  ),
-                tiles[i],
-              ],
-            ],
-          ),
-        ),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+      child: Column(
+        children: [
+          row(tiles[0], tiles[1]),
+          Divider(height: 29, color: divider),
+          row(tiles[2], tiles[3]),
+        ],
       ),
     );
   }
@@ -166,7 +166,7 @@ class _KpiTile extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 104),
+      constraints: const BoxConstraints(minWidth: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -581,7 +581,7 @@ class _MilestoneModule extends StatelessWidget {
                 child: Text('Next milestone', style: textTheme.titleMedium),
               ),
               StatusBadge(
-                '$target workouts',
+                '$target ${target == 1 ? 'workout' : 'workouts'}',
                 icon: LucideIcons600.award,
                 foreground: colors.tertiary,
                 background: colors.tertiaryContainer,
